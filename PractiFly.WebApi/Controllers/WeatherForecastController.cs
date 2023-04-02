@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace PractiFly.WebApi.Controllers
 {
+    //Початок
   [ApiController]
   [Route("[controller]")]
   public class WeatherForecastController : ControllerBase
