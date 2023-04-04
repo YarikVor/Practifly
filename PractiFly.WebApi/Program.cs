@@ -22,6 +22,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.UseCertificateForwarding();
+
 app.Run();
 
 //Hi! :)
