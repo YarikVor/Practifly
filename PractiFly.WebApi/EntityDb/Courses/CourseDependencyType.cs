@@ -1,16 +1,13 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using PractiFly.WebApi.EntityDb.Materials;
-using PractiFly.WebApi.EntityDb.Users;
+﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
 namespace PractiFly.WebApi.EntityDb.Courses;
 
-[Table("Course")]
+[Table("CourseDependencyType")]
 [PrimaryKey("Id")]
-public class Course
+public class CourseDependencyType
 {
     [Key]
     [Column("Id")]
@@ -21,13 +18,6 @@ public class Course
     [Required]
     [MaybeNull]
     public string Name { get; set; }
-
-    [Column("OwnerId")]
-    [ForeignKey("OwnerId")]
-    [Required]
-    public int OwnerId { get; set; }
-
-    public virtual User Owner { get; set; }
 
     [Column("Note")]
     [MaxLength(256)]
