@@ -5,9 +5,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace PractiFly.WebApi.EntityDb.Users;
 
-[Table("Users")]
+[Table("User")]
 [PrimaryKey("Id")]
-public class Users
+public class User
 {
     [Key]
     [Column("Id")]
