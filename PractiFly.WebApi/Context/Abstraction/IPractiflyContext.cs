@@ -5,5 +5,5 @@ namespace PractiFly.WebApi.Context;
 
 public interface IPractiflyContext
 {
-    DbSet<Heading> Headings { get; set; }
+    
 }

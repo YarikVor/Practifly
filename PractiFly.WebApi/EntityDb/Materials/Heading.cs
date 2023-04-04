@@ -15,20 +15,25 @@ public class Heading
 	
 	[Column("Code")]
 	[MaybeNull]
+	[DataType(DataType.Text)]
 	public string Code { get; set; }
 	
 	[Column("Name")]
 	[MaybeNull]
+	[DataType(DataType.Text)]
 	public string Name { get; set; }
 	
 	[Column("UDC")]
 	[MaybeNull]
+	[DataType(DataType.Text)]
 	public string Udc { get; set; }
 	
 	[Column("Note")]
+	[DataType(DataType.Text)]
 	public string? Note { get; set; }
 	
 	[Column("Description")]
+	[DataType(DataType.Text)]
 	public string? Description { get; set; }
 
 }

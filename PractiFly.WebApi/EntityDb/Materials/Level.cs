@@ -16,6 +16,5 @@ namespace PractiFly.WebApi.EntityDb.Materials;
 [Table("Level")]
 public class Level
 {
-    [Column("Id")]
-    public 
+    
 }

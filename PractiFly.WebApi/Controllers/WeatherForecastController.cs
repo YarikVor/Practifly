@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using PractiFly.WebApi.Context;
 
 namespace PractiFly.WebApi.Controllers
 {
-    //Початок
+
   [ApiController]
   [Route("[controller]")]
-  public class WeatherForecastController : ControllerBase
+  public class WeatherForecastController : Controller
   {
     private static readonly string[] Summaries = new[]
     {
@@ -13,10 +15,15 @@ namespace PractiFly.WebApi.Controllers
     };
 
     private readonly ILogger<WeatherForecastController> _logger;
-
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
+    private readonly PractiflyContext _context;
+    
+    public WeatherForecastController(
+      ILogger<WeatherForecastController> logger,
+      PractiflyContext context
+      )
     {
       _logger = logger;
+      _context = context;
     }
 
     [HttpGet(Name = "GetWeatherForecast")]
@@ -29,6 +36,14 @@ namespace PractiFly.WebApi.Controllers
         Summary = Summaries[Random.Shared.Next(Summaries.Length)]
       })
       .ToArray();
+    }
+    
+    [HttpGet("Test")]
+    public async Task<IActionResult> Test()
+    {
+      var headings = await _context.Headings.FirstAsync();
+      
+      return Json(headings);
     }
   }
 }
