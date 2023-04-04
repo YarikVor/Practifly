@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -12,6 +13,7 @@ namespace PractiFly.WebApi.EntityDb.Materials;
         	Description*/
 
 [Table("Competency")]
+[PrimaryKey("Id")]
 public class Competency
 {
     [Key]
