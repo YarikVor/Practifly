@@ -11,4 +11,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="EntityDb\Courses" />
+    <Folder Include="EntityDb\Materials" />
+    <Folder Include="EntityDb\Users" />
+  </ItemGroup>
+
 </Project>
