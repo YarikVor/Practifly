@@ -16,8 +16,3 @@ public interface IUsersContext : IDisposable, IDbContext
     DbSet<UserMaterial> UserMaterials { get; }
     DbSet<UserTheme> UserThemes { get; }
 }
-
-public interface IDbContext
-{
-    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
-}
