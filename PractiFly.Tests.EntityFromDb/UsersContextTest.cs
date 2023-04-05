@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using PractiFly.WebApi.Context;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace PractiFly.Tests.EntityFromDb;
@@ -54,7 +55,10 @@ public class UsersContextTest
     [Fact]
     public async Task GetUserCourse_NotEmpty()
     {
-        var userCourse = (dynamic)(new object()); //await _usersContext.UserCourses.AsNoTracking().FirstOrDefaultAsync();
+        var userCourse = await _usersContext
+            .UserCourses
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
         Assert.NotNull(userCourse);
         Assert.NotEqual(0, userCourse.CourseId);
        
@@ -68,9 +72,97 @@ public class UsersContextTest
         NotDefault(userCourse.LastThemeId);
         NotDefault(userCourse.LastTime);
         NotDefault(userCourse.Grade);
-        
+    }
+    [Fact]
+    public async Task GetUserHeading_NotEmpty()
+    {
+        var userHeading = await _usersContext
+            .UserHeadings
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+        Assert.NotNull(userHeading);
+        Assert.NotEqual(0, userHeading.UserId);
+
+        WriteLine("UserHeading:");
+        WriteAsJson(userHeading);
+
+        NotDefault(userHeading.UserId);
+        NotDefault(userHeading.LevelId);
+        NotDefault(userHeading.HeadingId);
     }
 
+    [Fact]
+    public async Task GetUserMaterial_NotEmpty()
+    {
+        var userMaterial = await _usersContext
+            .UserMaterials
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+        Assert.NotNull(userMaterial);
+        Assert.NotEqual(0, userMaterial.UserId);
+
+        WriteLine("UserMaterial:");
+        WriteAsJson(userMaterial);
+
+        NotDefault(userMaterial.UserId);
+        NotDefault(userMaterial.MaterialId);
+        NotDefault(userMaterial.IsCompleted);
+        NotDefault(userMaterial.ResultUrl);
+        NotDefault(userMaterial.Grade);
+    }
+    [Fact]
+    public async Task GetUserTheme_NotEmpty()
+    {
+        var userTheme = await _usersContext
+            .UserThemes
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+        Assert.NotNull(userTheme);
+        Assert.NotEqual(0, userTheme.UserId);
+
+        WriteLine("UserTheme:");
+        WriteAsJson(userTheme);
+
+        NotDefault(userTheme.UserId);
+        NotDefault(userTheme.ThemeId);
+        NotDefault(userTheme.IsCompleted);
+        NotDefault(userTheme.LevelId);
+        NotDefault(userTheme.Grade);
+    }
+    [Fact]
+    public async Task GetGroup_NotEmpty()
+    {
+        var group = await _usersContext
+            .Groups
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+        Assert.NotNull(group);
+
+        WriteLine("Group:");
+        WriteAsJson(group);
+
+        NotDefault(group.Id);
+        NotDefault(group.Name);
+        NotDefault(group.FoundationDate);
+        NotDefault(group.TerminationDate);
+    }
+    [Fact]
+    public async Task GetGroupCourse_NotEmpty()
+    {
+        var group = await _usersContext
+            .GroupCourses
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+        Assert.NotNull(group);
+
+        WriteLine("GroupCourse:");
+        WriteAsJson(group);
+
+        NotDefault(group.GroupId);
+        NotDefault(group.CourseId);
+        NotDefault(group.LevelId);
+        NotDefault(group.IsCompleted);
+    }
 
     private static void NotDefault<T>(T value){
         Assert.NotEqual(default(T), value);
