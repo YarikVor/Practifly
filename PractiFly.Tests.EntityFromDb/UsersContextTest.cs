@@ -5,15 +5,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using PractiFly.WebApi.Context;
+using Xunit.Abstractions;
 
 namespace PractiFly.Tests.EntityFromDb;
 
 public class UsersContextTest
 {
     static UsersContext _usersContext = Mock.CreateUsersContext();
-    private ILogger _logger;
+    private ITestOutputHelper _logger;
     
-    public UsersContextTest(ILogger logger)
+    public UsersContextTest(ITestOutputHelper logger)
     {
         _logger = logger;
     }
@@ -56,6 +57,6 @@ public class UsersContextTest
     private void LogJson<T>(T obj)
     {
         var json = JsonConvert.SerializeObject(obj);
-        _logger.LogInformation(json);
+        _logger.WriteLine(json);
     }
 }
