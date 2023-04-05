@@ -14,24 +14,26 @@ namespace PractiFly.WebApi.EntityDb.Users
         public int UserId { get; set; }
         
         [ForeignKey("UserId")]
-        public virtual User User { get; set; }
+        public virtual User User { get; set; } = null!;
 
         [Column("ThemeId")]
         public int ThemeId { get; set; }
         
         [ForeignKey("ThemeId")]
-        public virtual Theme Theme { get; set; }
+        public virtual Theme Theme { get; set; } = null!;
 
         [Column("IsCompleted")]
+        [Required]
         public bool IsCompleted { get; set; }
 
         [Column("LevelId")]
         public int LevelId { get; set; }
         
         [ForeignKey("LevelId")]
-        public virtual Level Level { get; set; }
+        public virtual Level Level { get; set; } = null!;
 
         [Column("Grade")]
+        [Required]
         public int Grade { get; set; }
 
         [Column("Note")]

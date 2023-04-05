@@ -12,21 +12,21 @@ namespace PractiFly.WebApi.EntityDb.Users
     {
         [Column("GroupId")]
         public int GroupId { get; set; }
-        
+
         [ForeignKey("GroupId")]
-        public virtual Group Group { get; set; }
+        public virtual Group Group { get; set; } = null!;
 
         [Column("CourseId")]
         public int CourseId { get; set; }
-        
+
         [ForeignKey("CourseId")]
-        public virtual Course Course { get; set; }
+        public virtual Course Course { get; set; } = null!;
         
         [Column("LevelId")]
         public int LevelId { get; set; }
-        
+
         [ForeignKey("LevelId")]
-        public virtual Level Level { get; set; }
+        public virtual Level Level { get; set; } = null!;
 
         [Column("IsCompleted")]
         public bool IsCompleted { get; set; }

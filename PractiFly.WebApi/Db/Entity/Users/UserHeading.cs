@@ -10,27 +10,23 @@ namespace PractiFly.WebApi.EntityDb.Users
     [Keyless]
     public class UserHeading
     {
-        [Key] 
         [Column("UserId")] 
         public int UserId { get; set; }
 
         [ForeignKey("UserId")] 
-        public virtual User User { get; set; }
-
+        public virtual User User { get; set; } = null!;
 
         [Column("HeadingId")] 
         public int HeadingId { get; set; }
 
         [ForeignKey("HeadingId")] 
-        public virtual Heading Heading { get; set; }
-
+        public virtual Heading Heading { get; set; } = null!;
 
         [Column("LevelId")] 
         public int LevelId { get; set; }
 
         [ForeignKey("LevelId")] 
-        public virtual Level Level { get; set; }
-        
+        public virtual Level Level { get; set; } = null!;
 
         [Column("Note")] 
         [MaxLength(256)] 
