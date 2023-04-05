@@ -36,7 +36,12 @@ public class UsersContextTest
     [Fact]
     public async Task GetUserGroup_NotEmpty()
     {
-        var userGroup = await _usersContext.UserGroups.AsNoTracking().Include(e => e.User).FirstOrDefaultAsync();
+        var userGroup = await _usersContext
+            .UserGroups
+            .AsNoTracking()
+            .Include(e => e.User)
+            .FirstOrDefaultAsync();
+        
         Assert.NotNull(userGroup);
         
         
@@ -77,6 +82,8 @@ public class UsersContextTest
         _logger.WriteLine(json);
     }
 
-    private void WriteLine(string message) => _logger.WriteLine(message);
-    private void WriteLine(string format, params object[] args) => _logger.WriteLine(format, args);
+    private void WriteLine(string message) 
+        => _logger.WriteLine(message);
+    private void WriteLine(string format, params object[] args) 
+        => _logger.WriteLine(format, args);
 }
