@@ -1,39 +1,39 @@
-﻿using PractiFly.WebApi.EntityDb.Materials;
+﻿using Microsoft.EntityFrameworkCore;
+using PractiFly.WebApi.EntityDb.Materials;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PractiFly.WebApi.EntityDb.Courses
 {
     [Table("Theme")]
+    [Keyless]
     public class ThemeMaterial
     {
         [Column("ThemeId")]
-        [ForeignKey("ThemeId")]
-        [Required]
         public int ThemeId { get; set; }
-        public virtual Theme Theme { get; set; } //TODO:
+
+        [ForeignKey("ThemeId")]
+        public virtual Theme Theme { get; set; } = null!;
 
         [Column("MaterialId")]
-        [ForeignKey("MaterialId")]
-        [Required]
         public int MaterialId { get; set; }
-        public virtual Material Material { get; set; } //TODO:
+
+        [ForeignKey("MaterialId")]
+        public virtual Material Material { get; set; } = null!; 
 
         [Column("Number")]
-        [ForeignKey("Number")]
         [Required]
         public int Number { get; set; }
 
         [Column("IsBasic")]
-        [ForeignKey("IsBasic")]
         [Required]
         public bool IsBasic { get; set; }
 
         [Column("LevelId")]
-        [ForeignKey("LevelId")]
-        [Required]
         public int LevelId { get; set; }
-        public virtual Level Level { get; set; } //TODO:
+
+        [ForeignKey("LevelId")]
+        public virtual Level Level { get; set; } = null!;
 
         [Column("Note")]
         [MaxLength(256)]

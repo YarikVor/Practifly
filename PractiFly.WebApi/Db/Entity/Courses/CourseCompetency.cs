@@ -7,20 +7,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace PractiFly.WebApi.EntityDb.Courses;
 
 [Table("CourseCompetency")]
+[Keyless]
 public class CourseCompetency
 {
     [Column("CourseId")]
-    [ForeignKey("CourseId")]
-    [Required]
     public int CourseId { get; set; }
-    public virtual Course Course { get; set; } //TODO:
+
+    [ForeignKey("CourseId")]
+    public virtual Course Course { get; set; } = null!; //TODO:
 
     [Column("CompetencyId")]
-    [ForeignKey("CompetencyId")]
-    [Required]
-
     public int CompetencyId{ get; set; }
-    public virtual Competency Competency { get; set; } //TODO:
+
+    [ForeignKey("CompetencyId")]
+    public virtual Competency Competency { get; set; } = null!; //TODO:
 
     [Column("Note")]
     [MaxLength(256)]

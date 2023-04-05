@@ -1,27 +1,27 @@
-﻿using PractiFly.WebApi.EntityDb.Materials;
+﻿using Microsoft.EntityFrameworkCore;
+using PractiFly.WebApi.EntityDb.Materials;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PractiFly.WebApi.EntityDb.Courses
 {
     [Table("CourseHeading")]
+    [Keyless]
     public class CourseHeading
     {
         [Column("CourseId")]
-        [ForeignKey("CourseId")]
-        [Required]
         public int CourseId { get; set; }
-        public virtual Course Course { get; set; } //TODO:
+
+        [ForeignKey("CourseId")]
+        public virtual Course Course { get; set; } = null!; //TODO:
 
         [Column("HeadingId")]
-        [ForeignKey("HeadingId")]
-        [Required]
         public int HeadingId { get; set; }
-        public virtual Heading Heading { get; set; } //TODO:
 
+        [ForeignKey("HeadingId")]
+        public virtual Heading Heading { get; set; } = null!; //TODO:
 
         [Column("IsBasic")]
-        [ForeignKey("IsBasic")]
         [Required]
         public bool IsBasic { get; set; }
 
