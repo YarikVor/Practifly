@@ -40,6 +40,7 @@ void ConfigureServices(IServiceCollection services)
 
     var config = services.BuildServiceProvider().GetService<IConfiguration>();
 
-    services.AddDbContext<PractiflyContext>(options =>
+    services.AddDbContext<IUsersContext, UsersContext>(options =>
             options.UseNpgsql(config.GetConnectionString("DefaultConnection")));
 }
+

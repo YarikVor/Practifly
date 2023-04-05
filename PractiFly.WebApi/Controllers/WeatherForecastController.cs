@@ -15,11 +15,11 @@ namespace PractiFly.WebApi.Controllers
     };
 
     private readonly ILogger<WeatherForecastController> _logger;
-    private readonly PractiflyContext _context;
+    private readonly IUsersContext _context;
     
     public WeatherForecastController(
       ILogger<WeatherForecastController> logger,
-      PractiflyContext context
+      IUsersContext context
       )
     {
       _logger = logger;
@@ -41,7 +41,7 @@ namespace PractiFly.WebApi.Controllers
     [HttpGet("Test")]
     public async Task<IActionResult> Test()
     {
-      var headings = await _context.Headings.FirstAsync();
+      var headings = await _context.Users.FirstAsync();
       
       return Json(headings);
     }
