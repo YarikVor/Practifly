@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PractiFly.WebApi.EntityDb.Materials
 {
     [Table("HeadingMaterial")]
+    [Keyless]
     public class HeadingMaterial
     {
         [Column("HeadingId")]

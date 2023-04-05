@@ -15,8 +15,14 @@ namespace PractiFly.WebApi.EntityDb.Materials
         [Column("CompetencyId")]
         public int CompetencyId { get; set; }
 
+        [ForeignKey("CompetencyId")]
+        public virtual Competency Competency { get; set; } = null!;
+
         [Column("LevelId")]
         public int LevelId { get; set; }
+
+        [ForeignKey("LevelId")]
+        public virtual Level Level { get; set; } = null!;
 
         [Column("Note")]
         [MaxLength(256)]

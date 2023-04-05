@@ -14,17 +14,20 @@ public class Heading
 	public int Id { get; set; }
 	
 	[Column("Code")]
-	[MaybeNull]
+    [Required]
+    [MaybeNull]
 	[DataType(DataType.Text)]
 	public string Code { get; set; }
 	
 	[Column("Name")]
+	[Required]
 	[MaybeNull]
 	[DataType(DataType.Text)]
 	public string Name { get; set; }
 	
 	[Column("UDC")]
-	[MaybeNull]
+    [Required]
+    [MaybeNull]
 	[DataType(DataType.Text)]
 	public string Udc { get; set; }
 	

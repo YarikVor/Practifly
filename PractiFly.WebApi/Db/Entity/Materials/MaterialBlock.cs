@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PractiFly.WebApi.EntityDb.Materials
 {
     [Table("MaterialBlock")]
+    [Keyless]
     public class MaterialBlock
     {
         [Column("ParentId")]
@@ -13,6 +15,7 @@ namespace PractiFly.WebApi.EntityDb.Materials
         public int ChildId { get; set; }
 
         [Column("Number")]
+        [Required]
         public int Number { get; set; }
 
         [Column("Note")]
