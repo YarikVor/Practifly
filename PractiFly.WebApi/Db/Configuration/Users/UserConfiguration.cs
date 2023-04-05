@@ -12,10 +12,13 @@ public class UserConfiguration: IEntityTypeConfiguration<User>
     
     public void Configure(EntityTypeBuilder<User> builder)
     {
+        
+        
+        /*
         builder.HasData(
             new User
             {
-                Id = 2,
+                Id = 1,
                 FirstName = "Yarik",
                 LastName = "Vorobyov",
                 Email = "yarikhelov@gmail.com",
@@ -26,7 +29,7 @@ public class UserConfiguration: IEntityTypeConfiguration<User>
             },
             new User
             {
-                Id = 3,
+                Id = 2,
                 FirstName = "Vadim",
                 LastName = "Manchenko",
                 Email = "clashstarset2017@gmail.com",
@@ -34,6 +37,7 @@ public class UserConfiguration: IEntityTypeConfiguration<User>
                 FilePhoto = ""
             }
         );
+        */
         
         
         
