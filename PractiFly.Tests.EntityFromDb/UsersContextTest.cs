@@ -5,15 +5,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using PractiFly.WebApi.Context;
+using Xunit.Abstractions;
 
 namespace PractiFly.Tests.EntityFromDb;
 
 public class UsersContextTest
 {
     static UsersContext _usersContext = Mock.CreateUsersContext();
-    private ILogger _logger;
+    private ITestOutputHelper _logger;
     
-    public UsersContextTest(ILogger logger)
+    public UsersContextTest(ITestOutputHelper logger)
     {
         _logger = logger;
     }
@@ -23,7 +24,7 @@ public class UsersContextTest
     [Fact]
     public async Task GetUser_NotEmpty()
     {
-        var user = await _usersContext.Users.FirstOrDefaultAsync();
+        var user = await _usersContext.Users.FirstAsync(e => e.Id == 2);
         Assert.NotNull(user);
         
         LogJson(user);
@@ -37,7 +38,7 @@ public class UsersContextTest
     [Fact]
     public async Task GetUserGroup_NotEmpty()
     {
-        var userGroup = await _usersContext.UserGroups.AsNoTracking().FirstOrDefaultAsync();
+        var userGroup = await _usersContext.UserGroups.AsNoTracking().Include(e => e.User).FirstOrDefaultAsync();
         Assert.NotNull(userGroup);
         
         LogJson(userGroup);
@@ -70,7 +71,7 @@ public class UsersContextTest
 
     private void LogJson<T>(T obj)
     {
-        var json = JsonConvert.SerializeObject(obj);
-        _logger.LogInformation(json);
+        var json = JsonConvert.SerializeObject(obj, Formatting.Indented);
+        _logger.WriteLine(json);
     }
 }

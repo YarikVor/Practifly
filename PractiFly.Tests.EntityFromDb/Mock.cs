@@ -6,6 +6,7 @@ namespace PractiFly.Tests.EntityFromDb;
 
 public static class Mock
 {
+
     public const string ConnectionString
         = "User ID=YarikVor;password=uPGpfLbjt9Z4;Database=neondb;host=ep-tight-moon-762347.eu-central-1.aws.neon.tech";
 
