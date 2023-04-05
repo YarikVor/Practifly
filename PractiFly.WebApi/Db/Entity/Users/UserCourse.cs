@@ -41,7 +41,8 @@ namespace PractiFly.WebApi.EntityDb.Users
         public virtual Theme LastTheme { get; set; } = null!;
 
         [Column("Grade")]
-        public int Grade { get; set; }
+        //TODO: можливо не обов'язкове поле
+        public int Grade { get; set; } 
 
         [MaxLength(256)]
         [Column("Note")]

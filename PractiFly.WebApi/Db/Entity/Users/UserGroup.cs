@@ -21,7 +21,6 @@ namespace PractiFly.WebApi.EntityDb.Users
         public virtual Group Group { get; set; } = null!;
 
         [Column("IsActive")]
-        [Required]
         public bool IsActive { get; set; }
 
         [Column("Note")]
