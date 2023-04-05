@@ -1,5 +1,9 @@
 using System.Runtime.CompilerServices;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using PractiFly.WebApi.Context;
 
 namespace PractiFly.Tests.EntityFromDb;
@@ -7,19 +11,23 @@ namespace PractiFly.Tests.EntityFromDb;
 public class UsersContextTest
 {
     static UsersContext _usersContext = Mock.CreateUsersContext();
+    private ILogger _logger;
     
-    [Fact]
-    public async Task TestConnection_Success()
+    public UsersContextTest(ILogger logger)
     {
-        await _usersContext.Database.OpenConnectionAsync();
-        await _usersContext.Database.CloseConnectionAsync();
+        _logger = logger;
     }
+    
+
     
     [Fact]
     public async Task GetUser_NotEmpty()
     {
         var user = await _usersContext.Users.FirstOrDefaultAsync();
         Assert.NotNull(user);
+        
+        LogJson(user);
+        
         NotDefault(user.Id);
         NotDefault(user.FirstName);
         NotDefault(user.LastName);
@@ -31,11 +39,11 @@ public class UsersContextTest
     {
         var userGroup = await _usersContext.UserGroups.AsNoTracking().FirstOrDefaultAsync();
         Assert.NotNull(userGroup);
+        
+        LogJson(userGroup);
+        
         NotDefault(userGroup.UserId);
-        userGroup.GroupId = 0;
         NotDefault(userGroup.GroupId);
-        
-        
     }
     
     
@@ -43,5 +51,11 @@ public class UsersContextTest
     
     private static void NotDefault<T>(T value){
         Assert.NotEqual(default(T), value);
+    }
+
+    private void LogJson<T>(T obj)
+    {
+        var json = JsonConvert.SerializeObject(obj);
+        _logger.LogInformation(json);
     }
 }
