@@ -2,52 +2,49 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
+using PractiFly.WebApi.Db.Configuration.Users;
 
 namespace PractiFly.WebApi.EntityDb.Users;
 
 [Table("User")]
 [PrimaryKey("Id")]
+[EntityTypeConfiguration(typeof(UserConfiguration))]
 public class User
 {
     [Key]
     [Column("Id")]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     [Column("FirstName")]
     [MaxLength(128)]
     [Required]
-    [MaybeNull]
-    public string FirstName { get; set; }
+    public string FirstName { get; set; } = null!;
 
     [Column("LastName")]
     [MaxLength(128)]
     [Required]
-    [MaybeNull]
-    public string LastName { get; set; }
+    public string LastName { get; set; } = null!;
 
     [EmailAddress]
     [Column("Email")]
     [MaxLength(64)]
     [Required]
-    [MaybeNull]
-    public string Email { get; set; }
+    public string Email { get; set; } = null!;
 
     [Phone]
     [Column("Phone")]
     [MaxLength(32)]
     [Required]
-    [MaybeNull]
-    public string Phone { get; set; }
+    public string Phone { get; set; } = null!;
 
     [Url]
     [Column("FilePhoto")]
     [MaxLength(64)]
     [Required]
-    [MaybeNull]
-    public string FilePhoto { get; set; }
+    public string FilePhoto { get; set; } = null!;
 
     [Column("RegistrationDate")]
-    [MaybeNull]
     public DateOnly RegistrationDate { get; set; }
 
     [Column("Note")]

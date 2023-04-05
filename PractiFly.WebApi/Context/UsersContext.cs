@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using PractiFly.WebApi.Db.Configuration.Users;
 using PractiFly.WebApi.EntityDb.Users;
 
 namespace PractiFly.WebApi.Context;
@@ -11,10 +12,7 @@ public class UsersContext: DbContext
 
     public UsersContext(DbContextOptions<UsersContext> options) : base(options)
     {
+        
     }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<UserGroup>().HasNoKey();
-    }
 }
