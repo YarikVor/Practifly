@@ -14,13 +14,13 @@ public class CourseCompetency
     public int CourseId { get; set; }
 
     [ForeignKey("CourseId")]
-    public virtual Course Course { get; set; } = null!; //TODO:
+    public virtual Course Course { get; set; } = null!;
 
     [Column("CompetencyId")]
     public int CompetencyId{ get; set; }
 
     [ForeignKey("CompetencyId")]
-    public virtual Competency Competency { get; set; } = null!; //TODO:
+    public virtual Competency Competency { get; set; } = null!;
 
     [Column("Note")]
     [MaxLength(256)]

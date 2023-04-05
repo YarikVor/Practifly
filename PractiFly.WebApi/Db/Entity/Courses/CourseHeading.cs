@@ -13,13 +13,13 @@ namespace PractiFly.WebApi.EntityDb.Courses
         public int CourseId { get; set; }
 
         [ForeignKey("CourseId")]
-        public virtual Course Course { get; set; } = null!; //TODO:
+        public virtual Course Course { get; set; } = null!;
 
         [Column("HeadingId")]
         public int HeadingId { get; set; }
 
         [ForeignKey("HeadingId")]
-        public virtual Heading Heading { get; set; } = null!; //TODO:
+        public virtual Heading Heading { get; set; } = null!;
 
         [Column("IsBasic")]
         [Required]
