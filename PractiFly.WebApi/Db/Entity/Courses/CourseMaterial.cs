@@ -1,31 +1,31 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 using PractiFly.WebApi.EntityDb.Materials;
 
 namespace PractiFly.WebApi.EntityDb.Courses
 {
     [Table("CourseMaterial")]
+    [Keyless]
     public class CourseMaterial
     {
         [Column("CourseId")]
-        [ForeignKey("CourseId")]
-        [Required]
         public int CourseId { get; set; }
-        public virtual Course Course { get; set; } //TODO:
+
+        [ForeignKey("CourseId")]
+        public virtual Course Course { get; set; } = null!;
 
         [Column("MaterialId")]
-        [ForeignKey("MaterialId")]
-        [Required]
         public int MaterialId { get; set; }
-        public virtual Material Material { get; set; } //TODO:
+
+        [ForeignKey("MaterialId")]
+        public virtual Material Material { get; set; } = null!;
 
         [Column("PriorityLevel")]
-        [ForeignKey("PriorityLevel")]
         [Required]
         public int PriorityLevel { get; set; }
 
         [Column("IsReserved")]
-        [ForeignKey("IsReserved")]
         [Required]
         public bool IsReserved { get; set; }
 

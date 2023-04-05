@@ -17,29 +17,27 @@ namespace PractiFly.WebApi.EntityDb.Courses
         [Column("Name")]
         [MaxLength(128)]
         [Required]
-        [MaybeNull]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         [Column("CourseId")]
-        [ForeignKey("CourseId")]
-        [Required]
         public int CourseId { get; set; }
-        public virtual Course Course { get; set; } //TODO:
+
+        [ForeignKey("CourseId")]
+        public virtual Course Course { get; set; } = null!;
 
         [Column("LevelId")]
-        [ForeignKey("LevelId")]
-        [Required]
         public int LevelId { get; set; }
-        public virtual Level Level { get; set; } //TODO:
+
+        [ForeignKey("LevelId")]
+        public virtual Level Level { get; set; } = null!;
 
         [Column("ParentId")]
-        [ForeignKey("ParentId")]
         public int ParentId { get; set; }
 
-        public virtual Theme id { get; set; } //TODO:
+        [ForeignKey("ParentId")]
+        public virtual Theme Parent { get; set; } = null!;
 
         [Column("Number")]
-        [ForeignKey("Number")]
         [Required]
         public int Number { get; set; }
 

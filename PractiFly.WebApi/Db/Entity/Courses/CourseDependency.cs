@@ -1,31 +1,30 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PractiFly.WebApi.EntityDb.Courses;
 
 [Table("CourseDependency")]
+[Keyless]
 public class CourseDependency
 {
     [Column("CourseId")]
-    [ForeignKey("CourseId")]
-    [Required]
     public int CourseId { get; set; }
 
-    public virtual Course Course { get; set; } //TODO:
+    [ForeignKey("CourseId")]
+    public virtual Course Course { get; set; } = null!;
 
     [Column("BaseCourseId")]
-    [ForeignKey("BaseCourseId")]
-    [Required]
     public int BaseCourseId { get; set; }
 
-    public virtual Course BaseCourse { get; set; } //TODO:
+    [ForeignKey("BaseCourseId")]
+    public virtual Course BaseCourse { get; set; } = null!;
 
     [Column("CourseDependencyTypeId")]
-    [ForeignKey("CourseDependencyTypeId")]
-    [Required]
     public int CourseDependencyTypeId { get; set; }
 
-    public virtual CourseDependencyType CourseDependencyType { get; set; } //TODO:
+    [ForeignKey("CourseDependencyTypeId")]
+    public virtual CourseDependencyType CourseDependencyType { get; set; } = null!;
 
     [Column("Note")]
     [MaxLength(256)]

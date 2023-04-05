@@ -19,15 +19,13 @@ public class Course
     [Column("Name")]
     [MaxLength(128)]
     [Required]
-    [MaybeNull]
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     [Column("OwnerId")]
-    [ForeignKey("OwnerId")]
-    [Required]
     public int OwnerId { get; set; }
 
-    public virtual User Owner { get; set; }
+    [ForeignKey("OwnerId")]
+    public virtual User Owner { get; set; } = null!;
 
     [Column("Note")]
     [MaxLength(256)]
