@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
-using Microsoft.EntityFrameworkCore;
 
 namespace PractiFly.WebApi.EntityDb.Materials
 {
@@ -12,9 +10,6 @@ namespace PractiFly.WebApi.EntityDb.Materials
     {
         [Column("MaterialId")]
         public int MaterialId { get; set; }
-        
-        [ForeignKey("MaterialId")]
-        public virtual Material Material { get; set; }
 
         [ForeignKey("MaterialKey")] 
         public virtual Material Material { get; set; } = null!;
