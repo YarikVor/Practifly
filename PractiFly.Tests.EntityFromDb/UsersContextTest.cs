@@ -45,10 +45,25 @@ public class UsersContextTest
         NotDefault(userGroup.UserId);
         NotDefault(userGroup.GroupId);
     }
-    
-    
-    
-    
+
+    [Fact]
+    public async Task GetUserCourse_NotEmpty()
+    {
+        var userCourse = await _usersContext.UserCourses.AsNoTracking().FirstOrDefaultAsync();
+        Assert.NotNull(userCourse);
+
+        LogJson(userCourse);
+
+        NotDefault(userCourse.UserId);
+        NotDefault(userCourse.CourseId);
+        NotDefault(userCourse.LevelId);
+        NotDefault(userCourse.IsCompleted);
+        NotDefault(userCourse.LastThemeId);
+        NotDefault(userCourse.LastTime);
+        NotDefault(userCourse.Grade);
+    }
+
+
     private static void NotDefault<T>(T value){
         Assert.NotEqual(default(T), value);
     }
