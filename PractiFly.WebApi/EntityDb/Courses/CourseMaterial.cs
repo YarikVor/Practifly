@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using PractiFly.WebApi.EntityDb.Materials;
 
 namespace PractiFly.WebApi.EntityDb.Courses
 {
