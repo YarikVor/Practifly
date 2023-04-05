@@ -19,15 +19,13 @@ public class UsersContextTest
         _logger = logger;
     }
     
-
-    
     [Fact]
     public async Task GetUser_NotEmpty()
     {
         var user = await _usersContext.Users.FirstAsync(e => e.Id == 2);
         Assert.NotNull(user);
         
-        LogJson(user);
+        WriteAsJson(user);
         
         NotDefault(user.Id);
         NotDefault(user.FirstName);
@@ -41,7 +39,8 @@ public class UsersContextTest
         var userGroup = await _usersContext.UserGroups.AsNoTracking().Include(e => e.User).FirstOrDefaultAsync();
         Assert.NotNull(userGroup);
         
-        LogJson(userGroup);
+        
+        WriteAsJson(userGroup);
         
         NotDefault(userGroup.UserId);
         NotDefault(userGroup.GroupId);
@@ -53,7 +52,9 @@ public class UsersContextTest
         var userCourse = (dynamic)(new object()); //await _usersContext.UserCourses.AsNoTracking().FirstOrDefaultAsync();
         Assert.NotNull(userCourse);
         Assert.NotEqual(0, userCourse.CourseId);
-        LogJson(userCourse);
+       
+        WriteLine("UserCourse:");
+        WriteAsJson(userCourse);
 
         NotDefault(userCourse.UserId);
         NotDefault(userCourse.CourseId);
@@ -62,6 +63,7 @@ public class UsersContextTest
         NotDefault(userCourse.LastThemeId);
         NotDefault(userCourse.LastTime);
         NotDefault(userCourse.Grade);
+        
     }
 
 
@@ -69,9 +71,12 @@ public class UsersContextTest
         Assert.NotEqual(default(T), value);
     }
 
-    private void LogJson<T>(T obj)
+    private void WriteAsJson<T>(T obj)
     {
         var json = JsonConvert.SerializeObject(obj, Formatting.Indented);
         _logger.WriteLine(json);
     }
+
+    private void WriteLine(string message) => _logger.WriteLine(message);
+    private void WriteLine(string format, params object[] args) => _logger.WriteLine(format, args);
 }
