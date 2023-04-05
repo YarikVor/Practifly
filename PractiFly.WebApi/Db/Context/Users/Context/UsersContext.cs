@@ -8,10 +8,7 @@ namespace PractiFly.WebApi.Context;
 
 public class UsersContext: DbContext, IUsersContext
 {
-
-
     public DbSet<Group> Groups { get; set; } = null!;
-    
     public DbSet<GroupCourse> GroupCourses { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<UserCourse> UserCourses { get; set; }
