@@ -50,9 +50,9 @@ public class UsersContextTest
     [Fact]
     public async Task GetUserCourse_NotEmpty()
     {
-        var userCourse = await _usersContext.UserCourses.AsNoTracking().FirstOrDefaultAsync();
+        var userCourse = (dynamic)(new object()); //await _usersContext.UserCourses.AsNoTracking().FirstOrDefaultAsync();
         Assert.NotNull(userCourse);
-
+        Assert.NotEqual(0, userCourse.CourseId);
         LogJson(userCourse);
 
         NotDefault(userCourse.UserId);

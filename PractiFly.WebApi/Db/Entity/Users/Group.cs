@@ -16,8 +16,7 @@ namespace PractiFly.WebApi.EntityDb.Users
         [Column("Name")]
         [MaxLength(256)]
         [Required]
-        [MaybeNull]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         [Column("FoundationDate")]
         public DateOnly FoundationDate { get; set; }

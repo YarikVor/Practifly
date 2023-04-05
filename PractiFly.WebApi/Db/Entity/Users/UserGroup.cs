@@ -17,6 +17,9 @@ namespace PractiFly.WebApi.EntityDb.Users
 
         [Column("GroupId")]
         public int GroupId { get; set; }
+        
+        [ForeignKey("GroupId")]
+        public virtual Group Group { get; set; }
 
         [Column("IsActive")]
         public bool IsActive { get; set; }

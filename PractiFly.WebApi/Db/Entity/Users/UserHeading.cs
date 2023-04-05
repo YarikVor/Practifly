@@ -2,24 +2,38 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
+using PractiFly.WebApi.EntityDb.Materials;
 
 namespace PractiFly.WebApi.EntityDb.Users
 {
     [Table("UserHeading")]
-    //[PrimaryKey("UserId")]
+    [Keyless]
     public class UserHeading
     {
-        [Key]
-        [Column("UserId")]
+        [Key] 
+        [Column("UserId")] 
         public int UserId { get; set; }
-        [Column("HeadingId")]
-        [MaybeNull]
+
+        [ForeignKey("UserId")] 
+        public virtual User User { get; set; }
+
+
+        [Column("HeadingId")] 
         public int HeadingId { get; set; }
-        [Column("LevelId")]
-        [MaybeNull]
+
+        [ForeignKey("HeadingId")] 
+        public virtual Heading Heading { get; set; }
+
+
+        [Column("LevelId")] 
         public int LevelId { get; set; }
-        [Column("Note")]
-        [MaxLength(256)]
+
+        [ForeignKey("LevelId")] 
+        public virtual Level Level { get; set; }
+        
+
+        [Column("Note")] 
+        [MaxLength(256)] 
         public string? Note { get; set; }
     }
 }

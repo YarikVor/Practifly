@@ -8,12 +8,10 @@ namespace PractiFly.WebApi.EntityDb.Users;
 
 [Table("User")]
 [PrimaryKey("Id")]
-[EntityTypeConfiguration(typeof(UserConfiguration))]
 public class User
 {
     [Key]
     [Column("Id")]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     [Column("FirstName")]
@@ -40,7 +38,7 @@ public class User
 
     [Url]
     [Column("FilePhoto")]
-    [MaxLength(64)]
+    [MaxLength(2048)]
     [Required]
     public string FilePhoto { get; set; } = null!;
 
