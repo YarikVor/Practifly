@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using PractiFly.WebApi.Attributes;
 using PractiFly.WebApi.Context;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 ConfigureServices(builder.Services);
+
+builder.Services.AddControllers().AddJsonOptions(
+    options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
+        options.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
+    }
+);
 
 var app = builder.Build();
 
