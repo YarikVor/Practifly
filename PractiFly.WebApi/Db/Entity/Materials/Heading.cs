@@ -12,31 +12,28 @@ public class Heading
 {
 	[Column("Id")]
 	public int Id { get; set; }
-	
+
 	[Column("Code")]
-    [Required]
-    [MaybeNull]
-	[DataType(DataType.Text)]
-	public string Code { get; set; }
-	
+	[Required]
+    [MaxLength(16)]
+    public string Code { get; set; } = null!;
+
 	[Column("Name")]
 	[Required]
-	[MaybeNull]
-	[DataType(DataType.Text)]
-	public string Name { get; set; }
-	
+    [MaxLength(256)]
+    public string Name { get; set; } = null!;
+
 	[Column("UDC")]
-    [Required]
-    [MaybeNull]
-	[DataType(DataType.Text)]
-	public string Udc { get; set; }
+	[Required]
+    [MaxLength(16)]
+    public string Udc { get; set; } = null!;
 	
 	[Column("Note")]
-	[DataType(DataType.Text)]
-	public string? Note { get; set; }
+    [MaxLength(256)]
+    public string? Note { get; set; }
 	
 	[Column("Description")]
-	[DataType(DataType.Text)]
+	[MaxLength(65536)]
 	public string? Description { get; set; }
 
 }

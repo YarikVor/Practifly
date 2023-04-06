@@ -16,12 +16,12 @@ public class Level
     [Column("Name")]
     [MaxLength(256)]
     [Required]
-    [MaybeNull]
-    public string Name { get; set; }
+
+    public string Name { get; set; } = null!;
 
     [Column("Number")]
-    [ForeignKey("Number")]
     [Required]
+    
     public int Number { get; set; }
 
     [Column("Note")]

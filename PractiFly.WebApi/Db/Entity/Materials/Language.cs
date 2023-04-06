@@ -13,18 +13,17 @@ namespace PractiFly.WebApi.EntityDb.Materials
         [Column("Code")]
         [MaxLength(2)]
         [Required]
-        [MaybeNull]
-        public string Code { get; set; }
+        public string Code { get; set; } = null!;
 
         [Column("Name")]
         [MaxLength(128)]
-        [MaybeNull]
-        public string Name { get; set; }
+        [Required]
+        public string Name { get; set; } = null!;
 
         [Column("OriginalName")]
         [MaxLength(128)]
-        [MaybeNull]
-        public string OriginalName { get; set; }
+        [Required]
+        public string OriginalName { get; set; } = null!;
 
         [Column("Note")]
         [MaxLength(256)]

@@ -16,22 +16,22 @@ namespace PractiFly.WebApi.EntityDb.Materials
         [Column("Name")]
         [MaxLength(128)]
         [Required]
-        [MaybeNull]
-        public string Name { get; set; }
+
+        public string Name { get; set; } = null!;
 
         [Column("LanguageCode")]
         [MaxLength(2)]
         [Required]
-        [MaybeNull]
-        public string LanguageCode { get; set; }
+        public string LanguageCode { get; set; } = null!;
 
         [Column("URL")]
         [MaxLength(2048)]
         [Required]
-        [MaybeNull]
-        public string Url { get; set; }
+        [Url]
+        public string Url { get; set; } = null!;
 
         [Column("IsPractical")]
+        [Required]
         public bool IsPractical { get; set; }
 
         [Column("Note")]

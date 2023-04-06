@@ -22,6 +22,7 @@ namespace PractiFly.WebApi.EntityDb.Materials
         [Column("URL")]
         [MaxLength(2048)]
         [Required]
+        [Url]
         public string Url { get; set; } = null!;
     }
 }

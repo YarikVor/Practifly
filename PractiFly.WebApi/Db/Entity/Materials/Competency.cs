@@ -17,8 +17,7 @@ public class Competency
     [Column("Name")]
     [MaxLength(128)]
     [Required]
-    [MaybeNull]
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     [Column("HeadingId")]
     public int HeadingId { get; set; }
@@ -28,6 +27,9 @@ public class Competency
 
     [Column("ParentId")]
     public int ParentId { get; set; }
+
+    [ForeignKey("ParentId")]
+    public virtual Competency Parent { get; set; } = null!;
 
     [Column("Note")]
     [MaxLength(256)]
