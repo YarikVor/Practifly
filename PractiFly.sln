@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject1", "TestProject
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PractiFly.Tests.EntityFromDb", "PractiFly.Tests.EntityFromDb\PractiFly.Tests.EntityFromDb.csproj", "{B0F77AC5-0B4A-4533-911A-CBD9E893C47E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Practifly.Checkers", "Practifly.Checkers\Practifly.Checkers.csproj", "{3CACF428-F22E-40C7-9F28-A719C3353D1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Practifly.Checkers.Tests", "Practifly.Checkers.Tests\Practifly.Checkers.Tests.csproj", "{6267AC64-4DF9-4838-AC6A-A3B3775C2D53}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{B0F77AC5-0B4A-4533-911A-CBD9E893C47E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0F77AC5-0B4A-4533-911A-CBD9E893C47E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0F77AC5-0B4A-4533-911A-CBD9E893C47E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CACF428-F22E-40C7-9F28-A719C3353D1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CACF428-F22E-40C7-9F28-A719C3353D1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CACF428-F22E-40C7-9F28-A719C3353D1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CACF428-F22E-40C7-9F28-A719C3353D1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6267AC64-4DF9-4838-AC6A-A3B3775C2D53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6267AC64-4DF9-4838-AC6A-A3B3775C2D53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6267AC64-4DF9-4838-AC6A-A3B3775C2D53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6267AC64-4DF9-4838-AC6A-A3B3775C2D53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
