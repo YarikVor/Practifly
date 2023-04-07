@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using PractiFly.WebApi.Context;
-using PractiFly.WebApi.EntityDb.Users;
 
 namespace PractiFly.Tests.EntityFromDb;
 

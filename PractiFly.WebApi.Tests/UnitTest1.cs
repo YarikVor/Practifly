@@ -1,4 +1,4 @@
-namespace TestProject1;
+namespace PractiFly.WebApi.Tests;
 
 public class UnitTest1
 {

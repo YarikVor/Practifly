@@ -19,7 +19,7 @@ public class CheckerTests
     public static void Init()
     {
         var options = new CheckerOptionBuilder()
-            .Init()
+            .Init()            
             .Build();
         
         _checker = new Checker(options);

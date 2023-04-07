@@ -21,9 +21,6 @@ public class UsersContext: DbContext, IUsersContext
 
     public UsersContext(DbContextOptions<UsersContext> options) : base(options)
     {
-        Database.OpenConnection();
-        Database.EnsureCreated();
-
     }
 
     

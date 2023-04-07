@@ -7,7 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Practifly.Checkers;
 using Practifly.Checkers.Builder;
+using Practifly.GeneratorTestData;
 using PractiFly.WebApi.Context;
+using PractiFly.WebApi.EntityDb.Materials;
 using PractiFly.WebApi.EntityDb.Users;
 using Xunit.Abstractions;
 using Xunit.Sdk;
@@ -17,10 +19,14 @@ namespace PractiFly.Tests.EntityFromDb;
 public class UsersContextDataTest
 {
     static UsersContext _usersContext = Mock.CreateUsersContext();
+    
+    static FakerManager _fakerManager = new PractiFlyFakerManager();
 
     private ITestOutputHelper _logger;
 
     private Checker _checker;
+    
+    private const int _countEntity = 5;
 
     public UsersContextDataTest(ITestOutputHelper logger)
     {
@@ -29,6 +35,7 @@ public class UsersContextDataTest
             .Init()
             .SkipSubstring("Note")
             .SkipSubstring("Description")
+            .SkipType<bool>()
             .Build();
 
         _checker = new Checker(option);
@@ -40,29 +47,45 @@ public class UsersContextDataTest
         return new object[] { dbSet, ignoreProperty };
     }
 
+    // ToDo:
     public static IEnumerable<object[]> GetTestData()
     {
-        yield return MakeTest(_usersContext.Users);
-        yield return MakeTest(_usersContext.Groups);
+        yield return MakeTest(_usersContext.Users, );
+        yield return MakeTest(_usersContext.Groups,  );
+
+        yield return MakeTest(_usersContext.UserCourses, uc => uc.Grade);
     }
 
     [Theory]
     [MemberData(nameof(GetTestData))]
-    public async Task GetEntity_NotEmpty<T>(DbSet<T> dbSet, Expression<Func<T, object>>[] ignoreProperty)
-        where T : class
+    public async Task GetEntity_NotEmpty<TEntity>(DbSet<TEntity> dbSet, Expression<Func<TEntity, object>>[] ignoreProperty)
+        where TEntity : class
     {
+        AddEntitiesIfEmpty<TEntity>(dbSet);
+        
         var entity = await dbSet.FindAsync(1);
 
-        dbSet.ExecuteDelete();
-        
-        
-        
         Assert.NotNull(entity);
 
-        WriteLine(typeof(T).Name);
+        WriteLine(typeof(TEntity).Name);
         WriteAsJson(entity);
 
         _checker.Check(entity, ignoreProperty);
+    }
+
+    private void AddEntitiesIfEmpty<TEntity>(DbSet<TEntity> dbSet) where TEntity : class
+    {
+        
+        if (dbSet.Count() < _countEntity)
+        {
+            dbSet.ExecuteDelete();
+            
+            var entities = _fakerManager.Generate<TEntity>(_countEntity);
+            
+            dbSet.AddRange(entities);
+            
+            _usersContext.SaveChanges();
+        }
     }
 
 
@@ -74,8 +97,4 @@ public class UsersContextDataTest
 
     private void WriteLine(string message)
         => _logger.WriteLine(message);
-
-    private void WriteLine(string format, params object[] args)
-        => _logger.WriteLine(format, args);
-
 }

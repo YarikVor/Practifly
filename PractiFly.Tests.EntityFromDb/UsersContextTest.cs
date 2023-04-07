@@ -1,10 +1,16 @@
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Bogus;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Practifly.Checkers;
+using Practifly.Checkers.Builder;
+using Practifly.GeneratorTestData;
+using Practifly.GeneratorTestData.Faker.Users;
 using PractiFly.WebApi.Context;
+using PractiFly.WebApi.EntityDb.Users;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -15,23 +21,74 @@ public class UsersContextTest
     static UsersContext _usersContext = Mock.CreateUsersContext();
     private ITestOutputHelper _logger;
     
+    private Checker _checker;
+
     public UsersContextTest(ITestOutputHelper logger)
     {
         _logger = logger;
+        var option = new CheckerOptionBuilder()
+        .Init()
+        .SkipSubstring("Note")
+        .SkipSubstring("Description")
+        .Build();
+        
+        _checker = new Checker(option);
+
+
+        /*_usersContext.Users.Add(new()
+        {
+            FirstName = "Test1",
+            LastName = "Test1",
+            Email = "",
+            Phone = "",
+            FilePhoto = "",
+            RegistrationDate = DateOnly.FromDateTime(DateTime.Now),
+        });*/
+
+        //_usersContext.SaveChanges();
+
     }
+
+
+    [Fact]
+    public void TestFaker()
+    {
+        FakerManager fakerManager = new PractiFlyFakerManager();
+        
+        var user = fakerManager.Generate<User>(4);
+        
+        WriteAsJson(user);
+        
+        var group = fakerManager.Generate<Group>(1);
+        
+        WriteAsJson(group);
+        
+    }
+    
     
     [Fact]
     public async Task GetUser_NotEmpty()
     {
-        var user = await _usersContext.Users.FirstAsync(e => e.Id == 2);
+        {
+            var listUser = new UserFaker().Generate(2);
+            
+            WriteAsJson(listUser);
+
+            var userNew = listUser[0];
+
+            userNew.Id = 1;
+
+            _usersContext.Users.Add(userNew);
+            _usersContext.SaveChanges();            
+        }
+        
+        
+        var user = await _usersContext.Users.OrderBy(e => e.Id).LastAsync();
         Assert.NotNull(user);
         
         WriteAsJson(user);
         
-        NotDefault(user.Id);
-        NotDefault(user.FirstName);
-        NotDefault(user.LastName);
-        NotDefault(user.Email);
+        _checker.Check(user);
     }
 
     [Fact]
@@ -72,6 +129,8 @@ public class UsersContextTest
         NotDefault(userCourse.LastThemeId);
         NotDefault(userCourse.LastTime);
         NotDefault(userCourse.Grade);
+        
+        
     }
     [Fact]
     public async Task GetUserHeading_NotEmpty()
