@@ -32,7 +32,7 @@ namespace PractiFly.WebApi.EntityDb.Users
         public bool IsCompleted { get; set; }
         
         [Column("LastTime")]
-        public TimeOnly LastTime { get; set; }
+        public DateTime LastTime { get; set; }
 
         [Column("LastThemeId")]
         public int LastThemeId { get; set; }
