@@ -26,5 +26,14 @@ public static class Mock
         var options = CreateOptions<UsersContext>();
         return new UsersContext(options);
     }
-    
+    public static MaterialsContext CreateMaterialsContext()
+    {
+        var options = CreateOptions<MaterialsContext>();
+        return new MaterialsContext(options);
+    }
+    public static CoursesContext CreateCoursesContext()
+    {
+        var options = CreateOptions<CoursesContext>();
+        return new CoursesContext(options);
+    }
 }

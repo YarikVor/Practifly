@@ -19,7 +19,10 @@ namespace PractiFly.Tests.EntityFromDb;
 public class UsersContextDataTest
 {
     static UsersContext _usersContext = Mock.CreateUsersContext();
-    
+    static MaterialsContext _materialsContext = Mock.CreateMaterialsContext();
+    static CoursesContext _coursesContext = Mock.CreateCoursesContext();
+
+
     static FakerManager _fakerManager = new PractiFlyFakerManager();
 
     private ITestOutputHelper _logger;
@@ -46,14 +49,65 @@ public class UsersContextDataTest
     {
         return new object[] { dbSet, ignoreProperty };
     }
-
+    /*
+     ÏÎÐßÄÎÊ:
+        1.User
+        2.Group
+        3.Course (Owner)
+        4.Level
+        5.Heading
+        6.Language
+        7.Material
+        8.Competency (Parent)
+        9.Theme (Parent)
+        10. ThemeMaterial
+        11. CourseCompetency
+        12. CourseDependencyType
+        13. CourseDependency
+        14. CourseHeading
+        15. CourseMaterial
+        16. HeadingCompetency
+        17. HeadingMaterial
+        18.  MaterialBlock (Parent, Child)
+        19. MaterialCompetency
+        20. Unit (?)
+        21. GroupCourse
+        22. UserCourse
+        23. UserGroup
+        24. UserHeading
+        25. UserTheme
+        26. UserMaterial
+        27. Role (?)
+     */
     // ToDo:
     public static IEnumerable<object[]> GetTestData()
     {
         yield return MakeTest(_usersContext.Users );
         yield return MakeTest(_usersContext.Groups );
-
+        yield return MakeTest(_coursesContext.Courses);
+        yield return MakeTest(_materialsContext.Levels);
+        yield return MakeTest(_materialsContext.Headings);
+        yield return MakeTest(_materialsContext.Languages);
+        yield return MakeTest(_materialsContext.Materials);
+        yield return MakeTest(_materialsContext.Competencies);
+        yield return MakeTest(_materialsContext.Themes);
+        yield return MakeTest(_coursesContext.ThemeMaterials);
+        yield return MakeTest(_coursesContext.CourseCompetencies);
+        yield return MakeTest(_coursesContext.CourseDependencyTypes);
+        yield return MakeTest(_coursesContext.CourseDependencies);
+        yield return MakeTest(_coursesContext.CourseHeadings);
+        yield return MakeTest(_coursesContext.CourseMaterials);
+        yield return MakeTest(_materialsContext.HeadingCompetencies);
+        yield return MakeTest(_materialsContext.HeadingMaterials);
+        yield return MakeTest(_materialsContext.MaterialBlocks);
+        yield return MakeTest(_materialsContext.MaterialCompetencies);
+        yield return MakeTest(_materialsContext.Units);
+        yield return MakeTest(_usersContext.GroupCourses);
         yield return MakeTest(_usersContext.UserCourses, uc => uc.Grade);
+        yield return MakeTest(_usersContext.UserGroups);
+        yield return MakeTest(_usersContext.UserHeadings);
+        yield return MakeTest(_usersContext.UserThemes);
+        yield return MakeTest(_usersContext.UserMaterials);
     }
 
     [Theory]
