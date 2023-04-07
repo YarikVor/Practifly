@@ -50,8 +50,8 @@ public class UsersContextDataTest
     // ToDo:
     public static IEnumerable<object[]> GetTestData()
     {
-        yield return MakeTest(_usersContext.Users, );
-        yield return MakeTest(_usersContext.Groups,  );
+        yield return MakeTest(_usersContext.Users );
+        yield return MakeTest(_usersContext.Groups );
 
         yield return MakeTest(_usersContext.UserCourses, uc => uc.Grade);
     }

@@ -12,17 +12,19 @@ public static class Mock
           "Database=testdb;" +
           "host=ep-tight-moon-762347.eu-central-1.aws.neon.tech";
 
-    private static Lazy<DbContextOptions<UsersContext>> _lazyUsersContextOption =
-        new Lazy<DbContextOptions<UsersContext>>(() =>
-        {
-            var optionsBuilder = new DbContextOptionsBuilder<UsersContext>();
-            return optionsBuilder.UseNpgsql(ConnectionString).Options;
-        });
-
-    public static DbContextOptions<UsersContext> UsersContextOption => _lazyUsersContextOption.Value;
+    
+    private static DbContextOptions<TContext> CreateOptions<TContext>()
+        where TContext : DbContext
+    {
+        return new DbContextOptionsBuilder<TContext>()
+            .UseNpgsql(ConnectionString)
+            .Options;
+    } 
 
     public static UsersContext CreateUsersContext()
     {
-        return new UsersContext(UsersContextOption);
+        var options = CreateOptions<UsersContext>();
+        return new UsersContext(options);
     }
+    
 }
