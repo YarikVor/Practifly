@@ -20,8 +20,4 @@ public class CoursesContext: DbContext, ICoursesContext
         Database.EnsureCreated();
     }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        
-    }
 }
