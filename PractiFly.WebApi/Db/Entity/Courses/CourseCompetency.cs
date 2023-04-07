@@ -7,9 +7,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace PractiFly.WebApi.EntityDb.Courses;
 
 [Table("CourseCompetency")]
-[Keyless]
+[PrimaryKey("Id")]
 public class CourseCompetency
 {
+    [Key]
+    [Column("Id")]
+    public int Id { get; set; }
+    
     [Column("CourseId")]
     public int CourseId { get; set; }
 

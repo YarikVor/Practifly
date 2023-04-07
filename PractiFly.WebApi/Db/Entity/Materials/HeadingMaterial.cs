@@ -2,26 +2,30 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PractiFly.WebApi.EntityDb.Materials
-{
-    [Table("HeadingMaterial")]
-    [Keyless]
-    public class HeadingMaterial
-    {
-        [Column("HeadingId")]
-        public int HeadingId { get; set; }
+namespace PractiFly.WebApi.EntityDb.Materials;
 
-        [ForeignKey("HeadingId")]
-        public virtual Heading Heading { get; set; } = null!;
+[Table("HeadingMaterial")]
+[PrimaryKey("Id")]
+public class HeadingMaterial
+{    
+    [Key]
+    [Column("Id")]
+    public int Id { get; set; }
+    
+    [Column("HeadingId")]
+    public int HeadingId { get; set; }
 
-        [Column("MaterialId")]
-        public int MaterialId { get; set; }
+    [ForeignKey("HeadingId")]
+    public virtual Heading Heading { get; set; } = null!;
 
-        [ForeignKey("MaterialId")]
-        public virtual Material Material { get; set; } = null!;
+    [Column("MaterialId")]
+    public int MaterialId { get; set; }
 
-        [Column("Note")]
-        [MaxLength(256)]
-        public string? Note { get; set; }
-    }
+    [ForeignKey("MaterialId")]
+    public virtual Material Material { get; set; } = null!;
+
+    [Column("Note")]
+    [MaxLength(256)]
+    public string? Note { get; set; }
 }
+

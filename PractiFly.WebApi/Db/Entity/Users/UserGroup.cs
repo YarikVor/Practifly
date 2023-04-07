@@ -2,29 +2,31 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace PractiFly.WebApi.EntityDb.Users
-{
-    [Table("UserGroup")]
-    [Keyless]
-    public class UserGroup
-    {
-        [Column("UserId")]
-        public int UserId { get; set; }
+namespace PractiFly.WebApi.EntityDb.Users;
 
-        [ForeignKey("UserId")]
-        public virtual User User { get; set; } = null!;
+[Table("UserGroup")]
+[PrimaryKey("Id")]
+public class UserGroup
+{    [Key]
+     [Column("Id")]
+     public int Id { get; set; }
+    [Column("UserId")]
+    public int UserId { get; set; }
 
-        [Column("GroupId")]
-        public int GroupId { get; set; }
-        
-        [ForeignKey("GroupId")]
-        public virtual Group Group { get; set; } = null!;
+    [ForeignKey("UserId")]
+    public virtual User User { get; set; } = null!;
 
-        [Column("IsActive")]
-        public bool IsActive { get; set; }
+    [Column("GroupId")]
+    public int GroupId { get; set; }
+    
+    [ForeignKey("GroupId")]
+    public virtual Group Group { get; set; } = null!;
 
-        [Column("Note")]
-        [MaxLength(256)]
-        public string? Note { get; set; }
-    }
+    [Column("IsActive")]
+    public bool IsActive { get; set; }
+
+    [Column("Note")]
+    [MaxLength(256)]
+    public string? Note { get; set; }
 }
+

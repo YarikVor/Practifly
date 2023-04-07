@@ -26,10 +26,10 @@ public class Competency
     public virtual Heading Heading { get; set; } = null!;
 
     [Column("ParentId")]
-    public int ParentId { get; set; }
+    public int? ParentId { get; set; }
 
     [ForeignKey("ParentId")]
-    public virtual Competency Parent { get; set; } = null!;
+    public virtual Competency? Parent { get; set; }
 
     [Column("Note")]
     [MaxLength(256)]

@@ -10,6 +10,7 @@ namespace PractiFly.WebApi.EntityDb.Materials;
 [PrimaryKey("Id")]
 public class Heading
 {
+	[Key]
 	[Column("Id")]
 	public int Id { get; set; }
 
