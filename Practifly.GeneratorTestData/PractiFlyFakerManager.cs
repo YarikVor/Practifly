@@ -1,3 +1,4 @@
+using Practifly.GeneratorTestData.Faker.Materials;
 using Practifly.GeneratorTestData.Faker.Users;
 using PractiFly.Tests.EntityFromDb;
 
@@ -17,7 +18,16 @@ public class PractiFlyFakerManager : FakerManager
         AddFaker(new UserMaterialFaker());
 
         // Materials
-
+        AddFaker(new CompetencyFaker());
+        AddFaker(new HeadingCompetencyFaker());
+        AddFaker(new HeadingFaker());
+        AddFaker(new HeadingMaterialFaker());
+        AddFaker(new LanguageFaker());
+        AddFaker(new LevelFaker());
+        AddFaker(new MaterialFaker());
+        AddFaker(new MaterialBlockFaker());
+        AddFaker(new MaterialCompetencyFaker());
+        AddFaker(new UnitFaker());
 
         // Courses
         AddFaker(new CourseCompotencyFaker());
