@@ -162,7 +162,7 @@ namespace PractiFly.Tests.EntityFromDb.TestData.Materials
                 {
                     Id = 1,
                     Name = "Test1",
-                    LanguageCode = "en",
+                    // LanguageCode = "en",
                     Url = "",
                     IsPractical = true,
                     Note = "",
@@ -172,7 +172,7 @@ namespace PractiFly.Tests.EntityFromDb.TestData.Materials
                 {
                     Id = 2,
                     Name = "Test2",
-                    LanguageCode = "ua",
+                    // LanguageCode = "ua",
                     Url = "",
                     IsPractical = false,
                     Note = "",

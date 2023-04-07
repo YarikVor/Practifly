@@ -9,6 +9,7 @@ using Practifly.Checkers;
 using Practifly.Checkers.Builder;
 using Practifly.GeneratorTestData;
 using PractiFly.WebApi.Context;
+using PractiFly.WebApi.Db.Context;
 using PractiFly.WebApi.EntityDb.Materials;
 using PractiFly.WebApi.EntityDb.Users;
 using Xunit.Abstractions;
@@ -18,11 +19,10 @@ namespace PractiFly.Tests.EntityFromDb;
 
 public class UsersContextDataTest
 {
-    static UsersContext _usersContext = Mock.CreateUsersContext();
-    static MaterialsContext _materialsContext = Mock.CreateMaterialsContext();
-    static CoursesContext _coursesContext = Mock.CreateCoursesContext();
-
-
+    static PractiflyContext _practiflyContext = Mock.CreatePractiflyContext() 
+                                                ?? throw new NullReferenceException();
+    
+    
     static FakerManager _fakerManager = new PractiFlyFakerManager();
 
     private ITestOutputHelper _logger;
@@ -33,6 +33,9 @@ public class UsersContextDataTest
 
     public UsersContextDataTest(ITestOutputHelper logger)
     {
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
+        
         _logger = logger;
         var option = new CheckerOptionBuilder()
             .Init()
@@ -42,6 +45,17 @@ public class UsersContextDataTest
             .Build();
 
         _checker = new Checker(option);
+
+
+        
+        //ClearDb();
+    }
+
+    private void ClearDb()
+    {
+        const string sql =
+            @"DO $$ DECLARE tables CURSOR FOR SELECT pg_tables.tablename FROM pg_tables WHERE schemaname = 'public'; BEGIN FOR table_record IN tables LOOP EXECUTE 'TRUNCATE TABLE `' || table_record.tablename || '` RESTART IDENTITY CASCADE;'; END LOOP; FOR table_record IN tables LOOP EXECUTE 'DROP TABLE IF EXISTS `' || table_record.tablename || '` CASCADE;'; END LOOP; END $$;";
+        _practiflyContext.Database.ExecuteSqlRaw(sql, ArraySegment<object>.Empty);
     }
 
     public static object[] MakeTest<T>(DbSet<T> dbSet, params Expression<Func<T, object>>[] ignoreProperty)
@@ -50,7 +64,7 @@ public class UsersContextDataTest
         return new object[] { dbSet, ignoreProperty };
     }
     /*
-     ÏÎÐßÄÎÊ:
+     ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:
         1.User
         2.Group
         3.Course (Owner)
@@ -82,32 +96,32 @@ public class UsersContextDataTest
     // ToDo:
     public static IEnumerable<object[]> GetTestData()
     {
-        yield return MakeTest(_usersContext.Users );
-        yield return MakeTest(_usersContext.Groups );
-        yield return MakeTest(_coursesContext.Courses);
-        yield return MakeTest(_materialsContext.Levels);
-        yield return MakeTest(_materialsContext.Headings);
-        yield return MakeTest(_materialsContext.Languages);
-        yield return MakeTest(_materialsContext.Materials);
-        yield return MakeTest(_materialsContext.Competencies);
-        yield return MakeTest(_materialsContext.Themes);
-        yield return MakeTest(_coursesContext.ThemeMaterials);
-        yield return MakeTest(_coursesContext.CourseCompetencies);
-        yield return MakeTest(_coursesContext.CourseDependencyTypes);
-        yield return MakeTest(_coursesContext.CourseDependencies);
-        yield return MakeTest(_coursesContext.CourseHeadings);
-        yield return MakeTest(_coursesContext.CourseMaterials);
-        yield return MakeTest(_materialsContext.HeadingCompetencies);
-        yield return MakeTest(_materialsContext.HeadingMaterials);
-        yield return MakeTest(_materialsContext.MaterialBlocks);
-        yield return MakeTest(_materialsContext.MaterialCompetencies);
-        yield return MakeTest(_materialsContext.Units);
-        yield return MakeTest(_usersContext.GroupCourses);
-        yield return MakeTest(_usersContext.UserCourses, uc => uc.Grade);
-        yield return MakeTest(_usersContext.UserGroups);
-        yield return MakeTest(_usersContext.UserHeadings);
-        yield return MakeTest(_usersContext.UserThemes);
-        yield return MakeTest(_usersContext.UserMaterials);
+        yield return MakeTest(_practiflyContext.Users );
+        yield return MakeTest(_practiflyContext.Groups );
+        yield return MakeTest(_practiflyContext.Courses);
+        yield return MakeTest(_practiflyContext.Levels);
+        yield return MakeTest(_practiflyContext.Headings);
+        yield return MakeTest(_practiflyContext.Languages);
+        yield return MakeTest(_practiflyContext.Materials);
+        yield return MakeTest(_practiflyContext.Competencies, c => c.Parent, c => c.ParentId);
+        yield return MakeTest(_practiflyContext.Themes);
+        yield return MakeTest(_practiflyContext.ThemeMaterials);
+        yield return MakeTest(_practiflyContext.CourseCompetencies);
+        yield return MakeTest(_practiflyContext.CourseDependencyTypes);
+        yield return MakeTest(_practiflyContext.CourseDependencies);
+        yield return MakeTest(_practiflyContext.CourseHeadings);
+        yield return MakeTest(_practiflyContext.CourseMaterials);
+        yield return MakeTest(_practiflyContext.HeadingCompetencies);
+        yield return MakeTest(_practiflyContext.HeadingMaterials);
+        yield return MakeTest(_practiflyContext.MaterialBlocks);
+        yield return MakeTest(_practiflyContext.MaterialCompetencies);
+        yield return MakeTest(_practiflyContext.Units);
+        yield return MakeTest(_practiflyContext.GroupCourses);
+        yield return MakeTest(_practiflyContext.UserCourses, uc => uc.Grade);
+        yield return MakeTest(_practiflyContext.UserGroups);
+        yield return MakeTest(_practiflyContext.UserHeadings);
+        yield return MakeTest(_practiflyContext.UserThemes);
+        yield return MakeTest(_practiflyContext.UserMaterials);
     }
 
     [Theory]
@@ -117,7 +131,7 @@ public class UsersContextDataTest
     {
         AddEntitiesIfEmpty<TEntity>(dbSet);
         
-        var entity = await dbSet.FindAsync(1);
+        var entity = await dbSet.FirstAsync();
 
         Assert.NotNull(entity);
 
@@ -135,17 +149,29 @@ public class UsersContextDataTest
             dbSet.ExecuteDelete();
             
             var entities = _fakerManager.Generate<TEntity>(_countEntity);
+
+            WriteLine("Fake entities:");
+            WriteAsJson(entities);
             
             dbSet.AddRange(entities);
-            
-            _usersContext.SaveChanges();
+
+            _practiflyContext.SaveChanges();
         }
     }
 
 
     private void WriteAsJson<T>(T obj)
     {
-        var json = JsonConvert.SerializeObject(obj, Formatting.Indented);
+        string json;
+        try
+        {
+            json = JsonConvert.SerializeObject(obj, Formatting.Indented);
+        }
+        catch (Exception e)
+        {
+            json = e.Message;
+        }
+
         _logger.WriteLine(json);
     }
 
