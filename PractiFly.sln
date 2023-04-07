@@ -5,7 +5,7 @@ VisualStudioVersion = 17.5.33414.496
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PractiFly.WebApi", "PractiFly.WebApi\PractiFly.WebApi.csproj", "{573D5B77-266A-4845-929C-0CD48BCD209F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject1", "TestProject1\TestProject1.csproj", "{164EDE0B-6EEC-4370-A6D3-6CCA90892299}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PractiFly.WebApi.Tests", "PractiFly.WebApi.Tests\PractiFly.WebApi.Tests.csproj", "{164EDE0B-6EEC-4370-A6D3-6CCA90892299}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PractiFly.Tests.EntityFromDb", "PractiFly.Tests.EntityFromDb\PractiFly.Tests.EntityFromDb.csproj", "{B0F77AC5-0B4A-4533-911A-CBD9E893C47E}"
 EndProject
@@ -14,6 +14,16 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Practifly.Checkers.Tests", "Practifly.Checkers.Tests\Practifly.Checkers.Tests.csproj", "{6267AC64-4DF9-4838-AC6A-A3B3775C2D53}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Practifly.GeneratorTestData", "Practifly.GeneratorTestData\Practifly.GeneratorTestData.csproj", "{9289F6C8-1EAD-4959-BE8C-43D243650EAA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{C3CDCFFC-A2BE-405B-AD57-496605053D17}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Checker", "Checker", "{FF0D35C8-4B44-4B00-AA5A-0AD7F0D47A51}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{CB04A9F4-D2D6-4011-A27C-F0A8D278E02C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7C836C05-5373-4191-8FE5-AB09F67AF0EB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Entities", "Entities", "{C6D7507A-936D-4CD7-A83B-10FE0B392358}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,5 +61,14 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8EF3FF4D-1BC1-46C4-A217-31BAF24F10DC}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FF0D35C8-4B44-4B00-AA5A-0AD7F0D47A51} = {C3CDCFFC-A2BE-405B-AD57-496605053D17}
+		{3CACF428-F22E-40C7-9F28-A719C3353D1E} = {FF0D35C8-4B44-4B00-AA5A-0AD7F0D47A51}
+		{6267AC64-4DF9-4838-AC6A-A3B3775C2D53} = {FF0D35C8-4B44-4B00-AA5A-0AD7F0D47A51}
+		{573D5B77-266A-4845-929C-0CD48BCD209F} = {CB04A9F4-D2D6-4011-A27C-F0A8D278E02C}
+		{9289F6C8-1EAD-4959-BE8C-43D243650EAA} = {7C836C05-5373-4191-8FE5-AB09F67AF0EB}
+		{164EDE0B-6EEC-4370-A6D3-6CCA90892299} = {7C836C05-5373-4191-8FE5-AB09F67AF0EB}
+		{B0F77AC5-0B4A-4533-911A-CBD9E893C47E} = {C6D7507A-936D-4CD7-A83B-10FE0B392358}
 	EndGlobalSection
 EndGlobal
