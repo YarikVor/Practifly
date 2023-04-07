@@ -8,6 +8,7 @@ public sealed class CourseHeadingFaker : Faker<CourseHeading>, IFakerGenerate<Co
 {
     public CourseHeadingFaker()
     {
+        RuleFor(ch => ch.Id, f => f.IndexFaker + 1);
         RuleFor(ch => ch.CourseId, f => f.RandomId());
         RuleFor(ch => ch.HeadingId, f => f.RandomId());
 

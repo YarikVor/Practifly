@@ -8,6 +8,7 @@ public sealed class ThemeMaterialFaker : Faker<ThemeMaterial>, IFakerGenerate<Th
 {
     public ThemeMaterialFaker()
     {
+        RuleFor(tm => tm.Id, f => f.IndexFaker + 1);
         RuleFor(tm => tm.ThemeId, f => f.RandomId());
         RuleFor(tm => tm.MaterialId, f => f.RandomId());
         RuleFor(tm => tm.Number, f => f.Random.Int(0, 100));

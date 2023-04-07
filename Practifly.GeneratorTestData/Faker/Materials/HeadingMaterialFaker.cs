@@ -12,6 +12,7 @@ public sealed class HeadingMaterialFaker : Faker<HeadingMaterial>, IFakerGenerat
 {
     public HeadingMaterialFaker(string lang = "uk") : base(lang)
     {
+        RuleFor(hm => hm.Id, f => f.IndexFaker + 1);
         RuleFor(hm => hm.HeadingId, f => f.RandomId());
         RuleFor(hm => hm.MaterialId, f => f.RandomId());
         RuleFor(hm => hm.Note, f => f.Lorem.Sentence());

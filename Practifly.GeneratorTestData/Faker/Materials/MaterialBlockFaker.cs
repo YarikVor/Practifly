@@ -7,6 +7,7 @@ public sealed class MaterialBlockFaker : Faker<MaterialBlock>, IFakerGenerate<Ma
 {
     public MaterialBlockFaker(string lang = "uk") : base(lang)
     {
+        RuleFor(mb => mb.Id, f => f.IndexFaker + 1);
         RuleFor(mb => mb.ParentId, f => f.RandomId());
         RuleFor(mb => mb.ChildId, f => f.RandomId());
         RuleFor(mb => mb.Number, f => f.Random.Number(1, 5));

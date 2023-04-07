@@ -8,6 +8,7 @@ public sealed class CourseCompotencyFaker : Faker<CourseCompetency>, IFakerGener
 {
     public CourseCompotencyFaker()
     {
+        RuleFor(cc => cc.Id, f => f.IndexFaker + 1);
         RuleFor(cc => cc.CourseId, f => f.RandomId());
         RuleFor(cc => cc.CompetencyId, f => f.RandomId());
         RuleFor(cc => cc.Note, f => f.Lorem.Sentence());

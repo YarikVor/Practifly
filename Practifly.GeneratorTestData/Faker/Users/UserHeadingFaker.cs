@@ -8,6 +8,7 @@ public sealed class UserHeadingFaker: Faker<UserHeading>, IFakerGenerate<UserHea
 {
     public UserHeadingFaker(string lang = "uk") : base(lang)
     {
+        RuleFor(uh => uh.Id, f => f.IndexFaker + 1);
         RuleFor(uh => uh.UserId, f => f.RandomId());
         RuleFor(uh => uh.HeadingId, f => f.RandomId());
         RuleFor(uh => uh.LevelId, f => f.RandomId());

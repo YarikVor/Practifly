@@ -8,6 +8,7 @@ public sealed class UserMaterialFaker: Faker<UserMaterial>, IFakerGenerate<UserM
 {
     public UserMaterialFaker(string lang = "uk") : base(lang)
     {
+        RuleFor(um => um.Id, f => f.IndexFaker + 1);
         RuleFor(um => um.UserId, f => f.RandomId());
         RuleFor(um => um.MaterialId, f => f.RandomId());
         RuleFor(um => um.IsCompleted, f => f.Random.Bool());
