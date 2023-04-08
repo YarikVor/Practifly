@@ -21,21 +21,15 @@ public class UsersContextDataTest
 {
     static PractiflyContext _practiflyContext = Mock.CreatePractiflyContext() 
                                                 ?? throw new NullReferenceException();
-    
-    
     static FakerManager _fakerManager = new PractiFlyFakerManager();
-
     private ITestOutputHelper _logger;
-
     private Checker _checker;
-    
     private const int _countEntity = 5;
 
     public UsersContextDataTest(ITestOutputHelper logger)
     {
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-        
         _logger = logger;
         var option = new CheckerOptionBuilder()
             .Init()
@@ -46,8 +40,6 @@ public class UsersContextDataTest
 
         _checker = new Checker(option);
 
-
-        
         //ClearDb();
     }
 
@@ -58,42 +50,15 @@ public class UsersContextDataTest
         _practiflyContext.Database.ExecuteSqlRaw(sql, ArraySegment<object>.Empty);
     }
 
-    public static object[] MakeTest<T>(DbSet<T> dbSet, params Expression<Func<T, object>>[] ignoreProperty)
-        where T : class
+    public static object[] MakeTest<T>(
+        DbSet<T> dbSet, 
+        params Expression<Func<T, object>>[] ignoreProperty
+    )
+    where T : class
     {
         return new object[] { dbSet, ignoreProperty };
     }
-    /*
-     �������:
-        1.User
-        2.Group
-        3.Course (Owner)
-        4.Level
-        5.Heading
-        6.Language
-        7.Material
-        8.Competency (Parent)
-        9.Theme (Parent)
-        10. ThemeMaterial
-        11. CourseCompetency
-        12. CourseDependencyType
-        13. CourseDependency
-        14. CourseHeading
-        15. CourseMaterial
-        16. HeadingCompetency
-        17. HeadingMaterial
-        18.  MaterialBlock (Parent, Child)
-        19. MaterialCompetency
-        20. Unit (?)
-        21. GroupCourse
-        22. UserCourse
-        23. UserGroup
-        24. UserHeading
-        25. UserTheme
-        26. UserMaterial
-        27. Role (?)
-     */
-    // ToDo:
+    
     public static IEnumerable<object[]> GetTestData()
     {
         yield return MakeTest(_practiflyContext.Users );
@@ -143,7 +108,6 @@ public class UsersContextDataTest
 
     private void AddEntitiesIfEmpty<TEntity>(DbSet<TEntity> dbSet) where TEntity : class
     {
-        
         if (dbSet.Count() < _countEntity)
         {
             dbSet.ExecuteDelete();
@@ -158,7 +122,6 @@ public class UsersContextDataTest
             _practiflyContext.SaveChanges();
         }
     }
-
 
     private void WriteAsJson<T>(T obj)
     {
