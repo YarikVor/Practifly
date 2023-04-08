@@ -1,19 +1,22 @@
 using Microsoft.EntityFrameworkCore;
 using PractiFly.WebApi.Attributes;
 using PractiFly.WebApi.Context;
+using PractiFly.WebApi.Db.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+var services = builder.Services;
+
+services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
 
-ConfigureServices(builder.Services);
+ConfigureServices(services);
 
-builder.Services.AddControllers().AddJsonOptions(
+services.AddControllers().AddJsonOptions(
     options =>
     {
         options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
@@ -29,7 +32,6 @@ if (app.Environment.IsDevelopment())
   app.UseSwagger();
   app.UseSwaggerUI();
 }
-
 
 
 app.UseHttpsRedirection();
@@ -49,7 +51,17 @@ void ConfigureServices(IServiceCollection services)
 
     var config = services.BuildServiceProvider().GetService<IConfiguration>();
 
+    var connectionString = config.GetConnectionString("DefaultConnection");
+    
+    
     services.AddDbContext<IUsersContext, UsersContext>(options =>
-            options.UseNpgsql(config.GetConnectionString("DefaultConnection")));
+            options.UseNpgsql(connectionString));
+    services.AddDbContext<IMaterialsContext, MaterialsContext>(options =>
+        options.UseNpgsql(connectionString));
+    services.AddDbContext<ICoursesContext, CoursesContext>(options =>
+        options.UseNpgsql(connectionString));
+    services.AddDbContext<IPractiflyContext, PractiflyContext>(options =>
+        options.UseNpgsql(connectionString));
+    
 }
 

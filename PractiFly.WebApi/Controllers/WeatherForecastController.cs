@@ -7,41 +7,31 @@ namespace PractiFly.WebApi.Controllers
 
   [ApiController]
   [Route("[controller]")]
-  public class WeatherForecastController : Controller
+  public class UserController : Controller
   {
-    private static readonly string[] Summaries = new[]
-    {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
-    private readonly ILogger<WeatherForecastController> _logger;
+    private readonly ILogger<UserController> _logger;
     private readonly IUsersContext _context;
     
-    public WeatherForecastController(
-      ILogger<WeatherForecastController> logger,
+    public UserController(
+      ILogger<UserController> logger,
       IUsersContext context
       )
     {
       _logger = logger;
       _context = context;
     }
-
-    [HttpGet(Name = "GetWeatherForecast")]
-    public IEnumerable<WeatherForecast> Get()
-    {
-      return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-      {
-        Date = DateTime.Now.AddDays(index),
-        TemperatureC = Random.Shared.Next(-20, 55),
-        Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-      })
-      .ToArray();
-    }
     
-    [HttpGet("Test")]
-    public async Task<IActionResult> Test()
+    
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> User(int id)
     {
-      var headings = await _context.Users.FirstAsync();
+      if (id <= 0)
+        return BadRequest();
+      
+      var headings = await _context.Users.FirstOrDefaultAsync(e => e.Id == id);
+
+      if (headings == null)
+        return BadRequest();
       
       return Json(headings);
     }
