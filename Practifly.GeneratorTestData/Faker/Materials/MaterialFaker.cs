@@ -16,4 +16,3 @@ public sealed class MaterialFaker : Faker<Material>, IFakerGenerate<Material>
         RuleFor(m => m.Note, f => f.Lorem.Sentence());
     }
 }
-

@@ -1,7 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 
 namespace PractiFly.WebApi.EntityDb.Materials;
 
@@ -9,9 +8,9 @@ namespace PractiFly.WebApi.EntityDb.Materials;
 [Table("Material")]
 public class Material
 {
-    [Key]
-    [Column("Id")]
-    public int Id { get; set; }
+    [Column("LanguageCode")] public int LanguageId;
+
+    [Key] [Column("Id")] public int Id { get; set; }
 
     [Column("Name")]
     [MaxLength(128)]
@@ -19,11 +18,7 @@ public class Material
 
     public string Name { get; set; } = null!;
 
-    [Column("LanguageCode")]
-    public int LanguageId;
-    
-    [ForeignKey("LanguageId")]
-    public virtual Language Language { get; set; } = null!;
+    [ForeignKey("LanguageId")] public virtual Language Language { get; set; } = null!;
 
     [Column("URL")]
     [MaxLength(2048)]
@@ -31,12 +26,7 @@ public class Material
     [Url]
     public string Url { get; set; } = null!;
 
-    [Column("IsPractical")]
-    [Required]
-    public bool IsPractical { get; set; }
+    [Column("IsPractical")] [Required] public bool IsPractical { get; set; }
 
-    [Column("Note")]
-    [MaxLength(256)]
-    public string? Note { get; set; }
+    [Column("Note")] [MaxLength(256)] public string? Note { get; set; }
 }
-

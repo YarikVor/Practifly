@@ -1,7 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 
 namespace PractiFly.WebApi.EntityDb.Users;
 
@@ -9,9 +8,7 @@ namespace PractiFly.WebApi.EntityDb.Users;
 [PrimaryKey("Id")]
 public class User
 {
-    [Key]
-    [Column("Id")]
-    public int Id { get; set; }
+    [Key] [Column("Id")] public int Id { get; set; }
 
     [Column("FirstName")]
     [MaxLength(128)]
@@ -41,10 +38,7 @@ public class User
     [Required]
     public string FilePhoto { get; set; } = null!;
 
-    [Column("RegistrationDate")]
-    public DateOnly RegistrationDate { get; set; }
+    [Column("RegistrationDate")] public DateOnly RegistrationDate { get; set; }
 
-    [Column("Note")]
-    [MaxLength(256)]
-    public string? Note { get; set; }
+    [Column("Note")] [MaxLength(256)] public string? Note { get; set; }
 }

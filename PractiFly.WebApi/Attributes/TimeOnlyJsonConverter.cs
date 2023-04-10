@@ -9,7 +9,7 @@ public class TimeOnlyJsonConverter : JsonConverter<TimeOnly>
     {
         var value = reader.GetString();
 
-        return TimeOnly.Parse(value!); 
+        return TimeOnly.Parse(value!);
     }
 
     public override void Write(Utf8JsonWriter writer, TimeOnly value, JsonSerializerOptions options)

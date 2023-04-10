@@ -1,22 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace PractiFly.WebApi.EntityDb.Materials;
 
 [Table("Unit")]
 [PrimaryKey("Id")]
 public class Unit
-{    
-    [Key]
-    [Column("Id")]
-    public int Id { get; set; }
-    
-    [Column("MaterialId")]
-    public int MaterialId { get; set; }
+{
+    [Key] [Column("Id")] public int Id { get; set; }
 
-    [ForeignKey("MaterialId")] 
-    public virtual Material Material { get; set; } = null!;
+    [Column("MaterialId")] public int MaterialId { get; set; }
+
+    [ForeignKey("MaterialId")] public virtual Material Material { get; set; } = null!;
 
     [Column("Text")]
     [Required]
@@ -29,4 +25,3 @@ public class Unit
     [Url]
     public string Url { get; set; } = null!;
 }
-

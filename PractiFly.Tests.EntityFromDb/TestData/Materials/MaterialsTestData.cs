@@ -1,247 +1,245 @@
 ﻿using PractiFly.WebApi.Context;
 using PractiFly.WebApi.EntityDb.Materials;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace PractiFly.Tests.EntityFromDb.TestData.Materials
+namespace PractiFly.Tests.EntityFromDb.TestData.Materials;
+
+public class MaterialsTestData
 {
-    public class MaterialsTestData
+    private static IMaterialsContext _materialsContext = null!;
+
+    public void AddCompetency()
     {
-        private static IMaterialsContext _materialsContext = null!;
+        var competency = new Competency[]
+        {
+            new()
+            {
+                Id = 1,
+                Name = "Test1",
+                HeadingId = 1,
+                ParentId = 1, //TODO:
+                Note = ""
+            },
+            new()
+            {
+                Id = 2,
+                Name = "Test2",
+                HeadingId = 1,
+                ParentId = 1, //TODO:
+                Note = ""
+            }
+        };
+        //TODO:
+        //_materialsContext.Materials.AddRange(competency); 
+    }
 
-        public void AddCompetency()
+    public void AddHeading()
+    {
+        var heading = new Heading[]
         {
-            var competency = new Competency[]
+            new()
             {
-                new()
-                {
-                    Id = 1,
-                    Name = "Test1",
-                    HeadingId = 1,
-                    ParentId = 1, //TODO:
-                    Note = "",
-                },
-                new()
-                {
-                    Id = 2,
-                    Name = "Test2",
-                    HeadingId = 1,
-                    ParentId = 1, //TODO:
-                    Note = "",
-                }
-            };
-            //TODO:
-            //_materialsContext.Materials.AddRange(competency); 
-        }
-        public void AddHeading()
-        {
-            var heading = new Heading[]
+                Id = 1,
+                Code = "01.01.01.01",
+                Name = "Test1",
+                Udc = "Test1",
+                Note = "",
+                Description = ""
+            },
+            new()
             {
-                new()
-                {
-                    Id = 1,
-                    Code = "01.01.01.01",
-                    Name = "Test1",
-                    Udc = "Test1",
-                    Note = "",
-                    Description = "",
+                Id = 1,
+                Code = "02.02.02.02",
+                Name = "Test2",
+                Udc = "Test2",
+                Note = "",
+                Description = ""
+            }
+        };
+        //TODO:
+        //_materialsContext.Materials.AddRange(heading); 
+    }
 
-                },
-                new()
-                {
-                    Id = 1,
-                    Code = "02.02.02.02",
-                    Name = "Test2",
-                    Udc = "Test2",
-                    Note = "",
-                    Description = "",
+    public void AddHeadingCompetencyg()
+    {
+        var headingCompetency = new HeadingCompetency[]
+        {
+            new()
+            {
+                Id = 1,
+                CompetencyId = 1,
+                LevelId = 1,
+                Note = ""
+            },
+            new()
+            {
+                Id = 2,
+                CompetencyId = 1,
+                LevelId = 1,
+                Note = ""
+            }
+        };
+        //TODO:
+        //_materialsContext.Materials.AddRange(headingCompetency); 
+    }
 
+    public void AddHeadingMaterial()
+    {
+        var headingMaterial = new HeadingMaterial[]
+        {
+            new()
+            {
+                HeadingId = 1,
+                MaterialId = 1,
+                Note = ""
+            },
+            new()
+            {
+                HeadingId = 1,
+                MaterialId = 1,
+                Note = ""
+            }
+        };
+        //TODO:
+        //_materialsContext.Materials.AddRange(headingMaterial); 
+    }
 
-                }
-            };
-            //TODO:
-            //_materialsContext.Materials.AddRange(heading); 
-        }
-        public void AddHeadingCompetencyg()
+    public void AddLanguage()
+    {
+        var language = new Language[]
         {
-            var headingCompetency = new HeadingCompetency[]
+            new()
             {
-                new()
-                {
-                    Id= 1,
-                    CompetencyId = 1,
-                    LevelId = 1,
-                    Note = "",
-                },
-                new()
-                {
-                    Id= 2,
-                    CompetencyId = 1,
-                    LevelId = 1,
-                    Note = "",
-                }
-            };
-            //TODO:
-            //_materialsContext.Materials.AddRange(headingCompetency); 
-        }
-        public void AddHeadingMaterial()
-        {
-            var headingMaterial = new HeadingMaterial[]
+                Code = "en",
+                Name = "Англійська",
+                OriginalName = "English",
+                Note = ""
+            },
+            new()
             {
-                new()
-                {
-                    HeadingId = 1,
-                    MaterialId = 1,
-                    Note = "",
+                Code = "ua",
+                Name = "Українська",
+                OriginalName = "Ukrainian",
+                Note = ""
+            }
+        };
+        //TODO:
+        //_materialsContext.Materials.AddRange(language); 
+    }
 
-                },
-                new()
-                {
-                    HeadingId = 1,
-                    MaterialId = 1,
-                    Note = "",
-                }
-            };
-            //TODO:
-            //_materialsContext.Materials.AddRange(headingMaterial); 
-        }
-        public void AddLanguage()
+    public void AddLevel()
+    {
+        var level = new Level[]
         {
-            var language = new Language[]
+            new()
             {
-                new()
-                {
-                    Code = "en",
-                    Name = "Англійська",
-                    OriginalName = "English",
-                    Note = "",
-                },
-                new()
-                {
-                    Code = "ua",
-                    Name = "Українська",
-                    OriginalName = "Ukrainian",
-                    Note = "",
-                }
-            };
-            //TODO:
-            //_materialsContext.Materials.AddRange(language); 
-        }
-        public void AddLevel()
-        {
-            var level = new Level[]
+                Id = 1,
+                Name = "Test1",
+                Number = 1,
+                Note = "",
+                Description = ""
+            },
+            new()
             {
-                new()
-                {
-                    Id = 1,
-                    Name = "Test1",
-                    Number = 1,
-                    Note = "",
-                    Description = "",
-                },
-                new()
-                {
-                    Id = 2,
-                    Name = "Test2",
-                    Number = 1,
-                    Note = "",
-                    Description = "",
-                }
-            };
-            //TODO:
-            //_materialsContext.Materials.AddRange(level); 
-        }
-        public void AddMaterial()
-        {
-            var material = new Material[]
-            {
-                new()
-                {
-                    Id = 1,
-                    Name = "Test1",
-                    // LanguageCode = "en",
-                    Url = "",
-                    IsPractical = true,
-                    Note = "",
+                Id = 2,
+                Name = "Test2",
+                Number = 1,
+                Note = "",
+                Description = ""
+            }
+        };
+        //TODO:
+        //_materialsContext.Materials.AddRange(level); 
+    }
 
-                },
-                new()
-                {
-                    Id = 2,
-                    Name = "Test2",
-                    // LanguageCode = "ua",
-                    Url = "",
-                    IsPractical = false,
-                    Note = "",
-                }
-            };
-            //TODO:
-            //_materialsContext.Materials.AddRange(material); 
-        }
-        public void AddMaterialBlock ()
+    public void AddMaterial()
+    {
+        var material = new Material[]
         {
-            var materialBlock = new MaterialBlock[]
+            new()
             {
-                new()
-                {
-                    ParentId = 1,
-                    ChildId = 1,
-                    Number = 1,
-                    Note = "",
-                },
-                new()
-                {
-                    ParentId = 1,
-                    ChildId = 1,
-                    Number = 2,
-                    Note = "",
-                }
-            };
-            //TODO:
-            //_materialsContext.Materials.AddRange(materialBlock); 
-        }
-        public void AddMaterialCompetency()
+                Id = 1,
+                Name = "Test1",
+                // LanguageCode = "en",
+                Url = "",
+                IsPractical = true,
+                Note = ""
+            },
+            new()
+            {
+                Id = 2,
+                Name = "Test2",
+                // LanguageCode = "ua",
+                Url = "",
+                IsPractical = false,
+                Note = ""
+            }
+        };
+        //TODO:
+        //_materialsContext.Materials.AddRange(material); 
+    }
+
+    public void AddMaterialBlock()
+    {
+        var materialBlock = new MaterialBlock[]
         {
-            var materialCompetency = new MaterialCompetency[]
+            new()
             {
-                new()
-                {
-                    MaterialId = 1,
-                    CompetencyId = 1,
-                    Note = "",
-                },
-                new()
-                {
-                    MaterialId = 2,
-                    CompetencyId = 2,
-                    Note = "",
-                }
-            };
-            //TODO:
-            //_materialsContext.Materials.AddRange(materialCompetency); 
-        }
-        public void AddUnit()
+                ParentId = 1,
+                ChildId = 1,
+                Number = 1,
+                Note = ""
+            },
+            new()
+            {
+                ParentId = 1,
+                ChildId = 1,
+                Number = 2,
+                Note = ""
+            }
+        };
+        //TODO:
+        //_materialsContext.Materials.AddRange(materialBlock); 
+    }
+
+    public void AddMaterialCompetency()
+    {
+        var materialCompetency = new MaterialCompetency[]
         {
-            var unit = new Unit[]
+            new()
             {
-                new()
-                {
-                    MaterialId = 1,
-                    Text = "",
-                    Url = "",
-                },
-                new()
-                {
-                    MaterialId = 2,
-                    Text = "",
-                    Url = "",
-                }
-            };
-            //TODO:
-            //_materialsContext.Materials.AddRange(unit); 
-        }
+                MaterialId = 1,
+                CompetencyId = 1,
+                Note = ""
+            },
+            new()
+            {
+                MaterialId = 2,
+                CompetencyId = 2,
+                Note = ""
+            }
+        };
+        //TODO:
+        //_materialsContext.Materials.AddRange(materialCompetency); 
+    }
+
+    public void AddUnit()
+    {
+        var unit = new Unit[]
+        {
+            new()
+            {
+                MaterialId = 1,
+                Text = "",
+                Url = ""
+            },
+            new()
+            {
+                MaterialId = 2,
+                Text = "",
+                Url = ""
+            }
+        };
+        //TODO:
+        //_materialsContext.Materials.AddRange(unit); 
     }
 }

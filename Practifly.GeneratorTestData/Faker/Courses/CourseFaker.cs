@@ -1,7 +1,6 @@
 using Bogus;
 using PractiFly.Tests.EntityFromDb;
 using PractiFly.WebApi.EntityDb.Courses;
-using PractiFly.WebApi.EntityDb.Users;
 
 namespace Practifly.GeneratorTestData.Faker.Courses;
 

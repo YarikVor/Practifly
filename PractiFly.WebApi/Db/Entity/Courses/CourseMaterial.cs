@@ -8,33 +8,20 @@ namespace PractiFly.WebApi.EntityDb.Courses;
 [Table("CourseMaterial")]
 [PrimaryKey("Id")]
 public class CourseMaterial
-{    
-    [Key]
-    [Column("Id")]
-    public int Id { get; set; }
-    
-    [Column("CourseId")]
-    public int CourseId { get; set; }
+{
+    [Key] [Column("Id")] public int Id { get; set; }
 
-    [ForeignKey("CourseId")]
-    public virtual Course Course { get; set; } = null!;
+    [Column("CourseId")] public int CourseId { get; set; }
 
-    [Column("MaterialId")]
-    public int MaterialId { get; set; }
+    [ForeignKey("CourseId")] public virtual Course Course { get; set; } = null!;
 
-    [ForeignKey("MaterialId")]
-    public virtual Material Material { get; set; } = null!;
+    [Column("MaterialId")] public int MaterialId { get; set; }
 
-    [Column("PriorityLevel")]
-    [Required]
-    public int PriorityLevel { get; set; }
+    [ForeignKey("MaterialId")] public virtual Material Material { get; set; } = null!;
 
-    [Column("IsReserved")]
-    [Required]
-    public bool IsReserved { get; set; }
+    [Column("PriorityLevel")] [Required] public int PriorityLevel { get; set; }
 
-    [Column("Note")]
-    [MaxLength(256)]
-    public string? Note { get; set; }
+    [Column("IsReserved")] [Required] public bool IsReserved { get; set; }
+
+    [Column("Note")] [MaxLength(256)] public string? Note { get; set; }
 }
-

@@ -14,14 +14,15 @@ namespace PractiFly.Tests.EntityFromDb;
 
 public class EntitiesTest
 {
-    static readonly PractiflyContext _practiflyContext 
+    private const int CountEntitiesForGenerate = 5;
+
+    private static readonly PractiflyContext _practiflyContext
         = Mock.CreatePractiflyContext()
           ?? throw new NullReferenceException();
 
-    static  FakerManager _fakerManager = new PractiFlyFakerManager();
-    private ITestOutputHelper _logger;
-    private Checker _checker;
-    private const int CountEntitiesForGenerate = 5;
+    private static readonly FakerManager _fakerManager = new PractiFlyFakerManager();
+    private readonly Checker _checker;
+    private readonly ITestOutputHelper _logger;
 
     public EntitiesTest(ITestOutputHelper logger)
     {
@@ -39,19 +40,6 @@ public class EntitiesTest
         _checker = new Checker(option);
 
         //ClearDb();
-    }
-
-    private void ClearDb()
-    {
-        const string sql =
-            @"DO $$ DECLARE tables CURSOR FOR SELECT pg_tables.tablename FROM pg_tables WHERE schemaname = 'public'; BEGIN FOR table_record IN tables LOOP EXECUTE 'TRUNCATE TABLE `' || table_record.tablename || '` RESTART IDENTITY CASCADE;'; END LOOP; FOR table_record IN tables LOOP EXECUTE 'DROP TABLE IF EXISTS `' || table_record.tablename || '` CASCADE;'; END LOOP; END $$;";
-        _practiflyContext.Database.ExecuteSqlRaw(sql, ArraySegment<object>.Empty);
-    }
-
-    private static object[] MakeTest<T>(DbSet<T> dbSet, params Expression<Func<T, object>>[] ignoreProperty)
-        where T : class
-    {
-        return new object[] { dbSet, ignoreProperty };
     }
 
     public static IEnumerable<object[]> DbContextData => new[]
@@ -83,7 +71,20 @@ public class EntitiesTest
         MakeTest(_practiflyContext.UserThemes),
         MakeTest(_practiflyContext.UserMaterials)
     };
-    
+
+    private void ClearDb()
+    {
+        const string sql =
+            @"DO $$ DECLARE tables CURSOR FOR SELECT pg_tables.tablename FROM pg_tables WHERE schemaname = 'public'; BEGIN FOR table_record IN tables LOOP EXECUTE 'TRUNCATE TABLE `' || table_record.tablename || '` RESTART IDENTITY CASCADE;'; END LOOP; FOR table_record IN tables LOOP EXECUTE 'DROP TABLE IF EXISTS `' || table_record.tablename || '` CASCADE;'; END LOOP; END $$;";
+        _practiflyContext.Database.ExecuteSqlRaw(sql, ArraySegment<object>.Empty);
+    }
+
+    private static object[] MakeTest<T>(DbSet<T> dbSet, params Expression<Func<T, object>>[] ignoreProperty)
+        where T : class
+    {
+        return new object[] { dbSet, ignoreProperty };
+    }
+
 
     [Theory]
     [MemberData(nameof(DbContextData))]
@@ -91,7 +92,7 @@ public class EntitiesTest
         Expression<Func<TEntity, object>>[] ignoreProperty)
         where TEntity : class
     {
-        await AddEntitiesIfEmpty<TEntity>(dbSet);
+        await AddEntitiesIfEmpty(dbSet);
 
         var entity = await dbSet.FirstAsync();
 
@@ -136,5 +137,7 @@ public class EntitiesTest
     }
 
     private void WriteLine(string message)
-        => _logger.WriteLine(message);
+    {
+        _logger.WriteLine(message);
+    }
 }

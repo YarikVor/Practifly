@@ -1,5 +1,5 @@
-using Practifly.GeneratorTestData.Faker.Materials;
 using Practifly.GeneratorTestData.Faker.Courses;
+using Practifly.GeneratorTestData.Faker.Materials;
 using Practifly.GeneratorTestData.Faker.Users;
 using PractiFly.Tests.EntityFromDb;
 

@@ -14,6 +14,5 @@ public sealed class CourseHeadingFaker : Faker<CourseHeading>, IFakerGenerate<Co
 
         RuleFor(ch => ch.IsBasic, f => f.Random.Bool());
         RuleFor(ch => ch.Note, f => f.Lorem.Sentence());
-
     }
 }

@@ -12,6 +12,5 @@ public sealed class CourseCompotencyFaker : Faker<CourseCompetency>, IFakerGener
         RuleFor(cc => cc.CourseId, f => f.RandomId());
         RuleFor(cc => cc.CompetencyId, f => f.RandomId());
         RuleFor(cc => cc.Note, f => f.Lorem.Sentence());
-        
     }
 }

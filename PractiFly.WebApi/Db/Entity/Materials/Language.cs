@@ -1,7 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 
 namespace PractiFly.WebApi.EntityDb.Materials;
 
@@ -9,10 +8,8 @@ namespace PractiFly.WebApi.EntityDb.Materials;
 [PrimaryKey("Id")]
 public class Language
 {
-    [Key]
-    [Column("Id")]
-    public int Id { get; set; }
-    
+    [Key] [Column("Id")] public int Id { get; set; }
+
     [Column("Code")]
     [MaxLength(2)]
     [Required]
@@ -28,8 +25,5 @@ public class Language
     [Required]
     public string OriginalName { get; set; } = null!;
 
-    [Column("Note")]
-    [MaxLength(256)]
-    public string? Note { get; set; }
+    [Column("Note")] [MaxLength(256)] public string? Note { get; set; }
 }
-

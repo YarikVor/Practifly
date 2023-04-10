@@ -1,13 +1,9 @@
 ﻿using Bogus;
 using PractiFly.Tests.EntityFromDb;
 using PractiFly.WebApi.EntityDb.Materials;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Practifly.GeneratorTestData.Faker.Materials;
+
 public sealed class HeadingMaterialFaker : Faker<HeadingMaterial>, IFakerGenerate<HeadingMaterial>
 {
     public HeadingMaterialFaker(string lang = "uk") : base(lang)

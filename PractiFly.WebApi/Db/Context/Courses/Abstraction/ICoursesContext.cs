@@ -13,5 +13,4 @@ public interface ICoursesContext : IDisposable, IDbContext
     DbSet<CourseMaterial> CourseMaterials { get; }
     DbSet<Theme> Themes { get; }
     DbSet<ThemeMaterial> ThemeMaterials { get; }
-
 }

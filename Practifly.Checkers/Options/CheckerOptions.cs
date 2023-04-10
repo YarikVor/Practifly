@@ -4,11 +4,11 @@ namespace Practifly.Checkers.Options;
 
 public class CheckerOptions : ICheckerOptions
 {
-    private readonly List<Type> _skipTypes = new List<Type>();
-    private readonly List<string> _skipStartsWith = new List<string>();
-    private readonly List<string> _skipEndsWith = new List<string>();
-    private readonly List<string> _skipSubstrings = new List<string>();
-    private readonly Dictionary<Type, object?> _defaultValues = new Dictionary<Type, object?>();
+    private readonly Dictionary<Type, object?> _defaultValues = new();
+    private readonly List<string> _skipEndsWith = new();
+    private readonly List<string> _skipStartsWith = new();
+    private readonly List<string> _skipSubstrings = new();
+    private readonly List<Type> _skipTypes = new();
     private bool _skipNullableTypes;
 
     IReadOnlyCollection<Type> ICheckerOptions.SkipTypes => _skipTypes;
@@ -18,11 +18,11 @@ public class CheckerOptions : ICheckerOptions
     IReadOnlyCollection<string> ICheckerOptions.SkipEndsWith => _skipEndsWith;
 
     IReadOnlyCollection<string> ICheckerOptions.SkipSubstrings => _skipSubstrings;
-    
+
     bool ICheckerOptions.SkipNullableTypes => _skipNullableTypes;
 
     IReadOnlyDictionary<Type, object?> ICheckerOptions.DefaultValues => _defaultValues;
-    
+
     internal void AddSkipType(Type type)
     {
         _skipTypes.Add(type);
@@ -47,9 +47,9 @@ public class CheckerOptions : ICheckerOptions
     {
         _skipNullableTypes = true;
     }
+
     internal void AddDefaultValue(Type type, object? value)
     {
         _defaultValues.Add(type, value);
     }
-
 }

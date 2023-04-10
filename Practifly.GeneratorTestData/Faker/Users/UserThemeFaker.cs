@@ -4,7 +4,7 @@ using PractiFly.WebApi.EntityDb.Users;
 
 namespace Practifly.GeneratorTestData.Faker.Users;
 
-public sealed class UserThemeFaker: Faker<UserTheme>, IFakerGenerate<UserTheme>
+public sealed class UserThemeFaker : Faker<UserTheme>, IFakerGenerate<UserTheme>
 {
     public UserThemeFaker(string lang = "uk") : base(lang)
     {

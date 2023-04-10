@@ -3,6 +3,7 @@ using PractiFly.Tests.EntityFromDb;
 using PractiFly.WebApi.EntityDb.Materials;
 
 namespace Practifly.GeneratorTestData.Faker.Materials;
+
 public sealed class UnitFaker : Faker<Unit>, IFakerGenerate<Unit>
 {
     public UnitFaker(string lang = "uk") : base(lang)

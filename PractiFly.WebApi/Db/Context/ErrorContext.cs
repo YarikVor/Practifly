@@ -2,14 +2,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PractiFly.WebApi.Db.Context;
 
-public class ErrorContext: DbContext
+public class ErrorContext : DbContext
 {
-    public DbSet<ErrorEntity> ErrorEntities { get; set; } = null!;
-    
     public ErrorContext(DbContextOptions<ErrorContext> options) : base(options)
     {
         Database.EnsureCreated();
     }
+
+    public DbSet<ErrorEntity> ErrorEntities { get; set; } = null!;
 }
 
 public class ErrorEntity
@@ -20,12 +20,11 @@ public class ErrorEntity
     public string StackTrace { get; set; } = null!;
     public string ExceptionName { get; set; } = null!;
     public DateTime GeneratedAt { get; set; }
-    
 }
 
 public enum ErrorType
 {
     Unknown,
     Database,
-    WebApi,
+    WebApi
 }

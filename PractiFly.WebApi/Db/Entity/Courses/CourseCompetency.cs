@@ -1,8 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PractiFly.WebApi.EntityDb.Materials;
-using PractiFly.WebApi.EntityDb.Users;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+using PractiFly.WebApi.EntityDb.Materials;
 
 namespace PractiFly.WebApi.EntityDb.Courses;
 
@@ -10,24 +9,15 @@ namespace PractiFly.WebApi.EntityDb.Courses;
 [PrimaryKey("Id")]
 public class CourseCompetency
 {
-    [Key]
-    [Column("Id")]
-    public int Id { get; set; }
-    
-    [Column("CourseId")]
-    public int CourseId { get; set; }
+    [Key] [Column("Id")] public int Id { get; set; }
 
-    [ForeignKey("CourseId")]
-    public virtual Course Course { get; set; } = null!;
+    [Column("CourseId")] public int CourseId { get; set; }
 
-    [Column("CompetencyId")]
-    public int CompetencyId{ get; set; }
+    [ForeignKey("CourseId")] public virtual Course Course { get; set; } = null!;
 
-    [ForeignKey("CompetencyId")]
-    public virtual Competency Competency { get; set; } = null!;
+    [Column("CompetencyId")] public int CompetencyId { get; set; }
 
-    [Column("Note")]
-    [MaxLength(256)]
-    public string? Note { get; set; }
+    [ForeignKey("CompetencyId")] public virtual Competency Competency { get; set; } = null!;
 
+    [Column("Note")] [MaxLength(256)] public string? Note { get; set; }
 }

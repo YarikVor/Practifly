@@ -5,13 +5,10 @@ using PractiFly.WebApi.EntityDb.Users;
 
 namespace PractiFly.WebApi.Db.Context;
 
-public class PractiflyContext: DbContext, IPractiflyContext
+public class PractiflyContext : DbContext, IPractiflyContext
 {
-    
     public PractiflyContext(DbContextOptions<PractiflyContext> options) : base(options)
     {
-        
-        
         Database.EnsureCreated();
     }
 

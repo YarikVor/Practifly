@@ -9,7 +9,10 @@ public interface IFakerGenerate
 
 public interface IFakerGenerate<T> : IFakerGenerate
 {
-    List<T> Generate(int count, string ruleSets = null);
+    IEnumerable IFakerGenerate.Generate(int count, string ruleSets = null)
+    {
+        return Generate(count, ruleSets);
+    }
 
-    IEnumerable IFakerGenerate.Generate(int count, string ruleSets = null) => Generate(count, ruleSets);
+    List<T> Generate(int count, string ruleSets = null);
 }

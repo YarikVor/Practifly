@@ -7,7 +7,7 @@ public abstract class FakerManager
 {
     private readonly Dictionary<Type, IFakerGenerate> _fakers = new();
 
-    public IEnumerable<T> Generate<T>(int count) where T: class
+    public IEnumerable<T> Generate<T>(int count) where T : class
     {
         return (Generate(typeof(T), count) as IEnumerable<T>)!;
     }
@@ -18,12 +18,11 @@ public abstract class FakerManager
 
         return faker.Generate(count);
     }
-    
-    protected void AddFaker<T>(IFakerGenerate<T> faker) where T: class
+
+    protected void AddFaker<T>(IFakerGenerate<T> faker) where T : class
     {
         if (faker == null) throw new ArgumentNullException(nameof(faker));
 
         _fakers.Add(typeof(T), faker);
     }
-
 }

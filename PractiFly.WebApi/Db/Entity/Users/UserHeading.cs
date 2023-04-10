@@ -1,7 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using PractiFly.WebApi.EntityDb.Materials;
 
 namespace PractiFly.WebApi.EntityDb.Users;
@@ -9,30 +8,20 @@ namespace PractiFly.WebApi.EntityDb.Users;
 [Table("UserHeading")]
 [PrimaryKey("Id")]
 public class UserHeading
-{    
-    [Key]
-    [Column("Id")]
-    public int Id { get; set; }
-    
-    [Column("UserId")] 
-    public int UserId { get; set; }
+{
+    [Key] [Column("Id")] public int Id { get; set; }
 
-    [ForeignKey("UserId")] 
-    public virtual User User { get; set; } = null!;
+    [Column("UserId")] public int UserId { get; set; }
 
-    [Column("HeadingId")] 
-    public int HeadingId { get; set; }
+    [ForeignKey("UserId")] public virtual User User { get; set; } = null!;
 
-    [ForeignKey("HeadingId")] 
-    public virtual Heading Heading { get; set; } = null!;
+    [Column("HeadingId")] public int HeadingId { get; set; }
 
-    [Column("LevelId")] 
-    public int LevelId { get; set; }
+    [ForeignKey("HeadingId")] public virtual Heading Heading { get; set; } = null!;
 
-    [ForeignKey("LevelId")] 
-    public virtual Level Level { get; set; } = null!;
+    [Column("LevelId")] public int LevelId { get; set; }
 
-    [Column("Note")] 
-    [MaxLength(256)] 
-    public string? Note { get; set; }
+    [ForeignKey("LevelId")] public virtual Level Level { get; set; } = null!;
+
+    [Column("Note")] [MaxLength(256)] public string? Note { get; set; }
 }

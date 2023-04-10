@@ -7,11 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Bogus" Version="34.0.2" />
+        <PackageReference Include="Bogus" Version="34.0.2"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\PractiFly.WebApi\PractiFly.WebApi.csproj" />
+        <ProjectReference Include="..\PractiFly.WebApi\PractiFly.WebApi.csproj"/>
     </ItemGroup>
 
 </Project>
