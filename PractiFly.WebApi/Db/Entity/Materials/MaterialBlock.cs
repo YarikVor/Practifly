@@ -8,17 +8,27 @@ namespace PractiFly.WebApi.EntityDb.Materials;
 [PrimaryKey("Id")]
 public class MaterialBlock
 {
-    [Key] [Column("Id")] public int Id { get; set; }
+    [Key]
+    [Column("Id")]
+    public int Id { get; set; }
 
-    [Column("ParentId")] public int ParentId { get; set; }
+    [Column("ParentId")]
+    public int ParentId { get; set; }
 
-    [ForeignKey("ParentId")] public virtual Material Parent { get; set; } = null!;
+    [ForeignKey("ParentId")]
+    public virtual Material Parent { get; set; } = null!;
 
-    [Column("ChildId")] public int ChildId { get; set; }
+    [Column("ChildId")]
+    public int ChildId { get; set; }
 
-    [ForeignKey("ChildId")] public virtual Material Child { get; set; } = null!;
+    [ForeignKey("ChildId")]
+    public virtual Material Child { get; set; } = null!;
 
-    [Column("Number")] [Required] public int Number { get; set; }
+    [Column("Number")]
+    [Required]
+    public int Number { get; set; }
 
-    [Column("Note")] [MaxLength(256)] public string? Note { get; set; }
+    [Column("Note")]
+    [MaxLength(256)]
+    public string? Note { get; set; }
 }

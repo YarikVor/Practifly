@@ -9,23 +9,37 @@ namespace PractiFly.WebApi.EntityDb.Courses;
 [PrimaryKey("Id")]
 public class ThemeMaterial
 {
-    [Key] [Column("Id")] public int Id { get; set; }
+    [Key]
+    [Column("Id")]
+    public int Id { get; set; }
 
-    [Column("ThemeId")] public int ThemeId { get; set; }
+    [Column("ThemeId")]
+    public int ThemeId { get; set; }
 
-    [ForeignKey("ThemeId")] public virtual Theme Theme { get; set; } = null!;
+    [ForeignKey("ThemeId")]
+    public virtual Theme Theme { get; set; } = null!;
 
-    [Column("MaterialId")] public int MaterialId { get; set; }
+    [Column("MaterialId")]
+    public int MaterialId { get; set; }
 
-    [ForeignKey("MaterialId")] public virtual Material Material { get; set; } = null!;
+    [ForeignKey("MaterialId")]
+    public virtual Material Material { get; set; } = null!;
 
-    [Column("Number")] [Required] public int Number { get; set; }
+    [Column("Number")]
+    [Required]
+    public int Number { get; set; }
 
-    [Column("IsBasic")] [Required] public bool IsBasic { get; set; }
+    [Column("IsBasic")]
+    [Required]
+    public bool IsBasic { get; set; }
 
-    [Column("LevelId")] public int LevelId { get; set; }
+    [Column("LevelId")]
+    public int LevelId { get; set; }
 
-    [ForeignKey("LevelId")] public virtual Level Level { get; set; } = null!;
+    [ForeignKey("LevelId")]
+    public virtual Level Level { get; set; } = null!;
 
-    [Column("Note")] [MaxLength(256)] public string? Note { get; set; }
+    [Column("Note")]
+    [MaxLength(256)]
+    public string? Note { get; set; }
 }

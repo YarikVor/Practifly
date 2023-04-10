@@ -22,11 +22,13 @@ internal static class Program
 
         ConfigureDatabase(services);
 
+        InitTables(services);
+
         var app = builder.Build();
 
         if (app.Environment.IsDevelopment()) UseSwagger(app);
 
-        UseExceptionHandler(app, services);
+        //UseExceptionHandler(app, services);
 
         app.UseHttpsRedirection();
 
@@ -37,6 +39,11 @@ internal static class Program
         app.UseCertificateForwarding();
 
         app.Run();
+    }
+
+    private static void InitTables(IServiceCollection services)
+    {
+        var context = services.BuildServiceProvider().GetService<IPractiflyContext>()!;
     }
 
     private static void ConfigureDatabase(IServiceCollection services)

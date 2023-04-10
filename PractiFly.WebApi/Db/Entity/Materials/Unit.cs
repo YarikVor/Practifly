@@ -8,11 +8,15 @@ namespace PractiFly.WebApi.EntityDb.Materials;
 [PrimaryKey("Id")]
 public class Unit
 {
-    [Key] [Column("Id")] public int Id { get; set; }
+    [Key]
+    [Column("Id")]
+    public int Id { get; set; }
 
-    [Column("MaterialId")] public int MaterialId { get; set; }
+    [Column("MaterialId")]
+    public int MaterialId { get; set; }
 
-    [ForeignKey("MaterialId")] public virtual Material Material { get; set; } = null!;
+    [ForeignKey("MaterialId")]
+    public virtual Material Material { get; set; } = null!;
 
     [Column("Text")]
     [Required]

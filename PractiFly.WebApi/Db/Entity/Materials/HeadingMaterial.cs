@@ -8,15 +8,23 @@ namespace PractiFly.WebApi.EntityDb.Materials;
 [PrimaryKey("Id")]
 public class HeadingMaterial
 {
-    [Key] [Column("Id")] public int Id { get; set; }
+    [Key]
+    [Column("Id")]
+    public int Id { get; set; }
 
-    [Column("HeadingId")] public int HeadingId { get; set; }
+    [Column("HeadingId")]
+    public int HeadingId { get; set; }
 
-    [ForeignKey("HeadingId")] public virtual Heading Heading { get; set; } = null!;
+    [ForeignKey("HeadingId")]
+    public virtual Heading Heading { get; set; } = null!;
 
-    [Column("MaterialId")] public int MaterialId { get; set; }
+    [Column("MaterialId")]
+    public int MaterialId { get; set; }
 
-    [ForeignKey("MaterialId")] public virtual Material Material { get; set; } = null!;
+    [ForeignKey("MaterialId")]
+    public virtual Material Material { get; set; } = null!;
 
-    [Column("Note")] [MaxLength(256)] public string? Note { get; set; }
+    [Column("Note")]
+    [MaxLength(256)]
+    public string? Note { get; set; }
 }

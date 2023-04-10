@@ -10,7 +10,9 @@ public class Material
 {
     [Column("LanguageCode")] public int LanguageId;
 
-    [Key] [Column("Id")] public int Id { get; set; }
+    [Key]
+    [Column("Id")]
+    public int Id { get; set; }
 
     [Column("Name")]
     [MaxLength(128)]
@@ -18,7 +20,8 @@ public class Material
 
     public string Name { get; set; } = null!;
 
-    [ForeignKey("LanguageId")] public virtual Language Language { get; set; } = null!;
+    [ForeignKey("LanguageId")]
+    public virtual Language Language { get; set; } = null!;
 
     [Column("URL")]
     [MaxLength(2048)]
@@ -26,7 +29,11 @@ public class Material
     [Url]
     public string Url { get; set; } = null!;
 
-    [Column("IsPractical")] [Required] public bool IsPractical { get; set; }
+    [Column("IsPractical")]
+    [Required]
+    public bool IsPractical { get; set; }
 
-    [Column("Note")] [MaxLength(256)] public string? Note { get; set; }
+    [Column("Note")]
+    [MaxLength(256)]
+    public string? Note { get; set; }
 }

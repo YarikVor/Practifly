@@ -8,7 +8,9 @@ namespace PractiFly.WebApi.EntityDb.Materials;
 [PrimaryKey("Id")]
 public class Language
 {
-    [Key] [Column("Id")] public int Id { get; set; }
+    [Key]
+    [Column("Id")]
+    public int Id { get; set; }
 
     [Column("Code")]
     [MaxLength(2)]
@@ -25,5 +27,7 @@ public class Language
     [Required]
     public string OriginalName { get; set; } = null!;
 
-    [Column("Note")] [MaxLength(256)] public string? Note { get; set; }
+    [Column("Note")]
+    [MaxLength(256)]
+    public string? Note { get; set; }
 }

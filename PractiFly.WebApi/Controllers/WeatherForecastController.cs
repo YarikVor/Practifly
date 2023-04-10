@@ -6,12 +6,12 @@ namespace PractiFly.WebApi.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class UserController : Controller
+public class UsersdadController : Controller
 {
     private readonly IUsersContext _context;
     private readonly ILogger<UserController> _logger;
 
-    public UserController(
+    public UsersdadController(
         ILogger<UserController> logger,
         IUsersContext context
     )

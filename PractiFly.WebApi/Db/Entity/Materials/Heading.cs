@@ -8,7 +8,9 @@ namespace PractiFly.WebApi.EntityDb.Materials;
 [PrimaryKey("Id")]
 public class Heading
 {
-    [Key] [Column("Id")] public int Id { get; set; }
+    [Key]
+    [Column("Id")]
+    public int Id { get; set; }
 
     [Column("Code")]
     [Required]
@@ -25,7 +27,9 @@ public class Heading
     [MaxLength(16)]
     public string Udc { get; set; } = null!;
 
-    [Column("Note")] [MaxLength(256)] public string? Note { get; set; }
+    [Column("Note")]
+    [MaxLength(256)]
+    public string? Note { get; set; }
 
     [Column("Description")]
     [MaxLength(65536)]

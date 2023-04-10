@@ -8,7 +8,10 @@ namespace PractiFly.WebApi.EntityDb.Users;
 [PrimaryKey("Id")]
 public class User
 {
-    [Key] [Column("Id")] public int Id { get; set; }
+    [Key]
+    [Column("Id")]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; set; }
 
     [Column("FirstName")]
     [MaxLength(128)]
@@ -38,7 +41,18 @@ public class User
     [Required]
     public string FilePhoto { get; set; } = null!;
 
-    [Column("RegistrationDate")] public DateOnly RegistrationDate { get; set; }
+    [Column("Birthday")]
+    public DateOnly Birthday { get; set; }
 
-    [Column("Note")] [MaxLength(256)] public string? Note { get; set; }
+    [Column("PasswordHash")]
+    [MaxLength(256)]
+    [Required]
+    public string PasswordHash { get; set; } = null!;
+
+    [Column("RegistrationDate")]
+    public DateOnly RegistrationDate { get; set; }
+
+    [Column("Note")]
+    [MaxLength(256)]
+    public string? Note { get; set; }
 }
