@@ -1,67 +1,113 @@
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.WebApi.Attributes;
 using PractiFly.WebApi.Context;
 using PractiFly.WebApi.Db.Context;
+using ErrorContext = PractiFly.WebApi.Db.Context.ErrorContext;
 
-var builder = WebApplication.CreateBuilder(args);
+namespace PractiFly.WebApi;
 
-// Add services to the container.
-
-var services = builder.Services;
-
-services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-services.AddEndpointsApiExplorer();
-services.AddSwaggerGen();
-
-ConfigureServices(services);
-
-services.AddControllers().AddJsonOptions(
-    options =>
+internal static class Program
+{
+    public static void Main(string[] args)
     {
-        options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
-        options.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
+        var builder = WebApplication.CreateBuilder(args);
+        var services = builder.Services;
+
+        services.AddControllers();
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
+
+        AddJsonSerializerOptions(services);
+
+        ConfigureDatabase(services);
+
+        var app = builder.Build();
+
+        if (app.Environment.IsDevelopment()) UseSwagger(app);
+
+        UseExceptionHandler(app, services);
+
+        app.UseHttpsRedirection();
+
+        app.UseAuthorization();
+
+        app.MapControllers();
+
+        app.UseCertificateForwarding();
+
+        app.Run();
     }
-);
 
-var app = builder.Build();
+    private static void ConfigureDatabase(IServiceCollection services)
+    {
+        var config = services.BuildServiceProvider().GetService<IConfiguration>();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-  app.UseSwagger();
-  app.UseSwaggerUI();
+        var connectionString = config.GetConnectionString("DefaultConnection");
+
+        AddPractiFlyDb(services, connectionString);
+
+        var errorConnectionString = config.GetConnectionString("ErrorConnection");
+
+        AddErrorDb(services, errorConnectionString);
+    }
+
+    private static void AddErrorDb(IServiceCollection services, string? errorConnectionString)
+    {
+        services.AddDbContext<ErrorContext>(options =>
+            options.UseNpgsql(errorConnectionString));
+    }
+
+    private static void AddPractiFlyDb(IServiceCollection services, string? connectionString)
+    {
+        services
+            .AddDbContext<IUsersContext, UsersContext>(
+                options => options.UseNpgsql(connectionString))
+            .AddDbContext<IMaterialsContext, MaterialsContext>(
+                options => options.UseNpgsql(connectionString))
+            .AddDbContext<ICoursesContext, CoursesContext>(
+                options => options.UseNpgsql(connectionString))
+            .AddDbContext<IPractiflyContext, PractiflyContext>(options =>
+                options.UseNpgsql(connectionString));
+    }
+
+
+    private static void UseExceptionHandler(WebApplication app, IServiceCollection services)
+    {
+        app.UseExceptionHandler(appError =>
+        {
+            appError.Run(async context =>
+            {
+                var errorContext = services.BuildServiceProvider().GetService<ErrorContext>()!;
+
+                await errorContext.ErrorEntities.AddAsync(new ErrorEntity
+                {
+                    ErrorType = ErrorType.WebApi,
+                    Message = context.Features.Get<IExceptionHandlerFeature>()?.Error.Message ?? "Unknown",
+                    StackTrace = context.Features.Get<IExceptionHandlerFeature>()?.Error.StackTrace ?? "Unknown",
+                    ExceptionName = context.Features.Get<IExceptionHandlerFeature>()?.Error.GetType().Name ?? "Unknown",
+                    GeneratedAt = DateTime.UtcNow
+                });
+
+                await errorContext.SaveChangesAsync();
+            });
+        });
+    }
+
+    private static void UseSwagger(WebApplication app)
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+
+    private static void AddJsonSerializerOptions(IServiceCollection services)
+    {
+        services.AddControllers().AddJsonOptions(
+            options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
+                options.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
+            }
+        );
+    }
 }
-
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.UseCertificateForwarding();
-
-app.Run();
-
-//Hi! :)
-void ConfigureServices(IServiceCollection services)
-{
-    // Other DI initializations
-
-    var config = services.BuildServiceProvider().GetService<IConfiguration>();
-
-    var connectionString = config.GetConnectionString("DefaultConnection");
-    
-    
-    services.AddDbContext<IUsersContext, UsersContext>(options =>
-            options.UseNpgsql(connectionString));
-    services.AddDbContext<IMaterialsContext, MaterialsContext>(options =>
-        options.UseNpgsql(connectionString));
-    services.AddDbContext<ICoursesContext, CoursesContext>(options =>
-        options.UseNpgsql(connectionString));
-    services.AddDbContext<IPractiflyContext, PractiflyContext>(options =>
-        options.UseNpgsql(connectionString));
-    
-}
-
