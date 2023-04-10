@@ -34,12 +34,14 @@ public class RegistrationDto
     public int? YearBirth { get; set; }
 
     [PasswordPropertyText]
-    [Range(8, 256)]
+    [MinLength(8)]
+    [MaxLength(256)]
     [Required]
     public string Password { get; set; } = null!;
 
     [PasswordPropertyText]
-    [Range(8, 256)]
+    [MinLength(8)]
+    [MaxLength(256)]
     [Required]
     public string PasswordConfirm { get; set; } = null!;
 }
