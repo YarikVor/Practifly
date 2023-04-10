@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PractiFly.WebApi.Context;
 using PractiFly.WebApi.Dto.Registration;
 using PractiFly.WebApi.EntityDb.Users;
@@ -17,7 +18,10 @@ public class UserController : Controller
         _usersContext = usersContext;
     }
 
+
+    // TODO: SESSION
     [HttpPost]
+    [Route("create")]
     public async Task<IActionResult> Create(RegistrationDto registrationDto)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -56,5 +60,19 @@ public class UserController : Controller
         await _usersContext.SaveChangesAsync();
 
         return user.Id != 0 ? Ok(user.Id) : BadRequest();
+    }
+
+    [HttpPost]
+    [Route("login")]
+    public async Task<IActionResult> Login(LoginDto loginDto)
+    {
+        var user = await _usersContext
+            .Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(
+                u => u.Email == loginDto.Email && u.PasswordHash == loginDto.Password
+            );
+
+        return user != null ? Ok(user.FirstName) : BadRequest();
     }
 }

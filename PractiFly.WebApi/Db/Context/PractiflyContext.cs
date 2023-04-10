@@ -9,7 +9,7 @@ public class PractiflyContext : DbContext, IPractiflyContext
 {
     public PractiflyContext(DbContextOptions<PractiflyContext> options) : base(options)
     {
-        Database.EnsureCreated();
+        //Database.EnsureCreated();
     }
 
     public DbSet<Course> Courses { get; set; } = null!;
