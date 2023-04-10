@@ -1,10 +1,16 @@
-import React from "react";
+import {StrictMode} from "react";
 import ReactDOM from "react-dom/client";
+import {RouterProvider} from "react-router-dom";
+import {ThemeProvider} from "@mui/material/styles";
 
-import App from "./App";
+import "./main.css";
+import {router} from "./Router/router";
+import {theme} from "./theme";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
-    <App/>
-  </React.StrictMode>,
+  <StrictMode>
+    <ThemeProvider theme={theme}>
+      <RouterProvider router={router}/>
+    </ThemeProvider>
+  </StrictMode>,
 );
