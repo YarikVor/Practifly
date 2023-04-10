@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using PractiFly.WebApi.Db.Configuration.Users;
 using PractiFly.WebApi.EntityDb.Courses;
 using PractiFly.WebApi.EntityDb.Materials;
 using PractiFly.WebApi.EntityDb.Users;

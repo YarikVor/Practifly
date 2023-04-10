@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
-using PractiFly.WebApi.Db.Configuration.Users;
 
 namespace PractiFly.WebApi.EntityDb.Users;
 

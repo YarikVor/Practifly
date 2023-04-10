@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
-using PractiFly.WebApi.Db.Configuration.Users;
 using PractiFly.WebApi.EntityDb.Courses;
 using PractiFly.WebApi.EntityDb.Materials;
 

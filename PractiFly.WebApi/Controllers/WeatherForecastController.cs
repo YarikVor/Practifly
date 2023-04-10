@@ -25,6 +25,7 @@ namespace PractiFly.WebApi.Controllers
     [HttpGet("{id:int}")]
     public async Task<IActionResult> User(int id)
     {
+
       if (id <= 0)
         return BadRequest();
       
@@ -34,6 +35,8 @@ namespace PractiFly.WebApi.Controllers
         return BadRequest();
       
       return Json(headings);
+      
+      
     }
   }
 }
