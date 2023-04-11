@@ -1,5 +1,11 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using PractiFly.WebApi.Attributes;
 using PractiFly.WebApi.Context;
 using PractiFly.WebApi.Db.Context;
@@ -14,9 +20,48 @@ internal static class Program
         var builder = WebApplication.CreateBuilder(args);
         var services = builder.Services;
 
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+        
+        services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "BookStore", Version = "v1" });
+            c.AddSecurityDefinition("Bearer",
+                new OpenApiSecurityScheme
+                {
+                    Description =
+                        "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        },
+                        Scheme = "oauth2",
+                        Name = "Bearer",
+                        In = ParameterLocation.Header,
+
+                    },
+                    new List<string>()
+                }
+            }); ;
+        });
+
+        AuthOptions.Init(services.BuildServiceProvider().GetService<IConfiguration>());
+        
+        AddAuthorizationAndAuthentication(services);
 
         AddJsonSerializerOptions(services);
 
@@ -32,6 +77,7 @@ internal static class Program
 
         app.UseHttpsRedirection();
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();
@@ -40,6 +86,35 @@ internal static class Program
 
         app.Run();
     }
+
+    private static void AddAuthorizationAndAuthentication(IServiceCollection services)
+    {
+        services.AddAuthorization();
+        
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    // указывает, будет ли валидироваться издатель при валидации токена
+                    ValidateIssuer = true,
+                    // строка, представляющая издателя
+                    ValidIssuer = AuthOptions.ISSUER,
+                    // будет ли валидироваться потребитель токена
+                    ValidateAudience = true,
+                    // установка потребителя токена
+                    ValidAudience = AuthOptions.AUDIENCE,
+                    // будет ли валидироваться время существования
+                    ValidateLifetime = true,
+                    // установка ключа безопасности
+                    IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                    // валидация ключа безопасности
+                    ValidateIssuerSigningKey = true
+                    
+                };
+            });
+    }
+
 
     private static void InitTables(IServiceCollection services)
     {
@@ -115,6 +190,27 @@ internal static class Program
                 options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
                 options.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
             }
+        );
+    }
+}
+
+public static class AuthOptions
+{
+    public static string ISSUER => _section["Issuer"];
+    public static string AUDIENCE => _section["Audience"];
+    public static string KEY => _section["Key"];
+
+    private static IConfigurationSection _section;
+
+    public static void Init(IConfiguration configuration)
+    {
+        _section = configuration.GetSection("Secret");
+    }
+
+    public static SecurityKey GetSymmetricSecurityKey()
+    {
+        return new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(KEY)
         );
     }
 }
