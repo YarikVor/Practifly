@@ -14,6 +14,6 @@ public class FakerGeneratorConfiguration<T> : IEntityTypeConfiguration<T> where 
     public void Configure(EntityTypeBuilder<T> builder)
     {
         builder.HasData(_fakerManager.Generate<T>(NUMBER_GENERATE_ENTITIES));
-        builder.HasKey(e => e.Id)
+        //builder.HasKey(e => e.Id)
     }
 }
