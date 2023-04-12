@@ -1,9 +1,8 @@
-﻿namespace PractiFly.WebApi.Dto.CourseDependencies
+﻿namespace PractiFly.WebApi.Dto.CourseDependencies;
+
+public class CourseDependenciesViewDto
 {
-    public class CourseDependenciesViewDto
-    {
-        public string CourseName { get; set; } = null!;
-        public string? Description { get; set; }
-        public string DependencyFlag { get; set; } = null!;
-    }
+    public string CourseName { get; set; } = null!;
+    public string? Description { get; set; }
+    public string DependencyFlag { get; set; } = null!;
 }

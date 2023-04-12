@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 using Practifly.Checkers.Abstractions;
+using Practifly.Checkers.Exception;
 
 namespace Practifly.Checkers;
 

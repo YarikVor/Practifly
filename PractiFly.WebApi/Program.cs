@@ -1,15 +1,21 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using PractiFly.WebApi.Attributes;
-using PractiFly.WebApi.Context;
-using PractiFly.WebApi.Db.Context;
-using ErrorContext = PractiFly.WebApi.Db.Context.ErrorContext;
+using PractiFly.DateJsonConverter;
+using PractiFly.DbContextUtility.Context;
+using PractiFly.DbContextUtility.Context.Courses;
+using PractiFly.DbContextUtility.Context.Materials;
+using PractiFly.DbContextUtility.Context.PractiflyDb;
+using PractiFly.DbContextUtility.Context.Users;
+using PractiFly.DbEntities.Users;
+using Practifly.FakerGenerator;
+using PractiFly.FakerManager;
+using PractiFly.WebApi.Services.AuthenticationOptions;
+using PractiFly.WebApi.Services.TokenGenerator;
+using ErrorContext = PractiFly.DbContextUtility.Context.ErrorContext;
 
 namespace PractiFly.WebApi;
 
@@ -21,11 +27,17 @@ internal static class Program
         var services = builder.Services;
 
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+        services
+            .AddSingleton<IAuthOptions, AuthOptions>()
+            .AddSingleton<ITokenGenerator, TokenGenerator>();
+
+
+        services.AddSingleton<IFakerManager, PractiFlyFakerManager>();
         
         services.AddControllers();
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
-        
+
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "BookStore", Version = "v1" });
@@ -39,7 +51,7 @@ internal static class Program
                     Type = SecuritySchemeType.ApiKey,
                     Scheme = "Bearer"
                 });
-            c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
                 {
                     new OpenApiSecurityScheme
@@ -51,16 +63,14 @@ internal static class Program
                         },
                         Scheme = "oauth2",
                         Name = "Bearer",
-                        In = ParameterLocation.Header,
-
+                        In = ParameterLocation.Header
                     },
                     new List<string>()
                 }
-            }); ;
+            });
+            ;
         });
 
-        AuthOptions.Init(services.BuildServiceProvider().GetService<IConfiguration>());
-        
         AddAuthorizationAndAuthentication(services);
 
         AddJsonSerializerOptions(services);
@@ -89,28 +99,22 @@ internal static class Program
 
     private static void AddAuthorizationAndAuthentication(IServiceCollection services)
     {
+        var authOptions = services.BuildServiceProvider().GetService<IAuthOptions>();
+
         services.AddAuthorization();
-        
+
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    // указывает, будет ли валидироваться издатель при валидации токена
                     ValidateIssuer = true,
-                    // строка, представляющая издателя
-                    ValidIssuer = AuthOptions.ISSUER,
-                    // будет ли валидироваться потребитель токена
+                    ValidIssuer = authOptions.Issuer,
                     ValidateAudience = true,
-                    // установка потребителя токена
-                    ValidAudience = AuthOptions.AUDIENCE,
-                    // будет ли валидироваться время существования
+                    ValidAudience = authOptions.Audience,
                     ValidateLifetime = true,
-                    // установка ключа безопасности
-                    IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-                    // валидация ключа безопасности
+                    IssuerSigningKey = authOptions.SymmetricSecurityKey,
                     ValidateIssuerSigningKey = true
-                    
                 };
             });
     }
@@ -143,7 +147,7 @@ internal static class Program
     private static void AddPractiFlyDb(IServiceCollection services, string? connectionString)
     {
         services
-            .AddDbContext<IUsersContext, UsersContext>(
+            .AddDbContext<UsersContext, UsersContext>(
                 options => options.UseNpgsql(connectionString))
             .AddDbContext<IMaterialsContext, MaterialsContext>(
                 options => options.UseNpgsql(connectionString))
@@ -151,6 +155,13 @@ internal static class Program
                 options => options.UseNpgsql(connectionString))
             .AddDbContext<IPractiflyContext, PractiflyContext>(options =>
                 options.UseNpgsql(connectionString));
+
+        services
+            .AddIdentity<ApplicationUser, Role>()
+            .AddEntityFrameworkStores<UsersContext>()
+            .AddUserManager<UserManager<ApplicationUser>>()
+            .AddRoleManager<RoleManager<Role>>()
+            .AddSignInManager<SignInManager<ApplicationUser>>();
     }
 
 
@@ -190,27 +201,6 @@ internal static class Program
                 options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
                 options.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
             }
-        );
-    }
-}
-
-public static class AuthOptions
-{
-    public static string ISSUER => _section["Issuer"];
-    public static string AUDIENCE => _section["Audience"];
-    public static string KEY => _section["Key"];
-
-    private static IConfigurationSection _section;
-
-    public static void Init(IConfiguration configuration)
-    {
-        _section = configuration.GetSection("Secret");
-    }
-
-    public static SecurityKey GetSymmetricSecurityKey()
-    {
-        return new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(KEY)
         );
     }
 }

@@ -23,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\PractiFly.DbContextUtility\PractiFly.DbContextUtility.csproj" />
       <ProjectReference Include="..\PractiFly.WebApi\PractiFly.WebApi.csproj" />
     </ItemGroup>
 

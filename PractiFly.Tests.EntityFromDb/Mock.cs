@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using PractiFly.WebApi.Context;
-using PractiFly.WebApi.Db.Context;
+using PractiFly.DbContextUtility.Context.Courses;
+using PractiFly.DbContextUtility.Context.Materials;
+using PractiFly.DbContextUtility.Context.PractiflyDb;
+using PractiFly.DbContextUtility.Context.Users;
 
 namespace PractiFly.Tests.EntityFromDb;
 

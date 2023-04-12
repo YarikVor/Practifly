@@ -1,13 +1,12 @@
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using PractiFly.WebApi.Context;
+using PractiFly.DbContextUtility.Context.Users;
+using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Dto.Registration;
-using PractiFly.WebApi.EntityDb.Users;
 using PractiFly.WebApi.Extentions;
+using PractiFly.WebApi.Services.TokenGenerator;
 
 namespace PractiFly.WebApi.Controllers;
 
@@ -15,17 +14,16 @@ namespace PractiFly.WebApi.Controllers;
 [Route("[controller]")]
 public class UserController : Controller
 {
+    private readonly IHttpContextAccessor _httpContext;
+    private readonly ITokenGenerator _tokenGenerator;
     private readonly IUsersContext _usersContext;
 
-    private readonly IHttpContextAccessor _httpContext;
-
-   
-    public UserController(IUsersContext usersContext, IHttpContextAccessor httpContext)
+    public UserController(IUsersContext usersContext, IHttpContextAccessor httpContext, ITokenGenerator tokenGenerator)
     {
         _usersContext = usersContext;
         _httpContext = httpContext;
+        _tokenGenerator = tokenGenerator;
     }
-
 
     // TODO: SESSION
     [HttpPost]
@@ -83,47 +81,27 @@ public class UserController : Controller
                 u => u.Email == loginDto.Email && u.PasswordHash == loginDto.Password
             );
 
-        return user != null 
-            ? Ok(GenerateToken(user)) 
+        return user != null
+            ? Ok(GenerateToken(user))
             : BadRequest();
-
     }
-    
-    public string GenerateToken(User user)
-    {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
-        var handler = new JwtSecurityTokenHandler();
 
-        IEnumerable<Claim> claims = new Claim[]
+    private string GenerateToken(User user)
+    {
+        IEnumerable<Claim> claims = new[]
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.SerialNumber, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.Role, "empty"),
-            new Claim(ClaimTypes.Email, user.Email)
-           
+            new Claim(ClaimTypes.Role, "user"),
         };
 
-        var token = new JwtSecurityToken(
-            issuer: AuthOptions.ISSUER,
-            audience: AuthOptions.AUDIENCE,
-            claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(5),
-            signingCredentials: new SigningCredentials(
-                AuthOptions.GetSymmetricSecurityKey(),
-                algorithm: SecurityAlgorithms.HmacSha256
-            )
-        );
-
-        return handler.WriteToken(token);
+        return _tokenGenerator.GenerateToken(claims);
     }
-    
+
     [HttpGet("test")]
     [Authorize]
     public async Task<IActionResult> Test()
     {
-        var currentUser = _httpContext.HttpContext.User;
+        var currentUser = HttpContext.User;
         return Ok(currentUser.FindFirst(ClaimTypes.Email).Value);
     }
-    
-    
 }

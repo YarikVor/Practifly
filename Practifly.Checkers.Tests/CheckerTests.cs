@@ -1,4 +1,5 @@
 using Practifly.Checkers.Builder;
+using Practifly.Checkers.Exception;
 using Xunit.Abstractions;
 
 namespace Practifly.Checkers.Tests;

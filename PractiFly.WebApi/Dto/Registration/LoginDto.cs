@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace PractiFly.WebApi.Controllers;
+namespace PractiFly.WebApi.Dto.Registration;
 
 public class LoginDto
 {

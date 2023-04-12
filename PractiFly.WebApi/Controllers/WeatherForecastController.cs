@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PractiFly.WebApi.Context;
+using PractiFly.DbContextUtility.Context.Users;
 
 namespace PractiFly.WebApi.Controllers;
 

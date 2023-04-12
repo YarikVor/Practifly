@@ -1,13 +1,11 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using PractiFly.WebApi;
-using PractiFly.WebApi.Context;
+using PractiFly.DbContextUtility.Context.Users;
 using PractiFly.WebApi.Controllers;
+using PractiFly.WebApi.Dto.Registration;
 
 namespace PractiFly.WebApi.Tests;
-
 
 public class UserControllerTest
 {
@@ -19,7 +17,7 @@ public class UserControllerTest
         // var controller = new UserController(userDb)
 
         var user = await userDb.AsNoTracking().OrderBy(e => e.Id).LastAsync();
-        
+
         user.Should().NotBeNull();
 
         "TExt".Should().Be("tete");
@@ -29,9 +27,9 @@ public class UserControllerTest
             Email = user.Email,
             Password = user.PasswordHash
         };
-        
+
         var result = await controller.Login(loginDto);
-        
+
         result
             .Should()
             .NotBeNull()
@@ -41,12 +39,11 @@ public class UserControllerTest
             .Value
             .Should()
             .Be(user.FirstName);
-        
-        
+
+
         Assert.NotNull(result);
         Assert.IsType<OkObjectResult>(result);
         var okResult = result as OkObjectResult;
         Assert.Equal(user.FirstName, okResult.Value);
-
     }
 }

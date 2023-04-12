@@ -1,8 +1,7 @@
-﻿namespace PractiFly.WebApi.Dto.Level
+﻿namespace PractiFly.WebApi.Dto.Level;
+
+public class LevelViewDto
 {
-    public class LevelViewDto
-    {
-        public string LevelName { get; set; } = null!;
-        public string? Description { get; set; }
-    }
+    public string LevelName { get; set; } = null!;
+    public string? Description { get; set; }
 }

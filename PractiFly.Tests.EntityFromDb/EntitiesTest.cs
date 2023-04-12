@@ -6,8 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Practifly.Checkers;
 using Practifly.Checkers.Builder;
-using Practifly.GeneratorTestData;
-using PractiFly.WebApi.Db.Context;
+using PractiFly.DbContextUtility.Context.PractiflyDb;
+using Practifly.FakerGenerator;
 using Xunit.Abstractions;
 
 namespace PractiFly.Tests.EntityFromDb;
@@ -20,7 +20,7 @@ public class EntitiesTest
         = Mock.CreatePractiflyContext()
           ?? throw new NullReferenceException();
 
-    private static readonly FakerManager _fakerManager = new PractiFlyFakerManager();
+    private static readonly FakerManager.FakerManager _fakerManager = new PractiFlyFakerManager();
     private readonly Checker _checker;
     private readonly ITestOutputHelper _logger;
 
@@ -69,7 +69,9 @@ public class EntitiesTest
         MakeTest(_practiflyContext.UserGroups),
         MakeTest(_practiflyContext.UserHeadings),
         MakeTest(_practiflyContext.UserThemes),
-        MakeTest(_practiflyContext.UserMaterials)
+        MakeTest(_practiflyContext.UserMaterials),
+        MakeTest(_practiflyContext.Roles),
+        MakeTest(_practiflyContext.ApplicationUsers)
     };
 
     private void ClearDb()
