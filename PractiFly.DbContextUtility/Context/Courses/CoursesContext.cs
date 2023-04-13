@@ -12,8 +12,6 @@ public class CoursesContext : DbContext, ICoursesContext
     public CoursesContext(DbContextOptions<CoursesContext> options) : base(options)
     {
         
-        Database.EnsureCreated();
-        
     }
 
     public DbSet<Course> Courses { get; set; } = null!;
@@ -25,8 +23,4 @@ public class CoursesContext : DbContext, ICoursesContext
     public DbSet<Theme> Themes { get; set; } = null!;
     public DbSet<ThemeMaterial> ThemeMaterials { get; set; } = null!;
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        
-    }
 }

@@ -1,12 +1,11 @@
-using Bogus;
 using PractiFly.DbEntities.Users;
 using PractiFly.FakerManager;
 
 namespace Practifly.FakerGenerator.Faker.Users;
 
-public sealed class GroupFaker : Faker<Group>, IFakerGenerate<Group>
+public sealed class GroupFaker : FakerFkRandomizer<Group>, IFakerGenerate<Group>
 {
-    public GroupFaker(string lang = "uk") : base(lang)
+    public GroupFaker(int count) : base(count)
     {
         RuleFor(g => g.Id, f => f.IndexFaker + 1);
         RuleFor(g => g.Name, f => f.Company.CompanyName());

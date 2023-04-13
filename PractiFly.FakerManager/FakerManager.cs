@@ -2,14 +2,6 @@ using System.Collections;
 
 namespace PractiFly.FakerManager;
 
-public interface IFakerManager
-{
- 
-    IEnumerable<T> Generate<T>(int count) where T : class;
-    IEnumerable Generate(Type type, int count);
-    void AddFaker<T>(IFakerGenerate<T> faker) where T : class;
-}
-
 public class FakerManager : IFakerManager
 {
     private readonly Dictionary<Type, IFakerGenerate> _fakers = new();
@@ -33,3 +25,4 @@ public class FakerManager : IFakerManager
         _fakers.Add(typeof(T), faker);
     }
 }
+

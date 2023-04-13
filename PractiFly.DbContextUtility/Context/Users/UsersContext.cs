@@ -8,11 +8,9 @@ namespace PractiFly.DbContextUtility.Context.Users;
 
 public class UsersContext : DbContext, IUsersContext
 {
-    private readonly IFakerManager _fakerManager;
-    
-    public UsersContext(DbContextOptions<UsersContext> options, IFakerManager fakerManager) : base(options)
+
+    public UsersContext(DbContextOptions<UsersContext> options) : base(options)
     {
-        _fakerManager = fakerManager;
     }
 
     public DbSet<Group> Groups { get; set; } = null!;

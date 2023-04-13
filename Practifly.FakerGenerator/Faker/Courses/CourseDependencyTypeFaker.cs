@@ -6,7 +6,7 @@ namespace Practifly.FakerGenerator.Faker.Courses;
 
 public sealed class CourseDependencyTypeFaker : Faker<CourseDependencyType>, IFakerGenerate<CourseDependencyType>
 {
-    public CourseDependencyTypeFaker()
+    public CourseDependencyTypeFaker() : base("uk")
     {
         RuleFor(cdt => cdt.Id, f => f.IndexFaker + 1);
         RuleFor(cdt => cdt.Name, f => f.Lorem.Word());

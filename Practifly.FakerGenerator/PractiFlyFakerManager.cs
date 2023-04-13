@@ -7,38 +7,39 @@ namespace Practifly.FakerGenerator;
 
 public class PractiFlyFakerManager : FakerManager
 {
-    public PractiFlyFakerManager()
+   
+    public PractiFlyFakerManager(int count = 5)
     {
         // Users
-        AddFaker(new GroupCourseFaker());
-        AddFaker(new GroupFaker());
-        AddFaker(new UserCourseFaker());
+        AddFaker(new GroupCourseFaker(count));
+        AddFaker(new GroupFaker(count));
+        AddFaker(new UserCourseFaker(count));
         AddFaker(new UserFaker());
-        AddFaker(new UserGroupFaker());
-        AddFaker(new UserHeadingFaker());
-        AddFaker(new UserMaterialFaker());
-        AddFaker(new UserThemeFaker());
+        AddFaker(new UserGroupFaker(count));
+        AddFaker(new UserHeadingFaker(count));
+        AddFaker(new UserMaterialFaker(count));
+        AddFaker(new UserThemeFaker(count));
 
         // Materials
-        AddFaker(new CompetencyFaker());
-        AddFaker(new HeadingCompetencyFaker());
+        AddFaker(new CompetencyFaker(count));
+        AddFaker(new HeadingCompetencyFaker(count));
         AddFaker(new HeadingFaker());
-        AddFaker(new HeadingMaterialFaker());
+        AddFaker(new HeadingMaterialFaker(count));
         AddFaker(new LanguageFaker());
         AddFaker(new LevelFaker());
-        AddFaker(new MaterialFaker());
-        AddFaker(new MaterialBlockFaker());
-        AddFaker(new MaterialCompetencyFaker());
-        AddFaker(new UnitFaker());
+        AddFaker(new MaterialFaker(count));
+        AddFaker(new MaterialBlockFaker(count));
+        AddFaker(new MaterialCompetencyFaker(count));
+        AddFaker(new UnitFaker(count));
 
         // Courses
-        AddFaker(new CourseCompotencyFaker());
-        AddFaker(new CourseDependencyFaker());
+        AddFaker(new CourseCompotencyFaker(count));
+        AddFaker(new CourseDependencyFaker(count));
         AddFaker(new CourseDependencyTypeFaker());
-        AddFaker(new CourseFaker());
-        AddFaker(new CourseHeadingFaker());
-        AddFaker(new CourseMaterialFaker());
-        AddFaker(new ThemeFaker());
-        AddFaker(new ThemeMaterialFaker());
+        AddFaker(new CourseFaker(count));
+        AddFaker(new CourseHeadingFaker(count));
+        AddFaker(new CourseMaterialFaker(count));
+        AddFaker(new ThemeFaker(count));
+        AddFaker(new ThemeMaterialFaker(count));
     }
 }

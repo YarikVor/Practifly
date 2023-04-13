@@ -18,4 +18,8 @@
         <ProjectReference Include="..\PractiFly.FakerManager\PractiFly.FakerManager.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Migrations" />
+    </ItemGroup>
+
 </Project>
