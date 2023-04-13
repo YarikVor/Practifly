@@ -12,7 +12,7 @@ using PractiFly.DbContextUtility.Context.PractiflyDb;
 namespace PractiFly.DbContextUtility.Migrations
 {
     [DbContext(typeof(PractiflyContext))]
-    [Migration("20230412161955_PractiFlyMigration")]
+    [Migration("20230413101335_PractiFlyMigration")]
     partial class PractiFlyMigration
     {
         /// <inheritdoc />
@@ -908,6 +908,12 @@ namespace PractiFly.DbContextUtility.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)")
                         .HasColumnName("LastName");
+
+                    b.Property<string>("Name23")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("Name23");
 
                     b.Property<string>("Note")
                         .HasMaxLength(256)

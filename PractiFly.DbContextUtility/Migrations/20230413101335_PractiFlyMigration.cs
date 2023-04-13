@@ -144,6 +144,7 @@ namespace PractiFly.DbContextUtility.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     FirstName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    Name23 = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     LastName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     Email = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
                     Phone = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
