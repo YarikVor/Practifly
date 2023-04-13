@@ -58,8 +58,7 @@ public class Startup
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
-        //TODO:
-        //app.MapControllers();
+
         app.UseCertificateForwarding();
 
     }
@@ -153,14 +152,18 @@ public class Startup
     private static void AddPractiFlyDb(IServiceCollection services, string? connectionString)
     {
         services
-            .AddDbContext<UsersContext, UsersContext>(
+            .AddDbContext<IUsersContext, UsersContext>(
                 options => options.UseNpgsql(connectionString))
             .AddDbContext<IMaterialsContext, MaterialsContext>(
                 options => options.UseNpgsql(connectionString))
             .AddDbContext<ICoursesContext, CoursesContext>(
                 options => options.UseNpgsql(connectionString))
-            .AddDbContext<IPractiflyContext, PractiflyContext>(options =>
-                options.UseNpgsql(connectionString));
+            .AddDbContext<IPractiflyContext, PractiflyContext>(
+                options => options.UseNpgsql(connectionString));
+
+        var context = services.BuildServiceProvider().GetService<IPractiflyContext>() as DbContext;
+        
+        context?.GenerateTestDataIfEmpty();
 
         services
             .AddIdentity<ApplicationUser, Role>()
