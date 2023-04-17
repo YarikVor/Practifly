@@ -2,8 +2,10 @@
 
 namespace PractiFly.WebApi.Dto.CourseData
 {
-    public class CourseDataCreateDto
+    public class CourseInfoDto
     {
+        public string Language { get; set; } = null!;
+
         [Required]
         public string CourseName { get; set; } = null!;
 

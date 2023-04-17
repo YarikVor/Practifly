@@ -2,8 +2,10 @@
 
 namespace PractiFly.WebApi.Dto.Admin.UserView
 {
-    public class UserProfileForAdminDto
+    public class UserProfileForAdminCreateDto
     {
+        public int Id { get; set; }
+
         [Required]
         [MaxLength(128)]
         public string Name { get; set; } = null!;
@@ -28,6 +30,7 @@ namespace PractiFly.WebApi.Dto.Admin.UserView
         public string FilePhoto { get; set; } = null!;
 
         [Required]
-        public string? Role { get; set; }
+        [MaxLength(64)]
+        public string Role { get; set; } = null!;
     }
 }
