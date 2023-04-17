@@ -23,6 +23,6 @@ namespace PractiFly.WebApi.Dto.Admin.UserView
 
         //TODO: Ролі користувачів (може змінитись тип даних)
         [MaxLength(64)]
-        public string? Role { get; set; }
+        public string? Role { get; set; } 
     }
 }
