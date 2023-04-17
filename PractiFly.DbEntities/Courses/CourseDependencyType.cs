@@ -17,9 +17,10 @@ public class CourseDependencyType
     [Required]
     public string Name { get; set; } = null!;
 
-    [Column("Note")]
-    [MaxLength(256)]
-    public string? Note { get; set; }
+    [Column("Url")]
+    [MaxLength(2048)]
+    [Url]
+    public string Url { get; set; }
 
     [Column("Description")]
     [MaxLength(65536)]

@@ -101,6 +101,8 @@ public class UserController : Controller
     [Authorize]
     public async Task<IActionResult> Test()
     {
+        _usersContext.Users.Where(e => e.Is)
+    
         var currentUser = HttpContext.User;
         return Ok(currentUser.FindFirst(ClaimTypes.Email).Value);
     }
