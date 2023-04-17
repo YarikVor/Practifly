@@ -24,10 +24,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="AutoMapper" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\PractiFly.DateJsonConverter\PractiFly.DateJsonConverter.csproj" />
       <ProjectReference Include="..\PractiFly.DbContextUtility\PractiFly.DbContextUtility.csproj" />
       <ProjectReference Include="..\PractiFly.DbEntities\PractiFly.DbEntities.csproj" />

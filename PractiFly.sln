@@ -41,6 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PractiFly.FakerConfiguratio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PractiFly.FakerFkRandomUtility", "PractiFly.FakerFkRandomUtility\PractiFly.FakerFkRandomUtility.csproj", "{DF36E467-FD8E-415F-859F-2FD7B5417ADD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PractiFly.Tests.Mappings", "PractiFly.Tests.Mappings\PractiFly.Tests.Mappings.csproj", "{333C70CE-738D-4900-90F9-4000CF6322AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,10 @@ Global
 		{DF36E467-FD8E-415F-859F-2FD7B5417ADD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF36E467-FD8E-415F-859F-2FD7B5417ADD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF36E467-FD8E-415F-859F-2FD7B5417ADD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{333C70CE-738D-4900-90F9-4000CF6322AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{333C70CE-738D-4900-90F9-4000CF6322AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{333C70CE-738D-4900-90F9-4000CF6322AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{333C70CE-738D-4900-90F9-4000CF6322AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -117,5 +123,6 @@ Global
 		{C80B66B2-AD54-4D32-B30A-E5D5E9BB0AD9} = {C09A592D-116E-4459-AB5B-DF6ACD3841F5}
 		{154F52B7-2645-4F20-AC2E-EBA4EC8E5DBA} = {C09A592D-116E-4459-AB5B-DF6ACD3841F5}
 		{DF36E467-FD8E-415F-859F-2FD7B5417ADD} = {A2D0A9CE-F09F-48B7-B8E4-4B5B8FE46A74}
+		{333C70CE-738D-4900-90F9-4000CF6322AE} = {7C836C05-5373-4191-8FE5-AB09F67AF0EB}
 	EndGlobalSection
 EndGlobal

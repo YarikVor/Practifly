@@ -29,7 +29,8 @@ public class Startup
             .AddSingleton<IAuthOptions, AuthOptions>()
             .AddSingleton<ITokenGenerator, TokenGenerator>();
 
-
+        
+        
         services.AddSingleton<IFakerManager, PractiFlyFakerManager>();
 
         services.AddControllers();
@@ -103,7 +104,7 @@ public class Startup
     private static void AddAuthorizationAndAuthentication(IServiceCollection services)
     {
         var authOptions = services.BuildServiceProvider().GetService<IAuthOptions>() 
-            ?? throw new NullReferenceException("IAuthOptions is not found") ;
+            ?? throw new NullReferenceException("IAuthOptions is not found");
 
         services.AddAuthorization();
 

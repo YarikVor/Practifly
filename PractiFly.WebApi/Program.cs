@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace PractiFly.WebApi;
 
 public static class Program
