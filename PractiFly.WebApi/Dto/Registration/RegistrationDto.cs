@@ -1,10 +1,15 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using PractiFly.WebApi.Attributes;
 
 namespace PractiFly.WebApi.Dto.Registration;
 
 public class RegistrationDto
 {
+    [Required]
+    [MaxLength(64)]
+    public string Username { get; set; } = null!;
+    
     [Required]
     [MaxLength(128)]
     public string Name { get; set; } = null!;
@@ -24,24 +29,13 @@ public class RegistrationDto
     public string Phone { get; set; } = null!;
 
     [Required]
-    public int? DayBirth { get; set; }
+    [TodayDateConstraint]
+    public DateOnly Birthday { get; set; }
 
-    [Required]
-    [Range(1, 12)]
-    public int? MonthBirth { get; set; }
-
-    [Required]
-    public int? YearBirth { get; set; }
 
     [PasswordPropertyText]
     [MinLength(8)]
     [MaxLength(256)]
     [Required]
     public string Password { get; set; } = null!;
-
-    [PasswordPropertyText]
-    [MinLength(8)]
-    [MaxLength(256)]
-    [Required]
-    public string PasswordConfirm { get; set; } = null!;
 }
