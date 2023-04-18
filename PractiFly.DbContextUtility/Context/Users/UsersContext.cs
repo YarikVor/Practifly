@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbEntities.Courses;
 using PractiFly.DbEntities.Materials;
@@ -23,12 +24,15 @@ public class UsersContext : DbContext, IUsersContext
 
     public DbSet<UserMaterial> UserMaterials { get; set; }
     public DbSet<UserTheme> UserThemes { get; set; }
-    public DbSet<Role> Roles { get; set; }
+    //public DbSet<Role> Roles { get; set; }
     public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-
+    public DbSet<IdentityUser> IdentityUser { get; set; }
+    public DbSet<IdentityRole<int>> IdentityRole { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        
+        
         modelBuilder.Entity<Level>();
         modelBuilder.Entity<Course>();
         modelBuilder.Entity<Theme>();
