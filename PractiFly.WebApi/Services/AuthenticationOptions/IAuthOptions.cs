@@ -7,5 +7,6 @@ public interface IAuthOptions
     string Issuer { get; }
     string Audience { get; }
     string Secret { get; }
+    int TimeLife { get; }
     SecurityKey SymmetricSecurityKey { get; }
 }

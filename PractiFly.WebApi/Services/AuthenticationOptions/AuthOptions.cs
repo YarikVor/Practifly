@@ -9,6 +9,7 @@ public class AuthOptions : IAuthOptions
     private const string IssuerKey = "Issuer";
     private const string AudienceKey = "Audience";
     private const string SecretKey = "Key";
+    private const string TimeLifeKey = "TimeLife";
 
 
     private readonly IConfigurationSection _section;
@@ -27,6 +28,11 @@ public class AuthOptions : IAuthOptions
 
     public string Secret => _section[SecretKey]
                             ?? throw new NullReferenceException(ValueNotFound(SecretKey));
+
+    public int TimeLife => Int32.Parse(
+        _section[TimeLifeKey]
+        ?? throw new NullReferenceException(ValueNotFound(TimeLifeKey))
+    );
 
     // TODO: Lifetime
 
