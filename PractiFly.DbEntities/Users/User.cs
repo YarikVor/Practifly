@@ -1,18 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace PractiFly.DbEntities.Users;
 
-[Table("User")]
-[PrimaryKey("Id")]
-public class User
+public sealed class User: IdentityUser<int>
 {
-    [Key]
-    [Column("Id")]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
-
     [Column("FirstName")]
     [MaxLength(128)]
     [Required]
@@ -23,18 +17,6 @@ public class User
     [Required]
     public string LastName { get; set; } = null!;
 
-    [EmailAddress]
-    [Column("Email")]
-    [MaxLength(64)]
-    [Required]
-    public string Email { get; set; } = null!;
-
-    [Phone]
-    [Column("Phone")]
-    [MaxLength(32)]
-    [Required]
-    public string Phone { get; set; } = null!;
-
     [Url]
     [Column("FilePhoto")]
     [MaxLength(2048)]
@@ -44,10 +26,6 @@ public class User
     [Column("Birthday")]
     public DateOnly Birthday { get; set; }
 
-    [Column("PasswordHash")]
-    [MaxLength(256)]
-    [Required]
-    public string PasswordHash { get; set; } = null!;
 
     [Column("RegistrationDate")]
     public DateOnly RegistrationDate { get; set; }

@@ -22,7 +22,7 @@ public class TokenGenerator : ITokenGenerator
             _authOptions.Issuer,
             _authOptions.Audience,
             claims,
-            expires: DateTime.UtcNow.AddMinutes(5),
+            expires: DateTime.UtcNow.AddSeconds(_authOptions.TimeLife),
             signingCredentials: new SigningCredentials(
                 _authOptions.SymmetricSecurityKey,
                 SecurityAlgorithms.HmacSha256

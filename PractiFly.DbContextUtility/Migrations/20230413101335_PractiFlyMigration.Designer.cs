@@ -11,7 +11,7 @@ using PractiFly.DbContextUtility.Context.PractiflyDb;
 
 namespace PractiFly.DbContextUtility.Migrations
 {
-    [DbContext(typeof(PractiflyContext))]
+    [DbContext(typeof(PractiFlyContext))]
     [Migration("20230413101335_PractiFlyMigration")]
     partial class PractiFlyMigration
     {

@@ -29,7 +29,7 @@ public class Mock
                 options => NpgsqlDbContextOptionsBuilderExtensions.UseNpgsql(options, ConnectionString))
             .AddDbContext<ICoursesContext, CoursesContext>(
                 options => NpgsqlDbContextOptionsBuilderExtensions.UseNpgsql(options, ConnectionString))
-            .AddDbContext<IPractiflyContext, PractiflyContext>(options =>
+            .AddDbContext<IPractiflyContext, PractiFlyContext>(options =>
                 NpgsqlDbContextOptionsBuilderExtensions.UseNpgsql(options, ConnectionString))
             .AddTransient<UserController>();
 

@@ -2,6 +2,6 @@ using Microsoft.AspNetCore.Identity;
 
 namespace PractiFly.DbEntities.Users;
 
-public class Role : IdentityRole<int>
+public sealed class Role : IdentityRole<int>
 {
 }
