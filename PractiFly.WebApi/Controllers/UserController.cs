@@ -1,109 +1,105 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.Users;
 using PractiFly.DbEntities.Users;
+using PractiFly.WebApi.Context;
 using PractiFly.WebApi.Dto.Registration;
-using PractiFly.WebApi.Extentions;
 using PractiFly.WebApi.Services.TokenGenerator;
 
 namespace PractiFly.WebApi.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("[controller]/[action]")]
 public class UserController : Controller
 {
     private readonly IHttpContextAccessor _httpContext;
     private readonly ITokenGenerator _tokenGenerator;
-    private readonly IUsersContext _usersContext;
+    private readonly UserManager<User> _userManager;
+    private readonly SignInManager<User> _signInManager;
 
-    public UserController(IUsersContext usersContext, IHttpContextAccessor httpContext, ITokenGenerator tokenGenerator)
+    public UserController(IUsersContext usersContext, IHttpContextAccessor httpContext, ITokenGenerator
+        tokenGenerator, UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<Role> roleManager)
     {
-        _usersContext = usersContext;
         _httpContext = httpContext;
         _tokenGenerator = tokenGenerator;
+        _userManager = userManager;
+        _signInManager = signInManager;
     }
 
-    // TODO: SESSION
     [HttpPost]
-    [Route("[action]")]
+    [Route("")]
     [AllowAnonymous]
     public async Task<IActionResult> Create(RegistrationDto registrationDto)
     {
-        if (!ModelState.IsValid) return BadRequest(ModelState);
-
-        if (!DateEx.TryToConvertToDateOnly(
-                registrationDto.YearBirth!.Value,
-                registrationDto.MonthBirth!.Value,
-                registrationDto.DayBirth!.Value,
-                out var birthday)
-           )
-            ModelState.AddModelError("Birthday", "Birthday is not valid");
-
-        if (birthday >= DateOnly.FromDateTime(DateTime.Today))
-            ModelState.AddModelError("Birthday", "Birthday is not valid");
-
-        if (registrationDto.Password != registrationDto.PasswordConfirm)
-            ModelState.AddModelError("Password", "Passwords are not equal");
-
-        if (!ModelState.IsValid) return BadRequest(ModelState);
-
-        var user = new User
+        var identityUser = new User
         {
-            Id = 0,
-            Birthday = birthday,
+            UserName = registrationDto.Username,
+            Birthday = registrationDto.Birthday,
             Email = registrationDto.Email,
             FirstName = registrationDto.Name,
             LastName = registrationDto.Surname,
-            Phone = registrationDto.Phone,
+            PhoneNumber = registrationDto.Phone,
             RegistrationDate = DateOnly.FromDateTime(DateTime.Today),
-            // TODO: Hash password
-            PasswordHash = registrationDto.Password,
             FilePhoto = "https://www.nicepng.com/maxp/u2y3a9e6t4o0a9w7/"
         };
 
-        await _usersContext.Users.AddAsync(user);
-        await _usersContext.SaveChangesAsync();
+        var identityResult = await _userManager.CreateAsync(identityUser, registrationDto.Password);
 
-        return user.Id != 0 ? Ok(user.Id) : BadRequest();
+        if (!identityResult.Succeeded)
+            return BadRequest();
+
+        identityResult = await _userManager.AddToRoleAsync(identityUser, UserRoles.User);
+
+        if (!identityResult.Succeeded)
+            return BadRequest();
+
+        string token = GenerateToken(identityUser, UserRoles.User);
+
+        return Ok(token);
     }
 
     [HttpPost]
-    [Route("[action]")]
+    [Route("")]
     [AllowAnonymous]
     public async Task<IActionResult> Login(LoginDto loginDto)
     {
-        var user = await _usersContext
-            .Users
-            .AsNoTracking()
-            .FirstOrDefaultAsync(
-                u => u.Email == loginDto.Email && u.PasswordHash == loginDto.Password
-            );
+        var user = await _userManager.FindByEmailAsync(loginDto.Email);
+        var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
-        return user != null
-            ? Ok(GenerateToken(user))
-            : BadRequest();
+        var role = (await _userManager.GetRolesAsync(user))[0];
+        
+
+        if (result.Succeeded)
+            return Ok(GenerateToken(user, role));
+
+        return BadRequest();
     }
 
-    private string GenerateToken(User user)
+    private string GenerateToken(User user, string role)
     {
         IEnumerable<Claim> claims = new[]
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Role, "user"),
+            new Claim(ClaimTypes.Role, role),
         };
 
         return _tokenGenerator.GenerateToken(claims);
     }
-
-    [HttpGet("test")]
-    [Authorize]
-    public async Task<IActionResult> Test()
-    {
-        _usersContext.Users.Where(e => e.Is)
     
+    [HttpGet]
+    [Route("")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
+    public async Task<IActionResult> RefreshToken()
+    {
         var currentUser = HttpContext.User;
-        return Ok(currentUser.FindFirst(ClaimTypes.Email).Value);
+        var id = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+        var user = await _userManager.FindByIdAsync(id);
+        
+        var role = (await _userManager.GetRolesAsync(user))[0];
+        
+        return Ok(GenerateToken(user, role));
     }
 }
