@@ -10,7 +10,7 @@ using PractiFly.DbContextUtility.Context.PractiflyDb;
 
 namespace PractiFly.DbContextUtility.Migrations
 {
-    [DbContext(typeof(PractiflyContext))]
+    [DbContext(typeof(PractiFlyContext))]
     partial class PractiflyContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

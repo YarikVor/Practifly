@@ -1,15 +1,16 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbEntities.Courses;
 using PractiFly.DbEntities.Materials;
 using PractiFly.DbEntities.Users;
-using PractiFly.FakerManager;
+
 
 namespace PractiFly.DbContextUtility.Context.PractiflyDb;
 
-public class PractiflyContext : DbContext, IPractiflyContext
+public class PractiFlyContext : DbContext, IPractiflyContext
 {
     
-    public PractiflyContext(DbContextOptions<PractiflyContext> options) : base(options)
+    public PractiFlyContext(DbContextOptions<PractiFlyContext> options) : base(options)
     {
     }
 

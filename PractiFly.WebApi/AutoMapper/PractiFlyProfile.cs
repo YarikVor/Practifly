@@ -16,7 +16,7 @@ public class PractiFlyProfile : Profile
 
 
         // (CourseDependencyType)CourseDependenciesTypeCreateDto
-        CreateMap<CourseDependenciesTypeCreateDto, CourseDependencyType>()
+        /*CreateMap<Course, CourseDependencyType>()
             .ForMember(
                 e => e.Name,
                 par
@@ -35,7 +35,7 @@ public class PractiFlyProfile : Profile
                 e => e.Id,
                 par
                     => par.MapFrom(e => e.Id)
-            );
+            );*/
         /*
          new CourseDependencyType(){
             Name = courseDependenciesTypeCreateDto.CourseName
