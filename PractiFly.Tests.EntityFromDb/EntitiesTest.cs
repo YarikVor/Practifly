@@ -16,7 +16,7 @@ public class EntitiesTest
 {
     private const int CountEntitiesForGenerate = 5;
 
-    private static readonly PractiflyContext _practiflyContext
+    private static readonly PractiFlyContext _practiflyContext
         = Mock.CreatePractiflyContext()
           ?? throw new NullReferenceException();
 

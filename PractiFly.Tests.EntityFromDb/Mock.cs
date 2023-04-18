@@ -50,8 +50,8 @@ public static class Mock
         return CreateContext<CoursesContext>();
     }
 
-    public static PractiflyContext CreatePractiflyContext()
+    public static PractiFlyContext CreatePractiflyContext()
     {
-        return CreateContext<PractiflyContext>();
+        return CreateContext<PractiFlyContext>();
     }
 }

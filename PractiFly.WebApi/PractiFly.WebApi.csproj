@@ -29,4 +29,8 @@
       <ProjectReference Include="..\PractiFly.DbEntities\PractiFly.DbEntities.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Migrations" />
+    </ItemGroup>
+
 </Project>
