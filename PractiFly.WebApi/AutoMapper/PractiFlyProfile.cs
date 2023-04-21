@@ -1,11 +1,14 @@
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities.Courses;
 using PractiFly.DbEntities.Users;
+using PractiFly.WebApi.Dto.CourseData;
 using PractiFly.WebApi.Dto.CourseDependencies;
+using PractiFly.WebApi.Dto.CourseThemes;
 using PractiFly.WebApi.Dto.MyCourse;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
@@ -15,7 +18,7 @@ public class PractiFlyProfile : Profile
 {
     private readonly PractiFlyContext _context;
 
-    
+
     public PractiFlyProfile(IPractiflyContext context)
     {
         _context = (PractiFlyContext)context;
@@ -63,10 +66,6 @@ public class PractiFlyProfile : Profile
         // TODO: Зробити: CountProgress, CountThemes, IsCompleted, IsChecked, Grade, GradeAverage, ThemeId
 
 
-        
-        
-        
-
         CreateProjection<UserCourse, UserCourseStatusDto>()
             .ForMember(e => e.CourseId, par => par.MapFrom(e => e.CourseId))
             .ForMember(e => e.Language, par => par.MapFrom(e => e.Course.Language.Code))
@@ -74,21 +73,21 @@ public class PractiFlyProfile : Profile
             .ForMember(
                 e => e.GradeAverage,
                 par => par.MapFrom(
-                    e => 
+                    e =>
                         (float)
                         _context
-                        .UserMaterials
-                        .Where(cm => cm.UserId == e.UserId)
-                        .Where(cm => _context.CourseMaterials
-                            .Where(courseMaterial => courseMaterial.CourseId == e.CourseId)
-                            .Select(courseMaterial => courseMaterial.MaterialId)
-                            .Any(materialId => materialId == cm.MaterialId)
-                        )
-                        .Select(um => um.Grade)
-                        .DefaultIfEmpty()
-                        .Average()
+                            .UserMaterials
+                            .Where(cm => cm.UserId == e.UserId)
+                            .Where(cm => _context.CourseMaterials
+                                .Where(courseMaterial => courseMaterial.CourseId == e.CourseId)
+                                .Select(courseMaterial => courseMaterial.MaterialId)
+                                .Any(materialId => materialId == cm.MaterialId)
+                            )
+                            .Select(um => um.Grade)
+                            .DefaultIfEmpty()
+                            .Average()
                 )
-                )
+            )
             .ForMember(
                 e => e.Grade,
                 par => par.MapFrom(
@@ -121,5 +120,25 @@ public class PractiFlyProfile : Profile
                 e => e.CourseId,
                 e => e.MapFrom(e => e.CourseId)
             );
+
+        CreateProjection<Course, CourseItemDto>();
+        CreateProjection<Theme, ThemeItemDto>();
+
+        CreateProjection<Course, CourseItemWithThemeDto>()
+            .ForMember(e => e.Themes, par => par.MapFrom(
+                    e => _context
+                        .Themes
+                        .Where(t => t.CourseId == e.Id)
+                        // TODO: Use ProjectTo
+                        .Select(
+                            t => new ThemeItemDto()
+                            {
+                                Id = t.Id,
+                                Name = t.Name,
+                            }
+                        )
+                )
+            );
+
     }
 }

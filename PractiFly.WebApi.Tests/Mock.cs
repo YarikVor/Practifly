@@ -24,24 +24,26 @@ public class Mock
     {
         IServiceCollection services = new ServiceCollection();
 
+        // Db
 
         services
-            .AddDbContext<IUsersContext, UsersContext>(
-                options => NpgsqlDbContextOptionsBuilderExtensions.UseNpgsql(options, ConnectionString))
-            .AddDbContext<IMaterialsContext, MaterialsContext>(
-                options => NpgsqlDbContextOptionsBuilderExtensions.UseNpgsql(options, ConnectionString))
-            .AddDbContext<ICoursesContext, CoursesContext>(
-                options => NpgsqlDbContextOptionsBuilderExtensions.UseNpgsql(options, ConnectionString))
-            .AddDbContext<IPractiflyContext, PractiFlyContext>(options =>
-                NpgsqlDbContextOptionsBuilderExtensions.UseNpgsql(options, ConnectionString));
+            .AddDbContext<IUsersContext, UsersContext>(UseConnectionString)
+            .AddDbContext<IMaterialsContext, MaterialsContext>(UseConnectionString)
+            .AddDbContext<ICoursesContext, CoursesContext>(UseConnectionString)
+            .AddDbContext<IPractiflyContext, PractiFlyContext>(UseConnectionString);
 
+        void UseConnectionString(DbContextOptionsBuilder options) 
+            => options.UseNpgsql(ConnectionString);
+
+        // Use controllers
         services
             .AddScoped<CourseController>()
-            .AddScoped<UsersContext>();
+            .AddScoped<UserController>();
 
-        
+        // Use Profiles for AutoMapper
         services.AddScoped<PractiFlyProfile>();
 
+        // Use Mapper
         services.AddScoped<IMapper, Mapper>(
             e => new Mapper(
                 new MapperConfiguration(cfg =>
