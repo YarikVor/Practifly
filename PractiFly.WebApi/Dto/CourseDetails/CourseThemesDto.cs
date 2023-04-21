@@ -1,8 +1,9 @@
 ﻿namespace PractiFly.WebApi.Dto.CourseDetails
 {
+    //теми
     public class CourseThemesDto
     {
         public int Id { get; set; }
-        public string Theme { get; set; } = null!;
+        public string Name { get; set; } = null!;
     }
 }

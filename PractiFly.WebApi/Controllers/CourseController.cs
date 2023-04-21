@@ -8,6 +8,7 @@ using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Context;
 using PractiFly.WebApi.Dto.CourseData;
 using PractiFly.WebApi.Dto.CourseThemes;
+using PractiFly.WebApi.Dto.HeadingCourse;
 using PractiFly.WebApi.Dto.MyCourse;
 
 namespace PractiFly.WebApi.Controllers;
@@ -70,6 +71,22 @@ public class CourseController : Controller
             .AsNoTracking()
             .Where(e => e.Id == courseId)
             .ProjectTo<CourseItemWithThemeDto>(_mapper.ConfigurationProvider)
+            .FirstAsync();
+
+        return Json(result);
+    }
+
+    [HttpGet]
+    [Route("")]
+
+    public async Task<IActionResult> GetIncludedHeadings(int courseId)
+    {
+        //TODO: Check included headings to courses in HeadingCourseItemDto
+        HeadingCourseItemDto result = await _context
+            .Courses
+            .AsNoTracking()
+            .Where(e => e.Id == courseId)
+            .ProjectTo<HeadingCourseItemDto>(_mapper.ConfigurationProvider)
             .FirstAsync();
 
         return Json(result);

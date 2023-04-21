@@ -2,22 +2,14 @@
 
 namespace PractiFly.WebApi.Dto.CourseDetails
 {
+    //тема + матеріали
     public class CourseDetailsMenuDto
     {
-        public int ThemeId { get; set; }
+        public int Id { get; set; }
 
-        public string Theme { get; set; } = null!;
-        
-        public int MaterialId { get; set; }
-        
-        public string Material { get; set; } = null!;
+        public string Name { get; set; } = null!;
 
-        [Required]
-        public bool IsSelected { get; set; }
-
-        //TODO: Check here. Чи треба тут ця властивість?
-        
-        //public string StatusFlag { get; set; } = null!;
-
+        //масив
+        public MaterialItemDto[] MaterialItemDto { get; set; } = null!;
     }
 }

@@ -5,10 +5,15 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities.Courses;
+using PractiFly.DbEntities.Materials;
 using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Dto.CourseData;
 using PractiFly.WebApi.Dto.CourseDependencies;
+using PractiFly.WebApi.Dto.CourseDetails;
 using PractiFly.WebApi.Dto.CourseThemes;
+using PractiFly.WebApi.Dto.Heading;
+using PractiFly.WebApi.Dto.HeadingCourse;
+using PractiFly.WebApi.Dto.Level;
 using PractiFly.WebApi.Dto.MyCourse;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
@@ -65,7 +70,7 @@ public class PractiFlyProfile : Profile
 
         // TODO: Зробити: CountProgress, CountThemes, IsCompleted, IsChecked, Grade, GradeAverage, ThemeId
 
-
+        #region MyCourse
         CreateProjection<UserCourse, UserCourseStatusDto>()
             .ForMember(e => e.CourseId, par => par.MapFrom(e => e.CourseId))
             .ForMember(e => e.Language, par => par.MapFrom(e => e.Course.Language.Code))
@@ -110,16 +115,17 @@ public class PractiFlyProfile : Profile
             )
             .ForMember(
                 e => e.Name,
-                e => e.MapFrom(e => e.Course.Name)
+                par => par.MapFrom(e => e.Course.Name)
             )
             .ForMember(
                 e => e.Language,
-                e => e.MapFrom(e => e.Course.Language.Code)
+                par => par.MapFrom(e => e.Course.Language.Code)
             )
             .ForMember(
                 e => e.CourseId,
-                e => e.MapFrom(e => e.CourseId)
+                par => par.MapFrom(e => e.CourseId)
             );
+        #endregion
 
         CreateProjection<Course, CourseItemDto>();
         CreateProjection<Theme, ThemeItemDto>();
@@ -139,6 +145,35 @@ public class PractiFlyProfile : Profile
                         )
                 )
             );
+        #region Heading
+        CreateProjection<Heading, HeadingItemDto>();
 
+        CreateProjection<Heading, HeadingInfoDto>();
+        #endregion
+
+        #region HeadingCourse
+        //TODO: Dto for Editing
+
+        //CreateProjection<Heading, HeadingCourseEditDto>()
+        //    .ForMember(
+        //    e => e.IsIncluded,
+        //    par => par.MapFrom(e => e.) //має бути булеве поле, що відповідає полю IsIncluded
+        //    ); 
+
+        //CreateProjection<CourseHeading, HeadingCourseItemDto>()
+        //    .ForMember(
+        //    e => e.Id, 
+        //    par => par.MapFrom(e => e.HeadingId)
+        //    )
+        //    .ForMember(
+        //    e => e.IsIncluded,
+        //    par => par.MapFrom(e => _context) //IsIncluded for this 
+        //    );
+
+        #endregion
+
+        #region CourseDetails
+        
+        #endregion
     }
 }
