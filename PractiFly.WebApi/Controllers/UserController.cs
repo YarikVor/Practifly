@@ -100,14 +100,13 @@ public class UserController : Controller
 
     [HttpDelete]
     [Route("")]
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = UserRoles.Admin)]
     public async Task<IActionResult> DeleteUserByIdAsync(string userId)
     {
         var user = await _userManager.FindByIdAsync(userId);
 
         if (user == null)
         {
-            // ����������� � ����� ��������������� �� ��������.
             return BadRequest();
         }
 
@@ -115,7 +114,6 @@ public class UserController : Controller
 
         if (!result.Succeeded)
         {
-            // ������� ������� ��� �������� �����������.
             return BadRequest();
         }
 
@@ -156,7 +154,10 @@ public class UserController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> EditUser([FromBody] UserProfileForAdminCreateDto userDto)
+    [Route("")]
+    [Authorize(Roles = UserRoles.Admin)]
+
+    public async Task<IActionResult> UpdateUser([FromBody] UserProfileForAdminCreateDto userDto)
     {
         const string defaultPassword = "Qwerty_1";
 
