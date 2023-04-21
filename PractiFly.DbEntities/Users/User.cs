@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PractiFly.DbEntities.Users;
 
+[Table("AspNetUsers")]
 public sealed class User: IdentityUser<int>
 {
     [Column("FirstName")]

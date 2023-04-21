@@ -7,13 +7,12 @@ namespace PractiFly.DbContextUtility.Context.Courses;
 
 public class CoursesContext : DbContext, ICoursesContext
 {
-    
-    
+
     public CoursesContext(DbContextOptions<CoursesContext> options) : base(options)
     {
         
     }
-
+    
     public DbSet<Course> Courses { get; set; } = null!;
     public DbSet<CourseCompetency> CourseCompetencies { get; set; } = null!;
     public DbSet<CourseDependency> CourseDependencies { get; set; } = null!;

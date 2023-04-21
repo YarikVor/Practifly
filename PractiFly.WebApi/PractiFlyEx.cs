@@ -20,13 +20,13 @@ public static class PractiFlyEx
         
         var fakerManager = new PractiFlyFakerManager(5);
 
-        AddData<User>();
+        //AddData<User>();
 
+        AddData<Language>();
         AddData<Group>();
         AddData<Course>();
         AddData<Level>();
         AddData<Heading>();
-        AddData<Language>();
         AddData<Material>();
 
         AddData<Theme>();
@@ -43,7 +43,6 @@ public static class PractiFlyEx
         AddData<MaterialCompetency>();
         AddData<Unit>();
         AddData<GroupCourse>();
-        // TODO: Roles
         AddData<UserCourse>();
         AddData<UserGroup>();
         AddData<UserHeading>();
@@ -56,14 +55,16 @@ public static class PractiFlyEx
 
             if (!dbSet.Any())
             {
-                context
-                    .Set<TEntity>()
-                    .AddRange(fakerManager.Generate<TEntity>(5));
+                IEnumerable<TEntity> entities = fakerManager.Generate<TEntity>(5);
+                
+                dbSet.AddRange(entities);
+                    
+                context.SaveChanges();
             }
-
+            
             
         }
         
-        context.SaveChanges();
+        
     }
 }

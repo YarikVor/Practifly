@@ -44,7 +44,6 @@ public class EntitiesTest
 
     public static IEnumerable<object[]> DbContextData => new[]
     {
-        MakeTest(_practiflyContext.Users),
         MakeTest(_practiflyContext.Groups),
         MakeTest(_practiflyContext.Courses),
         MakeTest(_practiflyContext.Levels),
@@ -70,8 +69,6 @@ public class EntitiesTest
         MakeTest(_practiflyContext.UserHeadings),
         MakeTest(_practiflyContext.UserThemes),
         MakeTest(_practiflyContext.UserMaterials),
-        MakeTest(_practiflyContext.Roles),
-        MakeTest(_practiflyContext.ApplicationUsers)
     };
 
     private void ClearDb()

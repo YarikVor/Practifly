@@ -19,8 +19,8 @@ public class UserController : Controller
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
 
-    public UserController(IUsersContext usersContext, IHttpContextAccessor httpContext, ITokenGenerator
-        tokenGenerator, UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<Role> roleManager)
+    public UserController(IHttpContextAccessor httpContext, ITokenGenerator
+        tokenGenerator, UserManager<User> userManager, SignInManager<User> signInManager)
     {
         _httpContext = httpContext;
         _tokenGenerator = tokenGenerator;
@@ -60,6 +60,7 @@ public class UserController : Controller
         return Ok(token);
     }
 
+    
     [HttpPost]
     [Route("")]
     [AllowAnonymous]
@@ -70,7 +71,6 @@ public class UserController : Controller
 
         var role = (await _userManager.GetRolesAsync(user))[0];
         
-
         if (result.Succeeded)
             return Ok(GenerateToken(user, role));
 
@@ -90,7 +90,7 @@ public class UserController : Controller
     
     [HttpGet]
     [Route("")]
-    [Authorize(AuthenticationSchemes = "Bearer")]
+    [Authorize()]
     public async Task<IActionResult> RefreshToken()
     {
         var currentUser = HttpContext.User;
@@ -98,7 +98,7 @@ public class UserController : Controller
 
         var user = await _userManager.FindByIdAsync(id);
         
-        var role = (await _userManager.GetRolesAsync(user))[0];
+        var role = (await _userManager.GetRolesAsync(user)).First();
         
         return Ok(GenerateToken(user, role));
     }

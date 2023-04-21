@@ -11,5 +11,6 @@ public sealed class CourseDependencyTypeFaker : Faker<CourseDependencyType>, IFa
         RuleFor(cdt => cdt.Id, f => f.IndexFaker + 1);
         RuleFor(cdt => cdt.Name, f => f.Lorem.Word());
         RuleFor(cdt => cdt.Description, f => f.Lorem.Sentence());
+        RuleFor(cdt => cdt.Url, f => f.Internet.Url());
     }
 }

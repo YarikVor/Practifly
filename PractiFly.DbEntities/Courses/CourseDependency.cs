@@ -13,19 +13,20 @@ public class CourseDependency
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
-    [Column("CourseId")]
+    [Column("CourseId", Order = 1)]
     public int CourseId { get; set; }
-
+    
     [ForeignKey("CourseId")]
     public virtual Course Course { get; set; } = null!;
 
-    [Column("BaseCourseId")]
+    [Column("BaseCourseId", Order = 2)]
     public int BaseCourseId { get; set; }
-
+    
     [ForeignKey("BaseCourseId")]
     public virtual Course BaseCourse { get; set; } = null!;
 
     [Column("CourseDependencyTypeId")]
+    [ForeignKey("CourseDependencyType")]
     public int CourseDependencyTypeId { get; set; }
 
     [ForeignKey("CourseDependencyTypeId")]

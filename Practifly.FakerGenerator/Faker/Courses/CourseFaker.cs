@@ -12,5 +12,6 @@ public sealed class CourseFaker : FakerFkRandomizer<Course>, IFakerGenerate<Cour
         RuleFor(x => x.OwnerId, RandomId);
         RuleFor(x => x.Note, f => f.Lorem.Sentence());
         RuleFor(x => x.Description, f => f.Lorem.Sentence());
+        RuleFor(x => x.LanguageId, RandomId);
     }
 }

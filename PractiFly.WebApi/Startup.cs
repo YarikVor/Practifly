@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ using PractiFly.DbContextUtility.Context.Users;
 using PractiFly.DbEntities.Users;
 using Practifly.FakerGenerator;
 using PractiFly.FakerManager;
+using PractiFly.WebApi.AutoMappers;
 using PractiFly.WebApi.Context;
 using PractiFly.WebApi.Schema;
 using PractiFly.WebApi.Services.AuthenticationOptions;
@@ -66,6 +68,20 @@ public class Startup
         InitTables(services);
 
         AddIdentityUserAndRole(services);
+
+        services.AddScoped<PractiFlyProfile>();
+
+        services.AddScoped<IMapper, Mapper>(
+            e => new Mapper(
+                new MapperConfiguration(cfg =>
+                    {
+                        cfg.AddProfile(e.GetRequiredService<PractiFlyProfile>());
+                    }
+                )
+            )
+        );
+
+        services.AddMvc();
     }
 
     #endregion
@@ -74,6 +90,9 @@ public class Startup
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+        // TODO: Add support DateTime, DateOnly and TimeOnly where UTC = +00:00
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", false);
+            AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
         if (env.IsDevelopment())
             UseSwagger(app);
 
@@ -261,9 +280,12 @@ public class Startup
             .AddDbContext<IPractiflyContext, PractiFlyContext>(SetConnectionString)
             .AddDbContext<UserIdentityDbContext>(SetConnectionString);
 
-        services.BuildServiceProvider().GetService<UserIdentityDbContext>().Database.Migrate();
+        //services.BuildServiceProvider().GetService<UserIdentityDbContext>().Database.Migrate();
 
-        //context?.GenerateTestDataIfEmpty();
+        var context = services.BuildServiceProvider().GetService<IPractiflyContext>() as PractiFlyContext;
+        context.GenerateTestDataIfEmpty();
+        //context.Database.Migrate();
+
 
         void SetConnectionString(DbContextOptionsBuilder options)
         {

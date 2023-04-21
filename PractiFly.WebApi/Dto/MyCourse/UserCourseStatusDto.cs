@@ -4,7 +4,7 @@ namespace PractiFly.WebApi.Dto.MyCourse
 {
     public class UserCourseStatusDto
     {
-        public int Id { get; set; }
+        public int CourseId { get; set; }
         public string Language { get; set; } = null!;
         public string Name { get; set; } = null!;
 
@@ -19,7 +19,7 @@ namespace PractiFly.WebApi.Dto.MyCourse
         public bool IsChecked { get; set; }
 
         public string? Description { get; set; }
-        public float Grade { get; set; }
+        public int Grade { get; set; }
         public float GradeAverage { get; set; }
         public int? ThemeId { get; set; }
         //TODO: список оцінок
