@@ -44,6 +44,5 @@ public class PractiFlyContext : DbContext, IPractiflyContext
     public DbSet<UserHeading> UserHeadings { get; set; } = null!;
     public DbSet<UserMaterial> UserMaterials { get; set; } = null!;
     public DbSet<UserTheme> UserThemes { get; set; } = null!;
-
-
+    public DbSet<User> Users { get; set; } = null!;
 }

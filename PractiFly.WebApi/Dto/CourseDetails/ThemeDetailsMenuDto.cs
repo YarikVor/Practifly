@@ -3,7 +3,7 @@
 namespace PractiFly.WebApi.Dto.CourseDetails
 {
     //тема + матеріали
-    public class CourseDetailsMenuDto
+    public class ThemeDetailsMenuDto
     {
         public int Id { get; set; }
 

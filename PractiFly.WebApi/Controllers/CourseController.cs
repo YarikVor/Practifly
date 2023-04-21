@@ -7,6 +7,7 @@ using PractiFly.DbEntities.Courses;
 using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Context;
 using PractiFly.WebApi.Dto.CourseData;
+using PractiFly.WebApi.Dto.CourseDetails;
 using PractiFly.WebApi.Dto.CourseThemes;
 using PractiFly.WebApi.Dto.HeadingCourse;
 using PractiFly.WebApi.Dto.MyCourse;
@@ -47,16 +48,16 @@ public class CourseController : Controller
         CourseItemDto[] result;
         if (!userId.HasValue)
         {
-            result = _context.Courses.AsNoTracking()
+            result = await _context.Courses.AsNoTracking()
                 .ProjectTo<CourseItemDto>(_mapper.ConfigurationProvider)
-                .ToArray();
+                .ToArrayAsync();
         }
         else
         {
-            result = _context.Courses.AsNoTracking()
+            result = await _context.Courses.AsNoTracking()
                 .Where(e => e.OwnerId == userId)
                 .ProjectTo<CourseItemDto>(_mapper.ConfigurationProvider)
-                .ToArray();
+                .ToArrayAsync();
         }
         
         return Json(result);
@@ -87,6 +88,18 @@ public class CourseController : Controller
             .AsNoTracking()
             .Where(e => e.Id == courseId)
             .ProjectTo<HeadingCourseItemDto>(_mapper.ConfigurationProvider)
+            .FirstAsync();
+
+        return Json(result);
+    }
+
+    public async Task<IActionResult> ViewMaterialDetails(int themeMateralId)
+    {
+        MaterialDetailsViewDto result = await _context
+            .Courses
+            .AsNoTracking()
+            .Where(e => e.Id == themeMateralId)
+            .ProjectTo<MaterialDetailsViewDto>(_mapper.ConfigurationProvider)
             .FirstAsync();
 
         return Json(result);

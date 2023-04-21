@@ -42,4 +42,9 @@ public class ThemeMaterial
     [Column("Note")]
     [MaxLength(256)]
     public string? Note { get; set; }
+
+    //TODO: Description?
+    [Column("Description")]
+    [MaxLength(65536)]
+    public string? Description { get; set; }
 }

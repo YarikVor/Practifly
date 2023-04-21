@@ -21,6 +21,7 @@ public class UsersContext : DbContext, IUsersContext
     public DbSet<UserHeading> UserHeadings { get; set; }
     public DbSet<UserMaterial> UserMaterials { get; set; }
     public DbSet<UserTheme> UserThemes { get; set; }
+    public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

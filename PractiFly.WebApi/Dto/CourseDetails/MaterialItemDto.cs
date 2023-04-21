@@ -9,6 +9,6 @@
         
         public int Grade { get; set; }
 
-        public bool IsSelected { get; set; }
+        public bool IsCompleted { get; set; }
     }
 }

@@ -8,15 +8,15 @@ namespace PractiFly.WebApi.Dto.Profile
 
         [Required]
         [MaxLength(128)]
-        public string Name { get; set; } = null!;
+        public string FirstName { get; set; } = null!;
 
         [Required]
         [MaxLength(128)]
-        public string Surname { get; set; } = null!;
+        public string LastName { get; set; } = null!;
 
         [Phone]
         [MaxLength(32)]
-        public string? Phone { get; set; }
+        public string? PhoneNumber { get; set; }
 
         [EmailAddress]
         [MaxLength(64)]

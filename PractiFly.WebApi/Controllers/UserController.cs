@@ -1,13 +1,17 @@
 using System.Security.Claims;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbContextUtility.Context.Users;
 using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.AutoMapper;
 using PractiFly.WebApi.Context;
 using PractiFly.WebApi.Dto.Admin.UserView;
+using PractiFly.WebApi.Dto.Profile;
 using PractiFly.WebApi.Dto.Registration;
 using PractiFly.WebApi.Services.TokenGenerator;
 
@@ -22,8 +26,11 @@ public class UserController : Controller
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
     private readonly RoleManager<Role> _roleManager;
+    private readonly IPractiflyContext _context;
+    private readonly IMapper _mapper;
 
-    public UserController(IUsersContext usersContext, IHttpContextAccessor httpContext, ITokenGenerator
+
+    public UserController(IPractiflyContext practiflyContext, IHttpContextAccessor httpContext, ITokenGenerator
         tokenGenerator, UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<Role> roleManager)
     {
         _httpContext = httpContext;
@@ -31,6 +38,7 @@ public class UserController : Controller
         _userManager = userManager;
         _signInManager = signInManager;
         _roleManager = roleManager;
+        _context = practiflyContext;
 
     }
 
@@ -65,7 +73,7 @@ public class UserController : Controller
         var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
         var role = (await _userManager.GetRolesAsync(user))[0];
-        
+
         if (result.Succeeded)
             return Ok(GenerateToken(user, role));
 
@@ -82,7 +90,7 @@ public class UserController : Controller
 
         return _tokenGenerator.GenerateToken(claims);
     }
-    
+
     [HttpGet]
     [Route("")]
     [Authorize(AuthenticationSchemes = "Bearer")]
@@ -239,5 +247,17 @@ public class UserController : Controller
 
         return Json(result);
     }
+    public async Task<IActionResult> ViewProfile(int userId)
+    {
+        UserProfileInfoViewDto result = await _context
+            .Users
+            .AsNoTracking()
+            .Where(u => u.Id == userId)
+            .ProjectTo<UserInfoDto>(_mapper.ConfigurationProvider)
+            .FirstAsync();
+
+        return Json(result);
+    }
+    //TODO: Edit profile
 
 }

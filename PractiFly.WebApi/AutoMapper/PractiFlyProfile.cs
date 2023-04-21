@@ -15,6 +15,7 @@ using PractiFly.WebApi.Dto.Heading;
 using PractiFly.WebApi.Dto.HeadingCourse;
 using PractiFly.WebApi.Dto.Level;
 using PractiFly.WebApi.Dto.MyCourse;
+using PractiFly.WebApi.Dto.Profile;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace PractiFly.WebApi.AutoMappers;
@@ -172,8 +173,72 @@ public class PractiFlyProfile : Profile
 
         #endregion
 
+        #region Profile
+        CreateProjection<User, UserProfileInfoViewDto>();
+        CreateProjection<User, UserProfileInfoCreateDto>();
+        CreateProjection<User, UserInfoDto>()
+            .ForMember(
+            dto => dto.CountCompleted,
+            par => par.MapFrom(
+                    user =>
+                        _context
+                            .UserCourses
+                            .Where(uc => uc.UserId == user.Id && uc.IsCompleted)
+                            .Count()
+                            )
+            )
+            .ForMember(
+            dto => dto.CountInProgress,
+            par => par.MapFrom(
+                    user =>
+                        _context
+                            .UserCourses
+                            .Where(uc => uc.UserId == user.Id && !uc.IsCompleted)
+                            .Count()
+                            )
+            )
+            .ForMember(
+                e => e.AverageGrade,
+                par => par.MapFrom(
+                    e =>
+                        (float)
+                        _context
+                            .UserCourses
+                            .Where(uc => uc.UserId == e.Id)
+                            .Select(uc => uc.Grade)
+                            .DefaultIfEmpty()
+                            .Average()
+                            )
+                );
+        #endregion
         #region CourseDetails
-        
+        CreateProjection<Course, ThemeDetailsMenuDto>()
+             .ForMember(m => m.MaterialItemDto, par => par.MapFrom(
+                    m => _context
+                        .Courses
+                        .Where(c => c.Id == c.Id)
+                        .Select(
+                            c => new MaterialItemDto()
+                            {
+                                Id = c.Id,
+                                Name = c.Name,
+                            }
+                        )
+                ));
+        CreateProjection<Material, MaterialDetailsViewDto>()
+            .ForMember(dto => dto.MaterialUrl, par => par.MapFrom(
+                m => m.Url));
+        CreateProjection<Theme, CourseThemeItemDto>();
+        CreateProjection<UserMaterial, MaterialItemDto>()
+            .ForMember(dto => dto.Id, par => par.MapFrom(
+                m => m.MaterialId))
+            .ForMember(dto => dto.Name, par => par.MapFrom(
+                m => m.Material.Name));
+        //TODO: 
+        //CreateProjection<ThemeMaterial, ThemeMaterialInfoDto>()
+        //    .ForMember(dto => dto.Material, par => par.MapFrom(
+        //        tm =>  tm.Material ))
+            
         #endregion
     }
 }

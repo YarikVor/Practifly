@@ -3,6 +3,6 @@
     public class HeadingInfoDto
     {
         public int Id { get; set; }
-        public string HeadingItem { get; set; } = null!;
+        public string Name { get; set; } = null!;
     }
 }
