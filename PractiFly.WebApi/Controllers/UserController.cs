@@ -123,15 +123,47 @@ public class UserController : Controller
 
         return Ok();
     }
-    //TODO: ¬идаленн€ самого себе
+
+    [HttpDelete]
+    [Route("")]
+    [Authorize]
+    public async Task<IActionResult> DeleteCurrentUserAsync()
+    {
+        // ќтриманн€ ≥дентиф≥катора поточного користувача з токена.
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (userId == null)
+        {
+            // якщо ≥дентиф≥катор користувача не було знайдено в токен≥, видаЇтьс€ помилка.
+            return BadRequest();
+        }
+
+        // «находженн€ користувача за його ≥дентиф≥катором.
+        var user = await _userManager.FindByIdAsync(userId);
+
+        if (user == null)
+        {
+            // якщо користувача з таким ≥дентиф≥катором не знайдено, видаЇтьс€ помилка.
+            return BadRequest();
+        }
+        //TODO: Add confirm email
+        var result = await _userManager.DeleteAsync(user);
+
+        if (!result.Succeeded)
+        {
+            // якщо виникла помилка при видаленн≥ користувача, видаЇтьс€ помилка.
+            return BadRequest();
+        }
+
+        return Ok();
+    }
 
     [HttpPost]
     public async Task<IActionResult> EditUser([FromBody] UserProfileForAdminCreateDto userDto)
     {
         const string defaultPassword = "Qwerty_1";
 
-        User user = userDto.Id == 0 
-            ? new User() 
+        User user = userDto.Id == 0
+            ? new User()
             : await _userManager.FindByIdAsync(userDto.Id.ToString());
 
         if (user == null)
