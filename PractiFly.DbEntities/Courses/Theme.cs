@@ -30,11 +30,12 @@ public class Theme
     [ForeignKey("LevelId")]
     public virtual Level Level { get; set; } = null!;
 
+    /*
     [Column("ParentId")]
-    public int ParentId { get; set; }
+    public int? ParentId { get; set; }
 
     [ForeignKey("ParentId")]
-    public virtual Theme Parent { get; set; } = null!;
+    public virtual Theme? Parent { get; set; } = null!;*/
 
     [Column("Number")]
     [Required]

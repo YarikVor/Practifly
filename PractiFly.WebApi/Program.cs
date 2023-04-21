@@ -6,8 +6,6 @@ public static class Program
 {
     public static void Main(string[] args)
     {
-        // TODO: Add support DateTime, DateOnly and TimeOnly where UTC = +00:00
-        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         CreateHostBuilder(args).Build().Run();
     }
 

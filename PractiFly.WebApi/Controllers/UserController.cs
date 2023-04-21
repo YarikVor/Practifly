@@ -65,8 +65,7 @@ public class UserController : Controller
         var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
         var role = (await _userManager.GetRolesAsync(user))[0];
-
-
+        
         if (result.Succeeded)
             return Ok(GenerateToken(user, role));
 
@@ -83,7 +82,7 @@ public class UserController : Controller
 
         return _tokenGenerator.GenerateToken(claims);
     }
-
+    
     [HttpGet]
     [Route("")]
     [Authorize(AuthenticationSchemes = "Bearer")]
@@ -94,8 +93,7 @@ public class UserController : Controller
 
         var user = await _userManager.FindByIdAsync(id);
 
-        var role = (await _userManager.GetRolesAsync(user))[0];
-
+        var role = (await _userManager.GetRolesAsync(user)).First();
         return Ok(GenerateToken(user, role));
     }
 
@@ -109,7 +107,7 @@ public class UserController : Controller
 
         if (user == null)
         {
-            // Користувача з таким ідентифікатором не знайдено.
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
             return BadRequest();
         }
 
@@ -117,13 +115,13 @@ public class UserController : Controller
 
         if (!result.Succeeded)
         {
-            // Виникла помилка при видаленні користувача.
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
             return BadRequest();
         }
 
         return Ok();
     }
-    //TODO: Видалення самого себе
+    //TODO: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 
     [HttpPost]
     public async Task<IActionResult> EditUser([FromBody] UserProfileForAdminCreateDto userDto)

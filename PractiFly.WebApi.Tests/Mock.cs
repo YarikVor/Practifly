@@ -1,9 +1,11 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PractiFly.DbContextUtility.Context.Courses;
 using PractiFly.DbContextUtility.Context.Materials;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbContextUtility.Context.Users;
+using PractiFly.WebApi.AutoMappers;
 using PractiFly.WebApi.Controllers;
 
 namespace PractiFly.WebApi.Tests;
@@ -22,6 +24,7 @@ public class Mock
     {
         IServiceCollection services = new ServiceCollection();
 
+
         services
             .AddDbContext<IUsersContext, UsersContext>(
                 options => NpgsqlDbContextOptionsBuilderExtensions.UseNpgsql(options, ConnectionString))
@@ -30,9 +33,25 @@ public class Mock
             .AddDbContext<ICoursesContext, CoursesContext>(
                 options => NpgsqlDbContextOptionsBuilderExtensions.UseNpgsql(options, ConnectionString))
             .AddDbContext<IPractiflyContext, PractiFlyContext>(options =>
-                NpgsqlDbContextOptionsBuilderExtensions.UseNpgsql(options, ConnectionString))
-            .AddTransient<UserController>();
+                NpgsqlDbContextOptionsBuilderExtensions.UseNpgsql(options, ConnectionString));
 
+        services
+            .AddScoped<CourseController>()
+            .AddScoped<UsersContext>();
+
+        
+        services.AddScoped<PractiFlyProfile>();
+
+        services.AddScoped<IMapper, Mapper>(
+            e => new Mapper(
+                new MapperConfiguration(cfg =>
+                    {
+                        cfg.AddProfile(e.GetRequiredService<PractiFlyProfile>());
+                    }
+                )
+            )
+        );
+        
         return services.BuildServiceProvider();
     }
 

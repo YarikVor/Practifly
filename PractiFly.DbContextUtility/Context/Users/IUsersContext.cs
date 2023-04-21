@@ -8,7 +8,6 @@ public interface IUsersContext : IDisposable, IBasicDbContext
 {
     DbSet<GroupCourse> GroupCourses { get; }
     DbSet<Group> Groups { get; }
-    DbSet<User> Users { get; }
     DbSet<UserCourse> UserCourses { get; }
     DbSet<UserGroup> UserGroups { get; }
 
@@ -16,6 +15,4 @@ public interface IUsersContext : IDisposable, IBasicDbContext
 
     DbSet<UserMaterial> UserMaterials { get; }
     DbSet<UserTheme> UserThemes { get; }
-
-    DbSet<ApplicationUser> ApplicationUsers { get; }
 }

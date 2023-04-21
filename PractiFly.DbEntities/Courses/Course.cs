@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using PractiFly.DbEntities.Materials;
 using PractiFly.DbEntities.Users;
 
 namespace PractiFly.DbEntities.Courses;
@@ -19,11 +20,20 @@ public class Course
     [Required]
     public string Name { get; set; } = null!;
 
+    [ForeignKey("AspNetUsers")]
     [Column("OwnerId")]
+    
     public int OwnerId { get; set; }
-
+    
     [ForeignKey("OwnerId")]
     public virtual User Owner { get; set; } = null!;
+    
+    [Column("LanguageId")]
+    [ForeignKey("Language")]
+    public int LanguageId { get; set; }
+
+    [ForeignKey("LanguageId")]
+    public virtual Language Language { get; set; } = null!;
 
     [Column("Note")]
     [MaxLength(256)]

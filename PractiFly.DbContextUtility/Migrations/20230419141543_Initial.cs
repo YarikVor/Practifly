@@ -7,30 +7,32 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace PractiFly.DbContextUtility.Migrations
 {
     /// <inheritdoc />
-    public partial class PractiFlyMigration : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ApplicationUser",
+                name: "AspNetUsers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     FirstName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     LastName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    Email = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
-                    Phone = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
                     FilePhoto = table.Column<string>(type: "character varying(2048)", maxLength: 2048, nullable: false),
                     Birthday = table.Column<DateOnly>(type: "date", nullable: false),
-                    PasswordHash = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     RegistrationDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Note = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    UserName = table.Column<string>(type: "text", nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "text", nullable: true),
+                    Email = table.Column<string>(type: "text", nullable: true),
                     NormalizedEmail = table.Column<string>(type: "text", nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
+                    PasswordHash = table.Column<string>(type: "text", nullable: true),
                     SecurityStamp = table.Column<string>(type: "text", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
                     TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
@@ -39,7 +41,7 @@ namespace PractiFly.DbContextUtility.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApplicationUser", x => x.Id);
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -49,7 +51,7 @@ namespace PractiFly.DbContextUtility.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    Note = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Url = table.Column<string>(type: "character varying(2048)", maxLength: 2048, nullable: false),
                     Description = table.Column<string>(type: "character varying(65536)", maxLength: 65536, nullable: true)
                 },
                 constraints: table =>
@@ -123,40 +125,47 @@ namespace PractiFly.DbContextUtility.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Roles",
+                name: "Material",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: true),
-                    NormalizedName = table.Column<string>(type: "text", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Roles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "User",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    FirstName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    Name23 = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    LastName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    Email = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
-                    Phone = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
-                    FilePhoto = table.Column<string>(type: "character varying(2048)", maxLength: 2048, nullable: false),
-                    Birthday = table.Column<DateOnly>(type: "date", nullable: false),
-                    PasswordHash = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    RegistrationDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    URL = table.Column<string>(type: "character varying(2048)", maxLength: 2048, nullable: false),
+                    IsPractical = table.Column<bool>(type: "boolean", nullable: false),
                     Note = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_Material", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserGroup",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    GroupId = table.Column<int>(type: "integer", nullable: false),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    Note = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserGroup", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserGroup_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserGroup_Group_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Group",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -188,29 +197,6 @@ namespace PractiFly.DbContextUtility.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Material",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    LanguageCode = table.Column<int>(type: "integer", nullable: false),
-                    URL = table.Column<string>(type: "character varying(2048)", maxLength: 2048, nullable: false),
-                    IsPractical = table.Column<bool>(type: "boolean", nullable: false),
-                    Note = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Material", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Material_Language_LanguageCode",
-                        column: x => x.LanguageCode,
-                        principalTable: "Language",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Course",
                 columns: table => new
                 {
@@ -218,6 +204,7 @@ namespace PractiFly.DbContextUtility.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     OwnerId = table.Column<int>(type: "integer", nullable: false),
+                    LanguageId = table.Column<int>(type: "integer", nullable: false),
                     Note = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Description = table.Column<string>(type: "character varying(65536)", maxLength: 65536, nullable: true)
                 },
@@ -225,37 +212,15 @@ namespace PractiFly.DbContextUtility.Migrations
                 {
                     table.PrimaryKey("PK_Course", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Course_User_OwnerId",
+                        name: "FK_Course_AspNetUsers_OwnerId",
                         column: x => x.OwnerId,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserGroup",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<int>(type: "integer", nullable: false),
-                    GroupId = table.Column<int>(type: "integer", nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
-                    Note = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserGroup", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserGroup_Group_GroupId",
-                        column: x => x.GroupId,
-                        principalTable: "Group",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserGroup_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
+                        name: "FK_Course_Language_LanguageId",
+                        column: x => x.LanguageId,
+                        principalTable: "Language",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -275,6 +240,12 @@ namespace PractiFly.DbContextUtility.Migrations
                 {
                     table.PrimaryKey("PK_UserHeading", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_UserHeading_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_UserHeading_Heading_HeadingId",
                         column: x => x.HeadingId,
                         principalTable: "Heading",
@@ -282,39 +253,6 @@ namespace PractiFly.DbContextUtility.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UserHeading_Level_LevelId",
-                        column: x => x.LevelId,
-                        principalTable: "Level",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserHeading_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "HeadingCompetency",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    CompetencyId = table.Column<int>(type: "integer", nullable: false),
-                    LevelId = table.Column<int>(type: "integer", nullable: false),
-                    Note = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_HeadingCompetency", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_HeadingCompetency_Competency_CompetencyId",
-                        column: x => x.CompetencyId,
-                        principalTable: "Competency",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_HeadingCompetency_Level_LevelId",
                         column: x => x.LevelId,
                         principalTable: "Level",
                         principalColumn: "Id",
@@ -377,33 +315,6 @@ namespace PractiFly.DbContextUtility.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MaterialCompetency",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    MaterialId = table.Column<int>(type: "integer", nullable: false),
-                    CompetencyId = table.Column<int>(type: "integer", nullable: false),
-                    Note = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MaterialCompetency", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_MaterialCompetency_Competency_CompetencyId",
-                        column: x => x.CompetencyId,
-                        principalTable: "Competency",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_MaterialCompetency_Material_MaterialId",
-                        column: x => x.MaterialId,
-                        principalTable: "Material",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Unit",
                 columns: table => new
                 {
@@ -441,15 +352,69 @@ namespace PractiFly.DbContextUtility.Migrations
                 {
                     table.PrimaryKey("PK_UserMaterial", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_UserMaterial_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_UserMaterial_Material_MaterialId",
                         column: x => x.MaterialId,
                         principalTable: "Material",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HeadingCompetency",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CompetencyId = table.Column<int>(type: "integer", nullable: false),
+                    LevelId = table.Column<int>(type: "integer", nullable: false),
+                    Note = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HeadingCompetency", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserMaterial_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
+                        name: "FK_HeadingCompetency_Competency_CompetencyId",
+                        column: x => x.CompetencyId,
+                        principalTable: "Competency",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_HeadingCompetency_Level_LevelId",
+                        column: x => x.LevelId,
+                        principalTable: "Level",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MaterialCompetency",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    MaterialId = table.Column<int>(type: "integer", nullable: false),
+                    CompetencyId = table.Column<int>(type: "integer", nullable: false),
+                    Note = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MaterialCompetency", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MaterialCompetency_Competency_CompetencyId",
+                        column: x => x.CompetencyId,
+                        principalTable: "Competency",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MaterialCompetency_Material_MaterialId",
+                        column: x => x.MaterialId,
+                        principalTable: "Material",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -485,10 +450,10 @@ namespace PractiFly.DbContextUtility.Migrations
                 name: "CourseDependency",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CourseId = table.Column<int>(type: "integer", nullable: false),
                     BaseCourseId = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CourseDependencyTypeId = table.Column<int>(type: "integer", nullable: false),
                     Note = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true)
                 },
@@ -616,7 +581,6 @@ namespace PractiFly.DbContextUtility.Migrations
                     Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     CourseId = table.Column<int>(type: "integer", nullable: false),
                     LevelId = table.Column<int>(type: "integer", nullable: false),
-                    ParentId = table.Column<int>(type: "integer", nullable: false),
                     Number = table.Column<int>(type: "integer", nullable: false),
                     Note = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Description = table.Column<string>(type: "character varying(65536)", maxLength: 65536, nullable: true)
@@ -634,12 +598,6 @@ namespace PractiFly.DbContextUtility.Migrations
                         name: "FK_Theme_Level_LevelId",
                         column: x => x.LevelId,
                         principalTable: "Level",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Theme_Theme_ParentId",
-                        column: x => x.ParentId,
-                        principalTable: "Theme",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -690,7 +648,7 @@ namespace PractiFly.DbContextUtility.Migrations
                     CourseId = table.Column<int>(type: "integer", nullable: false),
                     LevelId = table.Column<int>(type: "integer", nullable: false),
                     IsCompleted = table.Column<bool>(type: "boolean", nullable: false),
-                    LastTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     LastThemeId = table.Column<int>(type: "integer", nullable: false),
                     Grade = table.Column<int>(type: "integer", nullable: false),
                     Note = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true)
@@ -698,6 +656,12 @@ namespace PractiFly.DbContextUtility.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserCourse", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserCourse_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UserCourse_Course_CourseId",
                         column: x => x.CourseId,
@@ -714,12 +678,6 @@ namespace PractiFly.DbContextUtility.Migrations
                         name: "FK_UserCourse_Theme_LastThemeId",
                         column: x => x.LastThemeId,
                         principalTable: "Theme",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserCourse_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -741,6 +699,12 @@ namespace PractiFly.DbContextUtility.Migrations
                 {
                     table.PrimaryKey("PK_UserTheme", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_UserTheme_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_UserTheme_Level_LevelId",
                         column: x => x.LevelId,
                         principalTable: "Level",
@@ -750,12 +714,6 @@ namespace PractiFly.DbContextUtility.Migrations
                         name: "FK_UserTheme_Theme_ThemeId",
                         column: x => x.ThemeId,
                         principalTable: "Theme",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserTheme_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -769,6 +727,11 @@ namespace PractiFly.DbContextUtility.Migrations
                 name: "IX_Competency_ParentId",
                 table: "Competency",
                 column: "ParentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Course_LanguageId",
+                table: "Course",
+                column: "LanguageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Course_OwnerId",
@@ -856,11 +819,6 @@ namespace PractiFly.DbContextUtility.Migrations
                 column: "MaterialId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Material_LanguageCode",
-                table: "Material",
-                column: "LanguageCode");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_MaterialBlock_ChildId",
                 table: "MaterialBlock",
                 column: "ChildId");
@@ -889,11 +847,6 @@ namespace PractiFly.DbContextUtility.Migrations
                 name: "IX_Theme_LevelId",
                 table: "Theme",
                 column: "LevelId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Theme_ParentId",
-                table: "Theme",
-                column: "ParentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ThemeMaterial_LevelId",
@@ -990,9 +943,6 @@ namespace PractiFly.DbContextUtility.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ApplicationUser");
-
-            migrationBuilder.DropTable(
                 name: "CourseCompetency");
 
             migrationBuilder.DropTable(
@@ -1018,9 +968,6 @@ namespace PractiFly.DbContextUtility.Migrations
 
             migrationBuilder.DropTable(
                 name: "MaterialCompetency");
-
-            migrationBuilder.DropTable(
-                name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "ThemeMaterial");
@@ -1062,16 +1009,16 @@ namespace PractiFly.DbContextUtility.Migrations
                 name: "Heading");
 
             migrationBuilder.DropTable(
-                name: "Language");
-
-            migrationBuilder.DropTable(
                 name: "Course");
 
             migrationBuilder.DropTable(
                 name: "Level");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Language");
         }
     }
 }

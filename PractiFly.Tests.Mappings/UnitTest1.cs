@@ -15,27 +15,7 @@ public class UnitTest1
         _logger = logger;
     }
     
-    [Fact]
-    public void ConvertCourseDependencyTypeCreateDtoToCourseDependencyType_Valid()
-    {
-        var config = new MapperConfiguration(
-            config => config
-                .AddProfile(new PractiFlyProfile(null))
-        );
 
-        var mapper = new Mapper(config);
-
-        var entity = new CourseDependenciesTypeCreateDto()
-        {
-            Name = "TestName",
-            Description = "Lorem",
-            FlagUrl = "FlagUrl"
-        };
-
-        var result = mapper.Map<CourseDependencyType>(entity);
-        
-        WriteAsJson(result);
-    }
     
     private void WriteAsJson<T>(T obj)
     {

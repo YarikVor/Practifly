@@ -26,3 +26,9 @@ namespace PractiFly.WebApi.Dto.Admin.UserView
         public string? Role { get; set; } 
     }
 }
+
+/*
+ * Курси:
+ * 
+ * 
+ */

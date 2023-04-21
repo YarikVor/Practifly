@@ -8,8 +8,6 @@ namespace PractiFly.DbEntities.Materials;
 [Table("Material")]
 public class Material
 {
-    [Column("LanguageCode")] public int LanguageId;
-
     [Key]
     [Column("Id")]
     public int Id { get; set; }
@@ -19,9 +17,6 @@ public class Material
     [Required]
 
     public string Name { get; set; } = null!;
-
-    [ForeignKey("LanguageId")]
-    public virtual Language Language { get; set; } = null!;
 
     [Column("URL")]
     [MaxLength(2048)]

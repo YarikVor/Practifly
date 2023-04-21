@@ -1,21 +1,27 @@
+using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities.Courses;
+using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Dto.CourseDependencies;
+using PractiFly.WebApi.Dto.MyCourse;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace PractiFly.WebApi.AutoMappers;
 
 public class PractiFlyProfile : Profile
 {
-    private readonly IPractiflyContext _context;
+    private readonly PractiFlyContext _context;
 
+    
     public PractiFlyProfile(IPractiflyContext context)
     {
-        _context = context;
+        _context = (PractiFlyContext)context;
 
 
-        // (CourseDependencyType)CourseDependenciesTypeCreateDto
+        // (CourseDependencyType)Course
         /*CreateMap<Course, CourseDependencyType>()
             .ForMember(
                 e => e.Name,
@@ -41,8 +47,79 @@ public class PractiFlyProfile : Profile
             Name = courseDependenciesTypeCreateDto.CourseName
          }
         */
+
+        // CreateMap<In, Out>() -> створення мапера, що перетворює тип даних In в тип даних Out
+        // .ForMember(...) -> вказуємо, які властивості мапити
+        // e => e.Name -> вказуємо, куди записувати дані
+        // par => par.MapFrom(e => e.Name) -> вказуємо, звідки брати дані
+
+
+        /*
+         * .ForMember(out => out.CourseId, par => par.MapFrom(in => in.CourseId))
+         *                          ^                                   ^
+         *                          Куди записувати дані                Звідки брати дані
+         */
+
+        // TODO: Зробити: CountProgress, CountThemes, IsCompleted, IsChecked, Grade, GradeAverage, ThemeId
+
+
         
         
+        
+
+        CreateProjection<UserCourse, UserCourseStatusDto>()
+            .ForMember(e => e.CourseId, par => par.MapFrom(e => e.CourseId))
+            .ForMember(e => e.Language, par => par.MapFrom(e => e.Course.Language.Code))
+            // TODO: можливо оцінки беруться із тем та з матеріалів
+            .ForMember(
+                e => e.GradeAverage,
+                par => par.MapFrom(
+                    e => 
+                        (float)
+                        _context
+                        .UserMaterials
+                        .Where(cm => cm.UserId == e.UserId)
+                        .Where(cm => _context.CourseMaterials
+                            .Where(courseMaterial => courseMaterial.CourseId == e.CourseId)
+                            .Select(courseMaterial => courseMaterial.MaterialId)
+                            .Any(materialId => materialId == cm.MaterialId)
+                        )
+                        .Select(um => um.Grade)
+                        .DefaultIfEmpty()
+                        .Average()
+                )
+                )
+            .ForMember(
+                e => e.Grade,
+                par => par.MapFrom(
+                    e => _context
+                        .UserMaterials
+                        .Where(cm => cm.UserId == e.UserId)
+                        .Where(cm => _context.CourseMaterials
+                            .Where(courseMaterial => courseMaterial.CourseId == e.CourseId)
+                            .Select(courseMaterial => courseMaterial.MaterialId)
+                            .Any(materialId => materialId == cm.MaterialId)
+                        )
+                        .Select(um => um.Grade)
+                        .OrderByDescending(grade => grade)
+                        .FirstOrDefault()
+                )
+            )
+            .ForMember(
+                e => e.Description,
+                par => par.MapFrom(e => e.Course.Description)
+            )
+            .ForMember(
+                e => e.Name,
+                e => e.MapFrom(e => e.Course.Name)
+            )
+            .ForMember(
+                e => e.Language,
+                e => e.MapFrom(e => e.Course.Language.Code)
+            )
+            .ForMember(
+                e => e.CourseId,
+                e => e.MapFrom(e => e.CourseId)
+            );
     }
 }
-

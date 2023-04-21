@@ -10,6 +10,11 @@ namespace PractiFly.DbContextUtility.Context.PractiflyDb;
 public class PractiFlyContext : DbContext, IPractiflyContext
 {
     
+    static PractiFlyContext()
+    {
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+    }
+    
     public PractiFlyContext(DbContextOptions<PractiFlyContext> options) : base(options)
     {
     }
@@ -34,13 +39,11 @@ public class PractiFlyContext : DbContext, IPractiflyContext
     public DbSet<Unit> Units { get; set; } = null!;
     public DbSet<GroupCourse> GroupCourses { get; set; } = null!;
     public DbSet<Group> Groups { get; set; } = null!;
-    public DbSet<User> Users { get; set; } = null!;
     public DbSet<UserCourse> UserCourses { get; set; } = null!;
     public DbSet<UserGroup> UserGroups { get; set; } = null!;
     public DbSet<UserHeading> UserHeadings { get; set; } = null!;
     public DbSet<UserMaterial> UserMaterials { get; set; } = null!;
     public DbSet<UserTheme> UserThemes { get; set; } = null!;
-    public DbSet<Role> Roles { get; set; }
-    public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+
 
 }
