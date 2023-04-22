@@ -13,16 +13,16 @@ public class CourseDependencyType
     public int Id { get; set; }
 
     [Column("Name")]
-    [MaxLength(128)]
+    [MaxLength(EntitiesConstantLengths.Name)]
     [Required]
     public string Name { get; set; } = null!;
 
     [Column("Url")]
-    [MaxLength(2048)]
+    [MaxLength(EntitiesConstantLengths.Url)]
     [Url]
-    public string Url { get; set; }
+    public string Url { get; set; } = null!;
 
     [Column("Description")]
-    [MaxLength(65536)]
+    [MaxLength(EntitiesConstantLengths.Description)]
     public string? Description { get; set; }
 }

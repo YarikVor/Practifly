@@ -48,7 +48,7 @@ public class UserCourse
     //TODO: можливо не обов'язкове поле
     public int Grade { get; set; }
 
-    [MaxLength(256)]
     [Column("Note")]
+    [MaxLength(EntitiesConstantLengths.Note)]
     public string? Note { get; set; }
 }

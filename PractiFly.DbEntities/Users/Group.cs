@@ -13,7 +13,7 @@ public class Group
     public int Id { get; set; }
 
     [Column("Name")]
-    [MaxLength(256)]
+    [MaxLength(EntitiesConstantLengths.Name)]
     [Required]
     public string Name { get; set; } = null!;
 
@@ -24,6 +24,6 @@ public class Group
     public DateOnly TerminationDate { get; set; }
 
     [Column("Note")]
-    [MaxLength(256)]
+    [MaxLength(EntitiesConstantLengths.Note)]
     public string? Note { get; set; }
 }

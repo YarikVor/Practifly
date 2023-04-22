@@ -40,7 +40,7 @@ public class ThemeMaterial
     public virtual Level Level { get; set; } = null!;
 
     [Column("Note")]
-    [MaxLength(256)]
+    [MaxLength(EntitiesConstantLengths.Note)]
     public string? Note { get; set; }
 
     //TODO: Description?

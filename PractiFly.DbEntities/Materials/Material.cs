@@ -13,13 +13,13 @@ public class Material
     public int Id { get; set; }
 
     [Column("Name")]
-    [MaxLength(128)]
+    [MaxLength(EntitiesConstantLengths.Name)]
     [Required]
 
     public string Name { get; set; } = null!;
 
     [Column("URL")]
-    [MaxLength(2048)]
+    [MaxLength(EntitiesConstantLengths.Url)]
     [Required]
     [Url]
     public string Url { get; set; } = null!;
@@ -29,6 +29,6 @@ public class Material
     public bool IsPractical { get; set; }
 
     [Column("Note")]
-    [MaxLength(256)]
+    [MaxLength(EntitiesConstantLengths.Note)]
     public string? Note { get; set; }
 }

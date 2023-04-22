@@ -20,11 +20,11 @@ public class Unit
 
     [Column("Text")]
     [Required]
-    [MaxLength(2048)]
+    [MaxLength(EntitiesConstantLengths.Text)]
     public string Text { get; set; } = null!;
 
     [Column("URL")]
-    [MaxLength(2048)]
+    [MaxLength(EntitiesConstantLengths.Url)]
     [Required]
     [Url]
     public string Url { get; set; } = null!;

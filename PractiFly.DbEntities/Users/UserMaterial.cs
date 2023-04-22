@@ -32,7 +32,7 @@ public class UserMaterial
     [Column("ResultUrl")]
     [Url]
     [Required]
-    [MaxLength(256)]
+    [MaxLength(EntitiesConstantLengths.Url)]
     public string ResultUrl { get; set; } = null!;
 
     [Column("Grade")]
@@ -40,6 +40,6 @@ public class UserMaterial
     public int Grade { get; set; }
 
     [Column("Note")]
-    [MaxLength(256)]
+    [MaxLength(EntitiesConstantLengths.Note)]
     public string? Note { get; set; }
 }

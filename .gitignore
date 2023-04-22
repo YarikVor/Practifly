@@ -869,3 +869,7 @@ FodyWeavers.xsd
 
 # Ignore fields
 ManagedCode.OpenAI.Client.Experiments/
+/PractiFly.DateJsonConverter/Properties
+/PractiFly.DbContextUtility/Properties
+/PractiFly.FakerFkRandomUtility/Properties
+/PractiFly.Tests.EntityFromDb/Properties

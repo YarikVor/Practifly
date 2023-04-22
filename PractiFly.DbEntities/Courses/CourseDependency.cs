@@ -33,6 +33,6 @@ public class CourseDependency
     public virtual CourseDependencyType CourseDependencyType { get; set; } = null!;
 
     [Column("Note")]
-    [MaxLength(256)]
+    [MaxLength(EntitiesConstantLengths.Note)]
     public string? Note { get; set; }
 }

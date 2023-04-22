@@ -36,6 +36,6 @@ public class GroupCourse
     public bool IsCompleted { get; set; }
 
     [Column("Note")]
-    [MaxLength(256)]
+    [MaxLength(EntitiesConstantLengths.Note)]
     public string? Note { get; set; }
 }

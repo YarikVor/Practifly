@@ -16,7 +16,7 @@ public class Course
     public int Id { get; set; }
 
     [Column("Name")]
-    [MaxLength(128)]
+    [MaxLength(EntitiesConstantLengths.Name)]
     [Required]
     public string Name { get; set; } = null!;
 
@@ -36,10 +36,10 @@ public class Course
     public virtual Language Language { get; set; } = null!;
 
     [Column("Note")]
-    [MaxLength(256)]
+    [MaxLength(EntitiesConstantLengths.Note)]
     public string? Note { get; set; }
 
     [Column("Description")]
-    [MaxLength(65536)]
+    [MaxLength(EntitiesConstantLengths.Description)]
     public string? Description { get; set; }
 }

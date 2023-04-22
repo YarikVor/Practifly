@@ -9,18 +9,18 @@ namespace PractiFly.DbEntities.Users;
 public sealed class User: IdentityUser<int>
 {
     [Column("FirstName")]
-    [MaxLength(128)]
+    [MaxLength(EntitiesConstantLengths.Name)]
     [Required]
     public string FirstName { get; set; } = null!;
 
     [Column("LastName")]
-    [MaxLength(128)]
+    [MaxLength(EntitiesConstantLengths.Name)]
     [Required]
     public string LastName { get; set; } = null!;
 
     [Url]
     [Column("FilePhoto")]
-    [MaxLength(2048)]
+    [MaxLength(EntitiesConstantLengths.Url)]
     [Required]
     public string FilePhoto { get; set; } = null!;
 
@@ -32,6 +32,6 @@ public sealed class User: IdentityUser<int>
     public DateOnly RegistrationDate { get; set; }
 
     [Column("Note")]
-    [MaxLength(256)]
+    [MaxLength(EntitiesConstantLengths.Note)]
     public string? Note { get; set; }
 }
