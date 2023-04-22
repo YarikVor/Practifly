@@ -171,9 +171,5 @@ public class PractiFlyProfile : Profile
         //    );
 
         #endregion
-
-        #region CourseDetails
-        
-        #endregion
     }
 }
