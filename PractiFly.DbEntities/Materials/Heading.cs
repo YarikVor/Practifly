@@ -19,19 +19,19 @@ public class Heading
 
     [Column("Name")]
     [Required]
-    [MaxLength(256)]
+    [MaxLength(EntitiesConstantLengths.Name)]
     public string Name { get; set; } = null!;
 
     [Column("UDC")]
     [Required]
-    [MaxLength(16)]
+    [MaxLength(EntitiesConstantLengths.Udc)]
     public string Udc { get; set; } = null!;
 
     [Column("Note")]
-    [MaxLength(256)]
+    [MaxLength(EntitiesConstantLengths.Note)]
     public string? Note { get; set; }
 
     [Column("Description")]
-    [MaxLength(65536)]
+    [MaxLength(EntitiesConstantLengths.Description)]
     public string? Description { get; set; }
 }

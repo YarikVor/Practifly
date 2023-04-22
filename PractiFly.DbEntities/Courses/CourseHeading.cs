@@ -30,6 +30,6 @@ public class CourseHeading
     public bool IsBasic { get; set; }
 
     [Column("Note")]
-    [MaxLength(256)]
+    [MaxLength(EntitiesConstantLengths.Note)]
     public string? Note { get; set; }
 }

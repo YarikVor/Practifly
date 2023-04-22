@@ -25,6 +25,6 @@ public class HeadingMaterial
     public virtual Material Material { get; set; } = null!;
 
     [Column("Note")]
-    [MaxLength(256)]
+    [MaxLength(EntitiesConstantLengths.Note)]
     public string? Note { get; set; }
 }

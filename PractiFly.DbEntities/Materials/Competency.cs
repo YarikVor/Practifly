@@ -13,7 +13,7 @@ public class Competency
     public int Id { get; set; }
 
     [Column("Name")]
-    [MaxLength(128)]
+    [MaxLength(EntitiesConstantLengths.Name)]
     [Required]
     public string Name { get; set; } = null!;
 
@@ -30,10 +30,10 @@ public class Competency
     public virtual Competency? Parent { get; set; }
 
     [Column("Note")]
-    [MaxLength(256)]
+    [MaxLength(EntitiesConstantLengths.Note)]
     public string? Note { get; set; }
 
     [Column("Description")]
-    [MaxLength(65536)]
+    [MaxLength(EntitiesConstantLengths.Description)]
     public string? Description { get; set; }
 }

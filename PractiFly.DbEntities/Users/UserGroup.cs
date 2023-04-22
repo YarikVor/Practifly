@@ -28,6 +28,6 @@ public class UserGroup
     public bool IsActive { get; set; }
 
     [Column("Note")]
-    [MaxLength(256)]
+    [MaxLength(EntitiesConstantLengths.Note)]
     public string? Note { get; set; }
 }

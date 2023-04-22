@@ -27,6 +27,6 @@ public class CourseCompetency
     public virtual Competency Competency { get; set; } = null!;
 
     [Column("Note")]
-    [MaxLength(256)]
+    [MaxLength(EntitiesConstantLengths.Note)]
     public string? Note { get; set; }
 }

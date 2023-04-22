@@ -29,6 +29,6 @@ public class MaterialBlock
     public int Number { get; set; }
 
     [Column("Note")]
-    [MaxLength(256)]
+    [MaxLength(EntitiesConstantLengths.Note)]
     public string? Note { get; set; }
 }

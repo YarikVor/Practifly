@@ -34,6 +34,6 @@ public class CourseMaterial
     public bool IsReserved { get; set; }
 
     [Column("Note")]
-    [MaxLength(256)]
+    [MaxLength(EntitiesConstantLengths.Note)]
     public string? Note { get; set; }
 }

@@ -13,7 +13,7 @@ public class Level
     public int Id { get; set; }
 
     [Column("Name")]
-    [MaxLength(256)]
+    [MaxLength(EntitiesConstantLengths.Name)]
     [Required]
 
     public string Name { get; set; } = null!;
@@ -23,10 +23,10 @@ public class Level
     public int Number { get; set; }
 
     [Column("Note")]
-    [MaxLength(256)]
+    [MaxLength(EntitiesConstantLengths.Note)]
     public string? Note { get; set; }
 
     [Column("Description")]
-    [MaxLength(65536)]
+    [MaxLength(EntitiesConstantLengths.Description)]
     public string? Description { get; set; }
 }
