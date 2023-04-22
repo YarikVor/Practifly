@@ -866,10 +866,3 @@ FodyWeavers.xsd
 # End of https://www.toptal.com/developers/gitignore/api/windows,linux,macos,visualstudio,visualstudiocode,intellij,intellij+all,rider,angular,dotnetcore,aspnetcore,xamarinstudio
 
 
-
-# Ignore fields
-ManagedCode.OpenAI.Client.Experiments/
-/PractiFly.DateJsonConverter/Properties
-/PractiFly.DbContextUtility/Properties
-/PractiFly.FakerFkRandomUtility/Properties
-/PractiFly.Tests.EntityFromDb/Properties
