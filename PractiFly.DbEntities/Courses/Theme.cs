@@ -37,7 +37,6 @@ public class Theme
     [ForeignKey("ParentId")]
     public virtual Theme? Parent { get; set; } = null!;*/
 
-    //TODO: IsCompleted?
 
     [Column("Number")]
     [Required]

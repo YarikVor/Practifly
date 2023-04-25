@@ -1,7 +1,7 @@
 ﻿namespace PractiFly.WebApi.Dto.CourseDetails
 {
     //матеріали
-    public class MaterialItemDto
+    public class CourseMaterialItemDto
     {
         public int Id { get; set; }
         
