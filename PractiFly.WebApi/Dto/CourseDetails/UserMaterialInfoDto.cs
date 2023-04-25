@@ -4,6 +4,6 @@
     {
         public int? Grade { get; set; }
         public string ResultUrl { get; set; } = null!;
-        public bool IsPassed { get; set; }
+        public bool IsCompleted { get; set; }
     }
 }

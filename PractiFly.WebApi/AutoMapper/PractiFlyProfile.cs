@@ -10,6 +10,7 @@ using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Dto.CourseData;
 using PractiFly.WebApi.Dto.CourseDependencies;
 using PractiFly.WebApi.Dto.CourseDetails;
+using PractiFly.WebApi.Dto.CourseMaterials;
 using PractiFly.WebApi.Dto.CourseThemes;
 using PractiFly.WebApi.Dto.Heading;
 using PractiFly.WebApi.Dto.HeadingCourse;
@@ -161,15 +162,26 @@ public class PractiFlyProfile : Profile
         //    par => par.MapFrom(e => e.) //має бути булеве поле, що відповідає полю IsIncluded
         //    ); 
 
-        //CreateProjection<CourseHeading, HeadingCourseItemDto>()
-        //    .ForMember(
-        //    e => e.Id, 
-        //    par => par.MapFrom(e => e.HeadingId)
-        //    )
-        //    .ForMember(
-        //    e => e.IsIncluded,
-        //    par => par.MapFrom(e => _context) //IsIncluded for this 
-        //    );
+        CreateProjection<CourseHeading, HeadingCourseItemDto>()
+            .ForMember(
+            e => e.Id,
+            par => par.MapFrom(e => e.HeadingId)
+            )
+            .ForMember(dto => dto.Name, par => par.MapFrom(
+                e => _context
+                .CourseHeadings
+                .Where(ch => ch.HeadingId == e.Id)
+                .Select(m => m.Heading.Name)))
+            .ForMember(dto => dto.Code, par => par.MapFrom(
+                e => _context
+                .CourseHeadings
+                .Where(ch => ch.HeadingId == e.Id)
+                .Select(m => m.Heading.Code)))
+            .ForMember(dto => dto.IsIncluded, par => par.MapFrom(
+                e => _context
+                .CourseHeadings
+                .Any(cm => cm.HeadingId == e.Id)));
+        //CreateProjection<Course, CourseItemDto>();
 
         #endregion
 
@@ -212,10 +224,16 @@ public class PractiFlyProfile : Profile
                 );
         #endregion
         #region CourseDetails
-        CreateProjection<Course, ThemeDetailsMenuDto>()
+        CreateProjection<Theme, CourseThemeItemDto>()
+            .ForMember(t => t.IsCompleted, par => par.MapFrom(
+                 e => _context
+                 .UserThemes
+                 .Select(ut => ut.IsCompleted)));
+
+        CreateProjection<Theme, CourseThemeWithMaterialsDto>()
              .ForMember(m => m.MaterialItemDto, par => par.MapFrom(
                     m => _context
-                        .Courses
+                        .Themes
                         .Where(c => c.Id == c.Id)
                         .Select(
                             c => new MaterialItemDto()
@@ -224,21 +242,56 @@ public class PractiFlyProfile : Profile
                                 Name = c.Name,
                             }
                         )
-                ));
+                ))
+             .ForMember(t => t.IsCompleted, par => par.MapFrom(
+                 e => _context
+                 .UserThemes
+                 .Select(ut => ut.IsCompleted)));
+
         CreateProjection<Material, MaterialDetailsViewDto>()
             .ForMember(dto => dto.MaterialUrl, par => par.MapFrom(
                 m => m.Url));
-        CreateProjection<Theme, CourseThemeItemDto>();
+
         CreateProjection<UserMaterial, MaterialItemDto>()
             .ForMember(dto => dto.Id, par => par.MapFrom(
                 m => m.MaterialId))
             .ForMember(dto => dto.Name, par => par.MapFrom(
                 m => m.Material.Name));
         //TODO: 
-        //CreateProjection<ThemeMaterial, ThemeMaterialInfoDto>()
-        //    .ForMember(dto => dto.Material, par => par.MapFrom(
-        //        tm =>  tm.Material ))
-            
+        CreateProjection<ThemeMaterial, ThemeMaterialInfoDto>()
+            .ForMember(dto => dto.Material, par => par.MapFrom(
+                tm => tm.Material));
+
+        //.ForMember(dto => dto.ViewStatus, par => par.MapFrom(
+        //    tm => tm.ViewStatus))
+        //.ForMember(dto => dto.SendStatus, par => par.MapFrom(
+        //    tm => tm.SendStatus));
+        ////
+        CreateProjection<UserMaterial, UserMaterialInfoDto>();
+        CreateProjection<UserMaterial, UserMaterialSendDto>();
+        #endregion
+
+        #region CourseMaterials
+        CreateProjection<Heading, HeadingInfoDto>();
+        CreateProjection<Material, MaterialBlocksDto>() //Id, Name, IsPractical
+            .ForMember(dto => dto.IsIncluded, par => par.MapFrom(
+                e => _context
+                .CourseMaterials
+                .Any(cm => cm.MaterialId == e.Id)))
+            .ForMember(dto => dto.PriorityLevel, par => par.MapFrom(
+                e => _context
+                .CourseMaterials
+                .Where(cm => cm.MaterialId == e.Id)
+                .Select(cm => cm.PriorityLevel))) //Чи правильно?
+                                                  //.ForMember(dto => dto.Type, par => par.MapFrom(
+                                                  //    )
+            ;
+        CreateProjection<Material, MaterialFromIncludedBlockViewDto>()
+            .ForMember(dto => dto.PriorityLevel, par => par.MapFrom(
+                e => _context
+                .CourseMaterials
+                .Where(cm => cm.MaterialId == e.Id)
+                .Select(cm => cm.PriorityLevel)));
         #endregion
     }
 }
