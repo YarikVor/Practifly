@@ -9,6 +9,6 @@
         //TODO: IsCompleted?
         public bool IsCompleted { get; set; }
 
-        public MaterialItemDto[] MaterialItemDto { get; set; } = null!;
+        public CourseMaterialItemDto[] CourseMaterialItemDto { get; set; } = null!;
     }
 }

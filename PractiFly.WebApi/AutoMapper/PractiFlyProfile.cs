@@ -21,7 +21,7 @@ using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace PractiFly.WebApi.AutoMappers;
 
-public class PractiFlyProfile : Profile
+public partial class PractiFlyProfile : Profile
 {
     private readonly PractiFlyContext _context;
 
@@ -215,7 +215,7 @@ public class PractiFlyProfile : Profile
                  .Select(ut => ut.IsCompleted)));
 
         CreateProjection<Theme, CourseThemeWithMaterialsDto>()
-             .ForMember(m => m.MaterialItemDto, par => par.MapFrom(
+             .ForMember(m => m.CourseMaterialItemDto, par => par.MapFrom(
                     m => _context
                         .Themes
                         .Where(c => c.Id == c.Id)
