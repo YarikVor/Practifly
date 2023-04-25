@@ -128,28 +128,12 @@ public class PractiFlyProfile : Profile
             );
         #endregion
 
-        CreateProjection<Course, CourseItemDto>();
-        CreateProjection<Theme, ThemeItemDto>();
-
-        CreateProjection<Course, CourseItemWithThemeDto>()
-            .ForMember(e => e.Themes, par => par.MapFrom(
-                    e => _context
-                        .Themes
-                        .Where(t => t.CourseId == e.Id)
-                        // TODO: Use ProjectTo
-                        .Select(
-                            t => new ThemeItemDto()
-                            {
-                                Id = t.Id,
-                                Name = t.Name,
-                            }
-                        )
-                )
-            );
         #region Heading
         CreateProjection<Heading, HeadingItemDto>();
 
         CreateProjection<Heading, HeadingInfoDto>();
+
+        //TODO: Mapper for HeadingEditDto
         #endregion
 
         #region HeadingCourse
@@ -238,7 +222,52 @@ public class PractiFlyProfile : Profile
         //CreateProjection<ThemeMaterial, ThemeMaterialInfoDto>()
         //    .ForMember(dto => dto.Material, par => par.MapFrom(
         //        tm =>  tm.Material ))
-            
+
+        #endregion
+
+        #region CourseThemes
+
+        CreateProjection<Theme, ThemeDto>(); //мапінг вікна перегляду тем курсів
+        
+        CreateProjection<Theme, ThemeItemDto>(); //мапінг перегляду переліку курсів
+
+        CreateProjection<Theme, ThemeEditDto>(); //мапінг вікна редагування тем курсів
+
+        CreateProjection<Course, CourseItemWithThemeDto>()  //мапінг переліку тем, що входять до курсу
+            .ForMember(e => e.Themes, par => par.MapFrom(
+                    e => _context
+                        .Themes
+                        .Where(t => t.CourseId == e.Id)
+                        // TODO: Use ProjectTo
+                        .Select(
+                            t => new ThemeItemDto()
+                            {
+                                Id = t.Id,
+                                Name = t.Name,
+                            }
+                        )
+                )
+            );
+
+        CreateProjection<Material, MaterialsMenuDto>()  //мапінг перегляду меню матеріалів
+            .ForMember(
+            dto => dto.Grade,
+            par => par.MapFrom(
+                e => 
+                _context
+                .ThemeMaterials
+                .Where(i => i.MaterialId == e.Id)
+                .Select(i => i.Number)
+                )
+            )
+            .ForMember(dto => dto.IsSelected,
+            par => par.MapFrom(
+                e => 
+                _context
+                .ThemeMaterials
+                .Any(i => i.MaterialId == e.Id)
+                )
+            );
         #endregion
     }
 }
