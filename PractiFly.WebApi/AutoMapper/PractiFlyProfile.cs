@@ -8,6 +8,7 @@ using PractiFly.DbEntities.Courses;
 using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Dto.CourseData;
 using PractiFly.WebApi.Dto.CourseDependencies;
+using PractiFly.WebApi.Dto.CourseMaterials;
 using PractiFly.WebApi.Dto.CourseThemes;
 using PractiFly.WebApi.Dto.MyCourse;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
@@ -121,6 +122,9 @@ public class PractiFlyProfile : Profile
                 e => e.MapFrom(e => e.CourseId)
             );
 
+
+        #region CourseThemes
+
         CreateProjection<Course, CourseItemDto>();
         CreateProjection<Theme, ThemeItemDto>();
 
@@ -140,5 +144,28 @@ public class PractiFlyProfile : Profile
                 )
             );
 
+        CreateProjection<CourseMaterial, MaterialsMenuDto>()
+            .ForMember(
+                dto => dto.Id,
+                par => par.MapFrom(cm => cm.Material.Id)
+            )
+            .ForMember(
+                dto => dto.Name,
+                par => par.MapFrom(cm => cm.Material.Name)
+            )
+            .ForMember(
+                dto => dto.Priority,
+                par => par.MapFrom(cm => cm.PriorityLevel)
+            )
+            .ForMember(
+                dto => dto.IsIncluded,
+                par => par.MapFrom(
+                    cm => _context
+                        .ThemeMaterials
+                        .Any(tm => tm.MaterialId == cm.MaterialId)
+                )
+            );
+
+        #endregion
     }
 }
