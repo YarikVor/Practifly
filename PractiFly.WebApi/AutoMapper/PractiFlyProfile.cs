@@ -311,6 +311,8 @@ public partial class PractiFlyProfile : Profile
                 )
             );
 
+        // TODO: Maybe another type data
+        /*
         CreateProjection<Material, MaterialsMenuDto>()  //мапінг перегляду меню матеріалів
             .ForMember(
             dto => dto.Grade,
@@ -330,6 +332,8 @@ public partial class PractiFlyProfile : Profile
                 .Any(i => i.MaterialId == e.Id)
                 )
             );
+        */
+        
         #endregion
         CreateProjection<CourseMaterial, MaterialsMenuDto>()
             .ForMember(
