@@ -86,7 +86,7 @@ public class CourseController : Controller
             .Materials
             .AsNoTracking()
             .ProjectTo<MaterialsMenuDto>(_mapper.ConfigurationProvider)
-            .OrderBy(e => e.Grade)
+            .OrderBy(e => e.Priority)
             .ToArrayAsync();
 
         return Json(result);
