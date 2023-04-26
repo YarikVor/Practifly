@@ -78,13 +78,15 @@ public class CourseController : Controller
     }
 
     //???
+    //TODO: ViewMaterialsList
     [HttpGet]
     [Route("course/{courseId:int}/themes")]
-    public async Task<IActionResult> ViewMaterialsList()
+    public async Task<IActionResult> ViewMaterialsList(int materialId)
     {
         MaterialsMenuDto[] result = await _context
             .Materials
             .AsNoTracking()
+            .Where(e => e.Id == materialId)
             .ProjectTo<MaterialsMenuDto>(_mapper.ConfigurationProvider)
             .OrderBy(e => e.Priority)
             .ToArrayAsync();
