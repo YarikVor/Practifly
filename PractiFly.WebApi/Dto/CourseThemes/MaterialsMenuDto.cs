@@ -4,8 +4,8 @@
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;
-        public int Grade { get; set; }
-        public bool IsSelected { get; set; }
+        public int Priority { get; set; }
+        public bool IsIncluded { get; set; }
 
     }
 }

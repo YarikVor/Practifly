@@ -236,6 +236,11 @@ public partial class PractiFlyProfile : Profile
             .ForMember(dto => dto.MaterialUrl, par => par.MapFrom(
                 m => m.Url));
 
+        #region CourseThemes
+
+        CreateProjection<Course, CourseItemDto>();
+        CreateProjection<Theme, ThemeItemDto>();
+
         CreateProjection<UserMaterial, MaterialItemDto>()
             .ForMember(dto => dto.Id, par => par.MapFrom(
                 m => m.MaterialId))
@@ -325,6 +330,29 @@ public partial class PractiFlyProfile : Profile
                 .Any(i => i.MaterialId == e.Id)
                 )
             );
+        #endregion
+        CreateProjection<CourseMaterial, MaterialsMenuDto>()
+            .ForMember(
+                dto => dto.Id,
+                par => par.MapFrom(cm => cm.Material.Id)
+            )
+            .ForMember(
+                dto => dto.Name,
+                par => par.MapFrom(cm => cm.Material.Name)
+            )
+            .ForMember(
+                dto => dto.Priority,
+                par => par.MapFrom(cm => cm.PriorityLevel)
+            )
+            .ForMember(
+                dto => dto.IsIncluded,
+                par => par.MapFrom(
+                    cm => _context
+                        .ThemeMaterials
+                        .Any(tm => tm.MaterialId == cm.MaterialId)
+                )
+            );
+
         #endregion
     }
 }
