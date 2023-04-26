@@ -54,4 +54,16 @@ public class UserControllerTest
         
         _output.WriteLine(JsonConvert.SerializeObject(value, Formatting.Indented));
     }
+    
+    [Fact]
+    public async Task Test4()
+    {
+        var controller = Mock.Get<CourseController>();
+
+        var result = await controller.GetMaterialsInTheme(1);
+
+        var value = (result as JsonResult).Value;
+        
+        _output.WriteLine(JsonConvert.SerializeObject(value, Formatting.Indented));
+    }
 }

@@ -119,4 +119,29 @@ public class CourseController : Controller
 
         return Json(result);
     }
+
+
+    [HttpGet]
+    public async Task<IActionResult> GetMaterialsInTheme(int themeId)
+    {
+        
+
+        MaterialsMenuDto[] result = await
+            _context
+                .CourseMaterials
+                .AsNoTracking()
+                .Where(cm => cm.CourseId == _context.Themes.FirstOrDefault(theme => theme.Id == themeId).CourseId)
+                .Select(cm => new MaterialsMenuDto()
+                {
+                    Id = cm.MaterialId,
+                    Name = cm.Material.Name,
+                    IsIncluded = _context
+                        .ThemeMaterials
+                        .Any(tm => tm.MaterialId == cm.MaterialId && tm.ThemeId == themeId),
+                    Priority = cm.PriorityLevel
+                })
+                .ToArrayAsync();
+
+        return Json(result);
+    }
 }
