@@ -77,6 +77,21 @@ public class CourseController : Controller
         return Json(result);
     }
 
+    //???
+    [HttpGet]
+    [Route("course/{courseId:int}/themes")]
+    public async Task<IActionResult> ViewMaterialsList()
+    {
+        MaterialsMenuDto[] result = await _context
+            .Materials
+            .AsNoTracking()
+            .ProjectTo<MaterialsMenuDto>(_mapper.ConfigurationProvider)
+            .OrderBy(e => e.Grade)
+            .ToArrayAsync();
+
+        return Json(result);
+    }
+
     [HttpGet]
     [Route("")]
 
