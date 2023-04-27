@@ -43,7 +43,7 @@ public class UserController : Controller
     }
 
     [HttpPost]
-    [Route("")]
+    [Route("[action]")]
     [AllowAnonymous]
     public async Task<IActionResult> Create(RegistrationDto registrationDto)
     {
@@ -64,8 +64,10 @@ public class UserController : Controller
         return Ok(token);
     }
 
+    
+
     [HttpPost]
-    [Route("")]
+    [Route("[action]")]
     [AllowAnonymous]
     public async Task<IActionResult> Login(LoginDto loginDto)
     {
@@ -92,7 +94,7 @@ public class UserController : Controller
     }
 
     [HttpGet]
-    [Route("")]
+    [Route("[action]")]
     [Authorize(AuthenticationSchemes = "Bearer")]
     public async Task<IActionResult> RefreshToken()
     {
@@ -106,30 +108,10 @@ public class UserController : Controller
     }
 
 
-    [HttpDelete]
-    [Route("")]
-    [Authorize(Roles = UserRoles.Admin)]
-    public async Task<IActionResult> DeleteUserByIdAsync(string userId)
-    {
-        var user = await _userManager.FindByIdAsync(userId);
-
-        if (user == null)
-        {
-            return BadRequest();
-        }
-
-        var result = await _userManager.DeleteAsync(user);
-
-        if (!result.Succeeded)
-        {
-            return BadRequest();
-        }
-
-        return Ok();
-    }
+    
 
     [HttpDelete]
-    [Route("")]
+    [Route("[action]")]
     [Authorize]
     public async Task<IActionResult> DeleteCurrentUserAsync()
     {
@@ -161,103 +143,7 @@ public class UserController : Controller
         return Ok();
     }
 
-    [HttpPost]
-    [Route("")]
-    [Authorize(Roles = UserRoles.Admin)]
 
-    public async Task<IActionResult> UpdateUser([FromBody] UserProfileForAdminCreateDto userDto)
-    {
-        const string defaultPassword = "Qwerty_1";
-
-        User user = userDto.Id == 0
-            ? new User()
-            : await _userManager.FindByIdAsync(userDto.Id.ToString());
-
-        if (user == null)
-        {
-            return NotFound();
-        }
-
-        user.UserName = userDto.Name;
-        user.LastName = userDto.Surname;
-        user.Email = userDto.Email;
-        user.PhoneNumber = userDto.Phone;
-        user.FilePhoto = userDto.FilePhoto;
-
-        var result = (userDto.Id == 0)
-            ? await _userManager.CreateAsync(user, defaultPassword)
-            : await _userManager.UpdateAsync(user);
-
-        await _userManager.RemoveFromRolesAsync(user, UserRoles.RolesEnumerable);
-        var roleResult = await _userManager.AddToRoleAsync(user, userDto.Role);
-
-        if (!roleResult.Succeeded)
-        {
-            return BadRequest(roleResult.Errors);
-        }
-
-        if (!result.Succeeded)
-        {
-            return BadRequest(result.Errors);
-        }
-
-        return Ok();
-    }
-
-    [HttpGet]
-    public async Task<IActionResult> FilterUsers(UserFilteringDto filter)
-    {
-        var users = _userManager.Users.AsNoTracking();
-
-        if (!string.IsNullOrEmpty(filter.Name))
-        {
-            users = users.Where(u => u.FirstName.Contains(filter.Name));
-        }
-
-        if (!string.IsNullOrEmpty(filter.Surname))
-        {
-            users = users.Where(u => u.LastName.Contains(filter.Surname));
-        }
-
-        if (!string.IsNullOrEmpty(filter.Phone))
-        {
-            users = users.Where(u => u.PhoneNumber == filter.Phone);
-        }
-
-        if (filter.RegistrationDateFrom.HasValue)
-        {
-            users = users.Where(u => u.RegistrationDate >= filter.RegistrationDateFrom.Value);
-        }
-
-        if (filter.RegistrationDateTo.HasValue)
-        {
-            users = users.Where(u => u.RegistrationDate <= filter.RegistrationDateTo.Value);
-        }
-
-        if (!string.IsNullOrEmpty(filter.Email))
-        {
-            users = users.Where(u => u.Email == filter.Email);
-        }
-
-        if (!string.IsNullOrEmpty(filter.Role))
-        {
-            users = users.Where(u => _userManager.IsInRoleAsync(u, filter.Role).Result);
-        }
-        var result = await users.Select(e => e.ToUserFullnameItemDto()).ToArrayAsync();
-
-        return Json(result);
-    }
-    public async Task<IActionResult> ViewProfile(int userId)
-    {
-        UserProfileInfoViewDto result = await _context
-            .Users
-            .AsNoTracking()
-            .Where(u => u.Id == userId)
-            .ProjectTo<UserInfoDto>(_mapper.ConfigurationProvider)
-            .FirstAsync();
-
-        return Json(result);
-    }
-    //TODO: Edit profile
+    
 
 }

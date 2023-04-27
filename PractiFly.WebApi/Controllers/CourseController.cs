@@ -28,20 +28,6 @@ public class CourseController : Controller
     }
 
     [HttpGet]
-    [Route("{userId:int}/usercourse")]
-    public async Task<IActionResult> UserCourse(int userId)
-    {
-        UserCourseStatusDto[] result = await _context
-            .UserCourses
-            .AsNoTracking()
-            .Where(e => e.UserId == userId)
-            .ProjectTo<UserCourseStatusDto>(_mapper.ConfigurationProvider)
-            .ToArrayAsync();
-
-        return Json(result);
-    }
-
-    [HttpGet]
     [Route("user/{userId:int?}/courses")]
     public async Task<IActionResult> UserCourses(int? userId = null)
     {
@@ -66,7 +52,7 @@ public class CourseController : Controller
     
 
     [HttpGet]
-    [Route("")]
+    [Route("[action]")]
 
     public async Task<IActionResult> GetIncludedHeadings(int courseId)
     {
@@ -81,6 +67,8 @@ public class CourseController : Controller
         return Json(result);
     }
 
+    [HttpGet]
+    [Route("[action]")]
     public async Task<IActionResult> ViewMaterialDetails(int themeMateralId)
     {
         MaterialDetailsViewDto result = await _context
@@ -95,10 +83,9 @@ public class CourseController : Controller
 
 
     [HttpGet]
+    [Route("[action]")]
     public async Task<IActionResult> GetMaterialsInTheme(int themeId)
     {
-        
-
         MaterialsMenuDto[] result = await
             _context
                 .CourseMaterials

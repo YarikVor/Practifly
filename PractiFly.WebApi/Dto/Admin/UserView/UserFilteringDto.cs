@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using PractiFly.WebApi.Attributes;
 
 namespace PractiFly.WebApi.Dto.Admin.UserView
 {
@@ -20,15 +21,8 @@ namespace PractiFly.WebApi.Dto.Admin.UserView
         [EmailAddress]
         [MaxLength(128)]
         public string? Email { get; set; }
-
-        //TODO: Ролі користувачів (може змінитись тип даних)
-        [MaxLength(64)]
+        
+        [RoleString]
         public string? Role { get; set; } 
     }
 }
-
-/*
- * Курси:
- * 
- * 
- */

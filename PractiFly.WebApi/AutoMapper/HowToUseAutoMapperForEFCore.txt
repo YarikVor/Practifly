@@ -1,0 +1,38 @@
+//(CourseDependencyType)Course
+CreateProjection<Course, CourseDependencyType>()
+    .ForMember(
+        e => e.Name,
+        par
+            => par.MapFrom(e => e.Name)
+    )
+    .ForMember(
+        e => e.Url,
+        par
+            => par.MapFrom(e => e.FlagUrl)
+    )
+    .ForMember(
+        e => e.Description,
+        par
+            => par.MapFrom(e => e.Description)
+    ).ForMember(
+        e => e.Id,
+        par
+            => par.MapFrom(e => e.Id)
+    );
+
+ new CourseDependencyType(){
+    Name = courseDependenciesTypeCreateDto.CourseName
+ }
+
+
+// CreateProjection<In, Out>() -> створення мапера, що перетворює тип даних In в тип даних Out
+// .ForMember(...) -> вказуємо, які властивості мапити
+// e => e.Name -> вказуємо, куди записувати дані
+// par => par.MapFrom(e => e.Name) -> вказуємо, звідки брати дані
+
+
+/*
+ * .ForMember(out => out.CourseId, par => par.MapFrom(in => in.CourseId))
+ *                          ^                                   ^
+ *                          Куди записувати дані                Звідки брати дані
+ */
