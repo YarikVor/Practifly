@@ -264,17 +264,5 @@ public class UserController : Controller
 
         return Json(result);
     }
-    public async Task<IActionResult> ViewProfile(int userId)
-    {
-        UserProfileInfoViewDto result = await _context
-            .Users
-            .AsNoTracking()
-            .Where(u => u.Id == userId)
-            .ProjectTo<UserInfoDto>(_mapper.ConfigurationProvider)
-            .FirstAsync();
-
-        return Json(result);
-    }
-    //TODO: Edit profile
 
 }
