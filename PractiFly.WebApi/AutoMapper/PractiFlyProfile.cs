@@ -207,6 +207,7 @@ public partial class PractiFlyProfile : Profile
                             )
                 );
         #endregion
+
         #region CourseDetails
         CreateProjection<Theme, CourseThemeItemDto>()
             .ForMember(t => t.IsCompleted, par => par.MapFrom(
@@ -236,21 +237,15 @@ public partial class PractiFlyProfile : Profile
             .ForMember(dto => dto.MaterialUrl, par => par.MapFrom(
                 m => m.Url));
 
-        #region CourseThemes
-
-        CreateProjection<Course, CourseItemDto>();
-        CreateProjection<Theme, ThemeItemDto>();
-
-        CreateProjection<UserMaterial, MaterialItemDto>()
+        CreateProjection<UserMaterial, CourseMaterialItemDto>()
             .ForMember(dto => dto.Id, par => par.MapFrom(
                 m => m.MaterialId))
             .ForMember(dto => dto.Name, par => par.MapFrom(
                 m => m.Material.Name));
-        //TODO: 
+
         CreateProjection<ThemeMaterial, ThemeMaterialInfoDto>()
             .ForMember(dto => dto.Material, par => par.MapFrom(
                 tm => tm.Material));
-
         //.ForMember(dto => dto.ViewStatus, par => par.MapFrom(
         //    tm => tm.ViewStatus))
         //.ForMember(dto => dto.SendStatus, par => par.MapFrom(
@@ -258,6 +253,30 @@ public partial class PractiFlyProfile : Profile
         ////
         CreateProjection<UserMaterial, UserMaterialInfoDto>();
         CreateProjection<UserMaterial, UserMaterialSendDto>();
+        #endregion
+
+        #region CourseThemes (one)
+
+        //CreateProjection<Course, CourseItemDto>();
+        //CreateProjection<Theme, ThemeItemDto>();
+
+        //CreateProjection<UserMaterial, MaterialItemDto>()
+        //    .ForMember(dto => dto.Id, par => par.MapFrom(
+        //        m => m.MaterialId))
+        //    .ForMember(dto => dto.Name, par => par.MapFrom(
+        //        m => m.Material.Name));
+        ////TODO: 
+        //CreateProjection<ThemeMaterial, ThemeMaterialInfoDto>()
+        //    .ForMember(dto => dto.Material, par => par.MapFrom(
+        //        tm => tm.Material));
+
+        ////.ForMember(dto => dto.ViewStatus, par => par.MapFrom(
+        ////    tm => tm.ViewStatus))
+        ////.ForMember(dto => dto.SendStatus, par => par.MapFrom(
+        ////    tm => tm.SendStatus));
+        //////
+        //CreateProjection<UserMaterial, UserMaterialInfoDto>();
+        //CreateProjection<UserMaterial, UserMaterialSendDto>();
         #endregion
 
         #region CourseMaterials
@@ -290,7 +309,7 @@ public partial class PractiFlyProfile : Profile
         #region CourseThemes
 
         CreateProjection<Theme, ThemeDto>(); //мапінг вікна перегляду тем курсів
-        
+
         CreateProjection<Theme, ThemeItemDto>(); //мапінг перегляду переліку курсів
 
         CreateProjection<Theme, ThemeEditDto>(); //мапінг вікна редагування тем курсів
@@ -333,8 +352,6 @@ public partial class PractiFlyProfile : Profile
                 )
             );
         */
-        
-        #endregion
         CreateProjection<CourseMaterial, MaterialsMenuDto>()
             .ForMember(
                 dto => dto.Id,
@@ -357,6 +374,10 @@ public partial class PractiFlyProfile : Profile
                 )
             );
 
+        #endregion
+
+        #region CourseData
+        //CreateProjection<>()
         #endregion
     }
 }
