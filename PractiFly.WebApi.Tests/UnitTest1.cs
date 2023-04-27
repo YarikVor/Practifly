@@ -24,7 +24,7 @@ public class UserControllerTest
     {
         var controller = Mock.Get<CourseController>();
 
-        var result = await controller.UserCourse(1);
+        //var result = await controller.UserCourse(1);
 
         var value = (result as JsonResult).Value;
         

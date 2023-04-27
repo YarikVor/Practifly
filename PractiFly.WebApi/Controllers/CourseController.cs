@@ -81,7 +81,7 @@ public class CourseController : Controller
     }
 
     [HttpGet]
-    [Route("")]
+    [Route("[action]")]
 
     public async Task<IActionResult> GetIncludedHeadings(int courseId)
     {
@@ -96,6 +96,8 @@ public class CourseController : Controller
         return Json(result);
     }
 
+    [HttpGet]
+    [Route("[action]")]
     public async Task<IActionResult> ViewMaterialDetails(int themeMateralId)
     {
         MaterialDetailsViewDto result = await _context
@@ -110,10 +112,9 @@ public class CourseController : Controller
 
 
     [HttpGet]
+    [Route("[action]")]
     public async Task<IActionResult> GetMaterialsInTheme(int themeId)
     {
-        
-
         MaterialsMenuDto[] result = await
             _context
                 .CourseMaterials

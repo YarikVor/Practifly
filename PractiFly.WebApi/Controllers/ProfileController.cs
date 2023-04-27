@@ -30,6 +30,7 @@ public class ProfileController: Controller
     }
 
     [HttpGet]
+    [Route("[action]")]
     public async Task<IActionResult> GetUserProfileInfo(int userId)
     {
         var result = _context
@@ -45,6 +46,8 @@ public class ProfileController: Controller
     }
 
     [Authorize]
+    [Route("[action]")]
+    [HttpGet]
     public async Task<IActionResult> UpdateUser(UserProfileInfoCreateDto userDto)
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

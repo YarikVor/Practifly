@@ -62,7 +62,7 @@ public class HeadingCourseController: Controller
     }
     
     [HttpGet]
-    [Route("")]
+    [Route("[action]")]
     public async Task<IActionResult> ChangeHeadingInCourse(HeadingItemCheckingDto headingItemCheckingDto)
     {
         if (headingItemCheckingDto.IsIncluded)

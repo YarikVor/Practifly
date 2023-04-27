@@ -43,7 +43,7 @@ public class UserController : Controller
     }
 
     [HttpPost]
-    [Route("")]
+    [Route("[action]")]
     [AllowAnonymous]
     public async Task<IActionResult> Create(RegistrationDto registrationDto)
     {
@@ -64,8 +64,10 @@ public class UserController : Controller
         return Ok(token);
     }
 
+    
+
     [HttpPost]
-    [Route("")]
+    [Route("[action]")]
     [AllowAnonymous]
     public async Task<IActionResult> Login(LoginDto loginDto)
     {
@@ -92,7 +94,7 @@ public class UserController : Controller
     }
 
     [HttpGet]
-    [Route("")]
+    [Route("[action]")]
     [Authorize(AuthenticationSchemes = "Bearer")]
     public async Task<IActionResult> RefreshToken()
     {
@@ -107,7 +109,7 @@ public class UserController : Controller
 
 
     [HttpDelete]
-    [Route("")]
+    [Route("[action]")]
     [Authorize(Roles = UserRoles.Admin)]
     public async Task<IActionResult> DeleteUserByIdAsync(string userId)
     {
@@ -129,7 +131,7 @@ public class UserController : Controller
     }
 
     [HttpDelete]
-    [Route("")]
+    [Route("[action]")]
     [Authorize]
     public async Task<IActionResult> DeleteCurrentUserAsync()
     {
@@ -161,7 +163,8 @@ public class UserController : Controller
         return Ok();
     }
 
-
+    [HttpGet]
+    [Route("[action]")]
     public async Task<IActionResult> CreateUserInAdmin(UserProfileForAdminCreateDto userDto)
     {
         const string defaultPassword = "Qwerty_1";
@@ -188,6 +191,8 @@ public class UserController : Controller
         return Ok();
     }
 
+    [HttpGet]
+    [Route("[action]")]
     public async Task<IActionResult> UpdateUserInAdmin(UserProfileForAdminUpdateDto userDto)
     {
         User user = await _userManager.FindByIdAsync(userDto.Id.ToString());
@@ -222,6 +227,7 @@ public class UserController : Controller
     }
 
     [HttpGet]
+    [Route("[action]")]
     public async Task<IActionResult> FilterUsers(UserFilteringDto filter)
     {
         var users = _userManager.Users.AsNoTracking();

@@ -27,7 +27,7 @@ namespace PractiFly.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("")]
+        [Route("[action]")]
         public async Task<IActionResult> GetCoursesForAdmin()
         {
             var courses = await _context.Courses
@@ -42,7 +42,7 @@ namespace PractiFly.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("")]
+        [Route("[action]")]
         public async Task<IActionResult> GetCourseInfo()
         {
             var result = await _context.Courses
@@ -60,7 +60,7 @@ namespace PractiFly.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("")]
+        [Route("[action]")]
         public async Task<IActionResult> GetUsersOffCourse(int courseId)
         {
             var result = await _context.UserCourses
@@ -72,7 +72,7 @@ namespace PractiFly.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("")]
+        [Route("[action]")]
         public async Task<IActionResult> GetOwnerOfCourse(int courseId)
         {
             var result = await _context.Courses
@@ -88,8 +88,8 @@ namespace PractiFly.WebApi.Controllers
             return Json(result);
         }
 
-        [HttpPost]
-        [Route("")]
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> CreateCourse(CreateCourseDto courseDto)
         {
             var course = new Course()
@@ -104,8 +104,8 @@ namespace PractiFly.WebApi.Controllers
             return Ok();
         }
 
-        [HttpPost]
-        [Route("")]
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> EditCourse(CreateCourseDto courseDto)
         {
             var course = await _context.Courses.FirstOrDefaultAsync(e => e.Id == courseDto.CourseId);
@@ -124,7 +124,7 @@ namespace PractiFly.WebApi.Controllers
         }
 
         [HttpDelete]
-        [Route("")]
+        [Route("[action]")]
         public async Task<IActionResult> DeleteCourse(int courseId)
         {
             var course = await _context.Courses.FirstOrDefaultAsync(e => e.Id == courseId);
