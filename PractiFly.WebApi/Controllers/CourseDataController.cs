@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
+using PractiFly.DbEntities.Courses;
+using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.AutoMapper;
+using PractiFly.WebApi.Dto.Admin.UserView;
 using PractiFly.WebApi.Dto.CourseData;
 using PractiFly.WebApi.Dto.CourseThemes;
 
@@ -82,6 +86,51 @@ namespace PractiFly.WebApi.Controllers
                 .ToListAsync();
 
             return Json(result);
+        }
+
+        [HttpPost]
+        [Route("")]
+        public async Task<IActionResult> CreateCourse(CreateCourseDto courseDto)
+        {
+            var course = new Course()
+            {
+                Language = _context.Languages.First(l => (l.Code == courseDto.Language)),
+                OwnerId = courseDto.OwnerId,
+                Name = courseDto.CourseName,
+                Note = courseDto.Note,
+                Description = courseDto.Description
+            };
+            await _context.Courses.AddAsync(course);
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("")]
+        public async Task<IActionResult> EditCourse(CreateCourseDto courseDto)
+        {
+            var course = await _context.Courses.FirstOrDefaultAsync(e => e.Id == courseDto.CourseId);
+            if (course == null) { return NotFound(); }
+
+            course.Id = courseDto.CourseId;
+            course.Language = _context.Languages.First(l => (l.Code == courseDto.Language));
+            course.OwnerId = courseDto.OwnerId;
+            course.Name = courseDto.CourseName;
+            course.Note = courseDto.Note;
+            course.Description = courseDto.Description;
+
+            _context.Courses.Update(course);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpDelete]
+        [Route("")]
+        public async Task<IActionResult> DeleteCourse(int courseId)
+        {
+            var course = await _context.Courses.FirstOrDefaultAsync(e => e.Id == courseId);
+            _context.Courses.Remove(course);
+            await _context.SaveChangesAsync();
+            return Ok();
         }
     }
 }
