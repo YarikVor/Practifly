@@ -26,7 +26,7 @@ namespace PractiFly.WebApi.Controllers
         //метод, повертає список тем в курсі
         public async Task<IActionResult> GetCourseThemes(int courseId)
         {
-            CourseItemWithThemeDto result = await _context
+            var result = await _context
                 .Courses
                 .AsNoTracking()
                 .Where(e => e.Id == courseId)
@@ -36,6 +36,21 @@ namespace PractiFly.WebApi.Controllers
             return Json(result);
         }
 
+        //метод для відображення тем, що знаходяться в курсі
+        public async Task<IActionResult> GetThemesFromCourses(int courseId)
+        {
+            var result = await _context.Themes.FindAsync(courseId);
+
+            if(result == null)
+            {
+                return NotFound();
+            }
+
+            var themes = await _context.Themes.Where(t => t.CourseId == courseId).ToListAsync();
+
+            return Ok(themes);
+        }
+
         //TODO: ViewMaterialsList
         [HttpGet]
         [Route("course/{courseId:int}/themes")]
@@ -43,13 +58,13 @@ namespace PractiFly.WebApi.Controllers
         //метод перегляду списку матеріалів
         public async Task<IActionResult> GetMaterialsList(int materialId)
         {
-            MaterialsMenuDto[] result = await _context
+            var result = await _context
                 .Materials
                 .AsNoTracking()
                 .Where(e => e.Id == materialId)
                 .ProjectTo<MaterialsMenuDto>(_mapper.ConfigurationProvider)
                 .OrderBy(e => e.Priority)
-                .ToArrayAsync();
+                .ToListAsync();
 
             return Json(result);
         }
@@ -67,11 +82,55 @@ namespace PractiFly.WebApi.Controllers
 
             return Json(result);
         }
+
+        //метод перегляду інформації щодо певної теми
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> CourseThemeInfo(int courseId)
+        public async Task<IActionResult> CourseThemeInfo(int themeId)
         {
-            
+            var result = await _context
+                .Themes
+                .AsNoTracking()
+                .Where(e => e.Id == themeId)
+                .Select(e => new ThemeDto()
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    Note = e.Note
+                })
+                .FirstOrDefaultAsync();
+
+            if(result == null)
+            {
+                return NotFound();
+            }
+
+            return Json(result);
         }
+
+        public async Task<IActionResult> UpdateTheme(int themeId, [FromBody] ThemeDto themeDto)
+        {
+            if (themeDto == null)
+            {
+                return BadRequest();
+            }
+
+            var theme = await _context.Themes.FindAsync(themeId);
+
+            if (theme == null)
+            {
+                return NotFound();
+            }
+
+            theme.Name = themeDto.Name;
+            theme.Note = themeDto.Note;
+
+            _context.Themes.Update(theme);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        //TODO: метод для перегляду всіх курсів наявний в CourseController.UserCourse
     }
 }
