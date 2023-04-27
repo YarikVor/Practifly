@@ -44,7 +44,7 @@ public class MyCourseProfile : Profile
                             .Average()
                 )
             );
-        
+        //TODO: Nect topic, grade for  current theme
         CreateProjection<UserCourse, UserCourseStatusDto>()
             .ForMember(e => e.CourseId, par => par.MapFrom(e => e.CourseId))
             .ForMember(e => e.Language, par => par.MapFrom(e => e.Course.Language.Code))
