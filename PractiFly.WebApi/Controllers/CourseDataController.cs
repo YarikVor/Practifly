@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
+using PractiFly.WebApi.AutoMapper;
 using PractiFly.WebApi.Dto.CourseData;
 using PractiFly.WebApi.Dto.CourseThemes;
 
@@ -45,8 +46,9 @@ namespace PractiFly.WebApi.Controllers
              {
                  Id = c.Id,
                  Language = c.Language.Code,
+                 CourseName = c.Name,
+                 Description = c.Description,
                  Note = c.Note,
-                 Description = c.Description
              })
              .ToListAsync();
 
@@ -55,19 +57,29 @@ namespace PractiFly.WebApi.Controllers
 
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> GetUsersForCourse()
+        public async Task<IActionResult> GetUsersOffCourse(int courseId)
         {
-            //var result = await users.Select(e => e.ToUserFullnameItemDto()).ToArrayAsync();
             var result = await _context.UserCourses
-                .Select(e => e.ToUserFullnameItemDto()).ToArrayAsync();
-             .Select(c => new CourseInfoDto
-             {
-                 Id = c.Id,
-                 Language = c.Language.Code,
-                 Note = c.Note,
-                 Description = c.Description
-             })
-             .ToListAsync();
+                .Where(e => e.CourseId == courseId)
+                .Select(e => e.User.ToUserFullnameItemDto())
+                .ToListAsync();
+
+            return Json(result);
+        }
+
+        [HttpGet]
+        [Route("")]
+        public async Task<IActionResult> GetOwnerOfCourse(int courseId)
+        {
+            var result = await _context.Courses
+                .Where(e => e.Id == courseId)
+                .Select(o => new OwnerInfoDto
+                {
+                    Id = o.Id,
+                    Owner = o.Name,
+                    FilePhoto = o.Owner.FilePhoto,
+                })
+                .ToListAsync();
 
             return Json(result);
         }

@@ -242,7 +242,7 @@ public partial class PractiFlyProfile : Profile
                 m => m.MaterialId))
             .ForMember(dto => dto.Name, par => par.MapFrom(
                 m => m.Material.Name));
-
+        //TODO: ??
         CreateProjection<ThemeMaterial, ThemeMaterialInfoDto>()
             .ForMember(dto => dto.Material, par => par.MapFrom(
                 tm => tm.Material));

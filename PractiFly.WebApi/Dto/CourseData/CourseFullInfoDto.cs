@@ -1,4 +1,6 @@
-﻿namespace PractiFly.WebApi.Dto.CourseData
+﻿using PractiFly.WebApi.Dto.Admin.UserView;
+
+namespace PractiFly.WebApi.Dto.CourseData
 {
     public class CourseFullInfoDto
     {
