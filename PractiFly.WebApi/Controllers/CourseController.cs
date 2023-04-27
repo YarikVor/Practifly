@@ -63,36 +63,7 @@ public class CourseController : Controller
         return Json(result);
     }
     
-    [HttpGet]
-    [Route("course/{courseId:int}/themes")]
-    public async Task<IActionResult> GetCourseThemes(int courseId)
-    {
-        CourseItemWithThemeDto result = await _context
-            .Courses
-            .AsNoTracking()
-            .Where(e => e.Id == courseId)
-            .ProjectTo<CourseItemWithThemeDto>(_mapper.ConfigurationProvider)
-            .FirstAsync();
-
-        return Json(result);
-    }
-
-    //???
-    //TODO: ViewMaterialsList
-    [HttpGet]
-    [Route("course/{courseId:int}/themes")]
-    public async Task<IActionResult> ViewMaterialsList(int materialId)
-    {
-        MaterialsMenuDto[] result = await _context
-            .Materials
-            .AsNoTracking()
-            .Where(e => e.Id == materialId)
-            .ProjectTo<MaterialsMenuDto>(_mapper.ConfigurationProvider)
-            .OrderBy(e => e.Priority)
-            .ToArrayAsync();
-
-        return Json(result);
-    }
+    
 
     [HttpGet]
     [Route("")]

@@ -207,6 +207,7 @@ public partial class PractiFlyProfile : Profile
                             )
                 );
         #endregion
+        
         #region CourseDetails
         CreateProjection<Theme, CourseThemeItemDto>()
             .ForMember(t => t.IsCompleted, par => par.MapFrom(
@@ -235,6 +236,7 @@ public partial class PractiFlyProfile : Profile
         CreateProjection<Material, MaterialDetailsViewDto>()
             .ForMember(dto => dto.MaterialUrl, par => par.MapFrom(
                 m => m.Url));
+        #endregion
 
         #region CourseThemes
 
@@ -333,8 +335,6 @@ public partial class PractiFlyProfile : Profile
                 )
             );
         */
-        
-        #endregion
         CreateProjection<CourseMaterial, MaterialsMenuDto>()
             .ForMember(
                 dto => dto.Id,
