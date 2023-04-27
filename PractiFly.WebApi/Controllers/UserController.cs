@@ -161,46 +161,63 @@ public class UserController : Controller
         return Ok();
     }
 
-    [HttpPost]
-    [Route("")]
-    [Authorize(Roles = UserRoles.Admin)]
 
-    public async Task<IActionResult> UpdateUser([FromBody] UserProfileForAdminCreateDto userDto)
+    public async Task<IActionResult> CreateUserInAdmin(UserProfileForAdminCreateDto userDto)
     {
         const string defaultPassword = "Qwerty_1";
+        var user = new User()
+        {
+            UserName = $"{userDto.Name}_{userDto.Surname}".ToLower(),
+            FirstName = userDto.Name,
+            LastName = userDto.Surname,
+            Email = userDto.Email,
+            PhoneNumber = userDto.Phone,
+            FilePhoto = userDto.FilePhoto
+        };
+        
+        var result = await _userManager.CreateAsync(user, defaultPassword);
 
-        User user = userDto.Id == 0
-            ? new User()
-            : await _userManager.FindByIdAsync(userDto.Id.ToString());
+        if (!result.Succeeded)
+            return BadRequest();
 
+        var roleResult = await _userManager.AddToRoleAsync(user, userDto.Role);
+        
+        if (!roleResult.Succeeded)
+            return BadRequest();
+
+        return Ok();
+    }
+
+    public async Task<IActionResult> UpdateUserInAdmin(UserProfileForAdminUpdateDto userDto)
+    {
+        User user = await _userManager.FindByIdAsync(userDto.Id.ToString());
+        
         if (user == null)
         {
             return NotFound();
         }
-
+        
         user.UserName = userDto.Name;
         user.LastName = userDto.Surname;
         user.Email = userDto.Email;
         user.PhoneNumber = userDto.Phone;
         user.FilePhoto = userDto.FilePhoto;
 
-        var result = (userDto.Id == 0)
-            ? await _userManager.CreateAsync(user, defaultPassword)
-            : await _userManager.UpdateAsync(user);
-
-        await _userManager.RemoveFromRolesAsync(user, UserRoles.RolesEnumerable);
-        var roleResult = await _userManager.AddToRoleAsync(user, userDto.Role);
-
-        if (!roleResult.Succeeded)
-        {
-            return BadRequest(roleResult.Errors);
-        }
-
+        var result = await _userManager.UpdateAsync(user);
+        
         if (!result.Succeeded)
         {
             return BadRequest(result.Errors);
         }
-
+        
+        await _userManager.RemoveFromRolesAsync(user, UserRoles.RolesEnumerable);
+        var roleResult = await _userManager.AddToRoleAsync(user, userDto.Role);
+        
+        if (!roleResult.Succeeded)
+        {
+            return BadRequest(roleResult.Errors);
+        }
+        
         return Ok();
     }
 

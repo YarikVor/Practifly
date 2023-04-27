@@ -7,7 +7,7 @@ namespace PractiFly.WebApi.AutoMappers;
 
 public class CourseThemesProfile : Profile
 {
-    public CourseDetailsProfile(IPractiflyContext _context)
+    public CourseThemesProfile(IPractiflyContext _context)
     {
         #region CourseThemes
 

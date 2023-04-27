@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using PractiFly.WebApi.Attributes;
 
 namespace PractiFly.WebApi.Dto.Profile
 {
@@ -21,11 +22,15 @@ namespace PractiFly.WebApi.Dto.Profile
         [EmailAddress]
         [MaxLength(64)]
         public string? Email { get; set; }
-
+        
+        [TodayDateConstraint]
         public DateOnly Birthday { get; set; }
 
         [Url]
         [MaxLength(2048)]
         public string? FilePhoto { get; set; }
+        
+        [RoleString]
+        public string Role { get; set; } = null!;
     }
 }

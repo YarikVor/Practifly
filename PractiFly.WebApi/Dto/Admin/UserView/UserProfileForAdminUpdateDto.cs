@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using PractiFly.WebApi.Attributes;
 
 namespace PractiFly.WebApi.Dto.Admin.UserView;
 
-public class UserProfileForAdminCreateDto
+public class UserProfileForAdminUpdateDto
 {
+    public int Id { get; set; }
 
     [Required]
     [MaxLength(128)]
@@ -21,7 +22,7 @@ public class UserProfileForAdminCreateDto
     
     [Phone]
     [MaxLength(32)]
-    public string Phone { get; set; } = null!;
+    public string? Phone { get; set; }
     
     [Url]
     [MaxLength(2048)]
