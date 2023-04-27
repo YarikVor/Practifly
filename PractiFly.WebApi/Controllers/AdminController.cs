@@ -39,7 +39,7 @@ namespace PractiFly.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("")]
+        [Route("[action]")]
         public async Task<IActionResult> GetInfoForUsers(int userId)
         {
             var result = await _context.Users
@@ -53,26 +53,19 @@ namespace PractiFly.WebApi.Controllers
                     Phone = u.PhoneNumber,
                     RegistrationDate = u.RegistrationDate,
                     FilePhoto = u.FilePhoto,
-                    Role = _userManager.GetRolesAsync(u).Result.First()
+                    //TODO: Role?
+                    //Role = _userManager.GetRolesAsync(u).Result.First()
                 })
-                .ToListAsync(); ;
+                .FirstOrDefaultAsync();
+
+            if(result == null) { return NotFound(); }
 
             return Json(result);
                
         }
 
-        public async Task<IActionResult> GetUsersOffCourse(int courseId)
-        {
-            var result = await _context.UserCourses
-                .Where(e => e.CourseId == courseId)
-                .Select(e => e.User.ToUserFullnameItemDto())
-                .ToListAsync();
-
-            return Json(result);
-        }
-
         [HttpDelete]
-        [Route("")]
+        [Route("[action]")]
         [Authorize(Roles = UserRoles.Admin)]
         public async Task<IActionResult> DeleteUserByIdAsync(string userId)
         {
@@ -93,8 +86,8 @@ namespace PractiFly.WebApi.Controllers
             return Ok();
         }
 
-        //[HttpPost]
-        //[Route("")]
+        [HttpPost]
+        [Route("[action]")]
         public async Task<IActionResult> CreateUserInAdmin(UserProfileForAdminCreateDto userDto)
         {
             const string defaultPassword = "Qwerty_1";
@@ -120,8 +113,8 @@ namespace PractiFly.WebApi.Controllers
 
             return Ok();
         }
-        //[HttpPost]
-        //[Route("")]
+        [HttpPost]
+        [Route("[action]")]
         public async Task<IActionResult> UpdateUserInAdmin(UserProfileForAdminUpdateDto userDto)
         {
             User user = await _userManager.FindByIdAsync(userDto.Id.ToString());
@@ -156,6 +149,7 @@ namespace PractiFly.WebApi.Controllers
         }
 
         [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> GetUsers(UserFilteringDto filter)
         {
             var users = _userManager.Users.AsNoTracking();
