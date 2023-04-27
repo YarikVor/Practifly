@@ -22,7 +22,7 @@ public class UserControllerTest
     [Fact]
     public async Task Test1()
     {
-        var controller = Mock.Get<CourseController>();
+        var controller = Mock.Get<MyCourseController>();
 
         var result = await controller.UserCourse(1);
 
