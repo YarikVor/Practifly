@@ -20,7 +20,7 @@ public class CourseMaterialsProfile : Profile
                 e => _context
                     .CourseMaterials
                     .Where(cm => cm.MaterialId == e.Id)
-                    .Select(cm => cm.PriorityLevel))) //×è ïðàâèëüíî?
+                    .Select(cm => cm.PriorityLevel))) //Ð§Ð¸ Ð¿Ñ€Ð°Ð²Ð¸Ð»ÑŒÐ½Ð¾?
             //.ForMember(dto => dto.Type, par => par.MapFrom(
             //    )
             ;
