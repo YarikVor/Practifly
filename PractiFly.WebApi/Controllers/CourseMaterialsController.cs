@@ -26,6 +26,8 @@ namespace PractiFly.WebApi.Controllers
             _context = context;
             _mapper = mapper;
         }
+        [HttpPost]
+        [Route("[action]")]
         public async Task<IActionResult> GetCoursesForAdmin()
         {
             var courses = await _context.Courses
@@ -58,14 +60,14 @@ namespace PractiFly.WebApi.Controllers
         }
         //TODO: ?
         [HttpGet]
-        [Route("")]
+        [Route("[action]")]
         //public async Task<IActionResult> GetMaterialAndBlocksForInclusion(int materialId)
-        public async Task<IActionResult> GetMaterialForInclusion(int headingId,int courseId)
+        public async Task<IActionResult> GetMaterialForInclusion(int headingId, int courseId)
         {
             var result = await _context
             .Materials
                 .AsNoTracking()
-                .Where(e => e.Id == materialId)
+                .Where(e => e.Id == 2/*TODO:*/)
                 .ProjectTo<MaterialBlocksDto>(_mapper.ConfigurationProvider)
                 .OrderBy(e => e.Id)
                 .ToListAsync();
@@ -74,7 +76,7 @@ namespace PractiFly.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("")]
+        [Route("[action]")]
         public async Task<IActionResult> GetMaterialBlocks(int materialId)
         {
             var result = await _context

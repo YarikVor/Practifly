@@ -35,6 +35,8 @@ namespace PractiFly.WebApi.Controllers
 
             return Json(result);
         }
+        [HttpGet]
+        [Route("[action]")]
 
         //метод для відображення тем, що знаходяться в курсі
         public async Task<IActionResult> GetThemesFromCourses(int courseId)
@@ -53,7 +55,7 @@ namespace PractiFly.WebApi.Controllers
 
         //TODO: ViewMaterialsList
         [HttpGet]
-        [Route("course/{courseId:int}/themes")]
+        [Route("[action]")]
 
         //метод перегляду списку матеріалів
         public async Task<IActionResult> GetMaterialsList(int materialId)
@@ -70,7 +72,7 @@ namespace PractiFly.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("")]
+        [Route("[action]")]
         public async Task<IActionResult> GetCoursesList(int courseId)
         {
             ThemeItemDto[] result = await _context
@@ -85,7 +87,7 @@ namespace PractiFly.WebApi.Controllers
 
         //метод перегляду інформації щодо певної теми
         [HttpGet]
-        [Route("")]
+        [Route("[action]")]
         public async Task<IActionResult> CourseThemeInfo(int themeId)
         {
             var result = await _context
@@ -108,6 +110,8 @@ namespace PractiFly.WebApi.Controllers
             return Json(result);
         }
 
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> UpdateTheme(int themeId, [FromBody] ThemeDto themeDto)
         {
             if (themeDto == null)
