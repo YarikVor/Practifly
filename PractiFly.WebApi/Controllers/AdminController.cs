@@ -15,6 +15,7 @@ namespace PractiFly.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = UserRoles.Admin)]
     public class AdminController : Controller
     {
         private readonly IHttpContextAccessor _httpContext;
@@ -37,9 +38,14 @@ namespace PractiFly.WebApi.Controllers
             _context = practiflyContext;
 
         }
-
+        /// <summary>
+        /// Method for obtaining information about the selected user from the list
+        /// </summary>
+        /// <param name="userId">ID for receiving information about the selected user from the list</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
+        //[Authorize(Roles = UserRoles.Admin)]
         public async Task<IActionResult> GetInfoForUsers(int userId)
         {
             var result = await _context.Users
@@ -63,10 +69,14 @@ namespace PractiFly.WebApi.Controllers
             return Json(result);
                
         }
-
+        /// <summary>
+        /// Method for deleting a user by his id
+        /// </summary>
+        /// <param name="userId">The ID of the user we want to delete</param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("[action]")]
-        [Authorize(Roles = UserRoles.Admin)]
+        //[Authorize(Roles = UserRoles.Admin)]
         public async Task<IActionResult> DeleteUserByIdAsync(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -85,7 +95,11 @@ namespace PractiFly.WebApi.Controllers
 
             return Ok();
         }
-
+        /// <summary>
+        /// A method for the admin to create a new user with a default password
+        /// </summary>
+        /// <param name="userDto">DTO that has the necessary properties to create a user</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> CreateUserInAdmin(UserProfileForAdminCreateDto userDto)
@@ -113,6 +127,12 @@ namespace PractiFly.WebApi.Controllers
 
             return Ok();
         }
+
+        /// <summary>
+        /// Method to update information about the selected user
+        /// </summary>
+        /// <param name="userDto">DTO that has the necessary properties to update information about the selected user</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> UpdateUserInAdmin(UserProfileForAdminUpdateDto userDto)
@@ -148,6 +168,11 @@ namespace PractiFly.WebApi.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// A method for filtering users, for a more convenient search for them
+        /// </summary>
+        /// <param name="filter">DTO which has the necessary properties for user filtering</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
         public async Task<IActionResult> GetUsers(UserFilteringDto filter)
