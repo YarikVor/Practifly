@@ -20,6 +20,15 @@ public class CourseMaterialsProfile : Profile
                 e => _context
                     .CourseMaterials
                     .Where(cm => cm.MaterialId == e.Id)
+                    .Select(cm => cm.PriorityLevel))) //Чи правильно?
+            //.ForMember(dto => dto.Type, par => par.MapFrom(
+            //    )
+            ;
+        CreateProjection<Material, MaterialFromIncludedBlockViewDto>()
+            .ForMember(dto => dto.PriorityLevel, par => par.MapFrom(
+                e => _context
+                    .CourseMaterials
+                    .Where(cm => cm.MaterialId == e.Id)
                     .Select(cm => cm.PriorityLevel)));
         //CreateProjection<Material, MaterialFromIncludedBlockViewDto>()
         //    .ForMember(dto => dto.PriorityLevel, par => par.MapFrom(
