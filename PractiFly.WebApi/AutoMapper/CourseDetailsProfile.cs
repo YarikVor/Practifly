@@ -23,7 +23,7 @@ public class CourseDetailsProfile : Profile
 
         CreateProjection<Theme, CourseThemeWithMaterialsDto>()
             .ForMember(
-                m => m.CourseMaterialItemDto,
+                m => m.Materials,
                 par => par.MapFrom(
                     m => _context
                         .Themes
@@ -47,7 +47,7 @@ public class CourseDetailsProfile : Profile
             );
 
         CreateProjection<Material, MaterialDetailsViewDto>()
-            .ForMember(dto => dto.MaterialUrl, par => par.MapFrom(m => m.Url));
+            .ForMember(dto => dto.Url, par => par.MapFrom(m => m.Url));
 
         CreateProjection<UserMaterial, CourseMaterialItemDto>()
             .ForMember(dto => dto.Id, par => par.MapFrom(m => m.MaterialId))

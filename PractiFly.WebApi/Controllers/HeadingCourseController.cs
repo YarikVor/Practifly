@@ -18,6 +18,11 @@ public class HeadingCourseController: Controller
         _context = context;
     }
 
+    /// <summary>
+    /// Get headings by begin heading code
+    /// </summary>
+    /// <param name="beginRubricCode"></param>
+    /// <returns></returns>
     [HttpGet]
     [Route("heading")]
     public async Task<IActionResult> Headings([RegularExpression(@"^(?:\d{2})?(?:\.\d{2}){0,2}$")] string beginRubricCode)
