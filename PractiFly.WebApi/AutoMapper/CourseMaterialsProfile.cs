@@ -11,7 +11,7 @@ public class CourseMaterialsProfile : Profile
     public CourseMaterialsProfile(IPractiflyContext _context)
     {
         CreateProjection<Heading, HeadingInfoDto>();
-        CreateProjection<Material, MaterialBlocksDto>() //Id, Name, IsPractical
+        CreateProjection<Material, MaterialForInclusion>() //Id, Name, IsPractical
             .ForMember(dto => dto.IsIncluded, par => par.MapFrom(
                 e => _context
                     .CourseMaterials
