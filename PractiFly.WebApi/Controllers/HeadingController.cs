@@ -42,7 +42,7 @@ public class HeadingController : Controller
     {
         var request = _context.Headings.AsNoTracking();
 
-        if (udc != null)
+        if (code != null)
             request = request.Where(e => e.Code == code);
         else if (headingId != null)
             request = request.Where(e => e.Id == headingId);
