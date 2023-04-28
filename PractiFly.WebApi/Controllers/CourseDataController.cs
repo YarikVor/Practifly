@@ -26,6 +26,10 @@ namespace PractiFly.WebApi.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Returns a list of courses that can be accessed by an admin, each represented by an ID and a name.
+        /// </summary>
+        /// <returns>A JSON-encoded representation of the list of courses.</returns>
         [HttpGet]
         [Route("[action]")]
         public async Task<IActionResult> GetCoursesForAdmin()
@@ -41,6 +45,10 @@ namespace PractiFly.WebApi.Controllers
             return Json(courses);
         }
 
+        /// <summary>
+        /// Returns a list of course information.
+        /// </summary>
+        /// <returns>A JSON-encoded representation of the list of course information.</returns>
         [HttpGet]
         [Route("[action]")]
         public async Task<IActionResult> GetCourseInfo()
@@ -59,6 +67,11 @@ namespace PractiFly.WebApi.Controllers
             return Json(result);
         }
 
+        /// <summary>
+        /// Returns a list of users who are enrolled in the course identified by the specified Id.
+        /// </summary>
+        /// <param name="courseId">Id of the course.</param>
+        /// <returns>A JSON-encoded representation of the list of users.</returns>
         [HttpGet]
         [Route("[action]")]
         public async Task<IActionResult> GetUsersOffCourse(int courseId)
@@ -71,6 +84,11 @@ namespace PractiFly.WebApi.Controllers
             return Json(result);
         }
 
+        /// <summary>
+        /// Returns the owner information for a course identified by the specified courseId.
+        /// </summary>
+        /// <param name="courseId">Id of the course.</param>
+        /// <returns>A JSON-encoded representation of the owner information.</returns>
         [HttpGet]
         [Route("[action]")]
         public async Task<IActionResult> GetOwnerOfCourse(int courseId)
@@ -88,6 +106,11 @@ namespace PractiFly.WebApi.Controllers
             return Json(result);
         }
 
+        /// <summary>
+        /// Creates a new course using the provided course data.
+        /// </summary>
+        /// <param name="courseDto">A data transfer object containing the course information.</param>
+        /// <returns>An HTTP response indicating the result of the operation.</returns>
         [HttpGet]
         [Route("[action]")]
         public async Task<IActionResult> CreateCourse(CreateCourseDto courseDto)
@@ -104,12 +127,22 @@ namespace PractiFly.WebApi.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Updates the specified course with the details provided in the <paramref name="courseDto"/> object.
+        /// </summary>
+        /// <param name="courseDto">A data transfer object containing the course information.</param>
+        /// <response code="200">Operation is successful, an HTTP 200 OK status code is returned.</response>
+        /// <response code="404">Otherwise, a HTTP Not Found response.</response>
+        /// <returns>Returns HTTP status response.</returns>
         [HttpGet]
         [Route("[action]")]
         public async Task<IActionResult> EditCourse(CreateCourseDto courseDto)
         {
             var course = await _context.Courses.FirstOrDefaultAsync(e => e.Id == courseDto.CourseId);
-            if (course == null) { return NotFound(); }
+            
+            if (course == null) { 
+                return NotFound(); 
+            }
 
             course.Id = courseDto.CourseId;
             course.Language = _context.Languages.First(l => (l.Code == courseDto.Language));
@@ -120,9 +153,17 @@ namespace PractiFly.WebApi.Controllers
 
             _context.Courses.Update(course);
             await _context.SaveChangesAsync();
+            
             return Ok();
         }
 
+        /// <summary>
+        /// Deletes a course identified by the specified Id.
+        /// </summary>
+        /// <param name="courseId">ID of the course to be deleted.</param>
+        /// <response code="200">Course was deleted succesfully.</response>
+        /// <response code="404">Delete error.</response>
+        /// <returns>An HTTP response status code.</returns>
         [HttpDelete]
         [Route("[action]")]
         public async Task<IActionResult> DeleteCourse(int courseId)

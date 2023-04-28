@@ -26,6 +26,13 @@ namespace PractiFly.WebApi.Controllers
             _context = context;
             _mapper = mapper;
         }
+
+        /// <summary>
+        /// Returns a list of courses for an admin user.
+        /// </summary>
+        /// <returns>A JSON-encoded representation of the list of courses, including only the course ID and name.</returns>
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> GetCoursesForAdmin()
         {
             var courses = await _context.Courses
@@ -39,6 +46,11 @@ namespace PractiFly.WebApi.Controllers
             return Json(courses);
         }
 
+        /// <summary>
+        /// Returns a list of course headings associated with a course identified by the specified Id.
+        /// </summary>
+        /// <param name="courseId">Id of the course.</param>
+        /// <returns>A JSON-encoded representation of the list of course headings.</returns>
         [HttpGet]
         [Route("course/{courseId:int}/heading")]
         public async Task<IActionResult> CourseHeading(int courseId)
@@ -56,6 +68,7 @@ namespace PractiFly.WebApi.Controllers
 
             return Json(result);
         }
+
         //TODO: ?
         [HttpGet]
         [Route("")]
@@ -73,6 +86,11 @@ namespace PractiFly.WebApi.Controllers
             return Json(result);
         }
 
+        /// <summary>
+        /// Returns a list of course headings associated with a course identified by the specified courseId.
+        /// </summary>
+        /// <param name="materialId">Id of the material.</param>
+        /// <returns>A JSON-encoded representation of the list of course headings.</returns>
         [HttpGet]
         [Route("")]
         public async Task<IActionResult> GetMaterialBlocks(int materialId)

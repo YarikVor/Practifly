@@ -20,9 +20,14 @@ namespace PractiFly.WebApi.Controllers
             _mapper = mapper;
         }
 
+
+        /// <summary>
+        /// Returns a list of themes associated with a course identified by the special Id.
+        /// </summary>
+        /// <param name="courseId">ID of the course.</param>
+        /// <returns>A JSON-encoded representation of the list of themes.</returns>
         [HttpGet]
         [Route("course/{courseId:int}/themes")]
-
         //метод, повертає список тем в курсі
         public async Task<IActionResult> GetCourseThemes(int courseId)
         {
@@ -36,7 +41,13 @@ namespace PractiFly.WebApi.Controllers
             return Json(result);
         }
 
-        //метод для відображення тем, що знаходяться в курсі
+        /// <summary>
+        /// Returns a list of themes associated with a course identified by the specified Id.
+        /// </summary>
+        /// <param name="courseId">ID of the course.</param>
+        /// <returns>An HTTP response indicating success and a 
+        /// JSON-encoded representation of the list of themes, 
+        /// or a "Not Found" error if the specified ID does not exist.</returns>
         public async Task<IActionResult> GetThemesFromCourses(int courseId)
         {
             var result = await _context.Themes.FindAsync(courseId);
@@ -51,11 +62,14 @@ namespace PractiFly.WebApi.Controllers
             return Ok(themes);
         }
 
+        /// <summary>
+        /// Returns a list of materials associated with a material identified by the specified Id.
+        /// </summary>
+        /// <param name="materialId">ID of the material.</param>
+        /// <returns>A JSON-encoded representation of the list of materials.</returns>
         //TODO: ViewMaterialsList
         [HttpGet]
         [Route("course/{courseId:int}/themes")]
-
-        //метод перегляду списку матеріалів
         public async Task<IActionResult> GetMaterialsList(int materialId)
         {
             var result = await _context
@@ -69,6 +83,11 @@ namespace PractiFly.WebApi.Controllers
             return Json(result);
         }
 
+        /// <summary>
+        /// Returns a list of courses associated with a course identified by the specified Id.
+        /// </summary>
+        /// <param name="courseId">ID of the course.</param>
+        /// <returns>A JSON-encoded representation of the list of courses.</returns>
         [HttpGet]
         [Route("")]
         public async Task<IActionResult> GetCoursesList(int courseId)
@@ -83,7 +102,12 @@ namespace PractiFly.WebApi.Controllers
             return Json(result);
         }
 
-        //метод перегляду інформації щодо певної теми
+        /// <summary>
+        /// Returns information about a specific theme identified by the specified Id.
+        /// </summary>
+        /// <param name="themeId">Id of the theme.</param>
+        /// <returns>An HTTP response indicating success and a JSON-encoded representation 
+        /// of the theme information, or a "Not Found" error if the specified theme ID does not exist.</returns>
         [HttpGet]
         [Route("")]
         public async Task<IActionResult> CourseThemeInfo(int themeId)
@@ -108,6 +132,12 @@ namespace PractiFly.WebApi.Controllers
             return Json(result);
         }
 
+        /// <summary>
+        /// Updates an existing theme identified by the specified Id with the specified Data Transfer Object.
+        /// </summary>
+        /// <param name="themeId">Id of the theme.</param>
+        /// <param name="themeDto">The updated theme data as a JSON-encoded ThemeDto object.</param>
+        /// <returns>An HTTP response indicating success or failure of the update operation.</returns>
         public async Task<IActionResult> UpdateTheme(int themeId, [FromBody] ThemeDto themeDto)
         {
             if (themeDto == null)

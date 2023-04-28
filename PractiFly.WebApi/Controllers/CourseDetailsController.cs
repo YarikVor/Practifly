@@ -16,7 +16,16 @@ public class CourseDetailsController : Controller
     {
         _context = context;
     }
-    
+
+    /// <summary>
+    /// Retrieves a list of themes associated with a course identified 
+    /// by the specified courseId, as well as information about whether 
+    /// or not each theme has been completed by the current user.
+    /// </summary>
+    /// <param name="courseId">Id of the course.</param>
+    /// <returns>A JSON-encoded representation of the list of themes, with completion information included for each theme.</returns>
+    [HttpGet]
+    [Route("[action]")]
     public async Task<IActionResult> GetThemesInUserCourse(int courseId)
     {
         var userId = User.GetUserIdInt();
@@ -46,6 +55,13 @@ public class CourseDetailsController : Controller
         return Json(themes);
     }
 
+    /// <summary>
+    /// Retrieves a list of materials associated with a user and theme identified by the specified Id.
+    /// </summary>
+    /// <param name="themeId">Id of the theme.</param>
+    /// <returns>A JSON-encoded representation of the list of materials associated with the user and theme.</returns>
+    [HttpGet]
+    [Route("")]
     public async Task<IActionResult> GetMaterialsInUserThemes(int themeId)
     {
         var userId = User.GetUserIdInt();
@@ -80,9 +96,17 @@ public class CourseDetailsController : Controller
         return Json(result);
     }
 
+    /// <summary>
+    /// Returns details about a material identified by the specified Id`s.
+    /// </summary>
+    /// <param name="themeId">Id of the theme.</param>
+    /// <param name="materialId">Id of the material.</param>
+    /// <returns>A JSON-encoded representation of the material details.</returns>
+    [HttpGet]
+    [Route("")]
     public async Task<IActionResult> GetMaterialInfo(int themeId, int materialId)
     {
-        var material = _context
+        var material = await _context
             .Materials
             .Where(e => e.Id == materialId)
             .Select(e => new MaterialDetailsViewDto()
@@ -97,7 +121,7 @@ public class CourseDetailsController : Controller
                     .Select(e => e.Description)
                     .FirstOrDefault()
             })
-            .FirstOrDefault();
+            .FirstOrDefaultAsync();
 
         if (material == null)
             return NotFound();
@@ -105,6 +129,13 @@ public class CourseDetailsController : Controller
         return Json(material);
     }
 
+    /// <summary>
+    /// Returns information about the user's progress in a specific material.
+    /// </summary>
+    /// <param name="materialId">Id of the material.</param>
+    /// <returns>A JSON-encoded representation of the user's progress information.</returns>
+    [HttpGet]
+    [Route("")]
     public async Task<IActionResult> GetUserInfoInMaterial(int materialId)
     {
         var userId = User.GetUserIdInt();
@@ -125,7 +156,18 @@ public class CourseDetailsController : Controller
         return userMaterial == null ? NotFound() : Json(userMaterial);
     }
 
-    
+    /// <summary>
+    /// Sets information about a user's progress on a specified material identified by the materialId parameter.
+    /// </summary>
+    /// <param name="materialId">Id of the material.</param>
+    /// <param name="dto">A Data Transfer Object which containing information about the user's progress on the material.</param>
+    /// <returns>
+    /// Returns an IActionResult that represents the result of the operation. 
+    /// </returns>
+    /// <response code="200">Operation is successful, HTTP OK status code is returned.</response>
+    /// <response code="404">The specified user material does not exist, HTTP 404 Not Found status code is returned.</response>
+    [HttpGet]
+    [Route("")]
     public async Task<IActionResult> SetMaterialInfo(int materialId, UserMaterialInfoDto dto)
     {
         var userId = User.GetUserIdInt();

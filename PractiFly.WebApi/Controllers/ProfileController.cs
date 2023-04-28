@@ -29,15 +29,20 @@ public class ProfileController: Controller
         _userManager = userManager;
     }
 
+    /// <summary>
+    /// Returns profile information for the user with the specified userId.
+    /// </summary>
+    /// <param name="userId">Id of the user.</param>
+    /// <returns>A JSON-encoded representation of the user's profile information.</returns>
     [HttpGet]
     [Route("[action]")]
     public async Task<IActionResult> GetUserProfileInfo(int userId)
     {
-        var result = _context
+        var result = await _context
             .Users
             .Where(e => e.Id == userId)
             .ProjectTo<UserInfoDto>(_configurationProvider)
-            .FirstOrDefault();
+            .FirstOrDefaultAsync();
         
         if(result == null)
             return NotFound();
@@ -45,6 +50,11 @@ public class ProfileController: Controller
         return Json(result);
     }
 
+    /// <summary>
+    /// Updates the profile information for the currently authenticated user.
+    /// </summary>
+    /// <param name="userDto">A Data Transfer Object containing the updated user information.</param>
+    /// <returns>An IActionResult representing the result of the update operation.</returns>
     [Authorize]
     [Route("[action]")]
     [HttpGet]

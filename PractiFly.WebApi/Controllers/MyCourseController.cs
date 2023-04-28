@@ -21,6 +21,11 @@ namespace PractiFly.WebApi.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Returns a list of courses and their statuses associated with a user identified by the specified Id.
+        /// </summary>
+        /// <param name="userId">Id of the user.</param>
+        /// <returns>A JSON-encoded representation of the list of courses and their statuses.</returns>
         [HttpGet]
         [Route("{userId:int}/usercourse")]
         public async Task<IActionResult> UserCourse(int userId)

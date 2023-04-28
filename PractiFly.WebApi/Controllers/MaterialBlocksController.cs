@@ -20,14 +20,19 @@ namespace PractiFly.WebApi.Controllers
             _context = context;
             _mapper = mapper;
         }
-        
+
         //метод для відображення ієрархії рубрик дублюється з HeadingController
-         
+
         /*
          Місце для методу
          */
 
         //метод для відображення матеріалів, що належать рубриці 
+        /// <summary>
+        /// Returns a list of materials associated with a heading identified by the specified Id.
+        /// </summary>
+        /// <param name="materialId">Id of the material</param>
+        /// <returns>A JSON-encoded representation of the list of materials.</returns>
         [HttpGet]
         [Route("")]
         public async Task<IActionResult> GetMaterialsFromHeading(int materialId)
@@ -48,6 +53,11 @@ namespace PractiFly.WebApi.Controllers
             return Json(result);
         }
 
+        /// <summary>
+        /// Creates a new material block with the specified properties.
+        /// </summary>
+        /// <param name="blockDto">A data transfer object containing the properties of the new material block.</param>
+        /// <returns>A JSON-encoded representation of the new material block.</returns>
         [HttpGet]
         [Route("[action]")]
         //TODO: має бути створення блоку, але тут створюється матеріал
@@ -66,6 +76,14 @@ namespace PractiFly.WebApi.Controllers
             return Json(material);
         }
 
+        /// <summary>
+        /// Returns a list of material blocks associated with a block identified by the specified Id. 
+        /// </summary>
+        /// <remarks>
+        /// When a block is clicked, the method displays the materials that are included in the block, as well as those that are not included in any block.
+        /// </remarks>
+        /// <param name="blockId">Id of the material block.</param>
+        /// <returns>A JSON-encoded representation of the list of material blocks.</returns>
         [HttpGet]
         [Route("[action]")]
         public async Task<IActionResult> GetBlocksWithMaterials(int blockId)

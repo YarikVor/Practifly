@@ -27,6 +27,11 @@ public class CourseController : Controller
         _mapper = mapper;
     }
 
+    /// <summary>
+    /// Retrieves an array of courses associated with a user identified by the specified Id, or all courses if no Id is provided.
+    /// </summary>
+    /// <param name="userId">Id of the user.</param>
+    /// <returns>A JSON-encoded representation of the array of courses.</returns>
     [HttpGet]
     [Route("user/{userId:int?}/courses")]
     public async Task<IActionResult> UserCourses(int? userId = null)
@@ -48,12 +53,15 @@ public class CourseController : Controller
         
         return Json(result);
     }
-    
-    
 
+
+    /// <summary>
+    /// Returns a list of headings included in the course identified by the specified Id.
+    /// </summary>
+    /// <param name="courseId">Id of the course.</param>
+    /// <returns>A JSON-encoded representation of the list of included headings.</returns>
     [HttpGet]
     [Route("[action]")]
-
     public async Task<IActionResult> GetIncludedHeadings(int courseId)
     {
         //TODO: Check included headings to courses in HeadingCourseItemDto
@@ -67,21 +75,31 @@ public class CourseController : Controller
         return Json(result);
     }
 
+    //TODO: ???
+    /// <summary>
+    /// Returns detailed information about a material identified by the specified Id.
+    /// </summary>
+    /// <param name="themeMaterialId">Id of the theme material</param>
+    /// <returns>A JSON-encoded representation of the material details.</returns>
     [HttpGet]
     [Route("[action]")]
-    public async Task<IActionResult> ViewMaterialDetails(int themeMateralId)
+    public async Task<IActionResult> ViewMaterialDetails(int themeMaterialId)
     {
         MaterialDetailsViewDto result = await _context
             .Courses
             .AsNoTracking()
-            .Where(e => e.Id == themeMateralId)
+            .Where(e => e.Id == themeMaterialId)
             .ProjectTo<MaterialDetailsViewDto>(_mapper.ConfigurationProvider)
             .FirstAsync();
 
         return Json(result);
     }
 
-
+    /// <summary>
+    /// Returns an array of materials associated with a theme identified by the specified themeId.
+    /// </summary>
+    /// <param name="themeId">Id of the theme.</param>
+    /// <returns>A JSON-encoded representation of the array of materials.</returns>
     [HttpGet]
     [Route("[action]")]
     public async Task<IActionResult> GetMaterialsInTheme(int themeId)

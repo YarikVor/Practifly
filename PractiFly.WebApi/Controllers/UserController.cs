@@ -42,6 +42,15 @@ public class UserController : Controller
 
     }
 
+    /// <summary>
+    ///  Creates a new user account based on the provided registration data, 
+    ///  adds the user to the 'User' role, 
+    ///  and returns an authentication token for the newly-created user.
+    /// </summary>
+    /// <param name="registrationDto">A Data Transfer Object, containing user registrate information.</param>
+    /// <returns>HTTP response status code.</returns>
+    /// <response code="200">An HTTP OK result containing a JSON-encoded authentication token if the user account was created successfully</response>     
+    /// <response code="400">HTTP BadRequest result</response>
     [HttpPost]
     [Route("[action]")]
     [AllowAnonymous]
@@ -64,7 +73,13 @@ public class UserController : Controller
         return Ok(token);
     }
 
-    
+    /// <summary>
+    /// Logs in a user with the specified email and password credentials.
+    /// </summary>
+    /// <param name="loginDto">The login Data Transfer Object for the user.</param>
+    /// <returns></returns>
+    /// <response code="200">Returns an access token for the user.</response>     
+    /// <response code="400">BadRequest result.</response>
 
     [HttpPost]
     [Route("[action]")]
@@ -82,6 +97,12 @@ public class UserController : Controller
         return BadRequest();
     }
 
+    /// <summary>
+    /// Generates a JWT (JSON Web Token) for the specified user with the given role.
+    /// </summary>
+    /// <param name="user">The User object for whom the token is generated.</param>
+    /// <param name="role">The role assigned to the user.</param>
+    /// <returns>A JWT that contains the specified user's ID and assigned role.</returns>
     private string GenerateToken(User user, string role)
     {
         IEnumerable<Claim> claims = new[]
@@ -93,6 +114,10 @@ public class UserController : Controller
         return _tokenGenerator.GenerateToken(claims);
     }
 
+    /// <summary>
+    /// Refreshes the authentication token for the current user.
+    /// </summary>
+    /// <returns>An HTTP 200 OK response containing a new authentication token.</returns>
     [HttpGet]
     [Route("[action]")]
     [Authorize(AuthenticationSchemes = "Bearer")]
@@ -107,9 +132,10 @@ public class UserController : Controller
         return Ok(GenerateToken(user, role));
     }
 
-
-    
-
+    /// <summary>
+    /// Deletes the user associated with the current request's token.
+    /// </summary>
+    /// <returns>An IActionResult indicating success or failure.</returns>
     [HttpDelete]
     [Route("[action]")]
     [Authorize]
@@ -142,8 +168,4 @@ public class UserController : Controller
 
         return Ok();
     }
-
-
-    
-
 }
