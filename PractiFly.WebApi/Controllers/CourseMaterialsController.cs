@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
+using PractiFly.DbEntities.Materials;
 using PractiFly.WebApi.Dto.CourseData;
+using PractiFly.WebApi.Dto.CourseMaterials;
+using PractiFly.WebApi.Dto.CourseThemes;
 using PractiFly.WebApi.Dto.Heading;
 using System.ComponentModel.DataAnnotations;
 
@@ -11,6 +15,7 @@ namespace PractiFly.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //TODO: CourseMAterialController
     public class CourseMaterialsController : Controller
     {
         private readonly IPractiflyContext _context;
@@ -34,27 +39,53 @@ namespace PractiFly.WebApi.Controllers
             return Json(courses);
         }
 
-        //[HttpGet]
-        //[Route("course/{courseId:int}/heading")]
-        //public async Task<IActionResult> CourseHeading(int courseId, [RegularExpression(@"^(?:\d{2})?(?:\.\d{2}){0,2}$")] string beginRubricCode)
-        //{
-        //    string patternSubRubricCode = string.IsNullOrEmpty(beginRubricCode)
-        //        ? "__"
-        //        : $"{beginRubricCode}.__";
+        [HttpGet]
+        [Route("course/{courseId:int}/heading")]
+        public async Task<IActionResult> CourseHeading(int courseId)
+        {
+            var result = await _context.CourseHeadings
+                .AsNoTracking()
+                .Where(e => e.CourseId == courseId)
+                .Select(e => new CourseHeadingInfoDto()
+                {
+                    Id = e.Heading.Id,
+                    Code = e.Heading.Code,
+                    Name = e.Heading.Name,
+                })
+                .ToListAsync();
 
-        //    var result = await _context.Headings
-        //        .AsNoTracking()
-        //        .Where(e => EF.Functions.Like(e.Code, patternSubRubricCode))
-        //        .Select(e => new HeadingItemInCourseDto()
-        //        {
-        //            Code = e.Code,
-        //            Name = e.Name,
-        //            Id = e.Id,
-        //            IsIncluded = _context.CourseHeadings.Any(ch => ch.CourseId == courseId)
-        //        })
-        //        .ToListAsync();
+            return Json(result);
+        }
+        //TODO: ?
+        [HttpGet]
+        [Route("")]
+        //public async Task<IActionResult> GetMaterialAndBlocksForInclusion(int materialId)
+        public async Task<IActionResult> GetMaterialForInclusion(int headingId,int courseId)
+        {
+            var result = await _context
+            .Materials
+                .AsNoTracking()
+                .Where(e => e.Id == materialId)
+                .ProjectTo<MaterialBlocksDto>(_mapper.ConfigurationProvider)
+                .OrderBy(e => e.Id)
+                .ToListAsync();
 
-        //    return Json(result);
-        //}
+            return Json(result);
+        }
+
+        [HttpGet]
+        [Route("")]
+        public async Task<IActionResult> GetMaterialBlocks(int materialId)
+        {
+            var result = await _context
+            .Materials
+                .AsNoTracking()
+                .Where(e => e.Id == materialId)
+                .ProjectTo<MaterialBlocksDto>(_mapper.ConfigurationProvider)
+                .OrderBy(e => e.Id)
+                .ToListAsync();
+
+            return Json(result);
+        }
     }
 }
