@@ -13,7 +13,7 @@ using PractiFly.WebApi.Dto.CourseThemes;
 
 namespace PractiFly.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     [ApiController]
     public class CourseDataController : Controller
     {
@@ -26,32 +26,37 @@ namespace PractiFly.WebApi.Controllers
             _mapper = mapper;
         }
 
+
         /// <summary>
         /// Returns a list of courses that can be accessed by an admin, each represented by an ID and a name.
         /// </summary>
         /// <returns>A JSON-encoded representation of the list of courses.</returns>
-        [HttpGet]
-        [Route("[action]")]
-        public async Task<IActionResult> GetCoursesForAdmin()
-        {
-            var courses = await _context.Courses
-            .Select(c => new CourseItemDto
-            {
-                Id = c.Id,
-                Name = c.Name
-            })
-            .ToListAsync();
 
-            return Json(courses);
-        }
+        //already realized
+
+        //[HttpGet]
+        //[Route("courses/all")] 
+        //public async Task<IActionResult> GetCoursesForAdmin()
+        //{
+        //    var courses = await _context.Courses
+        //    .Select(c => new CourseItemDto
+        //    {
+        //        Id = c.Id,
+        //        Name = c.Name
+        //    })
+        //    .ToListAsync();
+
+        //    return Json(courses);
+        //}
 
         /// <summary>
         /// Returns a list of course information.
         /// </summary>
         /// <returns>A JSON-encoded representation of the list of course information.</returns>
+        //TODO: Глянути тут, має бути інфа про один курс.
         [HttpGet]
-        [Route("[action]")]
-        public async Task<IActionResult> GetCourseInfo()
+        [Route("course")]
+        public async Task<IActionResult> GetCourseInfo(int courseId)
         {
             var result = await _context.Courses
              .Select(c => new CourseInfoDto
@@ -62,7 +67,7 @@ namespace PractiFly.WebApi.Controllers
                  Description = c.Description,
                  Note = c.Note,
              })
-             .ToListAsync();
+             .FirstOrDefaultAsync();
 
             return Json(result);
         }
@@ -73,8 +78,8 @@ namespace PractiFly.WebApi.Controllers
         /// <param name="courseId">Id of the course.</param>
         /// <returns>A JSON-encoded representation of the list of users.</returns>
         [HttpGet]
-        [Route("[action]")]
-        public async Task<IActionResult> GetUsersOffCourse(int courseId)
+        [Route("course/users")]
+        public async Task<IActionResult> GetUsersOfCourse(int courseId)
         {
             var result = await _context.UserCourses
                 .Where(e => e.CourseId == courseId)
@@ -90,7 +95,8 @@ namespace PractiFly.WebApi.Controllers
         /// <param name="courseId">Id of the course.</param>
         /// <returns>A JSON-encoded representation of the owner information.</returns>
         [HttpGet]
-        [Route("[action]")]
+        [Route("course/owner")]
+        //TODO: має бути один вчитель, не список.
         public async Task<IActionResult> GetOwnerOfCourse(int courseId)
         {
             var result = await _context.Courses
@@ -111,8 +117,8 @@ namespace PractiFly.WebApi.Controllers
         /// </summary>
         /// <param name="courseDto">A data transfer object containing the course information.</param>
         /// <returns>An HTTP response indicating the result of the operation.</returns>
-        [HttpGet]
-        [Route("[action]")]
+        [HttpPost]
+        [Route("course")]
         public async Task<IActionResult> CreateCourse(CreateCourseDto courseDto)
         {
             var course = new Course()
@@ -135,7 +141,7 @@ namespace PractiFly.WebApi.Controllers
         /// <response code="404">Otherwise, a HTTP Not Found response.</response>
         /// <returns>Returns HTTP status response.</returns>
         [HttpGet]
-        [Route("[action]")]
+        [Route("course/edit")]
         public async Task<IActionResult> EditCourse(CreateCourseDto courseDto)
         {
             var course = await _context.Courses.FirstOrDefaultAsync(e => e.Id == courseDto.CourseId);
@@ -165,7 +171,7 @@ namespace PractiFly.WebApi.Controllers
         /// <response code="404">Delete error.</response>
         /// <returns>An HTTP response status code.</returns>
         [HttpDelete]
-        [Route("[action]")]
+        [Route("course")]
         public async Task<IActionResult> DeleteCourse(int courseId)
         {
             var course = await _context.Courses.FirstOrDefaultAsync(e => e.Id == courseId);
