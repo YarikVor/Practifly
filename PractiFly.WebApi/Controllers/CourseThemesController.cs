@@ -28,6 +28,7 @@ namespace PractiFly.WebApi.Controllers
         /// <returns>A JSON-encoded representation of the list of themes.</returns>
         [HttpGet]
         [Route("course/{courseId:int}/themes")]
+
         //метод, повертає список тем в курсі
         public async Task<IActionResult> GetCourseThemes(int courseId)
         {
@@ -48,6 +49,8 @@ namespace PractiFly.WebApi.Controllers
         /// <returns>An HTTP response indicating success and a 
         /// JSON-encoded representation of the list of themes, 
         /// or a "Not Found" error if the specified ID does not exist.</returns>
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> GetThemesFromCourses(int courseId)
         {
             var result = await _context.Themes.FindAsync(courseId);
@@ -69,7 +72,7 @@ namespace PractiFly.WebApi.Controllers
         /// <returns>A JSON-encoded representation of the list of materials.</returns>
         //TODO: ViewMaterialsList
         [HttpGet]
-        [Route("course/{courseId:int}/themes")]
+        [Route("[action]")]
         public async Task<IActionResult> GetMaterialsList(int materialId)
         {
             var result = await _context
@@ -89,7 +92,7 @@ namespace PractiFly.WebApi.Controllers
         /// <param name="courseId">ID of the course.</param>
         /// <returns>A JSON-encoded representation of the list of courses.</returns>
         [HttpGet]
-        [Route("")]
+        [Route("[action]")]
         public async Task<IActionResult> GetCoursesList(int courseId)
         {
             ThemeItemDto[] result = await _context
@@ -109,7 +112,7 @@ namespace PractiFly.WebApi.Controllers
         /// <returns>An HTTP response indicating success and a JSON-encoded representation 
         /// of the theme information, or a "Not Found" error if the specified theme ID does not exist.</returns>
         [HttpGet]
-        [Route("")]
+        [Route("[action]")]
         public async Task<IActionResult> CourseThemeInfo(int themeId)
         {
             var result = await _context
@@ -138,6 +141,8 @@ namespace PractiFly.WebApi.Controllers
         /// <param name="themeId">Id of the theme.</param>
         /// <param name="themeDto">The updated theme data as a JSON-encoded ThemeDto object.</param>
         /// <returns>An HTTP response indicating success or failure of the update operation.</returns>
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> UpdateTheme(int themeId, [FromBody] ThemeDto themeDto)
         {
             if (themeDto == null)
