@@ -61,7 +61,7 @@ public class CourseDetailsController : Controller
     /// <param name="themeId">Id of the theme.</param>
     /// <returns>A JSON-encoded representation of the list of materials associated with the user and theme.</returns>
     [HttpGet]
-    [Route("")]
+    [Route("[action]")]
     public async Task<IActionResult> GetMaterialsInUserThemes(int themeId)
     {
         var userId = User.GetUserIdInt();
@@ -103,7 +103,7 @@ public class CourseDetailsController : Controller
     /// <param name="materialId">Id of the material.</param>
     /// <returns>A JSON-encoded representation of the material details.</returns>
     [HttpGet]
-    [Route("")]
+    [Route("[action]")]
     public async Task<IActionResult> GetMaterialInfo(int themeId, int materialId)
     {
         var material = await _context
@@ -135,7 +135,7 @@ public class CourseDetailsController : Controller
     /// <param name="materialId">Id of the material.</param>
     /// <returns>A JSON-encoded representation of the user's progress information.</returns>
     [HttpGet]
-    [Route("")]
+    [Route("[action]")]
     public async Task<IActionResult> GetUserInfoInMaterial(int materialId)
     {
         var userId = User.GetUserIdInt();
@@ -167,7 +167,7 @@ public class CourseDetailsController : Controller
     /// <response code="200">Operation is successful, HTTP OK status code is returned.</response>
     /// <response code="404">The specified user material does not exist, HTTP 404 Not Found status code is returned.</response>
     [HttpGet]
-    [Route("")]
+    [Route("[action]")]
     public async Task<IActionResult> SetMaterialInfo(int materialId, UserMaterialInfoDto dto)
     {
         var userId = User.GetUserIdInt();

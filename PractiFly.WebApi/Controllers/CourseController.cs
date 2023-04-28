@@ -15,7 +15,7 @@ using PractiFly.WebApi.Dto.MyCourse;
 namespace PractiFly.WebApi.Controllers;
 
 [ApiController]
-[Route("[controller]/[action]")]
+[Route("api")]
 public class CourseController : Controller
 {
     private readonly IPractiflyContext _context;
@@ -26,18 +26,18 @@ public class CourseController : Controller
         _context = context;
         _mapper = mapper;
     }
-
+    
     /// <summary>
-    /// Retrieves an array of courses associated with a user identified by the specified Id, or all courses if no Id is provided.
+    /// Retrieves an array of courses associated with a owner (user) identified by the specified Id, or all courses if no Id is provided.
     /// </summary>
-    /// <param name="userId">Id of the user.</param>
+    /// <param name="ownerId">Id of the owner (user).</param>
     /// <returns>A JSON-encoded representation of the array of courses.</returns>
     [HttpGet]
-    [Route("user/{userId:int?}/courses")]
-    public async Task<IActionResult> UserCourses(int? userId = null)
+    [Route("course/all")]
+    public async Task<IActionResult> Courses(int? ownerId = null)
     {
         CourseItemDto[] result;
-        if (!userId.HasValue)
+        if (!ownerId.HasValue)
         {
             result = await _context.Courses.AsNoTracking()
                 .ProjectTo<CourseItemDto>(_mapper.ConfigurationProvider)
@@ -46,22 +46,21 @@ public class CourseController : Controller
         else
         {
             result = await _context.Courses.AsNoTracking()
-                .Where(e => e.OwnerId == userId)
+                .Where(e => e.OwnerId == ownerId)
                 .ProjectTo<CourseItemDto>(_mapper.ConfigurationProvider)
                 .ToArrayAsync();
         }
         
         return Json(result);
     }
-
-
+    
     /// <summary>
     /// Returns a list of headings included in the course identified by the specified Id.
     /// </summary>
     /// <param name="courseId">Id of the course.</param>
     /// <returns>A JSON-encoded representation of the list of included headings.</returns>
     [HttpGet]
-    [Route("[action]")]
+    [Route("course/headings")]
     public async Task<IActionResult> GetIncludedHeadings(int courseId)
     {
         //TODO: Check included headings to courses in HeadingCourseItemDto
@@ -82,7 +81,7 @@ public class CourseController : Controller
     /// <param name="themeMaterialId">Id of the theme material</param>
     /// <returns>A JSON-encoded representation of the material details.</returns>
     [HttpGet]
-    [Route("[action]")]
+    [Route("material")]
     public async Task<IActionResult> ViewMaterialDetails(int themeMaterialId)
     {
         MaterialDetailsViewDto result = await _context
@@ -101,7 +100,7 @@ public class CourseController : Controller
     /// <param name="themeId">Id of the theme.</param>
     /// <returns>A JSON-encoded representation of the array of materials.</returns>
     [HttpGet]
-    [Route("[action]")]
+    [Route("theme/materials")]
     public async Task<IActionResult> GetMaterialsInTheme(int themeId)
     {
         MaterialsMenuDto[] result = await
