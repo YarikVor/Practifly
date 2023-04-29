@@ -51,6 +51,7 @@ namespace PractiFly.WebApi.Controllers
         /// </summary>
         /// <param name="courseId">Id of the course.</param>
         /// <returns>A JSON-encoded representation of the list of course headings.</returns>
+        /// <response code="200"></response>
         [HttpGet]
         [Route("course/headings")]
         public async Task<IActionResult> CourseHeadings(int courseId)
@@ -68,19 +69,35 @@ namespace PractiFly.WebApi.Controllers
 
             return Json(result);
         }
-
-        //TODO: ?
+        /// <summary>
+        /// A method for extracting rubric materials and including them in the course
+        /// </summary>
+        /// <param name="headingId">The ID of the rubric from which the materials are obtained</param>
+        /// <returns></returns>
+        /// <response code="200">The rubric materials are returned</response>
         [HttpGet]
         [Route("course/heading/materials")]
         //public async Task<IActionResult> GetMaterialAndBlocksForInclusion(int materialId)
         public async Task<IActionResult> GetMaterialForInclusion(int headingId, int courseId)
         {
             var result = await _context
-            .Materials
+            .HeadingMaterials
                 .AsNoTracking()
-                .Where(e => e.Id == 2/*TODO:*/)
-                .ProjectTo<MaterialBlocksDto>(_mapper.ConfigurationProvider)
-                .OrderBy(e => e.Id)
+                .Where(e => e.Id == headingId/*TODO:*/)
+                //.ProjectTo<MaterialForInclusionDto>(_mapper.ConfigurationProvider)
+                .Select(e => new MaterialForInclusionDto
+                {
+                    IsIncluded = _context
+                    .CourseMaterials
+                    .Any(cm => cm.MaterialId == e.Id),
+                    PriorityLevel = _context
+                    .CourseMaterials
+                    .Where(cm => cm.MaterialId == e.Id)
+                    .Select(cm => cm.PriorityLevel)
+                    .First()
+
+                })
+                .OrderBy(e => e.PriorityLevel)
                 .ToListAsync();
 
             return Json(result);

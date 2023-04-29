@@ -43,6 +43,8 @@ namespace PractiFly.WebApi.Controllers
         /// </summary>
         /// <param name="userId">ID for receiving information about the selected user from the list</param>
         /// <returns></returns>
+        /// <response code="200">Received information about the user by his ID</response>
+        /// <response code="404">No user found with this ID</response>
         [HttpGet]
         [Route("")]
         //[Authorize(Roles = UserRoles.Admin)]
@@ -74,6 +76,10 @@ namespace PractiFly.WebApi.Controllers
         /// </summary>
         /// <param name="userId">The ID of the user we want to delete</param>
         /// <returns></returns>
+        /// <response code="200">Received information about the user by his ID</response>
+        /// <response code="404">No users found</response>
+        /// <response code="400">The user delete operation failed</response>
+
         [HttpDelete]
         [Route("")]
         //[Authorize(Roles = UserRoles.Admin)]
@@ -83,7 +89,8 @@ namespace PractiFly.WebApi.Controllers
 
             if (user == null)
             {
-                return BadRequest();
+                //return BadRequest();
+                return NotFound();
             }
 
             var result = await _userManager.DeleteAsync(user);
@@ -100,6 +107,8 @@ namespace PractiFly.WebApi.Controllers
         /// </summary>
         /// <param name="userDto">DTO that has the necessary properties to create a user</param>
         /// <returns></returns>
+        /// <response code="400">The operation to create a user or add its role failed</response>
+        /// <response code="200">User creation was successful</response>
         [HttpPost]
         [Route("")]
         public async Task<IActionResult> CreateUserInAdmin(UserProfileForAdminCreateDto userDto)
@@ -133,6 +142,10 @@ namespace PractiFly.WebApi.Controllers
         /// </summary>
         /// <param name="userDto">DTO that has the necessary properties to update information about the selected user</param>
         /// <returns></returns>
+        /// <response code="404">No users found</response>
+        /// <response code="400">The operation to create a user or add its role failed</response>
+        /// <response code="200">User update was successful</response>
+
         [HttpPost]
         [Route("edit")]
         public async Task<IActionResult> UpdateUserInAdmin(UserProfileForAdminUpdateDto userDto)
@@ -173,6 +186,7 @@ namespace PractiFly.WebApi.Controllers
         /// </summary>
         /// <param name="filter">DTO which has the necessary properties for user filtering</param>
         /// <returns></returns>
+        /// <response code="200">Filtration was successful</response>
         [HttpGet]
         [Route("filter")]
         public async Task<IActionResult> GetUsers(UserFilteringDto filter)
