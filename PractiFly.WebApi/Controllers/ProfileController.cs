@@ -13,7 +13,7 @@ using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 namespace PractiFly.WebApi.Controllers;
 
 [ApiController]
-[Route("[controller]/[action]")]
+[Route("api/user/profile")]
 public class ProfileController: Controller
 {
     private readonly IPractiflyContext _context;
@@ -35,7 +35,7 @@ public class ProfileController: Controller
     /// <param name="userId">Id of the user.</param>
     /// <returns>A JSON-encoded representation of the user's profile information.</returns>
     [HttpGet]
-    [Route("[action]")]
+    [Route("")]
     public async Task<IActionResult> GetUserProfileInfo(int userId)
     {
         var result = await _context
@@ -56,8 +56,8 @@ public class ProfileController: Controller
     /// <param name="userDto">A Data Transfer Object containing the updated user information.</param>
     /// <returns>An IActionResult representing the result of the update operation.</returns>
     [Authorize]
-    [Route("[action]")]
-    [HttpGet]
+    [Route("edit")]
+    [HttpPost]
     public async Task<IActionResult> UpdateUser(UserProfileInfoCreateDto userDto)
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

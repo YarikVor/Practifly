@@ -13,7 +13,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PractiFly.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     [ApiController]
     //TODO: CourseMAterialController
     public class CourseMaterialsController : Controller
@@ -27,12 +27,12 @@ namespace PractiFly.WebApi.Controllers
             _mapper = mapper;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Returns a list of courses for an admin user.
         /// </summary>
         /// <returns>A JSON-encoded representation of the list of courses, including only the course ID and name.</returns>
         [HttpGet]
-        [Route("[action]")]
+        [Route("course/all")]
         public async Task<IActionResult> GetCoursesForAdmin()
         {
             var courses = await _context.Courses
@@ -44,7 +44,7 @@ namespace PractiFly.WebApi.Controllers
             .ToListAsync();
 
             return Json(courses);
-        }
+        }*/
 
         /// <summary>
         /// Returns a list of course headings associated with a course identified by the specified Id.
@@ -52,8 +52,8 @@ namespace PractiFly.WebApi.Controllers
         /// <param name="courseId">Id of the course.</param>
         /// <returns>A JSON-encoded representation of the list of course headings.</returns>
         [HttpGet]
-        [Route("course/{courseId:int}/heading")]
-        public async Task<IActionResult> CourseHeading(int courseId)
+        [Route("course/headings")]
+        public async Task<IActionResult> CourseHeadings(int courseId)
         {
             var result = await _context.CourseHeadings
                 .AsNoTracking()
@@ -71,7 +71,7 @@ namespace PractiFly.WebApi.Controllers
 
         //TODO: ?
         [HttpGet]
-        [Route("")]
+        [Route("course/heading/materials")]
         //public async Task<IActionResult> GetMaterialAndBlocksForInclusion(int materialId)
         public async Task<IActionResult> GetMaterialForInclusion(int headingId, int courseId)
         {
@@ -92,7 +92,7 @@ namespace PractiFly.WebApi.Controllers
         /// <param name="materialId">Id of the material.</param>
         /// <returns>A JSON-encoded representation of the list of course headings.</returns>
         [HttpGet]
-        [Route("[action]")]
+        [Route("material")]
         public async Task<IActionResult> GetMaterialBlocks(int materialId)
         {
             var result = await _context

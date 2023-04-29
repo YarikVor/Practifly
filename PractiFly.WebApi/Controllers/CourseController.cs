@@ -60,7 +60,7 @@ public class CourseController : Controller
     /// <param name="courseId">Id of the course.</param>
     /// <returns>A JSON-encoded representation of the list of included headings.</returns>
     [HttpGet]
-    [Route("course/headings")]
+    [Route("course/headings/included")]
     public async Task<IActionResult> GetIncludedHeadings(int courseId)
     {
         //TODO: Check included headings to courses in HeadingCourseItemDto
@@ -81,7 +81,7 @@ public class CourseController : Controller
     /// <param name="themeMaterialId">Id of the theme material</param>
     /// <returns>A JSON-encoded representation of the material details.</returns>
     [HttpGet]
-    [Route("material")]
+    [Route("theme/materials")]
     public async Task<IActionResult> ViewMaterialDetails(int themeMaterialId)
     {
         MaterialDetailsViewDto result = await _context
@@ -100,7 +100,7 @@ public class CourseController : Controller
     /// <param name="themeId">Id of the theme.</param>
     /// <returns>A JSON-encoded representation of the array of materials.</returns>
     [HttpGet]
-    [Route("theme/materials")]
+    [Route("theme/materials_")]
     public async Task<IActionResult> GetMaterialsInTheme(int themeId)
     {
         MaterialsMenuDto[] result = await

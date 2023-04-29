@@ -107,6 +107,8 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", false);
         app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
         app.UseCertificateForwarding();
+
+        app.UseCors();
     }
 
     #endregion

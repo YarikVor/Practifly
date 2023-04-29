@@ -8,7 +8,7 @@ using PractiFly.WebApi.Dto.MaterialBlocks;
 
 namespace PractiFly.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     [ApiController]
     public class MaterialBlocksController : Controller
     {
@@ -33,19 +33,20 @@ namespace PractiFly.WebApi.Controllers
         /// </summary>
         /// <param name="materialId">Id of the material</param>
         /// <returns>A JSON-encoded representation of the list of materials.</returns>
+        //TODO: Тут матеріал лише отримується. ПЕРЕДИВИТИСЯ
         [HttpGet]
-        [Route("")]
-        public async Task<IActionResult> GetMaterialsFromHeading(int materialId)
+        [Route("[action]")]
+        public async Task<IActionResult> GetMaterialsFromHeading(int headingId)
         {
             var result = await _context
                 .HeadingMaterials
                 .AsNoTracking()
-                .Where(e => e.Id == materialId)
+                .Where(e => e.HeadingId == headingId)
                 .Select(e => new MaterialsHeadingItemDto()
                 {
                     Id = e.Id,
                     Name = e.Material.Name,
-                    IsIncluded = _context.HeadingMaterials.Any(e => e.Id == materialId),
+                    IsIncluded = _context.HeadingMaterials.Any(e => e.HeadingId == headingId),
                     IsPractical = e.Material.IsPractical
                 })
                 .ToListAsync();
@@ -53,13 +54,14 @@ namespace PractiFly.WebApi.Controllers
             return Json(result);
         }
 
+
         /// <summary>
         /// Creates a new material block with the specified properties.
         /// </summary>
         /// <param name="blockDto">A data transfer object containing the properties of the new material block.</param>
         /// <returns>A JSON-encoded representation of the new material block.</returns>
-        [HttpGet]
-        [Route("[action]")]
+        [HttpPost]
+        [Route("material")]
         //TODO: має бути створення блоку, але тут створюється матеріал
         public async Task<IActionResult> CreateMaterialBlock(CreateBlockDto blockDto)
         {
@@ -84,6 +86,7 @@ namespace PractiFly.WebApi.Controllers
         /// </remarks>
         /// <param name="blockId">Id of the material block.</param>
         /// <returns>A JSON-encoded representation of the list of material blocks.</returns>
+        // TODO: ПЕРЕДИВИТИСЯ
         [HttpGet]
         [Route("[action]")]
         public async Task<IActionResult> GetBlocksWithMaterials(int blockId)

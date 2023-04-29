@@ -18,7 +18,7 @@ using PractiFly.WebApi.Services.TokenGenerator;
 namespace PractiFly.WebApi.Controllers;
 
 [ApiController]
-[Route("[controller]/[action]")]
+[Route("api/user")]
 public class UserController : Controller
 {
     private readonly IHttpContextAccessor _httpContext;
@@ -52,7 +52,7 @@ public class UserController : Controller
     /// <response code="200">An HTTP OK result containing a JSON-encoded authentication token if the user account was created successfully</response>     
     /// <response code="400">HTTP BadRequest result</response>
     [HttpPost]
-    [Route("[action]")]
+    [Route("register")]
     [AllowAnonymous]
     public async Task<IActionResult> Create(RegistrationDto registrationDto)
     {
@@ -82,7 +82,7 @@ public class UserController : Controller
     /// <response code="400">BadRequest result.</response>
 
     [HttpPost]
-    [Route("[action]")]
+    [Route("login")]
     [AllowAnonymous]
     public async Task<IActionResult> Login(LoginDto loginDto)
     {
@@ -119,7 +119,7 @@ public class UserController : Controller
     /// </summary>
     /// <returns>An HTTP 200 OK response containing a new authentication token.</returns>
     [HttpGet]
-    [Route("[action]")]
+    [Route("refresh-token")]
     [Authorize(AuthenticationSchemes = "Bearer")]
     public async Task<IActionResult> RefreshToken()
     {
@@ -137,8 +137,8 @@ public class UserController : Controller
     /// </summary>
     /// <returns>An IActionResult indicating success or failure.</returns>
     [HttpDelete]
-    [Route("[action]")]
-    [Authorize]
+    [Route("delete")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public async Task<IActionResult> DeleteCurrentUserAsync()
     {
         // Отримання ідентифікатора поточного користувача з токена.

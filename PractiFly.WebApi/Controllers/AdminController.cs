@@ -13,7 +13,7 @@ using PractiFly.WebApi.Services.TokenGenerator;
 
 namespace PractiFly.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/admin/user")]
     [ApiController]
     [Authorize(Roles = UserRoles.Admin)]
     public class AdminController : Controller
@@ -44,7 +44,7 @@ namespace PractiFly.WebApi.Controllers
         /// <param name="userId">ID for receiving information about the selected user from the list</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("[action]")]
+        [Route("")]
         //[Authorize(Roles = UserRoles.Admin)]
         public async Task<IActionResult> GetInfoForUsers(int userId)
         {
@@ -75,7 +75,7 @@ namespace PractiFly.WebApi.Controllers
         /// <param name="userId">The ID of the user we want to delete</param>
         /// <returns></returns>
         [HttpDelete]
-        [Route("[action]")]
+        [Route("")]
         //[Authorize(Roles = UserRoles.Admin)]
         public async Task<IActionResult> DeleteUserByIdAsync(string userId)
         {
@@ -101,7 +101,7 @@ namespace PractiFly.WebApi.Controllers
         /// <param name="userDto">DTO that has the necessary properties to create a user</param>
         /// <returns></returns>
         [HttpPost]
-        [Route("[action]")]
+        [Route("")]
         public async Task<IActionResult> CreateUserInAdmin(UserProfileForAdminCreateDto userDto)
         {
             const string defaultPassword = "Qwerty_1";
@@ -134,7 +134,7 @@ namespace PractiFly.WebApi.Controllers
         /// <param name="userDto">DTO that has the necessary properties to update information about the selected user</param>
         /// <returns></returns>
         [HttpPost]
-        [Route("[action]")]
+        [Route("edit")]
         public async Task<IActionResult> UpdateUserInAdmin(UserProfileForAdminUpdateDto userDto)
         {
             User user = await _userManager.FindByIdAsync(userDto.Id.ToString());
@@ -174,7 +174,7 @@ namespace PractiFly.WebApi.Controllers
         /// <param name="filter">DTO which has the necessary properties for user filtering</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("[action]")]
+        [Route("filter")]
         public async Task<IActionResult> GetUsers(UserFilteringDto filter)
         {
             var users = _userManager.Users.AsNoTracking();

@@ -8,7 +8,7 @@ using PractiFly.WebApi.Dto.MyCourse;
 
 namespace PractiFly.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     [ApiController]
     public class MyCourseController : Controller
     {
@@ -27,7 +27,7 @@ namespace PractiFly.WebApi.Controllers
         /// <param name="userId">Id of the user.</param>
         /// <returns>A JSON-encoded representation of the list of courses and their statuses.</returns>
         [HttpGet]
-        [Route("{userId:int}/usercourse")]
+        [Route("user/courses")]
         public async Task<IActionResult> UserCourse(int userId)
         {
             UserCourseStatusDto[] result = await _context
