@@ -25,6 +25,9 @@ namespace PractiFly.WebApi.Controllers
         /// Returns a list of courses and their statuses associated with a user identified by the specified Id.
         /// </summary>
         /// <param name="userId">Id of the user.</param>
+        /// <response code="200">List of user courses return successfully.</response>
+        /// <response code="400">Operation was failed.</response>
+        /// <response code="404">No courses found.</response>
         /// <returns>A JSON-encoded representation of the list of courses and their statuses.</returns>
         [HttpGet]
         [Route("user/courses")]

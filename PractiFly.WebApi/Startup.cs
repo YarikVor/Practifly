@@ -207,7 +207,7 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", false);
 
     #endregion
     
-    #region Congigure Swagger
+    #region Configure Swagger
 
     private static void AddSwaggerGenerationTokenForUser(IServiceCollection services)
     {

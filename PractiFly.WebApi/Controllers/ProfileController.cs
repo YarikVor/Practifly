@@ -33,6 +33,9 @@ public class ProfileController: Controller
     /// Returns profile information for the user with the specified userId.
     /// </summary>
     /// <param name="userId">Id of the user.</param>
+    /// <response code="200">Getting profile information of user was successful.</response>
+    /// <response code="400">Operation was failed.</response>
+    /// <response code="404">No user found.</response>
     /// <returns>A JSON-encoded representation of the user's profile information.</returns>
     [HttpGet]
     [Route("")]
@@ -54,6 +57,9 @@ public class ProfileController: Controller
     /// Updates the profile information for the currently authenticated user.
     /// </summary>
     /// <param name="userDto">A Data Transfer Object containing the updated user information.</param>
+    /// <response code="200">User update was successful.</response>
+    /// <response code="400">Update was failed.</response>
+    /// <response code="404">No user found.</response>
     /// <returns>An IActionResult representing the result of the update operation.</returns>
     [Authorize]
     [Route("edit")]

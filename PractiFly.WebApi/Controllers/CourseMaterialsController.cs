@@ -9,6 +9,7 @@ using PractiFly.WebApi.Dto.CourseData;
 using PractiFly.WebApi.Dto.CourseMaterials;
 using PractiFly.WebApi.Dto.CourseThemes;
 using PractiFly.WebApi.Dto.Heading;
+using PractiFly.WebApi.Dto.MaterialBlocks;
 using System.ComponentModel.DataAnnotations;
 
 namespace PractiFly.WebApi.Controllers
@@ -116,7 +117,7 @@ namespace PractiFly.WebApi.Controllers
             .Materials
                 .AsNoTracking()
                 .Where(e => e.Id == materialId)
-                .ProjectTo<MaterialBlocksDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<MaterialBlockItemDto>(_mapper.ConfigurationProvider)
                 .OrderBy(e => e.Id)
                 .ToListAsync();
 

@@ -28,13 +28,13 @@ public class CourseDetailsProfile : Profile
                     m => _context
                         .Themes
                         .Where(c => c.Id == c.Id)
-                        .Select(
-                            c => new MaterialItemDto()
-                            {
-                                Id = c.Id,
-                                Name = c.Name,
-                            }
-                        )
+                        //.Select(
+                        //    c => new MaterialItemDto()
+                        //    {
+                        //        Id = c.Id,
+                        //        Name = c.Name,
+                        //    }
+                        //)
                 )
             )
             .ForMember(

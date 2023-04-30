@@ -22,10 +22,13 @@ namespace PractiFly.WebApi.Controllers
 
 
         /// <summary>
-        /// Returns a list of themes associated with a course identified by the special Id.
+        /// Returns an information of theme associated with a course identified by the special Id.
         /// </summary>
         /// <param name="courseId">ID of the course.</param>
-        /// <returns>A JSON-encoded representation of the list of themes.</returns>
+        /// <response code="200">Getting information of theme was successful.</response>
+        /// <response code="400">Operation was failed.</response>
+        /// <response code="404">No themes found.</response>
+        /// <returns>A JSON-encoded representation of the information of course theme.</returns>
         [HttpGet]
         [Route("course/themes/notunderstand")]
 
@@ -67,6 +70,9 @@ namespace PractiFly.WebApi.Controllers
         /// Returns a list of themes associated with a course identified by the specified Id.
         /// </summary>
         /// <param name="courseId">ID of the course.</param>
+        /// <response code="200">Getting list themes from course was successful.</response>
+        /// <response code="400">Operation was failed.</response>
+        /// <response code="404">No themes found.</response>
         /// <returns>An HTTP response indicating success and a 
         /// JSON-encoded representation of the list of themes, 
         /// or a "Not Found" error if the specified ID does not exist.</returns>
@@ -90,6 +96,9 @@ namespace PractiFly.WebApi.Controllers
         /// Returns a list of materials associated with a material identified by the specified Id.
         /// </summary>
         /// <param name="materialId">ID of the material.</param>
+        /// <response code="200">Getting materials was successful.</response>
+        /// <response code="400">Operation was failed.</response>
+        /// <response code="404">No materials found.</response>
         /// <returns>A JSON-encoded representation of the list of materials.</returns>
         //TODO: ViewMaterialsList
         [HttpGet]
@@ -111,6 +120,9 @@ namespace PractiFly.WebApi.Controllers
         /// Returns a list of courses associated with a course identified by the specified Id.
         /// </summary>
         /// <param name="courseId">ID of the course.</param>
+        /// <response code="200">Getting courses list was successful.</response>
+        /// <response code="400">Operation was failed.</response>
+        /// <response code="404">No courses found.</response>
         /// <returns>A JSON-encoded representation of the list of courses.</returns>
         // TODO: Цей метод поверне лише один курс, а не список курсів. ПЕРЕПРОВІРИТИ
         [HttpGet]
@@ -131,6 +143,9 @@ namespace PractiFly.WebApi.Controllers
         /// Returns information about a specific theme identified by the specified Id.
         /// </summary>
         /// <param name="themeId">Id of the theme.</param>
+        /// <response code="200">Getting information of course theme was successful.</response>
+        /// <response code="400">Operation was failed.</response>
+        /// <response code="404">No theme found.</response>
         /// <returns>An HTTP response indicating success and a JSON-encoded representation 
         /// of the theme information, or a "Not Found" error if the specified theme ID does not exist.</returns>
         [HttpGet]
@@ -162,6 +177,8 @@ namespace PractiFly.WebApi.Controllers
         /// </summary>
         /// <param name="themeId">Id of the theme.</param>
         /// <param name="themeDto">The updated theme data as a JSON-encoded ThemeDto object.</param>
+        /// <response code="200">Update theme was successful.</response>
+        /// <response code="400">Update was failed.</response>
         /// <returns>An HTTP response indicating success or failure of the update operation.</returns>
         [HttpGet]
         [Route("theme/edit")]

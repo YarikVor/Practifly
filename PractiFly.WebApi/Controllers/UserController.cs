@@ -97,11 +97,33 @@ public class UserController : Controller
         return BadRequest();
     }
 
+    //public async Task<IActionResult> Login(LoginDto loginDto)
+    //{
+    //    var user = await _userManager.FindByEmailAsync(loginDto.Email);
+
+    //    if (user == null)
+    //    {
+    //        return BadRequest("Invalid email or password.");
+    //    }
+
+    //    var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
+
+    //    if (result.Succeeded)
+    //    {
+    //        var role = (await _userManager.GetRolesAsync(user))[0];
+    //        return Ok(GenerateToken(user, role));
+    //    }
+
+    //    return BadRequest("Invalid email or password.");
+    //}
+
     /// <summary>
     /// Generates a JWT (JSON Web Token) for the specified user with the given role.
     /// </summary>
     /// <param name="user">The User object for whom the token is generated.</param>
     /// <param name="role">The role assigned to the user.</param>
+    /// <response code="200">Token generate was successful.</response>
+    /// <response code="400">Token generate was failed.</response>
     /// <returns>A JWT that contains the specified user's ID and assigned role.</returns>
     private string GenerateToken(User user, string role)
     {
@@ -110,13 +132,14 @@ public class UserController : Controller
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Role, role),
         };
-
         return _tokenGenerator.GenerateToken(claims);
     }
 
     /// <summary>
     /// Refreshes the authentication token for the current user.
     /// </summary>
+    /// <response code="200">Token refresh was successful.</response>
+    /// <response code="400">Operation was failed.</response>
     /// <returns>An HTTP 200 OK response containing a new authentication token.</returns>
     [HttpGet]
     [Route("refresh-token")]
@@ -135,6 +158,9 @@ public class UserController : Controller
     /// <summary>
     /// Deletes the user associated with the current request's token.
     /// </summary>
+    /// <response code="200">Delete current user was successful.</response>
+    /// <response code="400">Delete of user was failed.</response>
+    /// <response code="404">No users found.</response>
     /// <returns>An IActionResult indicating success or failure.</returns>
     [HttpDelete]
     [Route("delete")]

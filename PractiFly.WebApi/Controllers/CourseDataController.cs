@@ -52,6 +52,9 @@ namespace PractiFly.WebApi.Controllers
         /// <summary>
         /// Returns a list of course information.
         /// </summary>
+        /// <response code="200">Getting course information was successful.</response>
+        /// <response code="400">Operation was failed.</response>
+        /// <response code="404">No courses found.</response>
         /// <returns>A JSON-encoded representation of the list of course information.</returns>
         //TODO: Глянути тут, має бути інфа про один курс.
         [HttpGet]
@@ -76,6 +79,9 @@ namespace PractiFly.WebApi.Controllers
         /// Returns a list of users who are enrolled in the course identified by the specified Id.
         /// </summary>
         /// <param name="courseId">Id of the course.</param>
+        /// <response code="200">Getting users of course was successful.</response>
+        /// <response code="400">Operation was failed.</response>
+        /// <response code="404">No users found.</response>
         /// <returns>A JSON-encoded representation of the list of users.</returns>
         [HttpGet]
         [Route("course/users")]
@@ -93,6 +99,9 @@ namespace PractiFly.WebApi.Controllers
         /// Returns the owner information for a course identified by the specified courseId.
         /// </summary>
         /// <param name="courseId">Id of the course.</param>
+        /// <response code="200">Getting owner of course was successful.</response>
+        /// <response code="400">Operation was failed.</response>
+        /// <response code="404">No owner found.</response>
         /// <returns>A JSON-encoded representation of the owner information.</returns>
         [HttpGet]
         [Route("course/owner")]
@@ -107,7 +116,7 @@ namespace PractiFly.WebApi.Controllers
                     Owner = o.Name,
                     FilePhoto = o.Owner.FilePhoto,
                 })
-                .ToListAsync();
+                .FirstOrDefaultAsync();
 
             return Json(result);
         }
@@ -116,6 +125,8 @@ namespace PractiFly.WebApi.Controllers
         /// Creates a new course using the provided course data.
         /// </summary>
         /// <param name="courseDto">A data transfer object containing the course information.</param>
+        /// <response code="200">Creating of course was successful.</response>
+        /// <response code="400">Creating of course was failed.</response>
         /// <returns>An HTTP response indicating the result of the operation.</returns>
         [HttpPost]
         [Route("course")]
@@ -137,8 +148,9 @@ namespace PractiFly.WebApi.Controllers
         /// Updates the specified course with the details provided in the <paramref name="courseDto"/> object.
         /// </summary>
         /// <param name="courseDto">A data transfer object containing the course information.</param>
-        /// <response code="200">Operation is successful, an HTTP 200 OK status code is returned.</response>
-        /// <response code="404">Otherwise, a HTTP Not Found response.</response>
+        /// <response code="200">Editing course is successful.</response>
+        /// <response code="400">Editing course was failed.</response>
+        /// <response code="404">Not Found response.</response>
         /// <returns>Returns HTTP status response.</returns>
         [HttpGet]
         [Route("course/edit")]
@@ -168,7 +180,8 @@ namespace PractiFly.WebApi.Controllers
         /// </summary>
         /// <param name="courseId">ID of the course to be deleted.</param>
         /// <response code="200">Course was deleted succesfully.</response>
-        /// <response code="404">Delete error.</response>
+        /// <response code="400">Deleting of course was failed.</response>
+        /// <response code="404">Not found course to delete.</response>
         /// <returns>An HTTP response status code.</returns>
         [HttpDelete]
         [Route("course")]

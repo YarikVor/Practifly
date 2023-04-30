@@ -31,7 +31,10 @@ namespace PractiFly.WebApi.Controllers
         /// <summary>
         /// Returns a list of materials associated with a heading identified by the specified Id.
         /// </summary>
-        /// <param name="materialId">Id of the material</param>
+        /// <param name="headingId">Id of the heading</param>
+        /// <response code="200">Getting materials from heading was successful.</response>
+        /// <response code="400">Operation was failed.</response>
+        /// <response code="404">No heading found.</response>
         /// <returns>A JSON-encoded representation of the list of materials.</returns>
         //TODO: Тут матеріал лише отримується. ПЕРЕДИВИТИСЯ
         [HttpGet]
@@ -59,6 +62,8 @@ namespace PractiFly.WebApi.Controllers
         /// Creates a new material block with the specified properties.
         /// </summary>
         /// <param name="blockDto">A data transfer object containing the properties of the new material block.</param>
+        /// <response code="200">Create material block was successful.</response>
+        /// <response code="400">Create block was failed.</response>
         /// <returns>A JSON-encoded representation of the new material block.</returns>
         [HttpPost]
         [Route("material")]
@@ -85,6 +90,9 @@ namespace PractiFly.WebApi.Controllers
         /// When a block is clicked, the method displays the materials that are included in the block, as well as those that are not included in any block.
         /// </remarks>
         /// <param name="blockId">Id of the material block.</param>
+        /// <response code="200">Getting material blocks was successful.</response>
+        /// <response code="400">Operation was failed.</response>
+        /// <response code="404">No blocks found.</response>
         /// <returns>A JSON-encoded representation of the list of material blocks.</returns>
         // TODO: ПЕРЕДИВИТИСЯ
         [HttpGet]

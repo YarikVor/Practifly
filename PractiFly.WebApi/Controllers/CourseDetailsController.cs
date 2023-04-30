@@ -25,6 +25,9 @@ public class CourseDetailsController : Controller
     /// or not each theme has been completed by the current user.
     /// </summary>
     /// <param name="courseId">Id of the course.</param>
+    /// <response code="200">Getting themes in user course was successful.</response>
+    /// <response code="400">Operation was failed.</response>
+    /// <response code="404">No themes found.</response>
     /// <returns>A JSON-encoded representation of the list of themes, with completion information included for each theme.</returns>
     //TODO: Check Route.
     [HttpGet]
@@ -62,6 +65,9 @@ public class CourseDetailsController : Controller
     /// Retrieves a list of materials associated with a user and theme identified by the specified Id.
     /// </summary>
     /// <param name="themeId">Id of the theme.</param>
+    /// <response code="200">Getting materials in user themes was successful.</response>
+    /// <response code="400">Operation was failed.</response>
+    /// <response code="404">No materials found.</response>
     /// <returns>A JSON-encoded representation of the list of materials associated with the user and theme.</returns>
     //TODO: Check route.
     [HttpGet]
@@ -105,6 +111,9 @@ public class CourseDetailsController : Controller
     /// </summary>
     /// <param name="themeId">Id of the theme.</param>
     /// <param name="materialId">Id of the material.</param>
+    /// <response code="200">Getting information of material was successful.</response>
+    /// <response code="400">Operation was failed.</response>
+    /// <response code="404">No materials found.</response>
     /// <returns>A JSON-encoded representation of the material details.</returns>
     [HttpGet]
     [Route("theme/material")]
@@ -137,6 +146,9 @@ public class CourseDetailsController : Controller
     /// Returns information about the user's progress in a specific material.
     /// </summary>
     /// <param name="materialId">Id of the material.</param>
+    /// <response code="200">Getting user information in material was successful.</response>
+    /// <response code="400">Operation was failed.</response>
+    /// <response code="404">No material found.</response>
     /// <returns>A JSON-encoded representation of the user's progress information.</returns>
     //TODO: Check route.
     [HttpGet]
@@ -168,8 +180,8 @@ public class CourseDetailsController : Controller
     /// <returns>
     /// Returns an IActionResult that represents the result of the operation. 
     /// </returns>
-    /// <response code="200">Operation is successful, HTTP OK status code is returned.</response>
-    /// <response code="404">The specified user material does not exist, HTTP 404 Not Found status code is returned.</response>
+    /// <response code="200">Operation is successful.</response>
+    /// <response code="404">The specified user material does not exist.</response>
     //TODO: Check route.
     [HttpPost]
     [Route("user/material/status")]

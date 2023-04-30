@@ -48,15 +48,18 @@ public class HeadingCourseController: Controller
         
         return Json(result);
     }
-    
+
     /// <summary>
-    /// Returns the subtopics, but adds an IsIncluded field indicating whether it is included in the course
+    /// Returns the subtopics, but adds an IsIncluded field indicating whether it is included in the course.
     /// </summary>
     /// <param name="courseId"> Course identifier used to obtain included and excluded rubrics </param>
     /// <param name="beginCode">
     /// The beginning of a section of code that returns sub-sections (ex: 12 -> 12.__, where '_' - 0-9).
     /// Supports three rubric levels (ex: "", "12", "12.12", "12.12.12")
     /// </param>
+    /// <response code="200">Operation was successful.</response>
+    /// <response code="400">Operation was failed.</response>
+    /// <response code="404">No courses found.</response>
     /// <returns></returns>
     [HttpGet]
     [Route("course/{courseId:int}/heading")]
