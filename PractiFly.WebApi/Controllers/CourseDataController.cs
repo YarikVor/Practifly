@@ -65,7 +65,7 @@ namespace PractiFly.WebApi.Controllers
         /// <response code="400">Operation was failed.</response>
         /// <response code="404">No courses found.</response>
         /// <returns>A JSON-encoded representation of the list of course information.</returns>
-        //TODO: Глянути тут, має бути інфа про один курс.
+        //TODO: Глянути тут, має бути інфа про один курс. ПЕРЕРОБЛЕНИЙ.
         [HttpGet]
         [Route("course")]
         public async Task<IActionResult> GetCourseInfo(int courseId)
@@ -112,6 +112,7 @@ namespace PractiFly.WebApi.Controllers
         /// <response code="400">Operation was failed.</response>
         /// <response code="404">No users found.</response>
         /// <returns>A JSON-encoded representation of the list of users.</returns>
+        //TODO: Чи потрібний?, оскільки вище реалізований метод для відображення користувачів курсу. 
         [HttpGet]
         [Route("course/users")]
         public async Task<IActionResult> GetUsersOfCourse(int courseId)
@@ -135,6 +136,7 @@ namespace PractiFly.WebApi.Controllers
         [HttpGet]
         [Route("course/owner")]
         //TODO: має бути один вчитель, не список.
+        //TODO: Чи потрібний?, оскільки вище реалізований метод для відображення власника курсу. 
         public async Task<IActionResult> GetOwnerOfCourse(int courseId)
         {
             var result = await _context.Courses
