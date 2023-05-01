@@ -5,6 +5,7 @@ using PractiFly.DbEntities.Materials;
 using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Dto.CourseDetails;
 using PractiFly.WebApi.Dto.CourseMaterials;
+using PractiFly.WebApi.Dto.MaterialBlocks;
 
 namespace PractiFly.WebApi.AutoMappers;
 

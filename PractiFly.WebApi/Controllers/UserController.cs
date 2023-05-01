@@ -21,25 +21,22 @@ namespace PractiFly.WebApi.Controllers;
 [Route("api/user")]
 public class UserController : Controller
 {
-    private readonly IHttpContextAccessor _httpContext;
     private readonly ITokenGenerator _tokenGenerator;
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
-    private readonly RoleManager<Role> _roleManager;
-    private readonly IPractiflyContext _context;
     private readonly IMapper _mapper;
-
-
-    public UserController(IPractiflyContext practiflyContext, IHttpContextAccessor httpContext, ITokenGenerator
-        tokenGenerator, UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<Role> roleManager)
+    
+    public UserController(
+        ITokenGenerator tokenGenerator,
+        UserManager<User> userManager,
+        SignInManager<User> signInManager,
+        IMapper mapper
+    )
     {
-        _httpContext = httpContext;
         _tokenGenerator = tokenGenerator;
         _userManager = userManager;
         _signInManager = signInManager;
-        _roleManager = roleManager;
-        _context = practiflyContext;
-
+        _mapper = mapper;
     }
 
     /// <summary>
@@ -53,20 +50,19 @@ public class UserController : Controller
     /// <response code="400">HTTP BadRequest result</response>
     [HttpPost]
     [Route("register")]
-    [AllowAnonymous]
     public async Task<IActionResult> Create(RegistrationDto registrationDto)
     {
-        var identityUser = registrationDto.ToUser();
+        var identityUser = _mapper.Map<RegistrationDto, User>(registrationDto);
 
         var identityResult = await _userManager.CreateAsync(identityUser, registrationDto.Password);
 
         if (!identityResult.Succeeded)
-            return BadRequest();
+            return BadRequest(identityResult.Errors);
 
         identityResult = await _userManager.AddToRoleAsync(identityUser, UserRoles.User);
 
         if (!identityResult.Succeeded)
-            return BadRequest();
+            return BadRequest(identityResult.Errors);
 
         string token = GenerateToken(identityUser, UserRoles.User);
 
@@ -80,7 +76,6 @@ public class UserController : Controller
     /// <returns></returns>
     /// <response code="200">Returns an access token for the user.</response>     
     /// <response code="400">BadRequest result.</response>
-
     [HttpPost]
     [Route("login")]
     [AllowAnonymous]
@@ -183,6 +178,7 @@ public class UserController : Controller
             // Якщо користувача з таким ідентифікатором не знайдено, видається помилка.
             return BadRequest();
         }
+
         //TODO: Add confirm email
         var result = await _userManager.DeleteAsync(user);
 
