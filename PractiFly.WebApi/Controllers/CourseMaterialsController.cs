@@ -116,7 +116,7 @@ namespace PractiFly.WebApi.Controllers
             .Materials
                 .AsNoTracking()
                 .Where(e => e.Id == materialId)
-                .ProjectTo<MaterialBlocksDto>(_mapper.ConfigurationProvider)
+                //.ProjectTo<MaterialBlocksDto>(_mapper.ConfigurationProvider)
                 .OrderBy(e => e.Id)
                 .ToListAsync();
 

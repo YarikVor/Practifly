@@ -21,6 +21,7 @@ using PractiFly.WebApi.Schema;
 using PractiFly.WebApi.Services.AuthenticationOptions;
 using PractiFly.WebApi.Services.TokenGenerator;
 using ErrorContext = PractiFly.DbContextUtility.Context.ErrorContext;
+using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace PractiFly.WebApi;
 
@@ -47,6 +48,8 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        
+        
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
         services
@@ -69,20 +72,9 @@ public class Startup
         InitTables(services);
 
         AddIdentityUserAndRole(services);
-
-        services.AddScoped<PractiFlyProfile>();
-
-        services.AddScoped<IMapper, Mapper>(
-            e => new Mapper(
-                new MapperConfiguration(cfg =>
-                    {
-                        cfg.AddProfile(e.GetRequiredService<PractiFlyProfile>());
-                    }
-                )
-            )
-        );
-
-        services.AddMvc();
+        
+        services.AddScoped<IConfigurationProvider, PractiFlyMapperConfiguration>();
+        services.AddScoped<IMapper, PractiFlyMapper>();
     }
 
     #endregion
@@ -92,8 +84,8 @@ public class Startup
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         // TODO: Add support DateTime, DateOnly and TimeOnly where UTC = +00:00
-AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", false);
-            AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", false);
+        AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
         if (env.IsDevelopment())
             UseSwagger(app);
 
@@ -107,12 +99,11 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", false);
         app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
         app.UseCertificateForwarding();
-
         app.UseCors();
     }
 
     #endregion
-    
+
     #region Authorization and Authentication
 
     private static void AddAuthorizationAndAuthentication(IServiceCollection services)
@@ -141,7 +132,7 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", false);
     }
 
     #endregion
-    
+
     #region Add Identity User And Role
 
     private static void AddIdentityUserAndRole(IServiceCollection services)
@@ -206,7 +197,7 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", false);
     }
 
     #endregion
-    
+
     #region Congigure Swagger
 
     private static void AddSwaggerGenerationTokenForUser(IServiceCollection services)
@@ -244,11 +235,11 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", false);
                     new List<string>()
                 }
             });
-            
+
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
             c.IncludeXmlComments(xmlPath);
-            
+
             c.MapType<DateOnly>(DateOnlyApiSchema.Create);
         });
     }
@@ -290,7 +281,7 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", false);
         //services.BuildServiceProvider().GetService<UserIdentityDbContext>().Database.Migrate();
 
         var context = services.BuildServiceProvider().GetService<IPractiflyContext>() as PractiFlyContext;
-        context.GenerateTestDataIfEmpty();
+        //context.GenerateTestDataIfEmpty();
         //context.Database.Migrate();
 
 
@@ -299,7 +290,7 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", false);
             options.UseNpgsql(connectionString);
         }
     }
-    
+
     private static void InitTables(IServiceCollection services)
     {
         // TODO: Make init tables
