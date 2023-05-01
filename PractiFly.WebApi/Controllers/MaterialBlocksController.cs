@@ -94,28 +94,42 @@ namespace PractiFly.WebApi.Controllers
         /// <response code="400">Operation was failed.</response>
         /// <response code="404">No blocks found.</response>
         /// <returns>A JSON-encoded representation of the list of material blocks.</returns>
-        // TODO: ПЕРЕДИВИТИСЯ
+        // TODO: ПЕРЕДИВИТИСЯ (певно цей метод має видалитись, оскільки елемент сторінки з блоками матеріалів був викинутий)
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetBlocksWithMaterials(int blockId)
+        public async Task<IActionResult> GetBlocksWithMaterials([FromQuery] int blockId)
         {
-            var result = await _context
-                .MaterialBlocks
-                .AsNoTracking()
-                //TODO:
-                //При натисканні на блок відображаються ті матеріали,
-                //що включені  в цей блок, а також ті,
-                //що не включені взагалі ні в один блок
-                .Where(e => e.Id == blockId)
-                .Select(e => new MaterialBlockItemDto(){
-                    Id = e.Id,
-                    Name = e.Parent.Name,
-                    IsIncluded = _context.MaterialBlocks.Any(e => e.Id == blockId),
-                    IsPractical = e.Parent.IsPractical
-                }
-            ).ToListAsync();
+            //var result = await _context
+            //    .MaterialBlocks
+            //    .AsNoTracking()
+            //    //TODO:
+            //    //При натисканні на блок відображаються ті матеріали,
+            //    //що включені  в цей блок, а також ті,
+            //    //що не включені взагалі ні в один блок
+            //    .Where(e => e.Id == blockId)
+            //    .Select(e => new MaterialBlockItemDto(){
+            //        Id = e.Id,
+            //        Name = e.Parent.Name,
+            //        IsIncluded = _context.MaterialBlocks.Any(e => e.Id == blockId),
+            //        IsPractical = e.Parent.IsPractical
+            //    }
+            //).ToListAsync();
 
-            return Json(result);
+            var materials = await _context.Materials
+                .AsNoTracking()
+                .Include(m => _context.MaterialBlocks)
+                .ThenInclude(mb => mb.Parent)
+                .Where(m => _context.MaterialBlocks.Any(mb => mb.Id == blockId) || !_context.MaterialBlocks.Any())
+                .Select(m => new MaterialBlockItemDto()
+                {
+                    Id = m.Id,
+                    Name = m.Name,
+                    IsIncluded = _context.MaterialBlocks.Any(mb => mb.Id == blockId),
+                    IsPractical = m.IsPractical
+                })
+                .ToListAsync();
+
+            return Json(materials);
         }
     }
 }

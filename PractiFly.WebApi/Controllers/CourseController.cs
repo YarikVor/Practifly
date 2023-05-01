@@ -9,6 +9,7 @@ using PractiFly.WebApi.Context;
 using PractiFly.WebApi.Dto.CourseData;
 using PractiFly.WebApi.Dto.CourseDetails;
 using PractiFly.WebApi.Dto.CourseThemes;
+using PractiFly.WebApi.Dto.Heading;
 using PractiFly.WebApi.Dto.HeadingCourse;
 using PractiFly.WebApi.Dto.MyCourse;
 
@@ -78,6 +79,27 @@ public class CourseController : Controller
             .FirstAsync();
 
         return Json(result);
+
+        //TODO: можлива реалізація даного методу
+        //HeadingCourseItemDto result = await _context
+        //.Courses
+        //.AsNoTracking()
+        //.Where(c => c.Id == courseId)
+        //.Select(c => new HeadingCourseItemDto()
+        //{
+        //    Id = c.Id,
+        //    Name = c.Name,
+        //    Headings = c.CourseHeadings
+        //        .Where(ch => ch.IsIncluded)
+        //        .Select(ch => new HeadingItemDto()
+        //        {
+        //            Id = ch.Heading.Id,
+        //            Name = ch.Heading.Name
+        //        })
+        //        .ToList()
+        //})
+        //.FirstOrDefaultAsync();
+
     }
 
     //TODO: ???
