@@ -15,7 +15,7 @@ namespace PractiFly.WebApi.Controllers
 {
     [Route("api/admin/user")]
     [ApiController]
-    [Authorize(Roles = UserRoles.Admin)]
+    [Authorize(Roles = UserRoles.Admin, AuthenticationSchemes = "Bearer")]
     public class AdminController : Controller
     {
         private readonly IHttpContextAccessor _httpContext;
