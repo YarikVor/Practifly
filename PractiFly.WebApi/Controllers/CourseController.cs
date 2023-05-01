@@ -28,35 +28,35 @@ public class CourseController : Controller
         _mapper = mapper;
     }
 
-    /// <summary>
-    /// Retrieves an array of courses associated with a owner (user) identified by the specified Id, or all courses if no Id is provided.
-    /// </summary>
-    /// <param name="ownerId">Id of the owner (user).</param>
-    /// <response code="200">Courses representation was successful.</response>
-    /// <response code="400">Operation was failed.</response>
-    /// <response code="404">No courses found.</response>
-    /// <returns>A JSON-encoded representation of the array of courses.</returns>
-    [HttpGet]
-    [Route("course/all")]
-    public async Task<IActionResult> Courses(int? ownerId = null)
-    {
-        CourseItemDto[] result;
-        if (!ownerId.HasValue)
-        {
-            result = await _context.Courses.AsNoTracking()
-                .ProjectTo<CourseItemDto>(_mapper.ConfigurationProvider)
-                .ToArrayAsync();
-        }
-        else
-        {
-            result = await _context.Courses.AsNoTracking()
-                .Where(e => e.OwnerId == ownerId)
-                .ProjectTo<CourseItemDto>(_mapper.ConfigurationProvider)
-                .ToArrayAsync();
-        }
+    ///// <summary>
+    ///// Retrieves an array of courses associated with a owner (user) identified by the specified Id, or all courses if no Id is provided.
+    ///// </summary>
+    ///// <param name="ownerId">Id of the owner (user).</param>
+    ///// <response code="200">Courses representation was successful.</response>
+    ///// <response code="400">Operation was failed.</response>
+    ///// <response code="404">No courses found.</response>
+    ///// <returns>A JSON-encoded representation of the array of courses.</returns>
+    //[HttpGet]
+    //[Route("course/all")]
+    //public async Task<IActionResult> Courses(int? ownerId = null)
+    //{
+    //    CourseItemDto[] result;
+    //    if (!ownerId.HasValue)
+    //    {
+    //        result = await _context.Courses.AsNoTracking()
+    //            .ProjectTo<CourseItemDto>(_mapper.ConfigurationProvider)
+    //            .ToArrayAsync();
+    //    }
+    //    else
+    //    {
+    //        result = await _context.Courses.AsNoTracking()
+    //            .Where(e => e.OwnerId == ownerId)
+    //            .ProjectTo<CourseItemDto>(_mapper.ConfigurationProvider)
+    //            .ToArrayAsync();
+    //    }
         
-        return Json(result);
-    }
+    //    return Json(result);
+    //}
 
     /// <summary>
     /// Returns a list of headings included in the course identified by the specified Id.

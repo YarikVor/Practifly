@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -28,26 +29,34 @@ namespace PractiFly.WebApi.Controllers
 
 
         /// <summary>
-        /// Returns a list of courses that can be accessed by an admin, each represented by an ID and a name.
+        /// Retrieves an array of courses associated with a owner (user) identified by the specified Id, or all courses if no Id is provided.
         /// </summary>
-        /// <returns>A JSON-encoded representation of the list of courses.</returns>
+        /// <param name="ownerId">Id of the owner (user).</param>
+        /// <response code="200">Courses representation was successful.</response>
+        /// <response code="400">Operation was failed.</response>
+        /// <response code="404">No courses found.</response>
+        /// <returns>A JSON-encoded representation of the array of courses.</returns>
+        [HttpGet]
+        [Route("course/all")]
+        public async Task<IActionResult> Courses(int? ownerId = null)
+        {
+            CourseItemDto[] result;
+            if (!ownerId.HasValue)
+            {
+                result = await _context.Courses.AsNoTracking()
+                    .ProjectTo<CourseItemDto>(_mapper.ConfigurationProvider)
+                    .ToArrayAsync();
+            }
+            else
+            {
+                result = await _context.Courses.AsNoTracking()
+                    .Where(e => e.OwnerId == ownerId)
+                    .ProjectTo<CourseItemDto>(_mapper.ConfigurationProvider)
+                    .ToArrayAsync();
+            }
 
-        //already realized
-
-        //[HttpGet]
-        //[Route("courses/all")] 
-        //public async Task<IActionResult> GetCoursesForAdmin()
-        //{
-        //    var courses = await _context.Courses
-        //    .Select(c => new CourseItemDto
-        //    {
-        //        Id = c.Id,
-        //        Name = c.Name
-        //    })
-        //    .ToListAsync();
-
-        //    return Json(courses);
-        //}
+            return Json(result);
+        }
 
         /// <summary>
         /// Returns a list of course information.
@@ -61,16 +70,36 @@ namespace PractiFly.WebApi.Controllers
         [Route("course")]
         public async Task<IActionResult> GetCourseInfo(int courseId)
         {
-            var result = await _context.Courses
-             .Select(c => new CourseInfoDto
-             {
-                 Id = c.Id,
-                 Language = c.Language.Code,
-                 CourseName = c.Name,
-                 Description = c.Description,
-                 Note = c.Note,
-             })
-             .FirstOrDefaultAsync();
+            var result = await _context
+                .Courses
+                .Where(e => e.Id == courseId)
+                .Select(e => new CourseFullInfoDto
+                {
+                    OwnerInfoDto = new OwnerInfoDto
+                    {
+                        Id = e.OwnerId,
+                        Owner = string.Concat(e.Owner.FirstName, " ", e.Owner.LastName),
+                        FilePhoto = e.Owner.FilePhoto
+                    },
+                    CourseInfoDto = new CourseInfoDto
+                    {
+                        Id = e.Id,
+                        Language = e.Language.Name,
+                        CourseName = e.Name,
+                        Description = e.Description,
+                        Note = e.Note
+                    },
+                    UserFullnameItemDto = _context
+                        .UserCourses
+                        .Where(e => e.CourseId == courseId)
+                        .Select(uc => new UserFullnameItemDto
+                        {
+                            Id = uc.UserId,
+                            Fullname = string.Concat(uc.User.FirstName, " ", uc.User.LastName)
+                        })
+                    .ToArray()
+                })
+            .FirstOrDefaultAsync();
 
             return Json(result);
         }
@@ -157,9 +186,10 @@ namespace PractiFly.WebApi.Controllers
         public async Task<IActionResult> EditCourse(CreateCourseDto courseDto)
         {
             var course = await _context.Courses.FirstOrDefaultAsync(e => e.Id == courseDto.CourseId);
-            
-            if (course == null) { 
-                return NotFound(); 
+
+            if (course == null)
+            {
+                return NotFound();
             }
 
             course.Id = courseDto.CourseId;
@@ -171,7 +201,7 @@ namespace PractiFly.WebApi.Controllers
 
             _context.Courses.Update(course);
             await _context.SaveChangesAsync();
-            
+
             return Ok();
         }
 
