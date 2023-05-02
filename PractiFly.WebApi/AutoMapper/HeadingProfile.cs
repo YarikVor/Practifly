@@ -17,7 +17,7 @@ public class HeadingProfile : Profile
         CreateProjection<Heading, HeadingInfoDto>();
         CreateMap<HeadingCreateDto, Heading>();
         CreateMap<Heading, HeadingInfoDto>();
-        
+        CreateMap<HeadingEditDto, Heading>();
         #endregion
         
         

@@ -115,6 +115,7 @@ public class HeadingController : Controller
     {
         var heading = await _context
             .Headings
+            .AsNoTracking()
             .FirstOrDefaultAsync(e => e.Id == dto.Id);
 
         if (heading == null)
@@ -123,13 +124,9 @@ public class HeadingController : Controller
         if (_context.Headings.Any(e => e.Code == dto.Code && e.Id != dto.Id))
             return BadRequest(new {message = "Heading with this code already exists"});
         
-        heading.Code = dto.Code;
-        heading.Name = dto.Name;
-        heading.Description = dto.Description;
-        heading.Note = dto.Note;
-        heading.Udc = dto.Udc;
+        var changedHeading = _mapper.Map<HeadingEditDto, Heading>(dto);
 
-        _context.Headings.Update(heading);
+        _context.Headings.Update(changedHeading);
 
         await _context.SaveChangesAsync();
 
