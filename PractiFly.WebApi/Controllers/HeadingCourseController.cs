@@ -1,21 +1,30 @@
 using System.ComponentModel.DataAnnotations;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
+using PractiFly.DbEntities;
 using PractiFly.DbEntities.Courses;
 using PractiFly.WebApi.Dto.Heading;
+using PractiFly.WebApi.Dto.HeadingCourse;
+using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace PractiFly.WebApi.Controllers;
 
 [ApiController]
 [Route("api")]
-public class HeadingCourseController: Controller
+public class HeadingCourseController : Controller
 {
     private readonly IPractiflyContext _context;
-    
-    public HeadingCourseController(IPractiflyContext context)
+    private readonly IConfigurationProvider _configurationProvider;
+
+    public HeadingCourseController(
+        IPractiflyContext context,
+        IConfigurationProvider configurationProvider
+    )
     {
         _context = context;
+        _configurationProvider = configurationProvider;
     }
 
     /// <summary>
@@ -23,29 +32,25 @@ public class HeadingCourseController: Controller
     /// </summary>
     /// <param name="beginCode">
     /// The beginning of a section of code that returns sub-sections (ex: 12 -> 12.__, where '_' - 0-9).
-    /// Supports three rubric levels (ex: "", "12", "12.12", "12.12.12")
+    /// Supports four rubric levels (ex: "", "12", "12.12", "12.12.12")
     /// </param>
     /// <returns></returns>
     /// <response code="200">Return subheading info (maybe empty result)</response>
     [HttpGet]
     [Route("heading/sub")]
-    public async Task<IActionResult> GetSubheading([RegularExpression(@"^(?:\d{2})?(?:\.\d{2}){0,2}$")] string? beginCode = "")
+    public async Task<IActionResult> GetSubheading(
+        [RegularExpression(EntitiesConstants.SubHeadingPattern)]
+        string beginCode
+    )
     {
-        string patternSubRubricCode = string.IsNullOrEmpty(beginCode) 
-            ? "__" 
-            : $"{beginCode}.__";
-        
+        string patternSubRubricCode = beginCode.GetCodeLike();
+
         var result = await _context.Headings
             .AsNoTracking()
             .Where(e => EF.Functions.Like(e.Code, patternSubRubricCode))
-            .Select(e => new HeadingItemDto()
-            {
-                Code = e.Code,
-                Name = e.Name,
-                Id = e.Id
-            })
-            .ToArrayAsync();
-        
+            .ProjectTo<HeadingItemDto>(_configurationProvider)
+            .ToListAsync();
+
         return Json(result);
     }
 
@@ -62,28 +67,27 @@ public class HeadingCourseController: Controller
     /// <response code="404">No courses found.</response>
     /// <returns></returns>
     [HttpGet]
-    [Route("course/{courseId:int}/heading")]
-    public async Task<IActionResult> CourseHeading(int courseId, [RegularExpression(@"^(?:\d{2})?(?:\.\d{2}){0,2}$")] string? beginCode = "")
+    [Route("course/heading/sub")]
+    public async Task<IActionResult> CourseSubHeading(
+        int courseId,
+        [RegularExpression(EntitiesConstants.SubHeadingPattern)]
+        string beginCode
+    )
     {
-        string patternSubRubricCode = string.IsNullOrEmpty(beginCode) 
-            ? "__" 
-            : $"{beginCode}.__";
-        
-        var result = await _context.Headings
+        string patternSubheadingCode = beginCode.GetCodeLike();
+
+        var result = await _context
+            .CourseHeadings
             .AsNoTracking()
-            .Where(e => EF.Functions.Like(e.Code, patternSubRubricCode))
-            .Select(e => new HeadingItemInCourseDto()
-            {
-                Code = e.Code,
-                Name = e.Name,
-                Id = e.Id,
-                IsIncluded = _context.CourseHeadings.Any(ch => ch.CourseId == courseId)
-            })
+            .Where(e => e.CourseId == courseId)
+            .Select(e => e.Heading)
+            .Where(e => EF.Functions.Like(e.Code, patternSubheadingCode))
+            .ProjectTo<HeadingItemInCourseDto>(_configurationProvider)
             .ToListAsync();
-        
+
         return Json(result);
     }
-    
+
     /// <summary>
     /// Change heading in course (include or exclude)
     /// </summary>
@@ -102,29 +106,34 @@ public class HeadingCourseController: Controller
 
         if (!isValid)
             return NotFound();
-        
-        
+
+
         if (headingItemCheckingDto.IsIncluded)
         {
-            _context.CourseHeadings.AddAsync(new CourseHeading()
+            var courseHeading = new CourseHeading()
             {
                 CourseId = headingItemCheckingDto.CourseId,
                 HeadingId = headingItemCheckingDto.HeadingId
-            });
+            };
+
+            await _context.CourseHeadings.AddAsync(courseHeading);
+            await _context.SaveChangesAsync();
+
+            if (courseHeading.Id == 0)
+                return BadRequest();
         }
         else
         {
             var courseHeading = await _context.CourseHeadings
-                .FirstOrDefaultAsync(ch => ch.CourseId == headingItemCheckingDto.CourseId && ch.HeadingId == headingItemCheckingDto.HeadingId);
+                .FirstOrDefaultAsync(ch =>
+                    ch.CourseId == headingItemCheckingDto.CourseId && ch.HeadingId == headingItemCheckingDto.HeadingId);
 
-            if (courseHeading == null) 
+            if (courseHeading == null)
                 return Ok();
             _context.CourseHeadings.Remove(courseHeading);
-            _context.SaveChangesAsync();
-
+            await _context.SaveChangesAsync();
         }
-        
+
         return Ok();
     }
-    
 }
