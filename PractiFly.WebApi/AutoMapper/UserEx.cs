@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Dto.Admin.UserView;
+using PractiFly.WebApi.Dto.Profile;
 using PractiFly.WebApi.Dto.Registration;
 
 namespace PractiFly.WebApi.AutoMapper
@@ -12,31 +13,15 @@ namespace PractiFly.WebApi.AutoMapper
             return new UserFullnameItemDto() { Id = user.Id, Fullname = string.Concat(user.FirstName, user.LastName) };
         }
 
-        public static User ToUser(this RegistrationDto registrationDto)
+        public static void ChangeUser(this User user, UserProfileInfoCreateDto userDto)
         {
-            return new User
-            {
-                UserName = registrationDto.Username,
-                Birthday = registrationDto.Birthday,
-                Email = registrationDto.Email,
-                FirstName = registrationDto.Name,
-                LastName = registrationDto.Surname,
-                PhoneNumber = registrationDto.Phone,
-                RegistrationDate = DateOnly.FromDateTime(DateTime.Today),
-                FilePhoto = "https://www.nicepng.com/maxp/u2y3a9e6t4o0a9w7/"
-            };
+            user.FirstName = userDto.FirstName;
+            user.LastName = userDto.LastName;
+            user.PhoneNumber = userDto.PhoneNumber;
+            user.Email = userDto.Email;
+            user.Birthday = userDto.Birthday;
+            user.FilePhoto = userDto.FilePhoto;
         }
-        //public static User ToUser(this UserProfileForAdminCreateDto userDto)
-        //{
-        //    return new User
-        //    {
-        //        UserName = userDto.Name,
-        //        LastName = userDto.Surname,
-        //        Email = userDto.Email,
-        //        PhoneNumber = userDto.Phone,
-        //        FilePhoto = userDto.FilePhoto,
-
-        //    };
-        //}
+        
     }
 }

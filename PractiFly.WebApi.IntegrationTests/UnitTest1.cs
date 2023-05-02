@@ -28,7 +28,7 @@ public class UnitTest1
         
         var client = webHost.CreateClient();
 
-        var result = await client.GetAsync("api/materia");
+        var result = await client.GetAsync("api/material?materialId=1");
         
         Assert.True(result.IsSuccessStatusCode);
         
