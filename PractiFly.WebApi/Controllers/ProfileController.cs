@@ -46,6 +46,7 @@ public class ProfileController : Controller
     {
         var result = await _context
             .Users
+            .AsNoTracking()
             .Where(e => e.Id == userId)
             .ProjectTo<UserInfoDto>(_configurationProvider)
             .FirstOrDefaultAsync();

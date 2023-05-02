@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities.Materials;
+using PractiFly.WebApi.Dto.CourseDetails;
 using PractiFly.WebApi.Dto.MaterialBlocks;
+using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace PractiFly.WebApi.Controllers
 {
@@ -12,13 +15,18 @@ namespace PractiFly.WebApi.Controllers
     [ApiController]
     public class MaterialBlocksController : Controller
     {
-        public IPractiflyContext _context;
-        public IMapper _mapper;
+        private readonly IPractiflyContext _context;
+        private readonly IMapper _mapper;
+        private readonly IConfigurationProvider _configurationProvider;
 
-        public MaterialBlocksController(IPractiflyContext context, IMapper mapper)
+        public MaterialBlocksController(
+            IPractiflyContext context, 
+            IMapper mapper,
+            IConfigurationProvider configurationProvider)
         {
             _context = context;
             _mapper = mapper;
+            _configurationProvider = configurationProvider;
         }
 
         //метод для відображення ієрархії рубрик дублюється з HeadingController
@@ -38,20 +46,14 @@ namespace PractiFly.WebApi.Controllers
         /// <returns>A JSON-encoded representation of the list of materials.</returns>
         //TODO: Тут матеріал лише отримується. ПЕРЕДИВИТИСЯ
         [HttpGet]
-        [Route("[action]")]
+        [Route("heading/materials")]
         public async Task<IActionResult> GetMaterialsFromHeading(int headingId)
         {
             var result = await _context
                 .HeadingMaterials
                 .AsNoTracking()
                 .Where(e => e.HeadingId == headingId)
-                .Select(e => new MaterialsHeadingItemDto()
-                {
-                    Id = e.Id,
-                    Name = e.Material.Name,
-                    IsIncluded = _context.HeadingMaterials.Any(e => e.HeadingId == headingId),
-                    IsPractical = e.Material.IsPractical
-                })
+                .ProjectTo<MaterialsHeadingItemDto>(_configurationProvider)
                 .ToListAsync();
 
             return Json(result);
@@ -67,23 +69,43 @@ namespace PractiFly.WebApi.Controllers
         /// <returns>A JSON-encoded representation of the new material block.</returns>
         [HttpPost]
         [Route("material")]
-        //TODO: має бути створення блоку, але тут створюється матеріал
-        public async Task<IActionResult> CreateMaterialBlock(CreateBlockDto blockDto)
+        public async Task<IActionResult> CreateMaterial(CreateMaterialDto blockDto)
         {
-            var material = new Material()
-            {
-                Name = blockDto.Name,
-                Note = blockDto.Note,
-                Url = blockDto.Url,
-                IsPractical = blockDto.IsPractical
-            };
+            var material = _mapper.Map<CreateMaterialDto, Material>(blockDto);
             await _context.Materials.AddAsync(material);
-
-            //TODO: має бути мапінг
-            return Json(material);
+            await  _context.SaveChangesAsync();
+            
+            if(material.Id == 0)
+                return Problem();
+            
+            var materialDto = _mapper.Map<Material, MaterialDto>(material);
+            return Json(materialDto);
+        }
+        
+        /// <summary>
+        /// Edit a material with the specified properties.
+        /// </summary>
+        /// <param name="blockDto">A data transfer object containing the properties of the changed material.</param>
+        /// <response code="200">Edit material was successful.</response>
+        /// <response code="400">Edit material was failed.</response>
+        /// <response code="404">No material found.</response>
+        /// <returns>A JSON-encoded representation of the new material block.</returns>
+        [HttpPost]
+        [Route("material/edit")]
+        public async Task<IActionResult> EditMaterial(EditMaterialDto blockDto)
+        {
+            if(!(await _context.Materials.AnyAsync(e => e.Id == blockDto.Id)))
+                return NotFound();
+            
+            var material = _mapper.Map<EditMaterialDto, Material>(blockDto);
+            
+            _context.Materials.Update(material);
+            await _context.SaveChangesAsync();
+            
+            return Ok();
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Returns a list of material blocks associated with a block identified by the specified Id. 
         /// </summary>
         /// <remarks>
@@ -97,7 +119,7 @@ namespace PractiFly.WebApi.Controllers
         // TODO: ПЕРЕДИВИТИСЯ (певно цей метод має видалитись, оскільки елемент сторінки з блоками матеріалів був викинутий)
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetBlocksWithMaterials([FromQuery] int blockId)
+        public async Task<IActionResult> GetBlocksWithMaterials(int blockId)
         {
             //var result = await _context
             //    .MaterialBlocks
@@ -127,6 +149,25 @@ namespace PractiFly.WebApi.Controllers
                     IsIncluded = _context.MaterialBlocks.Any(mb => mb.Id == blockId),
                     IsPractical = m.IsPractical
                 })
+                .ToListAsync();
+
+            return Json(materials);
+        }*/
+        
+        
+        /// <summary>
+        /// Gets all materials.
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">Getting materials was successful.</response>
+        [HttpGet]
+        [Route("material/all")]
+        public async Task<IActionResult> GetMaterials()
+        {
+            var materials = await _context.Materials
+                .AsNoTracking()
+                .OrderBy(e => e.Id)
+                .ProjectTo<MaterialItemDto>(_configurationProvider)
                 .ToListAsync();
 
             return Json(materials);
