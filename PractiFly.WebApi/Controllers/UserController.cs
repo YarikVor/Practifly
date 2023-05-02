@@ -40,9 +40,9 @@ public class UserController : Controller
     }
 
     /// <summary>
-    ///  Creates a new user account based on the provided registration data, 
-    ///  adds the user to the 'User' role, 
-    ///  and returns an authentication token for the newly-created user.
+    /// Creates a new user account based on the provided registration data, 
+    /// adds the user to the 'User' role, 
+    /// and returns an authentication token for the newly-created user.
     /// </summary>
     /// <param name="registrationDto">A Data Transfer Object, containing user registrate information.</param>
     /// <returns>HTTP response status code.</returns>

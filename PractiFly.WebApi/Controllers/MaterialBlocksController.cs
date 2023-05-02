@@ -162,13 +162,15 @@ namespace PractiFly.WebApi.Controllers
 
             return Json(materials);
         }*/
-        
-        
+
+
         /// <summary>
         /// Gets all materials.
         /// </summary>
         /// <returns></returns>
         /// <response code="200">Getting materials was successful.</response>
+        /// <response code="400">Getting materials was failed.</response>
+        /// <response code="404">Materials not found.</response>
         [HttpGet]
         [Route("material/all")]
         public async Task<IActionResult> GetMaterials()

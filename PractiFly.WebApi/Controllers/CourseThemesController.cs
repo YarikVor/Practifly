@@ -177,7 +177,6 @@ namespace PractiFly.WebApi.Controllers
         /// <summary>
         /// Updates an existing theme identified by the specified Id with the specified Data Transfer Object.
         /// </summary>
-        /// <param name="themeId">Id of the theme.</param>
         /// <param name="themeDto">The updated theme data as a JSON-encoded ThemeDto object.</param>
         /// <response code="200">Update theme was successful.</response>
         /// <response code="400">Update was failed.</response>
@@ -208,9 +207,11 @@ namespace PractiFly.WebApi.Controllers
         //TODO: метод для перегляду всіх курсів наявний в CourseController.UserCourse
 
         /// <summary>
-        /// 
+        /// Method for create themes of course.
         /// </summary>
-        /// <param name="themeDto"></param>
+        /// <param name="themeDto">A data transfer object containing the properties of the theme.</param>
+        /// <response code="200">Theme created successfully.</response>
+        /// <response code="400">Operation was failed.</response>
         /// <returns></returns>
         [HttpPost]
         [Route("theme")]
@@ -231,9 +232,11 @@ namespace PractiFly.WebApi.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Method for delete themes.
         /// </summary>
-        /// <param name="themeId"></param>
+        /// <param name="themeId">Id of theme to delete.</param>
+        /// <response code="200">Theme deleted successfully.</response>
+        /// <response code="404">Theme not found.</response>
         /// <returns></returns>
         [HttpDelete]
         [Route("theme")]
@@ -250,6 +253,13 @@ namespace PractiFly.WebApi.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Adds a new material to a theme and saves it to the database.
+        /// </summary>
+        /// <param name="themeMaterialDto">The DTO containing information about the material and theme.</param>
+        /// <response code="200">Operation was successful.</response>
+        /// <response code="400">Adding material to theme was failed.</response>
+        /// <returns>A JSON-encoded representation of the newly created theme-material relation.</returns>
         [HttpPost]
         [Route("theme_material")]
         public async Task<IActionResult> AddMaterialToTheme(ThemeMaterialCreateDto themeMaterialDto)
@@ -277,6 +287,14 @@ namespace PractiFly.WebApi.Controllers
             return Json(themeMaterialInfoDto);
         }
 
+        /// <summary>
+        /// Edits the properties of a theme material specified in the ThemeMaterialEditDto.
+        /// </summary>
+        /// <param name="themeMaterialDto">A DTO containing the properties of the theme material to edit.</param>
+        /// <response code="200">Change material was successful.</response>
+        /// <response code="400">Operation was failed.</response>
+        /// <response code="404">Theme Material not found.</response>
+        /// <returns>An IActionResult indicating the result of the operation.</returns>
         [HttpPost]
         [Route("theme_material/edit")]
         public async Task<IActionResult> ChangeMaterialToTheme(ThemeMaterialEditDto themeMaterialDto)
@@ -304,6 +322,15 @@ namespace PractiFly.WebApi.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Method for delete materials in theme.
+        /// </summary>
+        /// <param name="themeMaterialId">Id of the material in theme.</param>
+        /// <param name="themeId">Id of the theme.</param>
+        /// <param name="materialId">Id of the material.</param>
+        /// <response code="200">Theme material deleted successfully.</response>
+        /// <response code="404">Theme material not found.</response>
+        /// <returns></returns>
         [HttpDelete]
         [Route("theme_material")]
         public async Task<IActionResult> DeleteThemeMaterial(int? themeMaterialId = null, int? themeId = null, int? materialId = null)

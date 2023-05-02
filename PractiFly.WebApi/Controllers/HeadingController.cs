@@ -14,9 +14,6 @@ using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace PractiFly.WebApi.Controllers;
 
-/// <summary>
-/// Heading controller
-/// </summary>
 [Route("api/heading")]
 [ApiController]
 public class HeadingController : Controller
@@ -37,14 +34,14 @@ public class HeadingController : Controller
     }
 
     /// <summary>
-    /// Get heading by heading udc or heading id
+    /// Get heading by heading udc or heading id.
     /// </summary>
-    /// <param name="headingId">heading id</param>
+    /// <param name="headingId">Id of the heading.</param>
     /// <param name="code">Heading code (ex: 01, 01.01, 01.01.01, 01.01.01.01)</param>
     /// <returns></returns>
     /// <response code="200">Return heading info</response>
-    /// <response code="404">Heading not found</response>
     /// <response code="400">Bad request (udc or headingId must have value)</response>
+    /// <response code="404">Heading not found</response>
     [HttpGet]
     public async Task<IActionResult> Get(
         [RegularExpression(EntitiesConstants.HeadingRegex)]
@@ -74,7 +71,7 @@ public class HeadingController : Controller
     }
 
     /// <summary>
-    /// Create new heading
+    /// Creates a new heading using the provided heading data.
     /// </summary>
     /// <param name="headingDto"> A parameter containing fields for creating a heading </param>
     /// <returns></returns>
@@ -102,12 +99,12 @@ public class HeadingController : Controller
     }
 
     /// <summary>
-    /// Edit heading
+    /// Method for edit heading data.
     /// </summary>
-    /// <param name="dto"> Containing fields for edit a heading</param>
+    /// <param name="dto">Containing fields for edit a heading.</param>
     /// <returns></returns>
-    /// <response code="200">Heading edited</response>
-    /// <response code="404">Heading not found</response>
+    /// <response code="200">Heading edited successfully.</response>
+    /// <response code="404">Heading not found.</response>
     [HttpPost]
     [Route("edit")]
     //[Authorize(UserRoles.Admin)]
@@ -129,11 +126,11 @@ public class HeadingController : Controller
     }
 
     /// <summary>
-    /// Delete heading
+    /// Method for delete heading.
     /// </summary>
-    /// <param name="headingId"> Id of the rubric to delete </param>
-    /// <response code="200">Heading deleted</response>
-    /// <response code="404">Heading not found</response>
+    /// <param name="headingId">Id of the heading to delete.</param>
+    /// <response code="200">Heading deleted successfully.</response>
+    /// <response code="404">Heading not found.</response>
     [HttpDelete]
     //[Authorize(UserRoles.Admin)]
     public async Task<IActionResult> Delete(int headingId)
