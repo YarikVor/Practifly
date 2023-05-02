@@ -113,12 +113,7 @@ public class HeadingController : Controller
     //[Authorize(UserRoles.Admin)]
     public async Task<IActionResult> Edit(HeadingEditDto dto)
     {
-        var heading = await _context
-            .Headings
-            .AsNoTracking()
-            .FirstOrDefaultAsync(e => e.Id == dto.Id);
-
-        if (heading == null)
+        if (!await _context.Headings.AnyAsync(e => e.Id == dto.Id))
             return NotFound();
 
         if (_context.Headings.Any(e => e.Code == dto.Code && e.Id != dto.Id))

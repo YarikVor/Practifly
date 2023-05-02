@@ -3,7 +3,10 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
+using PractiFly.DbEntities.Courses;
+using PractiFly.WebApi.Dto.CourseData;
 using PractiFly.WebApi.Dto.CourseThemes;
+using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace PractiFly.WebApi.Controllers
 {
@@ -13,11 +16,17 @@ namespace PractiFly.WebApi.Controllers
     {
         private readonly IPractiflyContext _context;
         private readonly IMapper _mapper;
+        private readonly IConfigurationProvider _configurationProvider;
 
-        public CourseThemesController(IPractiflyContext context, IMapper mapper)
+        public CourseThemesController(
+            IPractiflyContext context,
+            IMapper mapper,
+            IConfigurationProvider configurationProvider
+        )
         {
             _context = context;
             _mapper = mapper;
+            _configurationProvider = configurationProvider;
         }
 
 
@@ -29,7 +38,7 @@ namespace PractiFly.WebApi.Controllers
         /// <response code="400">Operation was failed.</response>
         /// <response code="404">No themes found.</response>
         /// <returns>A JSON-encoded representation of the information of course theme.</returns>
-        [HttpGet]
+        /*[HttpGet]
         [Route("course/themes/notunderstand")]
 
         //TODO: Метод повертає інформацію про курс. ПЕРЕПРОВІРИТИ
@@ -61,10 +70,10 @@ namespace PractiFly.WebApi.Controllers
                 .AsNoTracking()
                 .Where(e => e.Id == courseId)
                 .ProjectTo<CourseItemWithThemeDto>(_mapper.ConfigurationProvider)
-                .FirstAsync();*/
+                .FirstAsync();#1#
 
             return Json(1);
-        }
+        }*/
 
         /// <summary>
         /// Returns a list of themes associated with a course identified by the specified Id.
@@ -78,16 +87,19 @@ namespace PractiFly.WebApi.Controllers
         /// or a "Not Found" error if the specified ID does not exist.</returns>
         [HttpGet]
         [Route("course/themes")]
-        public async Task<IActionResult> GetThemesFromCourses(int courseId)
+        public async Task<IActionResult> GetThemesFromCourse(int courseId)
         {
-            var result = await _context.Themes.FindAsync(courseId);
-
-            if(result == null)
+            if (!await _context.Courses.AnyAsync(e => e.Id == courseId))
             {
                 return NotFound();
             }
 
-            var themes = await _context.Themes.Where(t => t.CourseId == courseId).ToListAsync();
+            var themes = await _context
+                .Themes
+                .AsNoTracking()
+                .Where(t => t.CourseId == courseId)
+                .ProjectTo<ThemeItemDto>(_configurationProvider)
+                .ToListAsync();
 
             return Ok(themes);
         }
@@ -95,28 +107,28 @@ namespace PractiFly.WebApi.Controllers
         /// <summary>
         /// Returns a list of materials associated with a material identified by the specified Id.
         /// </summary>
-        /// <param name="materialId">ID of the material.</param>
+        /// <param name="courseId">ID of the course.</param>
         /// <response code="200">Getting materials was successful.</response>
         /// <response code="400">Operation was failed.</response>
         /// <response code="404">No materials found.</response>
         /// <returns>A JSON-encoded representation of the list of materials.</returns>
         //TODO: ViewMaterialsList
         [HttpGet]
-        [Route("[action]")]
-        public async Task<IActionResult> GetMaterialsList(int materialId)
+        [Route("course/materials")]
+        public async Task<IActionResult> GetMaterialsFromCourse(int courseId)
         {
             var result = await _context
-                .Materials
+                .CourseMaterials
                 .AsNoTracking()
-                .Where(e => e.Id == materialId)
-                .ProjectTo<MaterialsMenuDto>(_mapper.ConfigurationProvider)
+                .Where(e => e.CourseId == courseId)
+                .ProjectTo<MaterialsMenuDto>(_configurationProvider)
                 .OrderBy(e => e.Priority)
                 .ToListAsync();
 
             return Json(result);
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Returns a list of courses associated with a course identified by the specified Id.
         /// </summary>
         /// <param name="courseId">ID of the course.</param>
@@ -129,15 +141,15 @@ namespace PractiFly.WebApi.Controllers
         [Route("[action]")]
         public async Task<IActionResult> GetCoursesList(int courseId)
         {
-            ThemeItemDto[] result = await _context
+            var result = await _context
                 .Courses
                 .AsNoTracking()
                 .Where(e => e.Id == courseId)
-                .ProjectTo<ThemeItemDto>(_mapper.ConfigurationProvider)
-                .ToArrayAsync();
+                .ProjectTo<CourseItemDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
 
             return Json(result);
-        }
+        }*/
 
         /// <summary>
         /// Returns information about a specific theme identified by the specified Id.
@@ -150,26 +162,16 @@ namespace PractiFly.WebApi.Controllers
         /// of the theme information, or a "Not Found" error if the specified theme ID does not exist.</returns>
         [HttpGet]
         [Route("theme")]
-        public async Task<IActionResult> CourseThemeInfo(int themeId)
+        public async Task<IActionResult> ThemeInfo(int themeId)
         {
             var result = await _context
                 .Themes
                 .AsNoTracking()
                 .Where(e => e.Id == themeId)
-                .Select(e => new ThemeDto()
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Note = e.Note
-                })
+                .ProjectTo<ThemeInfoDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
 
-            if(result == null)
-            {
-                return NotFound();
-            }
-
-            return Json(result);
+            return result == null ? NotFound() : Json(result);
         }
 
         /// <summary>
@@ -180,24 +182,22 @@ namespace PractiFly.WebApi.Controllers
         /// <response code="200">Update theme was successful.</response>
         /// <response code="400">Update was failed.</response>
         /// <returns>An HTTP response indicating success or failure of the update operation.</returns>
-        [HttpGet]
+        [HttpPost]
         [Route("theme/edit")]
-        public async Task<IActionResult> UpdateTheme(int themeId, [FromBody] ThemeDto themeDto)
+        public async Task<IActionResult> UpdateTheme(ThemeEditDto themeDto)
         {
-            if (themeDto == null)
-            {
-                return BadRequest();
-            }
-
-            var theme = await _context.Themes.FindAsync(themeId);
-
+            var theme = await _context.Themes.FirstOrDefaultAsync(e => e.Id == themeDto.Id);
+            
             if (theme == null)
             {
                 return NotFound();
             }
-
+            
             theme.Name = themeDto.Name;
+            theme.Number = themeDto.Number;
+            theme.LevelId = themeDto.LevelId;
             theme.Note = themeDto.Note;
+            theme.Description = themeDto.Description;
 
             _context.Themes.Update(theme);
             await _context.SaveChangesAsync();
@@ -206,5 +206,142 @@ namespace PractiFly.WebApi.Controllers
         }
 
         //TODO: метод для перегляду всіх курсів наявний в CourseController.UserCourse
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="themeDto"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("theme")]
+        public async Task<IActionResult> CreateTheme(ThemeCreateDto themeDto)
+        {
+            var theme = _mapper.Map<ThemeCreateDto, Theme>(themeDto);
+
+            _context.Themes.Add(theme);
+            await _context.SaveChangesAsync();
+
+            if (theme.Id == 0)
+                return BadRequest();
+            
+            var themeInfoDto = _mapper.Map<Theme, ThemeInfoDto>(theme);
+
+
+            return Json(themeInfoDto);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="themeId"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        [Route("theme")]
+        public async Task<IActionResult> DeleteTheme(int themeId)
+        {
+            var theme = await _context.Themes.FindAsync(themeId);
+
+            if (theme == null)
+                return NotFound();
+
+            _context.Themes.Remove(theme);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("theme_material")]
+        public async Task<IActionResult> AddMaterialToTheme(ThemeMaterialCreateDto themeMaterialDto)
+        {
+            if (await _context
+                    .ThemeMaterials
+                    .AnyAsync(e => e.ThemeId == themeMaterialDto.ThemeId
+                                   && e.MaterialId == themeMaterialDto.MaterialId))
+            {
+                return BadRequest();
+            }
+
+            var themeMaterial = _mapper.Map<ThemeMaterialCreateDto, ThemeMaterial>(themeMaterialDto);
+
+            await _context.ThemeMaterials.AddAsync(themeMaterial);
+            await _context.SaveChangesAsync();
+
+            if (themeMaterial.Id == 0)
+            {
+                return BadRequest();
+            }
+
+            var themeMaterialInfoDto = _mapper.Map<ThemeMaterial, ThemeMaterialInfoDto>(themeMaterial);
+
+            return Json(themeMaterialInfoDto);
+        }
+
+        [HttpPost]
+        [Route("theme_material/edit")]
+        public async Task<IActionResult> ChangeMaterialToTheme(ThemeMaterialEditDto themeMaterialDto)
+        {
+            var themeMaterial = await _context
+                .ThemeMaterials
+                .FirstOrDefaultAsync(e => e.ThemeId == themeMaterialDto.ThemeId
+                                          && e.MaterialId == themeMaterialDto.MaterialId);
+
+            if (themeMaterial == null)
+            {
+                return NotFound();
+            }
+
+            themeMaterial.Number = themeMaterialDto.Number;
+            themeMaterial.LevelId = themeMaterialDto.LevelId;
+            themeMaterial.IsBasic = themeMaterialDto.IsBasic;
+            themeMaterial.Note = themeMaterialDto.Note;
+            themeMaterial.Description = themeMaterialDto.Description;
+            themeMaterial.LevelId = themeMaterialDto.LevelId;
+
+            _context.ThemeMaterials.Update(themeMaterial);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpDelete]
+        [Route("theme_material")]
+        public async Task<IActionResult> DeleteThemeMaterial(int? themeMaterialId = null, int? themeId = null, int? materialId = null)
+        {
+            if (themeMaterialId.HasValue)
+            {
+                if (!await _context.ThemeMaterials.AnyAsync(e => e.Id == themeMaterialId.Value))
+                    return NotFound();
+
+                _context
+                    .ThemeMaterials
+                    .Remove(
+                        new ThemeMaterial()
+                        {
+                            Id = themeMaterialId.Value
+                        }
+                    );
+            }
+            else if (themeId.HasValue && materialId.HasValue)
+            {
+                var themeMaterial = await _context
+                    .ThemeMaterials
+                    .FirstOrDefaultAsync(e => e.ThemeId == themeId.Value
+                                              && e.MaterialId == materialId.Value);
+
+                if (themeMaterial == null)
+                    return NotFound();
+
+                _context.ThemeMaterials.Remove(themeMaterial);
+            }
+            else
+            {
+                return BadRequest("Invalid parameters");
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
     }
 }
