@@ -29,7 +29,7 @@ public class CourseDetailsController : Controller
     /// <response code="400">Operation was failed.</response>
     /// <response code="404">No themes found.</response>
     /// <returns>A JSON-encoded representation of the list of themes, with completion information included for each theme.</returns>
-    //TODO: Check Route.
+    //TODO: Я не понімаю шо тут як робить (Вадім).
     [HttpGet]
     [Route("user/course/themes")]
     public async Task<IActionResult> GetThemesInUserCourse(int courseId)
@@ -40,7 +40,7 @@ public class CourseDetailsController : Controller
             .UserCourses
             .AnyAsync(e => e.UserId == userId && e.CourseId == courseId);
         
-        if(userCourse == false)
+        if(!userCourse)
             return NotFound();
 
         var themes = await _context
@@ -69,12 +69,14 @@ public class CourseDetailsController : Controller
     /// <response code="400">Operation was failed.</response>
     /// <response code="404">No materials found.</response>
     /// <returns>A JSON-encoded representation of the list of materials associated with the user and theme.</returns>
-    //TODO: Check route.
+    //TODO: Я не понімаю шо тут як робить (Вадім).
     [HttpGet]
     [Route("user/course/theme/material")]
     public async Task<IActionResult> GetMaterialsInUserThemes(int themeId)
     {
         var userId = User.GetUserIdInt();
+        
+        //if (userId) return NotFound();
         
         var userTheme = await _context
             .UserThemes
@@ -182,27 +184,63 @@ public class CourseDetailsController : Controller
     /// </returns>
     /// <response code="200">Operation is successful.</response>
     /// <response code="404">The specified user material does not exist.</response>
-    //TODO: Check route.
     [HttpPost]
     [Route("user/material/status")]
-    public async Task<IActionResult> SetMaterialInfo(int materialId, UserMaterialInfoDto dto)
+    
+    //public async Task<IActionResult> SetMaterialInfo(int materialId, UserMaterialInfoDto dto)
+    //{
+    //    var userId = User.GetUserIdInt();
+        
+    //    var userMaterial = await _context
+    //        .UserMaterials
+    //        .Where(e => e.UserId == userId && e.MaterialId == materialId)
+    //        .FirstOrDefaultAsync();
+
+    //    if (userMaterial == null)
+    //        return NotFound();
+        
+    //    userMaterial.IsCompleted = dto.IsCompleted;
+    //    userMaterial.ResultUrl = dto.ResultUrl;
+
+    //    await _context.SaveChangesAsync();
+
+    //    return Ok();
+    //}
+
+    //TODO: можлива реалізація методу SetMaterialInfo (вище попередній метод) 
+    public async Task<IActionResult> SetMaterialInfo(int materialId, [FromBody] UserMaterialInfoDto dto)
     {
         var userId = User.GetUserIdInt();
-        
-        var userMaterial = await _context
-            .UserMaterials
-            .Where(e => e.UserId == userId && e.MaterialId == materialId)
-            .FirstOrDefaultAsync();
+
+        var userMaterial = await _context.UserMaterials
+            .FirstOrDefaultAsync(e => e.UserId == userId && e.MaterialId == materialId);
 
         if (userMaterial == null)
+        {
             return NotFound();
-        
+        }
+
         userMaterial.IsCompleted = dto.IsCompleted;
         userMaterial.ResultUrl = dto.ResultUrl;
 
-        await _context.SaveChangesAsync();
-
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            if (!UserMaterialExists(materialId, userId))
+            {
+                return NotFound();
+            }
+            else throw;
+        }
         return Ok();
+    }
+
+    private bool UserMaterialExists(int materialId, int userId)
+    {
+        return _context.UserMaterials.Any(e => e.MaterialId == materialId && e.UserId == userId);
     }
 }
 
