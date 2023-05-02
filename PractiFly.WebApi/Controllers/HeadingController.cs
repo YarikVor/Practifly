@@ -1,12 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
+using PractiFly.DbEntities;
 using PractiFly.DbEntities.Materials;
 using PractiFly.WebApi.Context;
 using PractiFly.WebApi.Dto.Heading;
+using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace PractiFly.WebApi.Controllers;
 
@@ -18,10 +22,18 @@ namespace PractiFly.WebApi.Controllers;
 public class HeadingController : Controller
 {
     private readonly IPractiflyContext _context;
+    private readonly IConfigurationProvider _configurationProvider;
+    private readonly IMapper _mapper;
 
-    public HeadingController(IPractiflyContext context)
+    public HeadingController(
+        IPractiflyContext context,
+        IConfigurationProvider configurationProvider,
+        IMapper mapper
+    )
     {
+        _configurationProvider = configurationProvider;
         _context = context;
+        _mapper = mapper;
     }
 
     /// <summary>
@@ -35,7 +47,7 @@ public class HeadingController : Controller
     /// <response code="400">Bad request (udc or headingId must have value)</response>
     [HttpGet]
     public async Task<IActionResult> Get(
-        [RegularExpression(@"^\d{2}(?:\.\d{2}){0,3}$")]
+        [RegularExpression(EntitiesConstants.HeadingRegex)]
         string? code = null,
         int? headingId = null
     )
@@ -52,15 +64,7 @@ public class HeadingController : Controller
         }
 
         var headingInfo = await request
-            .Select(e => new HeadingInfoDto()
-            {
-                Id = e.Id,
-                Name = e.Name,
-                Code = e.Code,
-                Description = e.Description,
-                Note = e.Note,
-                Udc = e.Udc
-            })
+            .ProjectTo<HeadingInfoDto>(_configurationProvider)
             .FirstOrDefaultAsync();
 
         if (headingInfo == null)
@@ -77,21 +81,24 @@ public class HeadingController : Controller
     /// <response code="200">Heading created and returned id</response>
     /// <response code="400">Bad request (error save)</response>
     [HttpPost]
-    [Authorize(UserRoles.Admin)]
-    public async Task<IActionResult> Create(HeadingEditDto headingDto)
+    //[Authorize(UserRoles.Admin)]
+    public async Task<IActionResult> Create(HeadingCreateDto headingDto)
     {
-        var heading = new Heading()
+        if(await _context.Headings.AnyAsync(e => e.Code == headingDto.Code))
+            return BadRequest(new {message = "Heading with this code already exists"});
+        
+        var heading = _mapper.Map<HeadingCreateDto, Heading>(headingDto);
+
+        await _context.Headings.AddAsync(heading);
+        await _context.SaveChangesAsync();
+
+        if (heading.Id == 0)
         {
-            Name = headingDto.Name,
-            Code = headingDto.Code,
-            Description = headingDto.Description,
-            Note = headingDto.Note,
-            Udc = headingDto.Udc
-        };
+            return BadRequest();
+        }
 
-        var result = await _context.Headings.AddAsync(heading);
-
-        return heading.Id != 0 ? Ok(heading.Id) : BadRequest();
+        var resultHeading = _mapper.Map<Heading, HeadingInfoDto>(heading);
+        return Json(resultHeading);
     }
 
     /// <summary>
@@ -103,7 +110,7 @@ public class HeadingController : Controller
     /// <response code="404">Heading not found</response>
     [HttpPost]
     [Route("edit")]
-    [Authorize(UserRoles.Admin)]
+    //[Authorize(UserRoles.Admin)]
     public async Task<IActionResult> Edit(HeadingEditDto dto)
     {
         var heading = await _context
@@ -113,6 +120,9 @@ public class HeadingController : Controller
         if (heading == null)
             return NotFound();
 
+        if (_context.Headings.Any(e => e.Code == dto.Code && e.Id != dto.Id))
+            return BadRequest(new {message = "Heading with this code already exists"});
+        
         heading.Code = dto.Code;
         heading.Name = dto.Name;
         heading.Description = dto.Description;
@@ -133,11 +143,11 @@ public class HeadingController : Controller
     /// <response code="200">Heading deleted</response>
     /// <response code="404">Heading not found</response>
     [HttpDelete]
-    [Authorize(UserRoles.Admin)]
+    //[Authorize(UserRoles.Admin)]
     public async Task<IActionResult> Delete(int headingId)
     {
         var isAvaibleHeading = await _context
-            .Materials
+            .Headings
             .AnyAsync(e => e.Id == headingId);
 
         if (!isAvaibleHeading)
