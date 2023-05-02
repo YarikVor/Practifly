@@ -1,6 +1,7 @@
 using AutoMapper;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities.Courses;
+using PractiFly.WebApi.Dto.CourseData;
 using PractiFly.WebApi.Dto.CourseThemes;
 
 namespace PractiFly.WebApi.AutoMappers;
@@ -11,12 +12,17 @@ public class CourseThemesProfile : Profile
     {
         #region CourseThemes
 
-        CreateProjection<Theme, ThemeDto>(); //мапінг вікна перегляду тем курсів
-
-        CreateProjection<Theme, ThemeItemDto>(); //мапінг перегляду переліку курсів
-
-        CreateProjection<Theme, ThemeEditDto>(); //мапінг вікна редагування тем курсів
-
+        CreateProjection<Theme, ThemeInfoDto>();
+        CreateProjection<Theme, ThemeItemDto>();
+        CreateProjection<Theme, ThemeEditDto>();
+        CreateProjection<Course, CourseItemDto>();
+        CreateMap<ThemeCreateDto, Theme>();
+        CreateMap<ThemeEditDto, Theme>();
+        CreateMap<ThemeMaterialCreateDto, ThemeMaterial>();
+        CreateMap<Theme, ThemeInfoDto>();
+        CreateMap<ThemeMaterial, ThemeMaterialInfoDto>();
+        
+        
         CreateProjection<Course, CourseItemWithThemeDto>() //мапінг переліку тем, що входять до курсу
             .ForMember(e => e.Themes, par => par.MapFrom(
                     e => _context

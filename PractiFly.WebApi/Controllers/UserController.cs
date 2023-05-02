@@ -159,7 +159,7 @@ public class UserController : Controller
     /// <returns>An IActionResult indicating success or failure.</returns>
     [HttpDelete]
     [Route("delete")]
-    [Authorize(AuthenticationSchemes = "Bearer")]
+    [Authorize()]
     public async Task<IActionResult> DeleteCurrentUserAsync()
     {
         // Отримання ідентифікатора поточного користувача з токена.
