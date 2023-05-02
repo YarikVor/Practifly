@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities.Materials;
+using PractiFly.WebApi.Context;
 using PractiFly.WebApi.Dto.CourseDetails;
 using PractiFly.WebApi.Dto.MaterialBlocks;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
@@ -69,6 +72,9 @@ namespace PractiFly.WebApi.Controllers
         /// <returns>A JSON-encoded representation of the new material block.</returns>
         [HttpPost]
         [Route("material")]
+        [Authorize(Roles = UserRoles.Teacher, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(Roles = UserRoles.Manager, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(Roles = UserRoles.Admin, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> CreateMaterial(CreateMaterialDto blockDto)
         {
             var material = _mapper.Map<CreateMaterialDto, Material>(blockDto);
@@ -92,6 +98,9 @@ namespace PractiFly.WebApi.Controllers
         /// <returns>A JSON-encoded representation of the new material block.</returns>
         [HttpPost]
         [Route("material/edit")]
+        [Authorize(Roles = UserRoles.Teacher, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(Roles = UserRoles.Manager, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(Roles = UserRoles.Admin, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> EditMaterial(EditMaterialDto blockDto)
         {
             if(!(await _context.Materials.AnyAsync(e => e.Id == blockDto.Id)))
