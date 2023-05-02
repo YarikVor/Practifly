@@ -36,6 +36,7 @@ namespace PractiFly.WebApi.Controllers
         /// <response code="400">Operation was failed.</response>
         /// <response code="404">No courses found.</response>
         /// <returns>A JSON-encoded representation of the array of courses.</returns>
+        //TODO: Провірити цей метод, бо я хз як (Вадім).
         [HttpGet]
         [Route("course/all")]
         public async Task<IActionResult> Courses(int? ownerId = null)
@@ -104,6 +105,8 @@ namespace PractiFly.WebApi.Controllers
             return Json(result);
         }
 
+
+
         /// <summary>
         /// Returns a list of users who are enrolled in the course identified by the specified Id.
         /// </summary>
@@ -152,6 +155,9 @@ namespace PractiFly.WebApi.Controllers
             return Json(result);
         }
 
+
+
+
         /// <summary>
         /// Creates a new course using the provided course data.
         /// </summary>
@@ -163,15 +169,21 @@ namespace PractiFly.WebApi.Controllers
         [Route("course")]
         public async Task<IActionResult> CreateCourse(CreateCourseDto courseDto)
         {
+            if (!await 
+                _context
+                .Users
+                .AnyAsync(e => e.Id == courseDto.OwnerId)) 
+                return BadRequest(new {message = "Course no have owner!"});
+
             var course = new Course()
             {
                 Language = _context.Languages.First(l => (l.Code == courseDto.Language)),
-                OwnerId = courseDto.OwnerId,
                 Name = courseDto.CourseName,
                 Note = courseDto.Note,
                 Description = courseDto.Description
             };
             await _context.Courses.AddAsync(course);
+            await _context.SaveChangesAsync();
             return Ok();
         }
 
@@ -183,25 +195,28 @@ namespace PractiFly.WebApi.Controllers
         /// <response code="400">Editing course was failed.</response>
         /// <response code="404">Not Found response.</response>
         /// <returns>Returns HTTP status response.</returns>
-        [HttpGet]
+        [HttpPost]
         [Route("course/edit")]
-        public async Task<IActionResult> EditCourse(CreateCourseDto courseDto)
+        public async Task<IActionResult> EditCourse(EditCourseDto courseDto)
         {
-            var course = await _context.Courses.FirstOrDefaultAsync(e => e.Id == courseDto.CourseId);
+            var course = await _context
+                .Courses
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.Id == courseDto.Id);
 
             if (course == null)
             {
                 return NotFound();
             }
 
-            course.Id = courseDto.CourseId;
+            course.Id = courseDto.Id;
             course.Language = _context.Languages.First(l => (l.Code == courseDto.Language));
-            course.OwnerId = courseDto.OwnerId;
             course.Name = courseDto.CourseName;
             course.Note = courseDto.Note;
             course.Description = courseDto.Description;
 
             _context.Courses.Update(course);
+            
             await _context.SaveChangesAsync();
 
             return Ok();
@@ -219,9 +234,17 @@ namespace PractiFly.WebApi.Controllers
         [Route("course")]
         public async Task<IActionResult> DeleteCourse(int courseId)
         {
-            var course = await _context.Courses.FirstOrDefaultAsync(e => e.Id == courseId);
-            _context.Courses.Remove(course);
+            var course = await _context
+                .Courses
+                .AnyAsync(e => e.Id == courseId);
+
+            if (!course)
+                return NotFound();
+
+            _context.Courses.Remove(new Course() { Id = courseId });
+
             await _context.SaveChangesAsync();
+            
             return Ok();
         }
     }
