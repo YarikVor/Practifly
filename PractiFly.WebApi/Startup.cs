@@ -48,6 +48,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddCors();
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
         services
@@ -73,13 +74,7 @@ public class Startup
         
         services.AddScoped<IConfigurationProvider, PractiFlyMapperConfiguration>();
         services.AddScoped<IMapper, PractiFlyMapper>();
-        
-        services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
-                {
-                    builder.AllowAnyOrigin()
-                           .AllowAnyMethod()
-                           .AllowAnyHeader();
-                }));
+
     }
 
     #endregion
@@ -97,6 +92,7 @@ public class Startup
         //UseExceptionHandler(app, services);
         app.UseRouting();
 
+        app.UseCors(builder => builder.AllowAnyOrigin());
         app.UseHttpsRedirection();
 
         app.UseAuthentication();
@@ -104,7 +100,6 @@ public class Startup
         app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
         app.UseCertificateForwarding();
-        app.UseCors();
     }
 
     #endregion
