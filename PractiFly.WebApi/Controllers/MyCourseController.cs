@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.WebApi.Dto.MyCourse;
+using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace PractiFly.WebApi.Controllers
 {
@@ -13,12 +14,15 @@ namespace PractiFly.WebApi.Controllers
     public class MyCourseController : Controller
     {
         private readonly IPractiflyContext _context;
-        private readonly IMapper _mapper;
+        private readonly IConfigurationProvider _configurationProvider;
 
-        public MyCourseController(IPractiflyContext context, IMapper mapper)
+        public MyCourseController(
+            IPractiflyContext context, 
+            IConfigurationProvider configurationProvider
+            )
         {
             _context = context;
-            _mapper = mapper;
+            _configurationProvider = configurationProvider;
         }
 
         /// <summary>
@@ -37,8 +41,7 @@ namespace PractiFly.WebApi.Controllers
                 .UserCourses
                 .AsNoTracking()
                 .Where(e => e.UserId == userId)
-                .ProjectTo<UserCourseStatusDto>(_mapper.ConfigurationProvider)
-                .ToArrayAsync();
+                .ProjectToArrayAsync<UserCourseStatusDto>(_configurationProvider);
 
             return Json(result);
         }
