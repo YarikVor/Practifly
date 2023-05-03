@@ -297,13 +297,7 @@ public class CourseThemesController : Controller
 
         if (themeMaterial == null) return NotFound();
 
-        //TODO: Ex
-        themeMaterial.Number = themeMaterialDto.Number;
-        themeMaterial.LevelId = themeMaterialDto.LevelId;
-        themeMaterial.IsBasic = themeMaterialDto.IsBasic;
-        themeMaterial.Note = themeMaterialDto.Note;
-        themeMaterial.Description = themeMaterialDto.Description;
-        themeMaterial.LevelId = themeMaterialDto.LevelId;
+        themeMaterial.ChangeThemeMaterialsForAdmin(themeMaterialDto);
 
         _context.ThemeMaterials.Update(themeMaterial);
         await _context.SaveChangesAsync();
@@ -359,5 +353,18 @@ public class CourseThemesController : Controller
         await _context.SaveChangesAsync();
 
         return Ok();
+    }
+}
+
+public static class CourseThemesEx
+{
+    public static void ChangeThemeMaterialsForAdmin(this ThemeMaterial themeMaterial, ThemeMaterialEditDto themeMaterialDto)
+    {
+        themeMaterial.Number = themeMaterialDto.Number;
+        themeMaterial.LevelId = themeMaterialDto.LevelId;
+        themeMaterial.IsBasic = themeMaterialDto.IsBasic;
+        themeMaterial.Note = themeMaterialDto.Note;
+        themeMaterial.Description = themeMaterialDto.Description;
+        themeMaterial.LevelId = themeMaterialDto.LevelId;
     }
 }

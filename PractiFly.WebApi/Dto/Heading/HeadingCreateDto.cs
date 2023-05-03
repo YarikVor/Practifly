@@ -11,7 +11,7 @@ public class HeadingCreateDto
 
     [Required]
     [MaxLength(16)]
-    [RegularExpression(EntitiesConstants.HeadingRegex)]
+    [RegularExpression(EntitiesConstants.HeadingPattern)]
     public string Code { get; set; } = null!;
 
     [Required]

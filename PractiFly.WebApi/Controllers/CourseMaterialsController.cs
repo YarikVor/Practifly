@@ -1,25 +1,25 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
+﻿using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
+using PractiFly.DbEntities;
 using PractiFly.WebApi.Dto.CourseMaterials;
-using PractiFly.WebApi.Dto.MaterialBlocks;
+using System.ComponentModel.DataAnnotations;
+using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace PractiFly.WebApi.Controllers;
 
 [Route("api")]
 [ApiController]
-//TODO: CourseMAterialController
 public class CourseMaterialsController : Controller
 {
     private readonly IPractiflyContext _context;
-    private readonly IMapper _mapper;
+    private readonly IConfigurationProvider _configurationProvider;
 
-    public CourseMaterialsController(IPractiflyContext context, IMapper mapper)
+    public CourseMaterialsController(IPractiflyContext context, IConfigurationProvider configurationProvider)
     {
         _context = context;
-        _mapper = mapper;
+        _configurationProvider = configurationProvider;
     }
 
     /*/// <summary>
@@ -51,50 +51,41 @@ public class CourseMaterialsController : Controller
     [Route("course/headings")]
     public async Task<IActionResult> CourseHeadings(int courseId)
     {
-        //TODO: Mapper: Heading -> CourseHeadingInfoDto
         var result = await _context.CourseHeadings
             .AsNoTracking()
             .Where(e => e.CourseId == courseId)
-            .Select(e => new CourseHeadingInfoDto
-            {
-                Id = e.Heading.Id,
-                Code = e.Heading.Code,
-                Name = e.Heading.Name
-            })
+            .ProjectTo<CourseHeadingInfoDto>(_configurationProvider)
             .ToListAsync();
 
         return Json(result);
     }
 
     /// <summary>
-    ///     A method for extracting rubric materials and including them in the course
+    ///     A method for extracting rubric materials and including them in the course.
     /// </summary>
-    /// <param name="headingId">The ID of the rubric from which the materials are obtained</param>
+    /// <param name="headingId">The ID of the rubric from which the materials are obtained.</param>
+    /// <param name="code">Code pattern.</param>
+    /// <param name="courseId">Id of the course.</param>
     /// <returns></returns>
-    /// <response code="200">The rubric materials are returned</response>
+    /// <response code="200">The rubric materials are returned.</response>
     [HttpGet]
     [Route("course/heading/materials")]
-    //TODO: Set heading by id or code (Nullable<int>)
-    //public async Task<IActionResult> GetMaterialAndBlocksForInclusion(int materialId)
-    public async Task<IActionResult> GetMaterialForInclusion(int headingId, int courseId)
+    public async Task<IActionResult> GetMaterialForInclusion(int? headingId, [RegularExpression(EntitiesConstants.HeadingPattern)] string code, int courseId)
     {
-        //TODO: Mapper: HeadingMaterials -> MaterialForInclusionDto
-        var result = await _context
-            .HeadingMaterials
-            .AsNoTracking()
-            .Where(e => e.Id == headingId /*TODO:*/)
-            //.ProjectTo<MaterialForInclusionDto>(_mapper.ConfigurationProvider)
-            .Select(e => new MaterialForInclusionDto
-            {
-                IsIncluded = _context
-                    .CourseMaterials
-                    .Any(cm => cm.MaterialId == e.Id),
-                PriorityLevel = _context
-                    .CourseMaterials
-                    .Where(cm => cm.MaterialId == e.Id)
-                    .Select(cm => cm.PriorityLevel)
-                    .First()
-            })
+        var query = _context.HeadingMaterials.AsNoTracking();
+
+        if (headingId.HasValue)
+        {
+            query = query.Where(e => e.Id == headingId.Value);
+        }
+        else if (!string.IsNullOrEmpty(code))
+        {
+            query = query.Where(e => e.Heading.Code == code);
+        }
+        else return BadRequest();
+
+        var result = await query
+            .ProjectTo<MaterialForInclusionDto>(_configurationProvider, new { courseId })
             .OrderBy(e => e.PriorityLevel)
             .ToListAsync();
 

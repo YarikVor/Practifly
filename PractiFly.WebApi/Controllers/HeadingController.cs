@@ -41,7 +41,7 @@ public class HeadingController : Controller
     /// <response code="404">Heading not found</response>
     [HttpGet]
     public async Task<IActionResult> Get(
-        [RegularExpression(EntitiesConstants.HeadingRegex)]
+        [RegularExpression(EntitiesConstants.HeadingPattern)]
         string? code = null,
         int? headingId = null
     )

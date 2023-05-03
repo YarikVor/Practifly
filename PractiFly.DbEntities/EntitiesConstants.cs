@@ -15,5 +15,5 @@ public static class EntitiesConstantLengths
 public static class EntitiesConstants
 {
     public const string SubHeadingPattern = @"^(?:\d{2}(?:\.\d{2}){0,2})?$";
-    public const string HeadingRegex = @"^\d{2}(?:\.\d{2}){0,3}$";
+    public const string HeadingPattern = @"^\d{2}(?:\.\d{2}){0,3}$";
 }

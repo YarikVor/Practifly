@@ -1,5 +1,6 @@
 using AutoMapper;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
+using PractiFly.DbEntities.Courses;
 using PractiFly.DbEntities.Materials;
 using PractiFly.WebApi.Dto.CourseMaterials;
 using PractiFly.WebApi.Dto.Heading;
@@ -39,5 +40,38 @@ public class CourseMaterialsProfile : Profile
         //CreateProjection<ThemeMaterial, ThemeMaterialInfoDto>()
         //    .ForMember(dto => dto.Material, par => par.MapFrom(
         //        tm =>  tm.Material ))
+
+        CreateProjection<Heading, CourseHeadingInfoDto>()
+            .ForMember(dto => dto.Id, par => par.MapFrom(ch => ch.Id))
+            .ForMember(dto => dto.Name, par => par.MapFrom(ch => ch.Name))
+            .ForMember(dto => dto.Code, par => par.MapFrom(ch => ch.Code));
+
+        CreateProjection<HeadingMaterial, MaterialForInclusionDto>()
+            .ForMember(
+                dto => dto.Id,
+                par => par.MapFrom(
+                    m => m.MaterialId))
+            .ForMember(
+                dto => dto.Name,
+                par => par.MapFrom(
+                    m => m.Material.Name))
+            .ForMember(
+                dto => dto.IsPractical,
+                par => par.MapFrom(
+                    m => m.Material.IsPractical))
+            .ForMember(
+                dto => dto.IsIncluded,
+                par => par.MapFrom(
+                    m => _context
+                    .CourseMaterials
+                    .Any(cm => cm.MaterialId == m.Id)))
+            .ForMember(dto => dto.PriorityLevel,
+                par => par.MapFrom(
+                    m => _context
+                    .CourseMaterials
+                    .Where(cm => cm.MaterialId == m.Id)
+                    .Select(cm => cm.PriorityLevel)
+                    .First()));
+
     }
 }
