@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,9 @@ using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.AutoMapper;
 using PractiFly.WebApi.Context;
 using PractiFly.WebApi.Dto.Admin.UserView;
+using PractiFly.WebApi.Dto.MyCourse;
 using PractiFly.WebApi.Services.TokenGenerator;
+using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace PractiFly.WebApi.Controllers;
 
@@ -17,17 +20,18 @@ namespace PractiFly.WebApi.Controllers;
 [Authorize(Roles = UserRoles.Admin, AuthenticationSchemes = "Bearer")]
 public class AdminController : Controller
 {
-    private readonly IPractiflyContext _context;
     private readonly IHttpContextAccessor _httpContext;
-    private readonly IMapper _mapper;
-    private readonly RoleManager<Role> _roleManager;
-    private readonly SignInManager<User> _signInManager;
     private readonly ITokenGenerator _tokenGenerator;
     private readonly UserManager<User> _userManager;
-
+    private readonly SignInManager<User> _signInManager;
+    private readonly RoleManager<Role> _roleManager;
+    private readonly IPractiflyContext _context;
+    private readonly IMapper _mapper;
+    private readonly IConfigurationProvider _configurationProvider;
 
     public AdminController(IPractiflyContext practiflyContext, IHttpContextAccessor httpContext, ITokenGenerator
-        tokenGenerator, UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<Role> roleManager)
+        tokenGenerator, UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<Role> roleManager,
+        IConfigurationProvider configurationProvider)
     {
         _httpContext = httpContext;
         _tokenGenerator = tokenGenerator;
@@ -35,10 +39,10 @@ public class AdminController : Controller
         _signInManager = signInManager;
         _roleManager = roleManager;
         _context = practiflyContext;
+        _configurationProvider = configurationProvider;
     }
-
     /// <summary>
-    ///     Method for obtaining information about the selected user from the list
+    /// Method for obtaining information about the selected user from the list
     /// </summary>
     /// <param name="userId">ID for receiving information about the selected user from the list</param>
     /// <returns></returns>
@@ -49,20 +53,11 @@ public class AdminController : Controller
     //[Authorize(Roles = UserRoles.Admin)]
     public async Task<IActionResult> GetInfoForUsers(int userId)
     {
-        var result = await _context.Users
+        var result = await _context
+            .Users
+            .AsNoTracking()
             .Where(u => u.Id == userId)
-            .Select(u => new UserProfileForAdminViewDto
-            {
-                Id = u.Id,
-                Name = u.FirstName,
-                Surname = u.LastName,
-                Email = u.Email,
-                Phone = u.PhoneNumber,
-                RegistrationDate = u.RegistrationDate,
-                FilePhoto = u.FilePhoto
-                //TODO: Role?
-                //Role = _userManager.GetRolesAsync(u).Result.First()
-            })
+            .ProjectTo<UserProfileForAdminViewDto>(_configurationProvider)
             .FirstOrDefaultAsync();
 
         if (result == null) return NotFound();

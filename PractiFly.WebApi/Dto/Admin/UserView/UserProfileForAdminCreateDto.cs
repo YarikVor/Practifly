@@ -20,7 +20,15 @@ public class UserProfileForAdminCreateDto
 
     [Phone]
     [MaxLength(32)]
-    public string Phone { get; set; } = null!;
+    public string PhoneNumber { get; set; } = null!;
+
+    [Required]
+    [TodayDateConstraint]
+    public DateOnly Birthday { get; set; }
+
+    //[Required]
+    //[TodayDateConstraint]
+    //public DateOnly RegistrationDate { get; set; }
 
     [Url]
     [MaxLength(2048)]

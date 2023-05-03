@@ -2,14 +2,14 @@
 using PractiFly.WebApi.Dto.Admin.UserView;
 using PractiFly.WebApi.Dto.Profile;
 
-namespace PractiFly.WebApi.AutoMapper;
-
-public static class UserEx
+namespace PractiFly.WebApi.AutoMapper
 {
-    public static UserFullnameItemDto ToUserFullnameItemDto(this User user)
+    public static class UserEx
     {
-        return new UserFullnameItemDto { Id = user.Id, Fullname = string.Concat(user.FirstName, user.LastName) };
-    }
+        public static UserFullnameItemDto ToUserFullnameItemDto(this User user)
+        {
+            return new UserFullnameItemDto() { Id = user.Id, Fullname = string.Concat(user.FirstName," ", user.LastName) };
+        }
 
     public static void ChangeUser(this User user, UserProfileInfoCreateDto userDto)
     {
