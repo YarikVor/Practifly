@@ -40,7 +40,6 @@ public class CourseThemesController : Controller
     /*[HttpGet]
     [Route("course/themes/notunderstand")]
 
-    //TODO: Метод повертає інформацію про курс. ПЕРЕПРОВІРИТИ
     //метод, повертає список тем в курсі
     public async Task<IActionResult> GetCourseThemes(int courseId)
     {

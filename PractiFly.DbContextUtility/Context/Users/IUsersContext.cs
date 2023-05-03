@@ -16,4 +16,6 @@ public interface IUsersContext : IDisposable, IBasicDbContext
     DbSet<UserMaterial> UserMaterials { get; }
     DbSet<UserTheme> UserThemes { get; }
     DbSet<User> Users { get; }
+    DbSet<UserRole> UserRoles { get; }
+    DbSet<Role> Roles { get; }
 }

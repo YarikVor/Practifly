@@ -204,6 +204,8 @@ public class CourseDetailsController : Controller
         return Ok();
     }
 
+    [HttpGet]
+    [Route("notunderstand")]
     public async Task<IActionResult> SetMaterialInfo2(int materialId, [FromBody] UserMaterialInfoDto dto)
     {
         var userId = User.GetUserIdInt();

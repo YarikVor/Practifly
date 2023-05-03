@@ -19,6 +19,9 @@ public class UsersContext : DbContext, IUsersContext
     public DbSet<UserMaterial> UserMaterials { get; set; }
     public DbSet<UserTheme> UserThemes { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<UserRole> UserRoles { get; set; } = null!;
+    public DbSet<Role> Roles { get; set; } = null!;
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
