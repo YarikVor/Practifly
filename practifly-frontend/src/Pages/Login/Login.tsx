@@ -1,15 +1,30 @@
-import React from "react";
+import React, {useEffect} from "react";
 
 import {Box, Typography} from "@mui/material";
 
-import {NavLink} from "react-router-dom";
+import { NavLink, useNavigate} from "react-router-dom";
+
+import {useSelector} from "react-redux";
 
 import LoginForm from "../../modules/LoginForm/LoginForm";
+
+import {selectIsAuth} from "../../redux/selectors/authSelectors";
 
 import {useStyles} from "./styles";
 
 const Login = () => {
   const styles = useStyles();
+  const isAuth = useSelector(selectIsAuth);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log(isAuth);
+    if(isAuth) {
+      navigate("/");
+    }
+  },[isAuth]);
+
+
   return (
     <Box className={styles.wrapper}>
       <Typography className={styles.h2} variant="h2">Вхід</Typography>

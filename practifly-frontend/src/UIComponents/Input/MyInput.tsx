@@ -12,6 +12,7 @@ export const MyInput: FC<IInput> = ({
   value,
   inputStyles,
   labelStyles,
+  name,
 }) => {
   const styles = useStyles();
   return (
@@ -21,6 +22,7 @@ export const MyInput: FC<IInput> = ({
         id={id}
         onChange={onChange}
         fullWidth
+        name={name}
         placeholder={placeholder}
         value={value}
         className={`${styles.inputStyles} ${inputStyles}`}
