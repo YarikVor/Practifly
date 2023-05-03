@@ -11,18 +11,19 @@ using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace PractiFly.WebApi.Controllers;
 
-[Route("api")]
+[Route("api/course")]
 [ApiController]
 public class CourseDataController : Controller
 {
     private readonly IPractiflyContext _context;
-    private readonly IMapper _mapper;
     private readonly IConfigurationProvider _configurationProvider;
 
-    public CourseDataController(IPractiflyContext context, IMapper mapper, IConfigurationProvider configurationProvider)
+    public CourseDataController(
+        IPractiflyContext context,
+        IConfigurationProvider configurationProvider
+        )
     {
         _context = context;
-        _mapper = mapper;
         _configurationProvider = configurationProvider;
     }
 
@@ -36,23 +37,20 @@ public class CourseDataController : Controller
     /// <response code="400">Operation was failed.</response>
     /// <response code="404">No courses found.</response>
     /// <returns>A JSON-encoded representation of the array of courses.</returns>
-    //TODO: Провірити цей метод, бо я хз як (Вадім).
     [HttpGet]
-    [Route("course/all")]
+    [Route("all")]
     public async Task<IActionResult> Courses(int? ownerId = null)
     {
-        CourseItemDto[] result;
-        if (!ownerId.HasValue)
-            result = await _context.Courses.AsNoTracking()
-                .ProjectTo<CourseItemDto>(_mapper.ConfigurationProvider)
-                .ToArrayAsync();
-        else
-            result = await _context.Courses.AsNoTracking()
-                .Where(e => e.OwnerId == ownerId)
-                .ProjectTo<CourseItemDto>(_mapper.ConfigurationProvider)
-                .ToArrayAsync();
-
-        return Json(result);
+        var query = _context.Courses.AsNoTracking();
+        
+        if (ownerId.HasValue)
+            query = query.Where(e => e.OwnerId == ownerId);
+        
+        var courseItemDtos = await query
+            .ProjectTo<CourseItemDto>(_configurationProvider)
+            .ToListAsync();
+        
+        return Json(courseItemDtos);
     }
 
     /// <summary>
@@ -64,7 +62,7 @@ public class CourseDataController : Controller
     /// <returns>A JSON-encoded representation of the list of course information.</returns>
     //TODO: Глянути тут, має бути інфа про один курс. ПЕРЕРОБЛЕНИЙ.
     [HttpGet]
-    [Route("course")]
+    [Route("")]
     public async Task<IActionResult> GetCourseInfo(int courseId)
     {
         //TODO: Mapper in mapper? (CourseDataProfile)
@@ -111,9 +109,8 @@ public class CourseDataController : Controller
     /// <response code="400">Operation was failed.</response>
     /// <response code="404">No users found.</response>
     /// <returns>A JSON-encoded representation of the list of users.</returns>
-    //TODO: Чи потрібний?, оскільки вище реалізований метод для відображення користувачів курсу. 
     [HttpGet]
-    [Route("course/users")]
+    [Route("users")]
     public async Task<IActionResult> GetUsersOfCourse(int courseId)
     {
         var result = await _context.UserCourses
@@ -133,19 +130,12 @@ public class CourseDataController : Controller
     /// <response code="404">No owner found.</response>
     /// <returns>A JSON-encoded representation of the owner information.</returns>
     [HttpGet]
-    [Route("course/owner")]
-    //TODO: має бути один вчитель, не список.
-    //TODO: Чи потрібний?, оскільки вище реалізований метод для відображення власника курсу. 
+    [Route("owner")]
     public async Task<IActionResult> GetOwnerOfCourse(int courseId)
     {
         var result = await _context.Courses
             .Where(e => e.Id == courseId)
-            //.Select(o => new OwnerInfoDto
-            //{
-            //    Id = o.OwnerId,
-            //    Owner = string.Concat(o.Owner.FirstName, " ", o.Owner.LastName),
-            //    FilePhoto = o.Owner.FilePhoto
-            //})
+            .Select(e => e.Owner)
             .ProjectTo<OwnerInfoDto>(_configurationProvider)
             .FirstOrDefaultAsync();
 
@@ -161,15 +151,15 @@ public class CourseDataController : Controller
     /// <response code="400">Creating of course was failed.</response>
     /// <returns>An HTTP response indicating the result of the operation.</returns>
     [HttpPost]
-    [Route("course")]
+    [Route("")]
     public async Task<IActionResult> CreateCourse(CreateCourseDto courseDto)
     {
-        if (!await
+        /*if (!await
                 _context
                     .Users
                     .AnyAsync(e => e.Id == courseDto.OwnerId))
-            return BadRequest(new { message = "Course no have owner!" });
-
+            return BadRequest(new { message = "Course no have owner!" });*/
+        //TODO: Mapper
         var course = new Course
         {
             Language = _context.Languages.First(l => l.Code == courseDto.Language),
@@ -179,6 +169,7 @@ public class CourseDataController : Controller
         };
         await _context.Courses.AddAsync(course);
         await _context.SaveChangesAsync();
+        //TODO: if id == 0
         return Ok();
     }
 
@@ -191,7 +182,7 @@ public class CourseDataController : Controller
     /// <response code="404">Not Found response.</response>
     /// <returns>Returns HTTP status response.</returns>
     [HttpPost]
-    [Route("course/edit")]
+    [Route("edit")]
     public async Task<IActionResult> EditCourse(EditCourseDto courseDto)
     {
         var course = await _context
@@ -223,7 +214,7 @@ public class CourseDataController : Controller
     /// <response code="404">Not found course to delete.</response>
     /// <returns>An HTTP response status code.</returns>
     [HttpDelete]
-    [Route("course")]
+    [Route("")]
     public async Task<IActionResult> DeleteCourse(int courseId)
     {
         var course = await _context

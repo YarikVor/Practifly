@@ -45,7 +45,6 @@ public class MaterialBlocksController : Controller
     /// <response code="400">Operation was failed.</response>
     /// <response code="404">No heading found.</response>
     /// <returns>A JSON-encoded representation of the list of materials.</returns>
-    //TODO: Тут матеріал лише отримується. ПЕРЕДИВИТИСЯ
     [HttpGet]
     [Route("heading/materials")]
     public async Task<IActionResult> GetMaterialsFromHeading(int headingId)

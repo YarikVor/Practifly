@@ -10,7 +10,6 @@ public class CourseThemesProfile : Profile
 {
     public CourseThemesProfile(IPractiflyContext _context)
     {
-        #region CourseThemes
 
         CreateProjection<Theme, ThemeInfoDto>();
         CreateProjection<Theme, ThemeItemDto>();
@@ -82,33 +81,5 @@ public class CourseThemesProfile : Profile
                         .Any(tm => tm.MaterialId == cm.MaterialId)
                 )
             );
-
-        #endregion
-
-
-        #region CourseThemes (one)
-
-        //CreateProjection<Course, CourseItemDto>();
-
-
-        //CreateProjection<UserMaterial, MaterialItemDto>()
-        //    .ForMember(dto => dto.Id, par => par.MapFrom(
-        //        m => m.MaterialId))
-        //    .ForMember(dto => dto.Name, par => par.MapFrom(
-        //        m => m.Material.Name));
-        ////TODO: 
-        //CreateProjection<ThemeMaterial, ThemeMaterialInfoDto>()
-        //    .ForMember(dto => dto.Material, par => par.MapFrom(
-        //        tm => tm.Material));
-
-        ////.ForMember(dto => dto.ViewStatus, par => par.MapFrom(
-        ////    tm => tm.ViewStatus))
-        ////.ForMember(dto => dto.SendStatus, par => par.MapFrom(
-        ////    tm => tm.SendStatus));
-        //////
-        //CreateProjection<UserMaterial, UserMaterialInfoDto>();
-        //CreateProjection<UserMaterial, UserMaterialSendDto>();
-
-        #endregion
     }
 }

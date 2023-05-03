@@ -4,6 +4,7 @@ using PractiFly.DbEntities.Courses;
 using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Dto.Admin.UserView;
 using PractiFly.WebApi.Dto.CourseData;
+using PractiFly.WebApi.Dto.CourseThemes;
 
 namespace PractiFly.WebApi.AutoMapper;
 
@@ -42,5 +43,13 @@ public class CourseDataProfile : Profile
                 o => string.Concat(o.Owner.FirstName, " ", o.Owner.LastName)))
             .ForMember(dto => dto.FilePhoto, par => par.MapFrom(
                 o => o.Owner.FilePhoto));
+        
+        CreateProjection<User, OwnerInfoDto>()
+            .ForMember(dto => dto.Id, par => par.MapFrom(
+                o => o.Id))
+            .ForMember(dto => dto.Owner, par => par.MapFrom(
+                o => string.Concat(o.FirstName, " ", o.LastName)))
+            .ForMember(dto => dto.FilePhoto, par => par.MapFrom(
+                o => o.FilePhoto));
     }
 }

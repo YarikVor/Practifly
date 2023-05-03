@@ -1,4 +1,4 @@
-using AutoMapper;
+/*using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +6,7 @@ using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.WebApi.Dto.CourseDetails;
 using PractiFly.WebApi.Dto.CourseThemes;
 using PractiFly.WebApi.Dto.HeadingCourse;
+using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace PractiFly.WebApi.Controllers;
 
@@ -14,12 +15,12 @@ namespace PractiFly.WebApi.Controllers;
 public class CourseController : Controller
 {
     private readonly IPractiflyContext _context;
-    private readonly IMapper _mapper;
+    private readonly IConfigurationProvider _configurationProvider;
 
-    public CourseController(IPractiflyContext context, IMapper mapper)
+    public CourseController(IPractiflyContext context, IConfigurationProvider configurationProvider)
     {
         _context = context;
-        _mapper = mapper;
+        _configurationProvider = configurationProvider;
     }
 
     ///// <summary>
@@ -69,8 +70,8 @@ public class CourseController : Controller
             .Courses
             .AsNoTracking()
             .Where(e => e.Id == courseId)
-            .ProjectTo<HeadingCourseItemDto>(_mapper.ConfigurationProvider)
-            .FirstAsync();
+            .ProjectTo<HeadingCourseItemDto>(_configurationProvider)
+            .FirstOrDefaultAsync();
 
         return Json(result);
 
@@ -112,7 +113,7 @@ public class CourseController : Controller
             .Courses
             .AsNoTracking()
             .Where(e => e.Id == themeMaterialId)
-            .ProjectTo<MaterialDetailsViewDto>(_mapper.ConfigurationProvider)
+            .ProjectTo<MaterialDetailsViewDto>(_configurationProvider)
             .FirstAsync();
 
         return Json(result);
@@ -147,8 +148,9 @@ public class CourseController : Controller
                         .Any(tm => tm.MaterialId == cm.MaterialId && tm.ThemeId == themeId),
                     Priority = cm.PriorityLevel
                 })
+                .ProjectTo<>()
                 .ToArrayAsync();
 
         return Json(result);
     }
-}
+}*/

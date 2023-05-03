@@ -51,6 +51,7 @@ public class CourseMaterialsController : Controller
     [Route("course/headings")]
     public async Task<IActionResult> CourseHeadings(int courseId)
     {
+        //TODO: Mapper: Heading -> CourseHeadingInfoDto
         var result = await _context.CourseHeadings
             .AsNoTracking()
             .Where(e => e.CourseId == courseId)
@@ -73,9 +74,11 @@ public class CourseMaterialsController : Controller
     /// <response code="200">The rubric materials are returned</response>
     [HttpGet]
     [Route("course/heading/materials")]
+    //TODO: Set heading by id or code (Nullable<int>)
     //public async Task<IActionResult> GetMaterialAndBlocksForInclusion(int materialId)
     public async Task<IActionResult> GetMaterialForInclusion(int headingId, int courseId)
     {
+        //TODO: Mapper: HeadingMaterials -> MaterialForInclusionDto
         var result = await _context
             .HeadingMaterials
             .AsNoTracking()
@@ -103,19 +106,20 @@ public class CourseMaterialsController : Controller
     /// </summary>
     /// <param name="materialId">Id of the material.</param>
     /// <returns>A JSON-encoded representation of the list of course headings.</returns>
-    [HttpGet]
+    /*[HttpGet]
     [Route("material")]
-    public async Task<IActionResult> GetMaterialBlocks(int materialId)
+    public async Task<IActionResult> GetMaterialsFromHeading(int headingId)
     {
+        //TODO: Select from HeadingMaterials and get Materials
         var result = await _context
             .Materials
             .AsNoTracking()
-            .Where(e => e.Id == materialId)
+            .Where(e => e.Id == headingId)
             //.ProjectTo<MaterialBlocksDto>(_mapper.ConfigurationProvider)
             .ProjectTo<MaterialBlockItemDto>(_mapper.ConfigurationProvider)
             .OrderBy(e => e.Id)
             .ToListAsync();
 
         return Json(result);
-    }
+    }*/
 }

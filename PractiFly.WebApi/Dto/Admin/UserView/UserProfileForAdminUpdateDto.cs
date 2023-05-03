@@ -36,5 +36,6 @@ public class UserProfileForAdminUpdateDto
     public string? FilePhoto { get; set; }
 
     [RoleString]
+    [Required]
     public string Role { get; set; } = null!;
 }

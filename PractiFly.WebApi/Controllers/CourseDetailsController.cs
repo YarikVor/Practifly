@@ -41,6 +41,7 @@ public class CourseDetailsController : Controller
         if (!userCourse)
             return NotFound();
 
+        //TODO: Mapper
         var themes = await _context
             .Themes
             .Where(e => e.CourseId == courseId)
@@ -67,7 +68,6 @@ public class CourseDetailsController : Controller
     /// <response code="400">Operation was failed.</response>
     /// <response code="404">No materials found.</response>
     /// <returns>A JSON-encoded representation of the list of materials associated with the user and theme.</returns>
-    //TODO: Check route.
     [HttpGet]
     [Route("user/course/theme/material")]
     public async Task<IActionResult> GetMaterialsInUserThemes(int themeId)
@@ -83,9 +83,10 @@ public class CourseDetailsController : Controller
         if (userTheme == false)
             return NotFound();
 
+        //TODO: Mapper
         var result = new CourseThemeWithMaterialsDto();
 
-
+        //TODO: Mapper
         result.Materials = await _context
             .UserMaterials
             .Where(um => um.UserId == userId)
@@ -119,6 +120,7 @@ public class CourseDetailsController : Controller
     [Route("theme/material")]
     public async Task<IActionResult> GetMaterialInfo(int themeId, int materialId)
     {
+        //TODO: Mapper
         var material = await _context
             .Materials
             .Where(e => e.Id == materialId)
@@ -150,13 +152,14 @@ public class CourseDetailsController : Controller
     /// <response code="400">Operation was failed.</response>
     /// <response code="404">No material found.</response>
     /// <returns>A JSON-encoded representation of the user's progress information.</returns>
-    //TODO: Check route.
+    //TODO: Можливо матеріал міститься лише в одній темі (1:1)
     [HttpGet]
     [Route("user/material/status")]
     public async Task<IActionResult> GetUserInfoInMaterial(int materialId)
     {
         var userId = User.GetUserIdInt();
 
+        //TODO: Mapper
         var userMaterial = await _context
             .UserMaterials
             .Where(e => e.UserId == userId && e.MaterialId == materialId)
@@ -184,57 +187,27 @@ public class CourseDetailsController : Controller
     /// <response code="404">The specified user material does not exist.</response>
     [HttpPost]
     [Route("user/material/status")]
-    public async Task<IActionResult> SetMaterialInfo(int materialId, UserMaterialInfoDto dto)
+    public async Task<IActionResult> SetMaterialInfo(UserMaterialInfoDto dto)
     {
         var userId = User.GetUserIdInt();
 
         var userMaterial = await _context
             .UserMaterials
-            .Where(e => e.UserId == userId && e.MaterialId == materialId)
+            .Where(e => e.UserId == userId && e.MaterialId == dto.MaterialId)
             .FirstOrDefaultAsync();
 
+        //TODO: Create userMaterial
+        //TODO: Mapper
         if (userMaterial == null)
             return NotFound();
 
+        //TODO: Extract to static method.
         userMaterial.IsCompleted = dto.IsCompleted;
         userMaterial.ResultUrl = dto.ResultUrl;
 
         await _context.SaveChangesAsync();
 
         return Ok();
-    }
-
-    [HttpGet]
-    [Route("notunderstand")]
-    public async Task<IActionResult> SetMaterialInfo2(int materialId, [FromBody] UserMaterialInfoDto dto)
-    {
-        var userId = User.GetUserIdInt();
-
-        var userMaterial = await _context.UserMaterials
-            .FirstOrDefaultAsync(e => e.UserId == userId && e.MaterialId == materialId);
-
-        if (userMaterial == null) return NotFound();
-
-        userMaterial.IsCompleted = dto.IsCompleted;
-        userMaterial.ResultUrl = dto.ResultUrl;
-
-        try
-        {
-            await _context.SaveChangesAsync();
-        }
-        catch (DbUpdateException)
-        {
-            if (!UserMaterialExists(materialId, userId))
-                return NotFound();
-            throw;
-        }
-
-        return Ok();
-    }
-
-    private bool UserMaterialExists(int materialId, int userId)
-    {
-        return _context.UserMaterials.Any(e => e.MaterialId == materialId && e.UserId == userId);
     }
 }
 

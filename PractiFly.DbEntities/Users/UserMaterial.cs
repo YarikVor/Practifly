@@ -26,7 +26,6 @@ public class UserMaterial
     public virtual Material Material { get; set; } = null!;
 
     [Column("IsCompleted")]
-    [Required]
     public bool IsCompleted { get; set; }
 
     [Column("ResultUrl")]
@@ -36,8 +35,7 @@ public class UserMaterial
     public string ResultUrl { get; set; } = null!;
 
     [Column("Grade")]
-    [Required]
-    public int Grade { get; set; }
+    public int? Grade { get; set; }
 
     [Column("Note")]
     [MaxLength(EntitiesConstantLengths.Note)]
