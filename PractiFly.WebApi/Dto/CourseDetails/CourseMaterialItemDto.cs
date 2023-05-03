@@ -7,7 +7,7 @@ public class CourseMaterialItemDto
 
     public string Name { get; set; } = null!;
 
-    public int Grade { get; set; }
+    public int? Grade { get; set; }
 
     public bool IsCompleted { get; set; }
 }
