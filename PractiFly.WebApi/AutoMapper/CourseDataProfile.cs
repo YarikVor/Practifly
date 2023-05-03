@@ -51,5 +51,18 @@ public class CourseDataProfile : Profile
                 o => string.Concat(o.FirstName, " ", o.LastName)))
             .ForMember(dto => dto.FilePhoto, par => par.MapFrom(
                 o => o.FilePhoto));
+
+        CreateMap<CreateCourseDto, Course>()
+            .ForMember(c => c.Language, par => par.MapFrom(
+                dto => _context
+                .Languages
+                .First(l => l.Code == dto.Language)))
+            .ForMember(c => c.Name, par => par.MapFrom(
+                dto => dto.CourseName));
+
+        CreateMap<Course, CourseInfoDto>()
+            .ForMember(dto => dto.Language, par => par.MapFrom(
+                e => e.Language.Name));
+
     }
 }

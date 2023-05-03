@@ -74,5 +74,23 @@ public class CourseDetailsProfile : Profile
             //        .Any(tm => tm.MaterialId == cm.MaterialId && tm.ThemeId == tm.themeId)
             .ForMember(dto => dto.Priority, par => par.MapFrom(
                 cm => cm.PriorityLevel));
+
+        CreateProjection<Theme, CourseThemeItemDto>()
+            .ForMember(dto => dto.IsCompleted, par => par.MapFrom(
+                e => _context
+                    .UserThemes
+                    .Where(ut => ut.ThemeId == e.Id)
+                    .Select(ut => ut.IsCompleted)
+                    .FirstOrDefault()));
+
+        CreateProjection<UserMaterial, CourseMaterialItemDto>()
+            .ForMember(dto => dto.Id, par => par.MapFrom(
+                e => e.MaterialId))
+            .ForMember(dto => dto.Name, par => par.MapFrom(
+                e => e.Material.Name));
+
+        CreateProjection<UserMaterial, UserMaterialInfoDto>();
+
+
     }
 }
