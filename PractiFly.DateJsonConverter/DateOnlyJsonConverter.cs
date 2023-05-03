@@ -12,8 +12,18 @@ public class DateOnlyJsonConverter : JsonConverter<DateOnly>
         return DateOnly.Parse(value!);
     }
 
+    public override DateOnly ReadAsPropertyName(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        return DateOnly.Parse(reader.GetString()!);
+    }
+
     public override void Write(Utf8JsonWriter writer, DateOnly value, JsonSerializerOptions options)
     {
-        writer.WriteStringValue(value.ToString("yyyy-MM-dd"));
+        writer.WriteStringValue(value.ToString("O"));
+    }
+    
+    public override void WriteAsPropertyName(Utf8JsonWriter writer, DateOnly value, JsonSerializerOptions options)
+    {
+        writer.WriteStringValue(value.ToString("O"));
     }
 }

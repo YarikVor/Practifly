@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.ComponentModel;
+using System.Reflection;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
@@ -193,7 +194,10 @@ public class Startup
                 options.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
             }
         );
+        
+        TypeDescriptor.AddAttributes(typeof(DateOnly), new TypeConverterAttribute(typeof(DateOnlyTypeConverter)));
     }
+    
 
     #endregion
 

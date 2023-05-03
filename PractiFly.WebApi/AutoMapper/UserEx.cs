@@ -15,4 +15,16 @@ public static class UserEx
         user.Birthday = userDto.Birthday;
         user.FilePhoto = userDto.FilePhoto;
     }
+
+    public static void ChangeUserInAdmin(this User user, UserProfileForAdminUpdateDto userDto)
+    {
+        user.UserName = userDto.Name;
+        user.LastName = userDto.Surname;
+        user.Email = userDto.Email;
+        user.PhoneNumber = userDto.Phone;
+        user.FilePhoto = userDto.FilePhoto;
+        user.Birthday = userDto.Birthday;
+    }
+    
+    
 }
