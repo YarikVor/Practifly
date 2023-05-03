@@ -6,9 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.AutoMapper;
-using PractiFly.WebApi.Context;
 using PractiFly.WebApi.Dto.Admin.UserView;
-using PractiFly.WebApi.Services.TokenGenerator;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace PractiFly.WebApi.Controllers;
@@ -18,25 +16,18 @@ namespace PractiFly.WebApi.Controllers;
 //[Authorize(Roles = UserRoles.Admin, AuthenticationSchemes = "Bearer")]
 public class AdminController : Controller
 {
-    private readonly IPractiflyContext _context;
-    private readonly IHttpContextAccessor _httpContext;
-    private readonly IMapper _mapper;
-    private readonly RoleManager<Role> _roleManager;
-    private readonly SignInManager<User> _signInManager;
-    private readonly ITokenGenerator _tokenGenerator;
-    private readonly UserManager<User> _userManager;
     private readonly IConfigurationProvider _configurationProvider;
+    private readonly IPractiflyContext _context;
+    private readonly IMapper _mapper;
+    private readonly UserManager<User> _userManager;
 
 
-    public AdminController(IPractiflyContext practiflyContext, IHttpContextAccessor httpContext, ITokenGenerator
-        tokenGenerator, UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<Role> roleManager,
-        IConfigurationProvider configurationProvider)
+    public AdminController(IPractiflyContext practiflyContext,
+        UserManager<User> userManager,
+        IConfigurationProvider configurationProvider
+    )
     {
-        _httpContext = httpContext;
-        _tokenGenerator = tokenGenerator;
         _userManager = userManager;
-        _signInManager = signInManager;
-        _roleManager = roleManager;
         _context = practiflyContext;
         _configurationProvider = configurationProvider;
     }
@@ -59,12 +50,8 @@ public class AdminController : Controller
             .Where(u => u.Id == userId)
             .ProjectTo<UserProfileForAdminViewDto>(_configurationProvider)
             .FirstOrDefaultAsync();
-        
-        /**/
 
-        if (result == null) return NotFound();
-
-        return Json(result);
+        return result == null ? NotFound() : Json(result);
     }
 
     /// <summary>
@@ -83,14 +70,11 @@ public class AdminController : Controller
         var user = await _userManager.FindByIdAsync(userId);
 
         if (user == null)
-            //return BadRequest();
             return NotFound();
 
         var result = await _userManager.DeleteAsync(user);
 
-        if (!result.Succeeded) return BadRequest();
-
-        return Ok();
+        return !result.Succeeded ? BadRequest() : Ok();
     }
 
     /// <summary>
@@ -104,20 +88,16 @@ public class AdminController : Controller
     [Route("")]
     public async Task<IActionResult> CreateUserInAdmin(UserProfileForAdminCreateDto userDto)
     {
-        const string defaultPassword = "Qwerty_1";
         var user = _mapper.Map<UserProfileForAdminCreateDto, User>(userDto);
 
-        var result = await _userManager.CreateAsync(user, defaultPassword);
+        var result = await _userManager.CreateAsync(user, userDto.Password);
 
         if (!result.Succeeded)
             return BadRequest();
 
         var roleResult = await _userManager.AddToRoleAsync(user, userDto.Role);
 
-        if (!roleResult.Succeeded)
-            return BadRequest();
-
-        return Ok();
+        return !roleResult.Succeeded ? BadRequest() : Ok();
     }
 
     /// <summary>
@@ -136,17 +116,20 @@ public class AdminController : Controller
 
         if (user == null) return NotFound();
 
-        user.UserName = userDto.Name;
-        user.LastName = userDto.Surname;
-        user.Email = userDto.Email;
-        user.PhoneNumber = userDto.Phone;
-        user.FilePhoto = userDto.FilePhoto;
+        user.ChangeUserInAdmin(userDto);
 
         var result = await _userManager.UpdateAsync(user);
 
-        if (!result.Succeeded) return BadRequest(result.Errors);
+        if (!result.Succeeded)
+            return BadRequest(result.Errors);
 
-        await _userManager.RemoveFromRolesAsync(user, UserRoles.RolesEnumerable);
+        var currentRoles = await _userManager.GetRolesAsync(user);
+
+        var roleDeleteResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+
+        if (!roleDeleteResult.Succeeded)
+            return BadRequest(roleDeleteResult.Errors);
+
         var roleResult = await _userManager.AddToRoleAsync(user, userDto.Role);
 
         if (!roleResult.Succeeded) return BadRequest(roleResult.Errors);
@@ -162,17 +145,25 @@ public class AdminController : Controller
     /// <response code="200">Filtration was successful</response>
     [HttpGet]
     [Route("filter")]
-    public async Task<IActionResult> GetUsers( [FromQuery] UserFilteringDto filter)
+    public async Task<IActionResult> GetUsers([FromQuery] UserFilteringDto filter)
     {
-        var users = _userManager.Users.Include(e => e.UserRoles).AsNoTracking();
+        var roleId = 0;
 
-        if (!string.IsNullOrEmpty(filter.Name)) 
+        if (!string.IsNullOrEmpty(filter.Role))
+            roleId = await _context.Roles.Where(e => e.Name == filter.Role).Select(e => e.Id).FirstAsync();
+
+        var users = _context.Users.AsNoTracking();
+
+        if (roleId != 0)
+            users = users.Where(u => _context.UserRoles.Any(ur => ur.UserId == u.Id && ur.RoleId == roleId));
+
+        if (!string.IsNullOrEmpty(filter.Name))
             users = users.Where(u => u.FirstName.Contains(filter.Name));
 
-        if (!string.IsNullOrEmpty(filter.Surname)) 
+        if (!string.IsNullOrEmpty(filter.Surname))
             users = users.Where(u => u.LastName.Contains(filter.Surname));
 
-        if (!string.IsNullOrEmpty(filter.Phone)) 
+        if (!string.IsNullOrEmpty(filter.Phone))
             users = users.Where(u => u.PhoneNumber == filter.Phone);
 
         if (filter.RegistrationDateFrom.HasValue)
@@ -181,14 +172,13 @@ public class AdminController : Controller
         if (filter.RegistrationDateTo.HasValue)
             users = users.Where(u => u.RegistrationDate <= filter.RegistrationDateTo.Value);
 
-        if (!string.IsNullOrEmpty(filter.Email)) 
+        if (!string.IsNullOrEmpty(filter.Email))
             users = users.Where(u => u.Email == filter.Email);
-        // TODO: Role Name Not Working
-        if (!string.IsNullOrEmpty(filter.Role))
-            users = users
-                .Where(u => u.UserRoles.Any(r => r.Role.Name == filter.Role));
-        
-        var result = await users.ProjectTo<UserFullnameItemDto>(_configurationProvider).ToListAsync();
+
+        var result = await users
+            .OrderBy(u => u.Id)
+            .ProjectTo<UserFullnameItemDto>(_configurationProvider)
+            .ToListAsync();
 
         return Json(result);
     }
