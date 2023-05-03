@@ -4,6 +4,7 @@ using PractiFly.DbEntities.Courses;
 using PractiFly.DbEntities.Materials;
 using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Dto.CourseDetails;
+using PractiFly.WebApi.Dto.CourseThemes;
 
 namespace PractiFly.WebApi.AutoMappers;
 
@@ -52,7 +53,7 @@ public class CourseDetailsProfile : Profile
             .ForMember(dto => dto.Id, par => par.MapFrom(m => m.MaterialId))
             .ForMember(dto => dto.Name, par => par.MapFrom(m => m.Material.Name));
 
-        CreateProjection<ThemeMaterial, ThemeMaterialInfoDto>()
+        CreateProjection<ThemeMaterial, ThemeContentInfoDto>()
             .ForMember(dto => dto.Material, par => par.MapFrom(tm => tm.Material));
         //.ForMember(dto => dto.ViewStatus, par => par.MapFrom(
         //    tm => tm.ViewStatus))
@@ -61,5 +62,17 @@ public class CourseDetailsProfile : Profile
         ////
         CreateProjection<UserMaterial, UserMaterialInfoDto>();
         CreateProjection<UserMaterial, UserMaterialSendDto>();
+        CreateProjection<CourseMaterial, MaterialsMenuDto>()
+
+            .ForMember(dto => dto.Id, par => par.MapFrom(
+                cm => cm.MaterialId))
+            .ForMember(dto => dto.Name, par => par.MapFrom(
+                cm => cm.Material.Name))
+            //.ForMember(dto => dto.IsIncluded, par => par.MapFrom(
+            //    cm => _context
+            //        .ThemeMaterials
+            //        .Any(tm => tm.MaterialId == cm.MaterialId && tm.ThemeId == tm.themeId)
+            .ForMember(dto => dto.Priority, par => par.MapFrom(
+                cm => cm.PriorityLevel));
     }
 }

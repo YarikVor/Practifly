@@ -67,6 +67,7 @@ public class CourseDataController : Controller
     [Route("course")]
     public async Task<IActionResult> GetCourseInfo(int courseId)
     {
+        //TODO: Mapper in mapper? (CourseDataProfile)
         var result = await _context
             .Courses
             .Where(e => e.Id == courseId)
@@ -139,12 +140,13 @@ public class CourseDataController : Controller
     {
         var result = await _context.Courses
             .Where(e => e.Id == courseId)
-            .Select(o => new OwnerInfoDto
-            {
-                Id = o.Id,
-                Owner = o.Name,
-                FilePhoto = o.Owner.FilePhoto
-            })
+            //.Select(o => new OwnerInfoDto
+            //{
+            //    Id = o.OwnerId,
+            //    Owner = string.Concat(o.Owner.FirstName, " ", o.Owner.LastName),
+            //    FilePhoto = o.Owner.FilePhoto
+            //})
+            .ProjectTo<OwnerInfoDto>(_configurationProvider)
             .FirstOrDefaultAsync();
 
         return Json(result);

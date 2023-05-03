@@ -134,11 +134,14 @@ public class CourseController : Controller
             _context
                 .CourseMaterials
                 .AsNoTracking()
-                .Where(cm => cm.CourseId == _context.Themes.FirstOrDefault(theme => theme.Id == themeId).CourseId)
+                .Where(cm => cm.CourseId == _context
+                .Themes
+                .FirstOrDefault(theme => theme.Id == themeId).CourseId)
                 .Select(cm => new MaterialsMenuDto
                 {
                     Id = cm.MaterialId,
                     Name = cm.Material.Name,
+                    //TODO: Go to map (CourseDetailsProfile) 
                     IsIncluded = _context
                         .ThemeMaterials
                         .Any(tm => tm.MaterialId == cm.MaterialId && tm.ThemeId == themeId),
