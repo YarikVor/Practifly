@@ -12,7 +12,9 @@ namespace PractiFly.WebApi.Dto.Admin.UserView
 
         public string Email { get; set; } = null!;
 
-        public string Phone { get; set; } = null!;
+        public string PhoneNumber { get; set; } = null!;
+
+        public DateOnly Birthday { get; set; }
 
         public DateOnly RegistrationDate { get; set; }
 

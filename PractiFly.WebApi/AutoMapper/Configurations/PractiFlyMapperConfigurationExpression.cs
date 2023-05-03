@@ -17,7 +17,8 @@ public class PractiFlyMapperConfigurationExpression : MapperConfigurationExpress
             new MyCourseProfile(_context),
             new UserProfile(),
             new MaterialBlockProfile(_context),
-            new HeadingCourseProfile(_context)
+            new HeadingCourseProfile(_context),
+            new AdminProfile(_context),
         };
         
         AddProfiles(profiles);

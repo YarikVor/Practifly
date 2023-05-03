@@ -22,7 +22,7 @@ namespace PractiFly.WebApi.Dto.Admin.UserView
         [MaxLength(128)]
         public string? Email { get; set; }
         
-        [RoleString]
+        [RoleString(false)]
         public string? Role { get; set; } 
     }
 }

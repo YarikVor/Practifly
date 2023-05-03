@@ -23,7 +23,14 @@ public class UserProfileForAdminUpdateDto
     [Phone]
     [MaxLength(32)]
     public string? Phone { get; set; }
-    
+
+    [Required]
+    [TodayDateConstraint]
+    public DateOnly Birthday { get; set; }
+
+    //[Required]
+    //[TodayDateConstraint]
+    //public DateOnly RegistrationDate { get; set; }
     [Url]
     [MaxLength(2048)]
     public string? FilePhoto { get; set; }

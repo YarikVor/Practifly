@@ -16,7 +16,8 @@ public class RoleStringAttribute : ValidationAttribute
     public override bool IsValid(object? value)
     {
         if (value is not string role)
-            throw new InvalidCastException("Value is not a string");
+            //throw new InvalidCastException("Value is not a string");
+            return false;
 
         return (!_isRequired && string.IsNullOrEmpty(role)) || UserRoles.RolesEnumerable.Contains(role);
     }
