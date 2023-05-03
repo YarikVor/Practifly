@@ -2,7 +2,7 @@ using Bogus;
 
 namespace PractiFly.FakerManager;
 
-public class FakerFkRandomizer<TEntity> : Faker<TEntity> where TEntity: class
+public class FakerFkRandomizer<TEntity> : Faker<TEntity> where TEntity : class
 {
     private readonly int _count;
 
@@ -10,7 +10,9 @@ public class FakerFkRandomizer<TEntity> : Faker<TEntity> where TEntity: class
     {
         _count = count;
     }
-    
-    protected int RandomId(Faker f) 
-        => f.Random.Int(1, _count);
+
+    protected int RandomId(Faker f)
+    {
+        return f.Random.Int(1, _count);
+    }
 }

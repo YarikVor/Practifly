@@ -1,20 +1,17 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbEntities.Courses;
 using PractiFly.DbEntities.Materials;
 using PractiFly.DbEntities.Users;
 
-
 namespace PractiFly.DbContextUtility.Context.PractiflyDb;
 
 public class PractiFlyContext : DbContext, IPractiflyContext
 {
-    
     static PractiFlyContext()
     {
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }
-    
+
     public PractiFlyContext(DbContextOptions<PractiFlyContext> options) : base(options)
     {
     }

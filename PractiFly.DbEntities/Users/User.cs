@@ -1,12 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace PractiFly.DbEntities.Users;
 
 [Table("AspNetUsers")]
-public sealed class User: IdentityUser<int>
+public sealed class User : IdentityUser<int>
 {
     [Column("FirstName")]
     [MaxLength(EntitiesConstantLengths.Name)]

@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using Bogus;
 using Microsoft.EntityFrameworkCore;
-using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities.Courses;
 using PractiFly.DbEntities.Materials;
 using PractiFly.DbEntities.Users;
@@ -15,10 +14,10 @@ public static class PractiFlyEx
     public static void GenerateTestDataIfEmpty(this DbContext context)
     {
         context.Database.EnsureCreated();
-        
+
         Randomizer.Seed = new Random(0);
-        
-        var fakerManager = new PractiFlyFakerManager(5);
+
+        var fakerManager = new PractiFlyFakerManager();
 
         //AddData<User>();
 
@@ -55,16 +54,12 @@ public static class PractiFlyEx
 
             if (!dbSet.Any())
             {
-                IEnumerable<TEntity> entities = fakerManager.Generate<TEntity>(5);
-                
+                var entities = fakerManager.Generate<TEntity>(5);
+
                 dbSet.AddRange(entities);
-                    
+
                 context.SaveChanges();
             }
-            
-            
         }
-        
-        
     }
 }

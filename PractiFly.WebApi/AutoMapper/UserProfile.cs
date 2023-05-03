@@ -4,11 +4,10 @@ using PractiFly.WebApi.Dto.Registration;
 
 namespace PractiFly.WebApi.AutoMapper;
 
-public class UserProfile: Profile
+public class UserProfile : Profile
 {
-    
     private const string DefaultPhotoUrl = "https://www.nicepng.com/maxp/u2y3a9e6t4o0a9w7/";
-    
+
     public UserProfile()
     {
         CreateMap<RegistrationDto, User>()

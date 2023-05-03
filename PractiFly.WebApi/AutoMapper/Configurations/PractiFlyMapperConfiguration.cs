@@ -9,5 +9,4 @@ public class PractiFlyMapperConfiguration : MapperConfiguration
         : base(new PractiFlyMapperConfigurationExpression(context))
     {
     }
-
 }

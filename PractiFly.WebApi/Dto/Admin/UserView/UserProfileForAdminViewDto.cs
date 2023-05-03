@@ -1,23 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace PractiFly.WebApi.Dto.Admin.UserView;
 
-namespace PractiFly.WebApi.Dto.Admin.UserView
+public class UserProfileForAdminViewDto
 {
-    public class UserProfileForAdminViewDto
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
 
-        public string Name { get; set; } = null!;
+    public string Name { get; set; } = null!;
 
-        public string Surname { get; set; } = null!;
+    public string Surname { get; set; } = null!;
 
-        public string Email { get; set; } = null!;
+    public string Email { get; set; } = null!;
 
-        public string Phone { get; set; } = null!;
+    public string Phone { get; set; } = null!;
 
-        public DateOnly RegistrationDate { get; set; }
+    public DateOnly RegistrationDate { get; set; }
 
-        public string FilePhoto { get; set; } = null!;
+    public string FilePhoto { get; set; } = null!;
 
-        public string Role { get; set; } = null!;
-    }
+    public string Role { get; set; } = null!;
 }

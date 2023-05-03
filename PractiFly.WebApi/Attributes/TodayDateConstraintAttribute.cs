@@ -1,14 +1,13 @@
 using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 
 namespace PractiFly.WebApi.Attributes;
 
-[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
+[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter)]
 public class TodayDateConstraintAttribute : ValidationAttribute
 {
     public override bool IsValid(object? value)
     {
-        DateOnly date = value switch
+        var date = value switch
         {
             DateOnly dateOnly => dateOnly,
             DateTime dateTime => DateOnly.FromDateTime(dateTime),
@@ -18,6 +17,8 @@ public class TodayDateConstraintAttribute : ValidationAttribute
         return date <= DateOnly.FromDateTime(DateTime.Today);
     }
 
-    public override string FormatErrorMessage(string name) =>
-        $"The {name} must be today or earlier";
+    public override string FormatErrorMessage(string name)
+    {
+        return $"The {name} must be today or earlier";
+    }
 }

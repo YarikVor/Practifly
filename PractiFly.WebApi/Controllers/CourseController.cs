@@ -3,15 +3,9 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
-using PractiFly.DbEntities.Courses;
-using PractiFly.DbEntities.Users;
-using PractiFly.WebApi.Context;
-using PractiFly.WebApi.Dto.CourseData;
 using PractiFly.WebApi.Dto.CourseDetails;
 using PractiFly.WebApi.Dto.CourseThemes;
-using PractiFly.WebApi.Dto.Heading;
 using PractiFly.WebApi.Dto.HeadingCourse;
-using PractiFly.WebApi.Dto.MyCourse;
 
 namespace PractiFly.WebApi.Controllers;
 
@@ -54,12 +48,12 @@ public class CourseController : Controller
     //            .ProjectTo<CourseItemDto>(_mapper.ConfigurationProvider)
     //            .ToArrayAsync();
     //    }
-        
+
     //    return Json(result);
     //}
 
     /// <summary>
-    /// Returns a list of headings included in the course identified by the specified Id.
+    ///     Returns a list of headings included in the course identified by the specified Id.
     /// </summary>
     /// <param name="courseId">Id of the course.</param>
     /// <response code="200">Representation headings in course was successful.</response>
@@ -71,7 +65,7 @@ public class CourseController : Controller
     public async Task<IActionResult> GetIncludedHeadings(int courseId)
     {
         //TODO: Check included headings to courses in HeadingCourseItemDto
-        HeadingCourseItemDto result = await _context
+        var result = await _context
             .Courses
             .AsNoTracking()
             .Where(e => e.Id == courseId)
@@ -80,7 +74,7 @@ public class CourseController : Controller
 
         return Json(result);
 
-        //TODO: ÏÓÊÎË‚‡ Â‡Î≥Á‡ˆ≥ˇ ‰‡ÌÓ„Ó ÏÂÚÓ‰Û
+        //TODO: –º–æ–∂–ª–∏–≤–∞ —Ä–µ–∞–ª—ñ–∑–∞—Ü—ñ—è –¥–∞–Ω–æ–≥–æ –º–µ—Ç–æ–¥—É
         //HeadingCourseItemDto result = await _context
         //.Courses
         //.AsNoTracking()
@@ -99,12 +93,11 @@ public class CourseController : Controller
         //        .ToList()
         //})
         //.FirstOrDefaultAsync();
-
     }
 
     //TODO: ???
     /// <summary>
-    /// Returns detailed information about a material identified by the specified Id.
+    ///     Returns detailed information about a material identified by the specified Id.
     /// </summary>
     /// <param name="themeMaterialId">Id of the theme material</param>
     /// <response code="200">Viewing material details was successful.</response>
@@ -115,7 +108,7 @@ public class CourseController : Controller
     [Route("theme/materials")]
     public async Task<IActionResult> ViewMaterialDetails(int themeMaterialId)
     {
-        MaterialDetailsViewDto result = await _context
+        var result = await _context
             .Courses
             .AsNoTracking()
             .Where(e => e.Id == themeMaterialId)
@@ -126,7 +119,7 @@ public class CourseController : Controller
     }
 
     /// <summary>
-    /// Returns an array of materials associated with a theme identified by the specified themeId.
+    ///     Returns an array of materials associated with a theme identified by the specified themeId.
     /// </summary>
     /// <param name="themeId">Id of the theme.</param>
     /// <response code="200">Getting materials in theme was successful.</response>
@@ -137,12 +130,12 @@ public class CourseController : Controller
     [Route("theme/materials_")]
     public async Task<IActionResult> GetMaterialsInTheme(int themeId)
     {
-        MaterialsMenuDto[] result = await
+        var result = await
             _context
                 .CourseMaterials
                 .AsNoTracking()
                 .Where(cm => cm.CourseId == _context.Themes.FirstOrDefault(theme => theme.Id == themeId).CourseId)
-                .Select(cm => new MaterialsMenuDto()
+                .Select(cm => new MaterialsMenuDto
                 {
                     Id = cm.MaterialId,
                     Name = cm.Material.Name,

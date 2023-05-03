@@ -19,15 +19,15 @@ public class UserProfileForAdminUpdateDto
     [EmailAddress]
     [MaxLength(128)]
     public string Email { get; set; } = null!;
-    
+
     [Phone]
     [MaxLength(32)]
     public string? Phone { get; set; }
-    
+
     [Url]
     [MaxLength(2048)]
     public string? FilePhoto { get; set; }
-    
+
     [RoleString]
     public string Role { get; set; } = null!;
 }

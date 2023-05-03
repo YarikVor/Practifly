@@ -11,15 +11,14 @@ public class CreateMaterialDto
 
     // TODO:
     public int Priority { get; set; }
-        
+
     [MaxLength(EntitiesConstantLengths.Note)]
     public string? Note { get; set; }
-    
+
     [Url]
     [MaxLength(EntitiesConstantLengths.Url)]
     [Required]
     public string Url { get; set; } = null!;
-        
-    public bool IsPractical { get; set; }
 
+    public bool IsPractical { get; set; }
 }

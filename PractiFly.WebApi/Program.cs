@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace PractiFly.WebApi;
 
 public static class Program
@@ -10,8 +8,9 @@ public static class Program
     }
 
     public static IHostBuilder CreateHostBuilder(string[] args)
-        => Host.CreateDefaultBuilder(args)
+    {
+        return Host.CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(
                 webBuilder => webBuilder.UseStartup<Startup>());
+    }
 }
-

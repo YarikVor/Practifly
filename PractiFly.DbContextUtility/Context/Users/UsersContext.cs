@@ -1,15 +1,12 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbEntities.Courses;
 using PractiFly.DbEntities.Materials;
 using PractiFly.DbEntities.Users;
-using PractiFly.FakerManager;
 
 namespace PractiFly.DbContextUtility.Context.Users;
 
 public class UsersContext : DbContext, IUsersContext
 {
-
     public UsersContext(DbContextOptions<UsersContext> options) : base(options)
     {
     }

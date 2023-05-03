@@ -1,9 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
-using Practifly.FakerGenerator;
-using PractiFly.FakerManager;
 
 namespace PractiFly.WebApi;
 

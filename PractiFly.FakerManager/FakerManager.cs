@@ -25,4 +25,3 @@ public class FakerManager : IFakerManager
         _fakers.Add(typeof(T), faker);
     }
 }
-

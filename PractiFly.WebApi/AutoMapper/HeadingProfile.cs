@@ -18,9 +18,10 @@ public class HeadingProfile : Profile
         CreateMap<HeadingCreateDto, Heading>();
         CreateMap<Heading, HeadingInfoDto>();
         CreateMap<HeadingEditDto, Heading>();
+
         #endregion
-        
-        
+
+
         #region HeadingCourse
 
         //TODO: Dto for Editing

@@ -68,7 +68,7 @@ public class EntitiesTest
         MakeTest(_practiflyContext.UserGroups),
         MakeTest(_practiflyContext.UserHeadings),
         MakeTest(_practiflyContext.UserThemes),
-        MakeTest(_practiflyContext.UserMaterials),
+        MakeTest(_practiflyContext.UserMaterials)
     };
 
     private void ClearDb()

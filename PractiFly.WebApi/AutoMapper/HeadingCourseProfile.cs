@@ -5,7 +5,7 @@ using PractiFly.WebApi.Dto.Heading;
 
 namespace PractiFly.WebApi.AutoMapper;
 
-public class HeadingCourseProfile: Profile
+public class HeadingCourseProfile : Profile
 {
     public HeadingCourseProfile(IPractiflyContext context)
     {

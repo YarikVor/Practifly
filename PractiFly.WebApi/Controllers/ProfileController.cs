@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -17,15 +16,15 @@ namespace PractiFly.WebApi.Controllers;
 [Route("api/user/profile")]
 public class ProfileController : Controller
 {
-    private readonly IPractiflyContext _context;
     private readonly IConfigurationProvider _configurationProvider;
+    private readonly IPractiflyContext _context;
     private readonly UserManager<User> _userManager;
 
     public ProfileController(
         IPractiflyContext context,
         IConfigurationProvider configurationProvider,
         UserManager<User> userManager
-        )
+    )
     {
         _context = context;
         _configurationProvider = configurationProvider;
@@ -33,7 +32,7 @@ public class ProfileController : Controller
     }
 
     /// <summary>
-    /// Returns profile information for the user with the specified userId.
+    ///     Returns profile information for the user with the specified userId.
     /// </summary>
     /// <param name="userId">Id of the user.</param>
     /// <response code="200">Getting profile information of user was successful.</response>
@@ -58,7 +57,7 @@ public class ProfileController : Controller
     }
 
     /// <summary>
-    /// Updates the profile information for the currently authenticated user.
+    ///     Updates the profile information for the currently authenticated user.
     /// </summary>
     /// <param name="userDto">A Data Transfer Object containing the updated user information.</param>
     /// <response code="200">User update was successful.</response>
@@ -72,21 +71,15 @@ public class ProfileController : Controller
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        User user = await _userManager.FindByIdAsync(userId);
+        var user = await _userManager.FindByIdAsync(userId);
 
-        if (user == null)
-        {
-            return NotFound();
-        }
+        if (user == null) return NotFound();
 
         user.ChangeUser(userDto);
 
         var result = await _userManager.UpdateAsync(user);
 
-        if (!result.Succeeded)
-        {
-            return BadRequest();
-        }
+        if (!result.Succeeded) return BadRequest();
 
         return Ok();
     }

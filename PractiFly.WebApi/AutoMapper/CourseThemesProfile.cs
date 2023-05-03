@@ -21,8 +21,8 @@ public class CourseThemesProfile : Profile
         CreateMap<ThemeMaterialCreateDto, ThemeMaterial>();
         CreateMap<Theme, ThemeInfoDto>();
         CreateMap<ThemeMaterial, ThemeMaterialInfoDto>();
-        
-        
+
+
         CreateProjection<Course, CourseItemWithThemeDto>() //мапінг переліку тем, що входять до курсу
             .ForMember(e => e.Themes, par => par.MapFrom(
                     e => _context
@@ -30,10 +30,10 @@ public class CourseThemesProfile : Profile
                         .Where(t => t.CourseId == e.Id)
                         // TODO: Use ProjectTo
                         .Select(
-                            t => new ThemeItemDto()
+                            t => new ThemeItemDto
                             {
                                 Id = t.Id,
-                                Name = t.Name,
+                                Name = t.Name
                             }
                         )
                 )
@@ -85,7 +85,7 @@ public class CourseThemesProfile : Profile
 
         #endregion
 
-        
+
         #region CourseThemes (one)
 
         //CreateProjection<Course, CourseItemDto>();
@@ -110,6 +110,5 @@ public class CourseThemesProfile : Profile
         //CreateProjection<UserMaterial, UserMaterialSendDto>();
 
         #endregion
-
     }
 }

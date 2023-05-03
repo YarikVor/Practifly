@@ -1,14 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities;
 using PractiFly.DbEntities.Materials;
-using PractiFly.WebApi.Context;
 using PractiFly.WebApi.Dto.Heading;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
@@ -18,8 +15,8 @@ namespace PractiFly.WebApi.Controllers;
 [ApiController]
 public class HeadingController : Controller
 {
-    private readonly IPractiflyContext _context;
     private readonly IConfigurationProvider _configurationProvider;
+    private readonly IPractiflyContext _context;
     private readonly IMapper _mapper;
 
     public HeadingController(
@@ -34,7 +31,7 @@ public class HeadingController : Controller
     }
 
     /// <summary>
-    /// Get heading by heading udc or heading id.
+    ///     Get heading by heading udc or heading id.
     /// </summary>
     /// <param name="headingId">Id of the heading.</param>
     /// <param name="code">Heading code (ex: 01, 01.01, 01.01.01, 01.01.01.01)</param>
@@ -56,9 +53,7 @@ public class HeadingController : Controller
         else if (headingId != null)
             request = request.Where(e => e.Id == headingId);
         else
-        {
             return BadRequest();
-        }
 
         var headingInfo = await request
             .ProjectTo<HeadingInfoDto>(_configurationProvider)
@@ -71,7 +66,7 @@ public class HeadingController : Controller
     }
 
     /// <summary>
-    /// Creates a new heading using the provided heading data.
+    ///     Creates a new heading using the provided heading data.
     /// </summary>
     /// <param name="headingDto"> A parameter containing fields for creating a heading </param>
     /// <returns></returns>
@@ -81,25 +76,22 @@ public class HeadingController : Controller
     //[Authorize(UserRoles.Admin)]
     public async Task<IActionResult> Create(HeadingCreateDto headingDto)
     {
-        if(await _context.Headings.AnyAsync(e => e.Code == headingDto.Code))
-            return BadRequest(new {message = "Heading with this code already exists"});
-        
+        if (await _context.Headings.AnyAsync(e => e.Code == headingDto.Code))
+            return BadRequest(new { message = "Heading with this code already exists" });
+
         var heading = _mapper.Map<HeadingCreateDto, Heading>(headingDto);
 
         await _context.Headings.AddAsync(heading);
         await _context.SaveChangesAsync();
 
-        if (heading.Id == 0)
-        {
-            return BadRequest();
-        }
+        if (heading.Id == 0) return BadRequest();
 
         var resultHeading = _mapper.Map<Heading, HeadingInfoDto>(heading);
         return Json(resultHeading);
     }
 
     /// <summary>
-    /// Method for edit heading data.
+    ///     Method for edit heading data.
     /// </summary>
     /// <param name="dto">Containing fields for edit a heading.</param>
     /// <returns></returns>
@@ -114,8 +106,8 @@ public class HeadingController : Controller
             return NotFound();
 
         if (_context.Headings.Any(e => e.Code == dto.Code && e.Id != dto.Id))
-            return BadRequest(new {message = "Heading with this code already exists"});
-        
+            return BadRequest(new { message = "Heading with this code already exists" });
+
         var changedHeading = _mapper.Map<HeadingEditDto, Heading>(dto);
 
         _context.Headings.Update(changedHeading);
@@ -126,7 +118,7 @@ public class HeadingController : Controller
     }
 
     /// <summary>
-    /// Method for delete heading.
+    ///     Method for delete heading.
     /// </summary>
     /// <param name="headingId">Id of the heading to delete.</param>
     /// <response code="200">Heading deleted successfully.</response>
@@ -142,7 +134,7 @@ public class HeadingController : Controller
         if (!isAvaibleHeading)
             return NotFound();
 
-        _context.Headings.Remove(new Heading() { Id = headingId });
+        _context.Headings.Remove(new Heading { Id = headingId });
 
         await _context.SaveChangesAsync();
 

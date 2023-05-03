@@ -29,7 +29,7 @@ public class AuthOptions : IAuthOptions
     public string Secret => _section[SecretKey]
                             ?? throw new NullReferenceException(ValueNotFound(SecretKey));
 
-    public int TimeLife => Int32.Parse(
+    public int TimeLife => int.Parse(
         _section[TimeLifeKey]
         ?? throw new NullReferenceException(ValueNotFound(TimeLifeKey))
     );

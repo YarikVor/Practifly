@@ -7,10 +7,9 @@ namespace PractiFly.FakerConfiguration;
 
 public class FakerGeneratorConfiguration<T> : IEntityTypeConfiguration<T> where T : class
 {
-    static IFakerManager _fakerManager = new PractiFlyFakerManager();
-    
-    const int NUMBER_GENERATE_ENTITIES = 5;
-    
+    private const int NUMBER_GENERATE_ENTITIES = 5;
+    private static readonly IFakerManager _fakerManager = new PractiFlyFakerManager();
+
     public void Configure(EntityTypeBuilder<T> builder)
     {
         builder.HasData(_fakerManager.Generate<T>(NUMBER_GENERATE_ENTITIES));

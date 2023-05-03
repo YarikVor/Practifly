@@ -15,13 +15,13 @@ public class CourseDependency
 
     [Column("CourseId", Order = 1)]
     public int CourseId { get; set; }
-    
+
     [ForeignKey("CourseId")]
     public virtual Course Course { get; set; } = null!;
 
     [Column("BaseCourseId", Order = 2)]
     public int BaseCourseId { get; set; }
-    
+
     [ForeignKey("BaseCourseId")]
     public virtual Course BaseCourse { get; set; } = null!;
 

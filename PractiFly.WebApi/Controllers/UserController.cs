@@ -1,17 +1,10 @@
 using System.Security.Claims;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PractiFly.DbContextUtility.Context.PractiflyDb;
-using PractiFly.DbContextUtility.Context.Users;
 using PractiFly.DbEntities.Users;
-using PractiFly.WebApi.AutoMapper;
 using PractiFly.WebApi.Context;
-using PractiFly.WebApi.Dto.Admin.UserView;
-using PractiFly.WebApi.Dto.Profile;
 using PractiFly.WebApi.Dto.Registration;
 using PractiFly.WebApi.Services.TokenGenerator;
 
@@ -21,11 +14,11 @@ namespace PractiFly.WebApi.Controllers;
 [Route("api/user")]
 public class UserController : Controller
 {
+    private readonly IMapper _mapper;
+    private readonly SignInManager<User> _signInManager;
     private readonly ITokenGenerator _tokenGenerator;
     private readonly UserManager<User> _userManager;
-    private readonly SignInManager<User> _signInManager;
-    private readonly IMapper _mapper;
-    
+
     public UserController(
         ITokenGenerator tokenGenerator,
         UserManager<User> userManager,
@@ -40,13 +33,16 @@ public class UserController : Controller
     }
 
     /// <summary>
-    /// Creates a new user account based on the provided registration data, 
-    /// adds the user to the 'User' role, 
-    /// and returns an authentication token for the newly-created user.
+    ///     Creates a new user account based on the provided registration data,
+    ///     adds the user to the 'User' role,
+    ///     and returns an authentication token for the newly-created user.
     /// </summary>
     /// <param name="registrationDto">A Data Transfer Object, containing user registrate information.</param>
     /// <returns>HTTP response status code.</returns>
-    /// <response code="200">An HTTP OK result containing a JSON-encoded authentication token if the user account was created successfully</response>     
+    /// <response code="200">
+    ///     An HTTP OK result containing a JSON-encoded authentication token if the user account was created
+    ///     successfully
+    /// </response>
     /// <response code="400">HTTP BadRequest result</response>
     [HttpPost]
     [Route("register")]
@@ -64,17 +60,17 @@ public class UserController : Controller
         if (!identityResult.Succeeded)
             return BadRequest(identityResult.Errors);
 
-        string token = GenerateToken(identityUser, UserRoles.User);
+        var token = GenerateToken(identityUser, UserRoles.User);
 
         return Ok(token);
     }
 
     /// <summary>
-    /// Logs in a user with the specified email and password credentials.
+    ///     Logs in a user with the specified email and password credentials.
     /// </summary>
     /// <param name="loginDto">The login Data Transfer Object for the user.</param>
     /// <returns></returns>
-    /// <response code="200">Returns an access token for the user.</response>     
+    /// <response code="200">Returns an access token for the user.</response>
     /// <response code="400">BadRequest result.</response>
     [HttpPost]
     [Route("login")]
@@ -113,7 +109,7 @@ public class UserController : Controller
     //}
 
     /// <summary>
-    /// Generates a JWT (JSON Web Token) for the specified user with the given role.
+    ///     Generates a JWT (JSON Web Token) for the specified user with the given role.
     /// </summary>
     /// <param name="user">The User object for whom the token is generated.</param>
     /// <param name="role">The role assigned to the user.</param>
@@ -125,13 +121,13 @@ public class UserController : Controller
         IEnumerable<Claim> claims = new[]
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Role, role),
+            new Claim(ClaimTypes.Role, role)
         };
         return _tokenGenerator.GenerateToken(claims);
     }
 
     /// <summary>
-    /// Refreshes the authentication token for the current user.
+    ///     Refreshes the authentication token for the current user.
     /// </summary>
     /// <response code="200">Token refresh was successful.</response>
     /// <response code="400">Operation was failed.</response>
@@ -151,7 +147,7 @@ public class UserController : Controller
     }
 
     /// <summary>
-    /// Deletes the user associated with the current request's token.
+    ///     Deletes the user associated with the current request's token.
     /// </summary>
     /// <response code="200">Delete current user was successful.</response>
     /// <response code="400">Delete of user was failed.</response>
@@ -159,34 +155,28 @@ public class UserController : Controller
     /// <returns>An IActionResult indicating success or failure.</returns>
     [HttpDelete]
     [Route("delete")]
-    [Authorize()]
+    [Authorize]
     public async Task<IActionResult> DeleteCurrentUserAsync()
     {
         // Отримання ідентифікатора поточного користувача з токена.
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (userId == null)
-        {
             // Якщо ідентифікатор користувача не було знайдено в токені, видається помилка.
             return BadRequest();
-        }
 
         // Знаходження користувача за його ідентифікатором.
         var user = await _userManager.FindByIdAsync(userId);
 
         if (user == null)
-        {
             // Якщо користувача з таким ідентифікатором не знайдено, видається помилка.
             return BadRequest();
-        }
 
         //TODO: Add confirm email
         var result = await _userManager.DeleteAsync(user);
 
         if (!result.Succeeded)
-        {
             // Якщо виникла помилка при видаленні користувача, видається помилка.
             return BadRequest();
-        }
 
         return Ok();
     }

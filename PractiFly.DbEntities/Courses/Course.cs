@@ -22,12 +22,12 @@ public class Course
 
     [ForeignKey("AspNetUsers")]
     [Column("OwnerId")]
-    
+
     public int OwnerId { get; set; }
-    
+
     [ForeignKey("OwnerId")]
     public virtual User Owner { get; set; } = null!;
-    
+
     [Column("LanguageId")]
     [ForeignKey("Language")]
     public int LanguageId { get; set; }

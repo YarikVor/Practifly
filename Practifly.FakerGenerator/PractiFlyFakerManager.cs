@@ -7,7 +7,6 @@ namespace Practifly.FakerGenerator;
 
 public class PractiFlyFakerManager : FakerManager
 {
-   
     public PractiFlyFakerManager(int count = 5)
     {
         // Users

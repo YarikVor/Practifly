@@ -71,10 +71,9 @@ public class Startup
         InitTables(services);
 
         AddIdentityUserAndRole(services);
-        
+
         services.AddScoped<IConfigurationProvider, PractiFlyMapperConfiguration>();
         services.AddScoped<IMapper, PractiFlyMapper>();
-
     }
 
     #endregion
@@ -235,11 +234,11 @@ public class Startup
                     new List<string>()
                 }
             });
-            
+
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
             c.IncludeXmlComments(xmlPath);
-            
+
             c.MapType<DateOnly>(DateOnlyApiSchema.Create);
         });
     }
@@ -290,7 +289,7 @@ public class Startup
             options.UseNpgsql(connectionString);
         }
     }
-    
+
     private static void InitTables(IServiceCollection services)
     {
         // TODO: Make init tables

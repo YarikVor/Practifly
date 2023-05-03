@@ -4,8 +4,6 @@ using PractiFly.DbEntities.Courses;
 using PractiFly.DbEntities.Materials;
 using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Dto.CourseDetails;
-using PractiFly.WebApi.Dto.CourseMaterials;
-using PractiFly.WebApi.Dto.MaterialBlocks;
 
 namespace PractiFly.WebApi.AutoMappers;
 
@@ -29,13 +27,13 @@ public class CourseDetailsProfile : Profile
                     m => _context
                         .Themes
                         .Where(c => c.Id == c.Id)
-                        //.Select(
-                        //    c => new MaterialItemDto()
-                        //    {
-                        //        Id = c.Id,
-                        //        Name = c.Name,
-                        //    }
-                        //)
+                    //.Select(
+                    //    c => new MaterialItemDto()
+                    //    {
+                    //        Id = c.Id,
+                    //        Name = c.Name,
+                    //    }
+                    //)
                 )
             )
             .ForMember(

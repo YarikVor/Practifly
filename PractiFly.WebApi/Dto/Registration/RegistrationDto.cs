@@ -9,7 +9,7 @@ public class RegistrationDto
     [Required]
     [MaxLength(64)]
     public string Username { get; set; } = null!;
-    
+
     [Required]
     [MaxLength(128)]
     public string Name { get; set; } = null!;

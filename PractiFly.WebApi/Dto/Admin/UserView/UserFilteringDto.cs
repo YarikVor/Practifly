@@ -1,28 +1,27 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using PractiFly.WebApi.Attributes;
 
-namespace PractiFly.WebApi.Dto.Admin.UserView
+namespace PractiFly.WebApi.Dto.Admin.UserView;
+
+public class UserFilteringDto
 {
-    public class UserFilteringDto
-    {
-        [MaxLength(128)]
-        public string? Name { get; set; }
-        
-        [MaxLength(128)]
-        public string? Surname { get; set; }
+    [MaxLength(128)]
+    public string? Name { get; set; }
 
-        [Phone]
-        [MaxLength(32)]
-        public string? Phone { get; set; } 
+    [MaxLength(128)]
+    public string? Surname { get; set; }
 
-        public DateOnly? RegistrationDateFrom { get; set; }
-        public DateOnly? RegistrationDateTo { get; set; }
+    [Phone]
+    [MaxLength(32)]
+    public string? Phone { get; set; }
 
-        [EmailAddress]
-        [MaxLength(128)]
-        public string? Email { get; set; }
-        
-        [RoleString]
-        public string? Role { get; set; } 
-    }
+    public DateOnly? RegistrationDateFrom { get; set; }
+    public DateOnly? RegistrationDateTo { get; set; }
+
+    [EmailAddress]
+    [MaxLength(128)]
+    public string? Email { get; set; }
+
+    [RoleString]
+    public string? Role { get; set; }
 }

@@ -9,6 +9,6 @@ public class MaterialDto
     public string Url { get; set; } = null!;
 
     public bool IsPractical { get; set; }
-        
+
     public string? Note { get; set; }
 }
