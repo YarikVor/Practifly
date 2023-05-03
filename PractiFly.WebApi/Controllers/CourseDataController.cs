@@ -7,6 +7,7 @@ using PractiFly.DbEntities.Courses;
 using PractiFly.WebApi.AutoMapper;
 using PractiFly.WebApi.Dto.Admin.UserView;
 using PractiFly.WebApi.Dto.CourseData;
+using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace PractiFly.WebApi.Controllers;
 
@@ -16,11 +17,13 @@ public class CourseDataController : Controller
 {
     private readonly IPractiflyContext _context;
     private readonly IMapper _mapper;
+    private readonly IConfigurationProvider _configurationProvider;
 
-    public CourseDataController(IPractiflyContext context, IMapper mapper)
+    public CourseDataController(IPractiflyContext context, IMapper mapper, IConfigurationProvider configurationProvider)
     {
         _context = context;
         _mapper = mapper;
+        _configurationProvider = configurationProvider;
     }
 
 
@@ -114,7 +117,7 @@ public class CourseDataController : Controller
     {
         var result = await _context.UserCourses
             .Where(e => e.CourseId == courseId)
-            .Select(e => e.User.ToUserFullnameItemDto())
+            .ProjectTo<UserFullnameItemDto>(_configurationProvider)
             .ToListAsync();
 
         return Json(result);

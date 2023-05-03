@@ -30,5 +30,9 @@ public class AdminProfile : Profile
                 user => user.RegistrationDate,
                 par => par.MapFrom(
                     dto => DateOnly.FromDateTime(DateTime.Today)));
+
+        CreateProjection<User, UserFullnameItemDto>()
+            .ForMember(dto => dto.Fullname, par => par.MapFrom(
+                e => string.Concat(e.FirstName, " ", e.LastName)));
     }
 }

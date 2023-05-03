@@ -6,11 +6,6 @@ namespace PractiFly.WebApi.AutoMapper;
 
 public static class UserEx
 {
-    public static UserFullnameItemDto ToUserFullnameItemDto(this User user)
-    {
-        return new UserFullnameItemDto() { Id = user.Id, Fullname = string.Concat(user.FirstName, " ", user.LastName) };
-    }
-
     public static void ChangeUser(this User user, UserProfileInfoCreateDto userDto)
     {
         user.FirstName = userDto.FirstName;

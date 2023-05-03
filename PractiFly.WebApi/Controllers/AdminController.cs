@@ -188,7 +188,7 @@ public class AdminController : Controller
             users = users
                 .Where(u => u.UserRoles.Any(r => r.Role.Name == filter.Role));
         
-        var result = await users.Select(e => e.ToUserFullnameItemDto()).ToArrayAsync();
+        var result = await users.ProjectTo<UserFullnameItemDto>(_configurationProvider).ToListAsync();
 
         return Json(result);
     }
