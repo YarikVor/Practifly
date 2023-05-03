@@ -60,11 +60,7 @@ public class AdminController : Controller
             .ProjectTo<UserProfileForAdminViewDto>(_configurationProvider)
             .FirstOrDefaultAsync();
         
-        /*Role = _context
-                    .UserRoles
-                    .Where(e => e.UserId == u.Id)
-                    .Select(e => e.Role.Name)
-                    .FirstOrDefault()*/
+        /**/
 
         if (result == null) return NotFound();
 
@@ -109,15 +105,7 @@ public class AdminController : Controller
     public async Task<IActionResult> CreateUserInAdmin(UserProfileForAdminCreateDto userDto)
     {
         const string defaultPassword = "Qwerty_1";
-        var user = new User
-        {
-            UserName = $"{userDto.Name}_{userDto.Surname}".ToLower(),
-            FirstName = userDto.Name,
-            LastName = userDto.Surname,
-            Email = userDto.Email,
-            PhoneNumber = userDto.Phone,
-            FilePhoto = userDto.FilePhoto
-        };
+        var user = _mapper.Map<UserProfileForAdminCreateDto, User>(userDto);
 
         var result = await _userManager.CreateAsync(user, defaultPassword);
 

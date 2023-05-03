@@ -16,24 +16,19 @@ public class AdminProfile : Profile
                    e => e.FirstName))
            .ForMember(
                up => up.Surname, par => par.MapFrom(
-                   e => e.LastName));
-        //Role?
-
-        CreateProjection<User, UserProfileForAdminCreateDto>()
-            .ForMember(
-                up => up.Name, par => par.MapFrom(
+                   e => e.LastName))
+           .ForMember(
+                up => up.Role, par => par.MapFrom(
                     e => _context
-                        .Users
-                        .Select(u => u.FirstName)))
+                    .UserRoles
+                    .Where(ur => ur.UserId == e.Id)
+                    .Select(ur => ur.Role.Name)
+                    .FirstOrDefault()));
+          
+        CreateMap<UserProfileForAdminCreateDto, User>()
             .ForMember(
-                up => up.Surname, par => par.MapFrom(
-                    e => _context
-                        .Users
-                        .Select(u => u.LastName)))
-            //.ForMember(
-            //    up => up.RegistrationDate, par => par.MapFrom(
-            //        dto => DateOnly.FromDateTime(DateTime.Today)))
-        ;
-       
+                user => user.RegistrationDate,
+                par => par.MapFrom(
+                    dto => DateOnly.FromDateTime(DateTime.Today)));
     }
 }
