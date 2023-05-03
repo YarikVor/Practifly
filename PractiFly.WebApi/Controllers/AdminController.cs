@@ -14,7 +14,7 @@ namespace PractiFly.WebApi.Controllers;
 
 [Route("api/admin/user")]
 [ApiController]
-[Authorize(Roles = UserRoles.Admin, AuthenticationSchemes = "Bearer")]
+//[Authorize(Roles = UserRoles.Admin, AuthenticationSchemes = "Bearer")]
 public class AdminController : Controller
 {
     private readonly IPractiflyContext _context;
@@ -59,9 +59,12 @@ public class AdminController : Controller
                 Email = u.Email,
                 Phone = u.PhoneNumber,
                 RegistrationDate = u.RegistrationDate,
-                FilePhoto = u.FilePhoto
-                //TODO: Role?
-                //Role = _userManager.GetRolesAsync(u).Result.First()
+                FilePhoto = u.FilePhoto,
+                Role = _context
+                    .UserRoles
+                    .Where(e => e.UserId == u.Id)
+                    .Select(e => e.Role.Name)
+                    .FirstOrDefault()
             })
             .FirstOrDefaultAsync();
 
@@ -173,15 +176,18 @@ public class AdminController : Controller
     /// <response code="200">Filtration was successful</response>
     [HttpGet]
     [Route("filter")]
-    public async Task<IActionResult> GetUsers(UserFilteringDto filter)
+    public async Task<IActionResult> GetUsers( [FromQuery] UserFilteringDto filter)
     {
-        var users = _userManager.Users.AsNoTracking();
+        var users = _userManager.Users.Include(e => e.UserRoles).AsNoTracking();
 
-        if (!string.IsNullOrEmpty(filter.Name)) users = users.Where(u => u.FirstName.Contains(filter.Name));
+        if (!string.IsNullOrEmpty(filter.Name)) 
+            users = users.Where(u => u.FirstName.Contains(filter.Name));
 
-        if (!string.IsNullOrEmpty(filter.Surname)) users = users.Where(u => u.LastName.Contains(filter.Surname));
+        if (!string.IsNullOrEmpty(filter.Surname)) 
+            users = users.Where(u => u.LastName.Contains(filter.Surname));
 
-        if (!string.IsNullOrEmpty(filter.Phone)) users = users.Where(u => u.PhoneNumber == filter.Phone);
+        if (!string.IsNullOrEmpty(filter.Phone)) 
+            users = users.Where(u => u.PhoneNumber == filter.Phone);
 
         if (filter.RegistrationDateFrom.HasValue)
             users = users.Where(u => u.RegistrationDate >= filter.RegistrationDateFrom.Value);
@@ -189,10 +195,13 @@ public class AdminController : Controller
         if (filter.RegistrationDateTo.HasValue)
             users = users.Where(u => u.RegistrationDate <= filter.RegistrationDateTo.Value);
 
-        if (!string.IsNullOrEmpty(filter.Email)) users = users.Where(u => u.Email == filter.Email);
+        if (!string.IsNullOrEmpty(filter.Email)) 
+            users = users.Where(u => u.Email == filter.Email);
 
         if (!string.IsNullOrEmpty(filter.Role))
-            users = users.Where(u => _userManager.IsInRoleAsync(u, filter.Role).Result);
+            users = users
+                .Where(u => u.UserRoles.Any(r => r.Role.Name == filter.Role));
+        
         var result = await users.Select(e => e.ToUserFullnameItemDto()).ToArrayAsync();
 
         return Json(result);

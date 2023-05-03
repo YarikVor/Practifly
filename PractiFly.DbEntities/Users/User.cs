@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 namespace PractiFly.DbEntities.Users;
 
 [Table("AspNetUsers")]
-public sealed class User : IdentityUser<int>
+public class User : IdentityUser<int>
 {
     [Column("FirstName")]
     [MaxLength(EntitiesConstantLengths.Name)]
@@ -33,4 +33,8 @@ public sealed class User : IdentityUser<int>
     [Column("Note")]
     [MaxLength(EntitiesConstantLengths.Note)]
     public string? Note { get; set; }
+    
+    [NotMapped]
+    [InverseProperty(nameof(UserRole.User))]
+    public ICollection<UserRole> UserRoles { get; set; } = null!;
 }

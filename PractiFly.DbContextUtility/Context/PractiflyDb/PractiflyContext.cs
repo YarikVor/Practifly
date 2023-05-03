@@ -42,4 +42,6 @@ public class PractiFlyContext : DbContext, IPractiflyContext
     public DbSet<UserMaterial> UserMaterials { get; set; } = null!;
     public DbSet<UserTheme> UserThemes { get; set; } = null!;
     public DbSet<User> Users { get; set; } = null!;
+    public DbSet<UserRole> UserRoles { get; set; } = null!;
+    public DbSet<Role> Roles { get; set; } = null!;
 }
