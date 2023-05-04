@@ -53,8 +53,7 @@ public class CourseDetailsProfile : Profile
         CreateMap<UserMaterialSendDto, UserMaterial>()
             .ForMember(um => um.MaterialId, par => par.MapFrom(dto => dto.Id));
         
-        
-        //TODO: Maybe delete
+        //TODO: Maybe delete this and down
         CreateProjection<Material, MaterialDetailsViewDto>()
             .ForMember(dto => dto.Url, par => par.MapFrom(m => m.Url));
         
