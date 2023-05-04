@@ -1,0 +1,244 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="PractiFly.DbEntities.Users.Group">
+    <Position X="5.5" Y="1.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAgAAAAQAAAAAAAAAAAAAAAEEAAA=</HashCode>
+      <FileName>Users\Group.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PractiFly.DbEntities.Users.GroupCourse">
+    <Position X="7.25" Y="1.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAGAEAEAAAAAAAAAIAAAAAAABAAABABAAAAAAEAAAA=</HashCode>
+      <FileName>Users\GroupCourse.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PractiFly.DbEntities.Users.Role">
+    <Position X="12.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Users\Role.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PractiFly.DbEntities.Users.User">
+    <Position X="9" Y="3.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAAAAAAQAIAAAAAAAAAAGAAAg=</HashCode>
+      <FileName>Users\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PractiFly.DbEntities.Users.UserCourse">
+    <Position X="10.75" Y="3.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAHAAAAAAAAAAAAAIAAAAgAABIAABABAAIAAAFAAAA=</HashCode>
+      <FileName>Users\UserCourse.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PractiFly.DbEntities.Users.UserGroup">
+    <Position X="12.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADAEAEAAAAAAAAEAAAAAgAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Users\UserGroup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PractiFly.DbEntities.Users.UserHeading">
+    <Position X="2.5" Y="4.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAADAAAAAAAAAAAAAAAAAAgAABAAAAABAAAAACFAAAA=</HashCode>
+      <FileName>Users\UserHeading.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Heading" />
+      <Property Name="Level" />
+      <Property Name="User" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="PractiFly.DbEntities.Users.UserMaterial">
+    <Position X="5.5" Y="4.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AEADAAAAAAAAAAAAAAQAAAgAAAAAABAAACAAAAEAAAA=</HashCode>
+      <FileName>Users\UserMaterial.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PractiFly.DbEntities.Users.UserTheme">
+    <Position X="7.25" Y="4.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAADAAAAAAABAAAQAAAAAAgAABAAABABAAAAAAEAAAA=</HashCode>
+      <FileName>Users\UserTheme.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PractiFly.DbEntities.Courses.Course">
+    <Position X="7" Y="2.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAACICAAgAAAAAAAAAAQAAgAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Courses\Course.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PractiFly.DbEntities.Courses.CourseCompetency">
+    <Position X="0.5" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAGAAAAAAAAAAQAAIAAAAAAAAAAAAAAAAACAAEAAAA=</HashCode>
+      <FileName>Courses\CourseCompetency.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Competency" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="PractiFly.DbEntities.Courses.CourseDependency">
+    <Position X="8.25" Y="0.5" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAGACAAAAAAAAAAAIAAAAAAAAAAAABAAAAAAAEAAEQ=</HashCode>
+      <FileName>Courses\CourseDependency.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="BaseCourse" />
+      <Property Name="Course" />
+      <Property Name="CourseDependencyType" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="PractiFly.DbEntities.Courses.CourseDependencyType">
+    <Position X="10.75" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAgAAAAAAAAAAQAAAAAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>Courses\CourseDependencyType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PractiFly.DbEntities.Courses.CourseHeading">
+    <Position X="12.5" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAGAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAiFAAAA=</HashCode>
+      <FileName>Courses\CourseHeading.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PractiFly.DbEntities.Courses.CourseMaterial">
+    <Position X="0.5" Y="2.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AEAGAAAAAAAEAAAAAIQAAAAAAAAAAAAAAAAAAAEAAAI=</HashCode>
+      <FileName>Courses\CourseMaterial.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Course" />
+      <Property Name="Material" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="PractiFly.DbEntities.Courses.Theme">
+    <Position X="4" Y="8" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAGAAAAAAAgAAAAAMAAAAQAABAAAAABAAAAAAEAAAA=</HashCode>
+      <FileName>Courses\Theme.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Course" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="PractiFly.DbEntities.Courses.ThemeMaterial">
+    <Position X="15.5" Y="5.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AEACAAAAAAABAAAQAEQAAAAAABAAAAABAAAAAgEAAAA=</HashCode>
+      <FileName>Courses\ThemeMaterial.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Level" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="PractiFly.DbEntities.Materials.Competency">
+    <Position X="6.25" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAgAAAAAAAAQAQAAAAAAAAAAgAAACFAAAA=</HashCode>
+      <FileName>Materials\Competency.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Heading" />
+      <Property Name="Parent" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="PractiFly.DbEntities.Materials.Heading">
+    <Position X="3.25" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAiAAAAAAAgAAAAAAAgAAQAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Materials\Heading.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PractiFly.DbEntities.Materials.HeadingCompetency">
+    <Position X="10.75" Y="1.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAQAAAAAAAAAABAAAAABAAACAAEAAAA=</HashCode>
+      <FileName>Materials\HeadingCompetency.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PractiFly.DbEntities.Materials.HeadingMaterial">
+    <Position X="12.5" Y="1.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AEACAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAACFAAAA=</HashCode>
+      <FileName>Materials\HeadingMaterial.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Heading" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="PractiFly.DbEntities.Materials.Language">
+    <Position X="0.5" Y="7" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAQAAAAAAAAAAAAAgAAQAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Materials\Language.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PractiFly.DbEntities.Materials.Level">
+    <Position X="15.75" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAgAAAAAEAAAAQAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Materials\Level.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PractiFly.DbEntities.Materials.Material">
+    <Position X="4.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAIAAAAAAQAAAAAAAAACAAAAAEAAAA=</HashCode>
+      <FileName>Materials\Material.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PractiFly.DbEntities.Materials.MaterialBlock">
+    <Position X="15.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAIAAAEAAQAAAAAAAAAAAAgAAAAEAAAg=</HashCode>
+      <FileName>Materials\MaterialBlock.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Child" />
+      <Property Name="Parent" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="PractiFly.DbEntities.Materials.MaterialCompetency">
+    <Position X="10.75" Y="2.5" Width="2.25" />
+    <AssociationLine Name="Material" Type="PractiFly.DbEntities.Materials.Material" ManuallyRouted="true">
+      <Path>
+        <Point X="11.875" Y="2.5" />
+        <Point X="11.875" Y="2.974" />
+        <Point X="9.077" Y="3.197" Type="JumpStart" />
+        <Point X="8.911" Y="3.21" Type="JumpEnd" />
+        <Point X="5.75" Y="3.462" />
+        <Point X="5.75" Y="3.936" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AEACAAAAAAAAAAQAAAQAAAAAAAAAAAAAAAACAAEAAAA=</HashCode>
+      <FileName>Materials\MaterialCompetency.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Competency" />
+      <Property Name="Material" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="PractiFly.DbEntities.Materials.Unit">
+    <Position X="0.5" Y="5.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AEACAAAAAAAAAAAAAAQAAAAAAAAAAAAACAAACAAAAAA=</HashCode>
+      <FileName>Materials\Unit.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Material" />
+    </ShowAsAssociation>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

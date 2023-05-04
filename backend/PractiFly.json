@@ -1,0 +1,57 @@
+{
+  "version": 2,
+  "warnings": [
+    {
+      "code": "Renew",
+      "cwe": 0,
+      "level": 1,
+      "positions": [
+        {
+          "file": "",
+          "line": 1,
+          "endLine": 1,
+          "column": 1,
+          "endColumn": 1,
+          "navigation": {
+            "previousLine": 0,
+            "currentLine": 0,
+            "nextLine": 0,
+            "columns": 0
+          }
+        }
+      ],
+      "message": "Your license will expire in 8 days. Click \u0027Renew\u0027 to learn more or contact us at support@viva64.com. This is an information message. You can continue using the analyzer with your current license. To hide this message, use the \u0027--disableLicenseExpirationCheck\u0027 flag.",
+      "projects": [
+        ""
+      ],
+      "favorite": false,
+      "falseAlarm": false
+    },
+    {
+      "code": "V3134",
+      "cwe": 128,
+      "level": 2,
+      "positions": [
+        {
+          "file": "G:\\Project\\Practifly\\PractiFly.WebApi\\Db\\Configuration\\Users\\KeylessConfiguration.cs",
+          "line": 18,
+          "endLine": 18,
+          "column": 1,
+          "endColumn": 1,
+          "navigation": {
+            "previousLine": 123,
+            "currentLine": 9457446,
+            "nextLine": 123,
+            "columns": 0
+          }
+        }
+      ],
+      "message": "Shift by 42 bits is greater than the size of \u0027Int32\u0027 type of expression \u00271\u0027.",
+      "projects": [
+        "PractiFly.WebApi"
+      ],
+      "favorite": false,
+      "falseAlarm": false
+    }
+  ]
+}
