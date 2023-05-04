@@ -68,6 +68,8 @@ public class CourseDataController : Controller
     {
         var result = await _context
             .Courses
+            .AsNoTracking()
+            //.Include(e => )
             .Where(e => e.Id == courseId)
             .ProjectTo<CourseFullInfoDto>(_configurationProvider)
             .FirstOrDefaultAsync();

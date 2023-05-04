@@ -1,6 +1,6 @@
 using AutoMapper;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
-using PractiFly.WebApi.AutoMapper;
+using PractiFly.WebApi.AutoMapper.Profiles;
 
 namespace PractiFly.WebApi.AutoMappers;
 

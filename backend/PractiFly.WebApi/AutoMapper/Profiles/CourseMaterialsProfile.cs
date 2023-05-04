@@ -4,14 +4,14 @@ using PractiFly.DbEntities.Materials;
 using PractiFly.WebApi.Dto.CourseMaterials;
 using PractiFly.WebApi.Dto.Heading;
 
-namespace PractiFly.WebApi.AutoMappers;
+namespace PractiFly.WebApi.AutoMapper.Profiles;
 
 public class CourseMaterialsProfile : Profile
 {
     public CourseMaterialsProfile(IPractiflyContext _context)
     {
         CreateProjection<Heading, HeadingInfoDto>();
-        CreateProjection<Material, MaterialForInclusionDto>() //Id, Name, IsPractical
+        CreateProjection<Material, MaterialForInclusionDto>()
             .ForMember(dto => dto.IsIncluded, par => par.MapFrom(
                 e => _context
                     .CourseMaterials
@@ -20,25 +20,14 @@ public class CourseMaterialsProfile : Profile
                 e => _context
                     .CourseMaterials
                     .Where(cm => cm.MaterialId == e.Id)
-                    .Select(cm => cm.PriorityLevel))) //Чи правильно?
-            //.ForMember(dto => dto.Type, par => par.MapFrom(
-            //    )
-            ;
+                    .Select(cm => cm.PriorityLevel)));
+            
         CreateProjection<Material, MaterialFromIncludedBlockViewDto>()
             .ForMember(dto => dto.PriorityLevel, par => par.MapFrom(
                 e => _context
                     .CourseMaterials
                     .Where(cm => cm.MaterialId == e.Id)
                     .Select(cm => cm.PriorityLevel)));
-        //CreateProjection<Material, MaterialFromIncludedBlockViewDto>()
-        //    .ForMember(dto => dto.PriorityLevel, par => par.MapFrom(
-        //        e => _context
-        //            .CourseMaterials
-        //            .Where(cm => cm.MaterialId == e.Id)
-        //            .Select(cm => cm.PriorityLevel)));
-        //CreateProjection<ThemeMaterial, ThemeMaterialInfoDto>()
-        //    .ForMember(dto => dto.Material, par => par.MapFrom(
-        //        tm =>  tm.Material ))
 
         CreateProjection<Heading, CourseHeadingInfoDto>()
             .ForMember(dto => dto.Id, par => par.MapFrom(ch => ch.Id))

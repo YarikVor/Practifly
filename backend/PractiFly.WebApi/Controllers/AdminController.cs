@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities.Users;
-using PractiFly.WebApi.AutoMapper;
+using PractiFly.WebApi.AutoMapper.Ex;
 using PractiFly.WebApi.Dto.Admin.UserView;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
@@ -24,12 +24,14 @@ public class AdminController : Controller
 
     public AdminController(IPractiflyContext practiflyContext,
         UserManager<User> userManager,
-        IConfigurationProvider configurationProvider
+        IConfigurationProvider configurationProvider,
+        IMapper mapper
     )
     {
         _userManager = userManager;
         _context = practiflyContext;
         _configurationProvider = configurationProvider;
+        _mapper = mapper;
     }
 
     /// <summary>
@@ -96,7 +98,7 @@ public class AdminController : Controller
             return BadRequest();
 
         var roleResult = await _userManager.AddToRoleAsync(user, userDto.Role);
-
+        //TODO: reyurn userId
         return !roleResult.Succeeded ? BadRequest() : Ok();
     }
 
@@ -117,7 +119,7 @@ public class AdminController : Controller
         if (user == null) return NotFound();
 
         user.ChangeUserInAdmin(userDto);
-
+        //Add UserName
         var result = await _userManager.UpdateAsync(user);
 
         if (!result.Succeeded)

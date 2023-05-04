@@ -2,7 +2,7 @@ using AutoMapper;
 using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Dto.Registration;
 
-namespace PractiFly.WebApi.AutoMapper;
+namespace PractiFly.WebApi.AutoMapper.Profiles;
 
 public class UserProfile : Profile
 {

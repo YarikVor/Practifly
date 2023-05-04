@@ -5,23 +5,24 @@ using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Dto.Admin.UserView;
 using PractiFly.WebApi.Dto.CourseData;
 
-namespace PractiFly.WebApi.AutoMapper;
+namespace PractiFly.WebApi.AutoMapper.Profiles;
 
 public class CourseDataProfile : Profile
 {
     public CourseDataProfile(IPractiflyContext _context)
     {
+        CreateMap<Course, CourseInfoDto>();
+
+
         CreateProjection<User, OwnerInfoDto>()
             .ForMember(dto => dto.FullName, par => par.MapFrom(
                 e => string.Concat(e.FirstName, " ", e.LastName)));
 
+        //TODO: return Code language
         CreateProjection<Course, CourseInfoDto>()
             .ForMember(dto => dto.Language, par => par.MapFrom(
                 e => e.Language.Name));
 
-        CreateProjection<User, UserFullnameItemDto>()
-            .ForMember(dto => dto.Fullname, par => par.MapFrom(
-                e => string.Concat(e.FirstName, " ", e.LastName)));
 
         CreateProjection<Course, CourseFullInfoDto>()
             .ForMember(dest => dest.CourseInfoDto, opt => opt.MapFrom(e => e))
@@ -46,6 +47,5 @@ public class CourseDataProfile : Profile
                     .Select(l => l.Id)
                     .FirstOrDefault()));
 
-        CreateMap<Course, CourseInfoDto>();
     }
 }

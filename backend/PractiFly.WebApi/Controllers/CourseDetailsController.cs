@@ -1,11 +1,13 @@
 using System.Security.Claims;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities.Users;
-using PractiFly.WebApi.AutoMapper;
+using PractiFly.WebApi.AutoMapper.Ex;
 using PractiFly.WebApi.Dto.CourseDetails;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
@@ -43,6 +45,7 @@ public class CourseDetailsController : Controller
     /// <returns>A JSON-encoded representation of the list of themes, with completion information included for each theme.</returns>
     //TODO: Check Route.
     [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("user/course/themes")]
     public async Task<IActionResult> GetThemesInUserCourse(int courseId)
     {
@@ -74,6 +77,7 @@ public class CourseDetailsController : Controller
     /// <response code="404">No materials found.</response>
     /// <returns>A JSON-encoded representation of the list of materials associated with the user and theme.</returns>
     [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("user/course/theme/material")]
     public async Task<IActionResult> GetMaterialsInUserThemes(int themeId)
     {
@@ -101,6 +105,7 @@ public class CourseDetailsController : Controller
     /// <response code="404">No materials found.</response>
     /// <returns>A JSON-encoded representation of the material details.</returns>
     [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("theme/material")]
     public async Task<IActionResult> GetMaterialInfo(int themeId, int materialId)
     {
@@ -127,11 +132,12 @@ public class CourseDetailsController : Controller
     /// <returns>A JSON-encoded representation of the user's progress information.</returns>
     //TODO: Можливо матеріал міститься лише в одній темі (1:1)
     [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("user/material/status")]
     public async Task<IActionResult> GetUserInfoInMaterial(int materialId)
     {
         var userId = User.GetUserIdInt();
-
+        //TODO: return url
         var userMaterial = await _context
             .UserMaterials
             .Where(e => e.UserId == userId && e.MaterialId == materialId)
@@ -152,10 +158,11 @@ public class CourseDetailsController : Controller
     /// <response code="200">Operation is successful.</response>
     /// <response code="404">The specified user material does not exist.</response>
     [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("user/material/status")]
     public async Task<IActionResult> SetMaterialInfo(UserMaterialSendDto dto)
     {
-        var userId = 2;
+        var userId = User.GetUserIdInt();
 
         var userMaterial = await _context
             .UserMaterials

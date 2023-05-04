@@ -4,7 +4,7 @@ using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Dto.MyCourse;
 using PractiFly.WebApi.Dto.Profile;
 
-namespace PractiFly.WebApi.AutoMappers;
+namespace PractiFly.WebApi.AutoMapper.Profiles;
 
 public class MyCourseProfile : Profile
 {
