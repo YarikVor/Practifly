@@ -6,7 +6,7 @@ namespace PractiFly.WebApi.Dto.CourseData;
 public class EditCourseDto
 {
     public int Id { get; set; }
-    
+
     [Required]
     [StringLength(2, MinimumLength = 2)]
     public string Language { get; set; } = null!;

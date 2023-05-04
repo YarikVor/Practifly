@@ -10,7 +10,7 @@ public class RoleStringAttribute : ValidationAttribute
     {
         if (value == null)
             return true;
-        
+
         if (value is not string role)
             throw new InvalidCastException("Value is not a string");
 

@@ -1,6 +1,5 @@
 using AutoMapper;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
-using PractiFly.DbEntities.Courses;
 using PractiFly.DbEntities.Materials;
 using PractiFly.WebApi.Dto.CourseMaterials;
 using PractiFly.WebApi.Dto.Heading;
@@ -47,7 +46,7 @@ public class CourseMaterialsProfile : Profile
             .ForMember(dto => dto.Code, par => par.MapFrom(ch => ch.Code));
 
 
-        int courseId = 0;
+        var courseId = 0;
         CreateProjection<HeadingMaterial, MaterialForInclusionDto>()
             .ForMember(
                 dto => dto.Id,

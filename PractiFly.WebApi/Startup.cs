@@ -194,10 +194,9 @@ public class Startup
                 options.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
             }
         );
-        
+
         TypeDescriptor.AddAttributes(typeof(DateOnly), new TypeConverterAttribute(typeof(DateOnlyTypeConverter)));
     }
-    
 
     #endregion
 

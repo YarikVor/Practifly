@@ -1,8 +1,6 @@
 using AutoMapper;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
-using PractiFly.DbEntities.Courses;
 using PractiFly.WebApi.AutoMapper;
-using PractiFly.WebApi.Dto.CourseThemes;
 
 namespace PractiFly.WebApi.AutoMappers;
 
@@ -21,7 +19,7 @@ public class PractiFlyMapperConfigurationExpression : MapperConfigurationExpress
             new MaterialBlockProfile(_context),
             new HeadingCourseProfile(_context),
             new AdminProfile(_context),
-            new CourseDataProfile(_context),
+            new CourseDataProfile(_context)
         };
 
         AddProfiles(profiles);

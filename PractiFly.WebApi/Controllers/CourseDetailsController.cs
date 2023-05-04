@@ -9,15 +9,14 @@ using PractiFly.WebApi.AutoMapper;
 using PractiFly.WebApi.Dto.CourseDetails;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
-
 namespace PractiFly.WebApi.Controllers;
 
 [ApiController]
 [Route("api")]
 public class CourseDetailsController : Controller
 {
-    private readonly IPractiflyContext _context;
     private readonly IConfigurationProvider _configurationProvider;
+    private readonly IPractiflyContext _context;
     private readonly IMapper _mapper;
 
 
@@ -47,7 +46,7 @@ public class CourseDetailsController : Controller
     [Route("user/course/themes")]
     public async Task<IActionResult> GetThemesInUserCourse(int courseId)
     {
-        var userId =  User.GetUserIdInt();
+        var userId = User.GetUserIdInt();
 
         var userCourse = await _context
             .UserCourses
@@ -78,7 +77,7 @@ public class CourseDetailsController : Controller
     [Route("user/course/theme/material")]
     public async Task<IActionResult> GetMaterialsInUserThemes(int themeId)
     {
-        var userId =  User.GetUserIdInt();
+        var userId = User.GetUserIdInt();
 
         //TODO: Mapper
         //?
@@ -88,7 +87,7 @@ public class CourseDetailsController : Controller
             .Where(ut => ut.UserId == userId && ut.ThemeId == themeId)
             .ProjectTo<ThemeWithMaterialsDto>(_configurationProvider)
             .FirstOrDefaultAsync();
-        
+
         return result == null ? NotFound() : Json(result);
     }
 
@@ -166,19 +165,16 @@ public class CourseDetailsController : Controller
         if (userMaterial == null)
         {
             //TODO: Check if materialId is not included in the themes (or UserThemes or UserCourses)
-            
-            var createUserMaterial = 
+
+            var createUserMaterial =
                 _mapper.Map<UserMaterialSendDto, UserMaterial>(dto);
-            
+
             createUserMaterial.UserId = userId;
-            
+
             await _context.UserMaterials.AddAsync(createUserMaterial);
             await _context.SaveChangesAsync();
-            
-            if (createUserMaterial.Id == 0)
-            {
-                return Problem();
-            }
+
+            if (createUserMaterial.Id == 0) return Problem();
 
             return Ok();
         }

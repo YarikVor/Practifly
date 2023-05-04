@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace PractiFly.DbEntities.Users;
 
 [Table("AspNetUserRoles")]
-[PrimaryKey(nameof(UserRole.RoleId), nameof(UserRole.UserId))]
+[PrimaryKey(nameof(RoleId), nameof(UserId))]
 public class UserRole : IdentityUserRole<int>
 {
     [Key]

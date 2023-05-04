@@ -358,7 +358,8 @@ public class CourseThemesController : Controller
 
 public static class CourseThemesEx
 {
-    public static void ChangeThemeMaterialsForAdmin(this ThemeMaterial themeMaterial, ThemeMaterialEditDto themeMaterialDto)
+    public static void ChangeThemeMaterialsForAdmin(this ThemeMaterial themeMaterial,
+        ThemeMaterialEditDto themeMaterialDto)
     {
         themeMaterial.Number = themeMaterialDto.Number;
         themeMaterial.LevelId = themeMaterialDto.LevelId;

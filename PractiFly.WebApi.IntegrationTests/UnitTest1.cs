@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc.Testing;
-using Newtonsoft.Json;
 using Xunit.Abstractions;
 
 namespace PractiFly.WebApi.IntegrationTests;

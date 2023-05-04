@@ -8,6 +8,5 @@ public class PractiFlyMapperConfiguration : MapperConfiguration
     public PractiFlyMapperConfiguration(IPractiflyContext context)
         : base(new PractiFlyMapperConfigurationExpression(context))
     {
-        
     }
 }

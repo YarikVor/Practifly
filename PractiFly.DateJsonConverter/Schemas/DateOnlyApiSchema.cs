@@ -12,6 +12,6 @@ public sealed class DateOnlyApiSchema : OpenApiSchema
 
     public static DateOnlyApiSchema Create()
     {
-        return new();
+        return new DateOnlyApiSchema();
     }
 }

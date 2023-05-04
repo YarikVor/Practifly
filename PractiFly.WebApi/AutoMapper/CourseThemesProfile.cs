@@ -10,7 +10,6 @@ public class CourseThemesProfile : Profile
 {
     public CourseThemesProfile(IPractiflyContext _context)
     {
-
         CreateProjection<Theme, ThemeInfoDto>();
         CreateProjection<Theme, ThemeItemDto>();
         CreateProjection<Theme, ThemeEditDto>();

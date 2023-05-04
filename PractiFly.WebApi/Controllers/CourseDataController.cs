@@ -14,15 +14,15 @@ namespace PractiFly.WebApi.Controllers;
 [ApiController]
 public class CourseDataController : Controller
 {
-    private readonly IPractiflyContext _context;
     private readonly IConfigurationProvider _configurationProvider;
+    private readonly IPractiflyContext _context;
     private readonly IMapper _mapper;
 
     public CourseDataController(
         IPractiflyContext context,
         IConfigurationProvider configurationProvider,
         IMapper mapper
-        )
+    )
     {
         _context = context;
         _configurationProvider = configurationProvider;
@@ -44,14 +44,14 @@ public class CourseDataController : Controller
     public async Task<IActionResult> Courses(int? ownerId = null)
     {
         var query = _context.Courses.AsNoTracking();
-        
+
         if (ownerId.HasValue)
             query = query.Where(e => e.OwnerId == ownerId);
-        
+
         var courseItemDtos = await query
             .ProjectTo<CourseItemDto>(_configurationProvider)
             .ToListAsync();
-        
+
         return Json(courseItemDtos);
     }
 
@@ -128,14 +128,10 @@ public class CourseDataController : Controller
     [Route("")]
     public async Task<IActionResult> CreateCourse(CreateCourseDto courseDto)
     {
-
-        var course = _mapper.Map<CreateCourseDto, Course>(courseDto);//???
+        var course = _mapper.Map<CreateCourseDto, Course>(courseDto); //???
         await _context.Courses.AddAsync(course);
         await _context.SaveChangesAsync();
-        if(course.Id == 0)
-        {
-            return BadRequest();
-        }
+        if (course.Id == 0) return BadRequest();
 
         var result = _mapper.Map<Course, CourseInfoDto>(course,
             opts => opts.AfterMap((_, dest) => dest.Language = courseDto.Language));
@@ -161,7 +157,7 @@ public class CourseDataController : Controller
             .FirstOrDefaultAsync(e => e.Id == courseDto.Id);
 
         if (course == null) return NotFound();
-        
+
         course.Language = _context.Languages.First(l => l.Code == courseDto.Language);
         course.Name = courseDto.Name;
         course.Note = courseDto.Note;

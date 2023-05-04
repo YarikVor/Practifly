@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
-
 using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Dto.Admin.UserView;
 
@@ -10,7 +9,6 @@ public class AdminProfile : Profile
 {
     public AdminProfile(IPractiflyContext _context)
     {
-       
         CreateProjection<User, UserProfileForAdminViewDto>()
             .ForMember(
                 up => up.Name, par => par.MapFrom(
@@ -25,8 +23,8 @@ public class AdminProfile : Profile
                         .Where(ur => ur.UserId == e.Id)
                         .Select(ur => ur.Role.Name)
                         .FirstOrDefault()));
-        
-        
+
+
         CreateMap<UserProfileForAdminCreateDto, User>()
             .ForMember(
                 user => user.RegistrationDate,

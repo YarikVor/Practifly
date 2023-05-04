@@ -45,7 +45,7 @@ public class CourseDataProfile : Profile
                     .Where(l => l.Code == dto.Language)
                     .Select(l => l.Id)
                     .FirstOrDefault()));
-        
+
         CreateMap<Course, CourseInfoDto>();
     }
 }

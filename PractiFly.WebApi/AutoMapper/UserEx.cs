@@ -25,6 +25,4 @@ public static class UserEx
         user.FilePhoto = userDto.FilePhoto;
         user.Birthday = userDto.Birthday;
     }
-    
-    
 }

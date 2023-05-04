@@ -21,7 +21,7 @@ public class CourseDetailsProfile : Profile
                         .FirstOrDefault()
                 )
             );
-        
+
         CreateProjection<UserTheme, ThemeWithMaterialsDto>()
             .ForMember(
                 m => m.Materials,
@@ -32,7 +32,7 @@ public class CourseDetailsProfile : Profile
                             .Where(um => um.UserId == ut.UserId)
                             .Where(um => _context
                                 .ThemeMaterials
-                                .Where(tm => tm.ThemeId == ut.ThemeId) 
+                                .Where(tm => tm.ThemeId == ut.ThemeId)
                                 .Any(tm => tm.MaterialId == um.MaterialId)
                             )
                 )
@@ -43,7 +43,7 @@ public class CourseDetailsProfile : Profile
         CreateProjection<UserMaterial, CourseMaterialItemDto>()
             .ForMember(dto => dto.Id, par => par.MapFrom(m => m.MaterialId))
             .ForMember(dto => dto.Name, par => par.MapFrom(m => m.Material.Name));
-        
+
         CreateProjection<ThemeMaterial, MaterialDetailsViewDto>()
             .ForMember(dto => dto.Url, par => par.MapFrom(m => m.Material.Url))
             .ForMember(dto => dto.Description, par => par.MapFrom(m => m.Description))
@@ -52,11 +52,11 @@ public class CourseDetailsProfile : Profile
 
         CreateMap<UserMaterialSendDto, UserMaterial>()
             .ForMember(um => um.MaterialId, par => par.MapFrom(dto => dto.Id));
-        
+
         //TODO: Maybe delete this and down
         CreateProjection<Material, MaterialDetailsViewDto>()
             .ForMember(dto => dto.Url, par => par.MapFrom(m => m.Url));
-        
+
         CreateProjection<ThemeMaterial, ThemeContentInfoDto>()
             .ForMember(dto => dto.Material, par => par.MapFrom(tm => tm.Material));
         //.ForMember(dto => dto.ViewStatus, par => par.MapFrom(
@@ -67,7 +67,6 @@ public class CourseDetailsProfile : Profile
         CreateProjection<UserMaterial, UserMaterialInfoDto>();
         CreateProjection<UserMaterial, UserMaterialSendDto>();
         CreateProjection<CourseMaterial, MaterialsMenuDto>()
-
             .ForMember(dto => dto.Id, par => par.MapFrom(
                 cm => cm.MaterialId))
             .ForMember(dto => dto.Name, par => par.MapFrom(
@@ -94,7 +93,5 @@ public class CourseDetailsProfile : Profile
                 e => e.Material.Name));
 
         CreateProjection<UserMaterial, UserMaterialInfoDto>();
-
-
     }
 }

@@ -33,7 +33,7 @@ public class User : IdentityUser<int>
     [Column("Note")]
     [MaxLength(EntitiesConstantLengths.Note)]
     public string? Note { get; set; }
-    
+
     [NotMapped]
     [InverseProperty(nameof(UserRole.User))]
     public ICollection<UserRole> UserRoles { get; set; } = null!;

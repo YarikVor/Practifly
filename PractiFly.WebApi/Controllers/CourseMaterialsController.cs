@@ -1,10 +1,10 @@
-﻿using AutoMapper.QueryableExtensions;
+﻿using System.ComponentModel.DataAnnotations;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities;
 using PractiFly.WebApi.Dto.CourseMaterials;
-using System.ComponentModel.DataAnnotations;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace PractiFly.WebApi.Controllers;
@@ -13,8 +13,8 @@ namespace PractiFly.WebApi.Controllers;
 [ApiController]
 public class CourseMaterialsController : Controller
 {
-    private readonly IPractiflyContext _context;
     private readonly IConfigurationProvider _configurationProvider;
+    private readonly IPractiflyContext _context;
 
     public CourseMaterialsController(IPractiflyContext context, IConfigurationProvider configurationProvider)
     {
@@ -73,20 +73,17 @@ public class CourseMaterialsController : Controller
     [HttpGet]
     [Route("heading/materials")]
     public async Task<IActionResult> GetMaterialForInclusion(
-        int courseId, 
+        int courseId,
         int? headingId = null,
-        [RegularExpression(EntitiesConstants.HeadingPattern)] string? code = null)
+        [RegularExpression(EntitiesConstants.HeadingPattern)]
+        string? code = null)
     {
         var query = _context.HeadingMaterials.AsNoTracking();
 
         if (headingId.HasValue)
-        {
             query = query.Where(e => e.Id == headingId.Value);
-        }
         else if (!string.IsNullOrEmpty(code))
-        {
             query = query.Where(e => e.Heading.Code == code);
-        }
         else return BadRequest();
 
         var result = await query

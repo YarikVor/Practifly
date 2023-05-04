@@ -7,5 +7,5 @@ public static class UserRoles
 
     public const string Teacher = "teacher";
     public const string User = "user";
-    public static readonly string[] RolesEnumerable = new[] { Admin, Manager, Teacher, User };
+    public static readonly string[] RolesEnumerable = { Admin, Manager, Teacher, User };
 }
