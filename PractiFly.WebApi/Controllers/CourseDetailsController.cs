@@ -47,7 +47,7 @@ public class CourseDetailsController : Controller
     [Route("user/course/themes")]
     public async Task<IActionResult> GetThemesInUserCourse(int courseId)
     {
-        var userId = User.GetUserIdInt();
+        var userId =  User.GetUserIdInt();
 
         var userCourse = await _context
             .UserCourses
@@ -59,6 +59,7 @@ public class CourseDetailsController : Controller
         var themes = await _context
             .Themes
             .Where(e => e.CourseId == courseId)
+            .OrderBy(e => e.Number)
             .ProjectTo<CourseThemeItemDto>(_configurationProvider)
             .ToListAsync();
 
@@ -77,32 +78,18 @@ public class CourseDetailsController : Controller
     [Route("user/course/theme/material")]
     public async Task<IActionResult> GetMaterialsInUserThemes(int themeId)
     {
-        var userId = User.GetUserIdInt();
-
-        //if (userId) return NotFound();
-        var userTheme = await _context
-            .UserThemes
-            .AnyAsync(e => e.UserId == userId && e.ThemeId == themeId);
-
-        if (userTheme == false)
-            return NotFound();
+        var userId =  User.GetUserIdInt();
 
         //TODO: Mapper
         //?
-        var result = new CourseThemeWithMaterialsDto();
 
-        result.Materials = await _context
-            .UserMaterials
-            .Where(um => um.UserId == userId)
-            .Where(um => _context
-                .ThemeMaterials
-                .Any(tm => tm.ThemeId == themeId
-                           && tm.MaterialId == um.MaterialId)
-            )
-            .ProjectTo<CourseMaterialItemDto>(_configurationProvider)
-            .ToArrayAsync();
-
-        return Json(result);
+        var result = await _context
+            .UserThemes
+            .Where(ut => ut.UserId == userId && ut.ThemeId == themeId)
+            .ProjectTo<ThemeWithMaterialsDto>(_configurationProvider)
+            .FirstOrDefaultAsync();
+        
+        return result == null ? NotFound() : Json(result);
     }
 
     /// <summary>
@@ -120,20 +107,9 @@ public class CourseDetailsController : Controller
     {
         //TODO: Mapper (foregin parametr)
         var material = await _context
-            .Materials
-            .Where(e => e.Id == materialId)
-            .Select(e => new MaterialDetailsViewDto
-            {
-                Id = e.Id,
-                Name = e.Name,
-                Url = e.Url,
-                Description = _context
-                    .ThemeMaterials
-                    .Where(e => e.MaterialId == materialId
-                                && e.ThemeId == themeId)
-                    .Select(e => e.Description)
-                    .FirstOrDefault()
-            })
+            .ThemeMaterials
+            .Where(tm => tm.MaterialId == materialId && tm.ThemeId == themeId)
+            .ProjectTo<MaterialDetailsViewDto>(_configurationProvider)
             .FirstOrDefaultAsync();
 
         if (material == null)
@@ -160,7 +136,7 @@ public class CourseDetailsController : Controller
         var userMaterial = await _context
             .UserMaterials
             .Where(e => e.UserId == userId && e.MaterialId == materialId)
-            .ProjectTo<UserMaterialInfoDto>(_configurationProvider)
+            .ProjectTo<CourseMaterialItemDto>(_configurationProvider)
             .FirstOrDefaultAsync();
 
         return userMaterial == null ? NotFound() : Json(userMaterial);
@@ -178,20 +154,27 @@ public class CourseDetailsController : Controller
     /// <response code="404">The specified user material does not exist.</response>
     [HttpPost]
     [Route("user/material/status")]
-    public async Task<IActionResult> SetMaterialInfo(UserMaterialInfoDto dto)
+    public async Task<IActionResult> SetMaterialInfo(UserMaterialSendDto dto)
     {
-        var userId = User.GetUserIdInt();
+        var userId = 2;
 
         var userMaterial = await _context
             .UserMaterials
-            .Where(e => e.UserId == userId && e.MaterialId == dto.MaterialId)
+            .Where(e => e.UserId == userId && e.MaterialId == dto.Id)
             .FirstOrDefaultAsync();
 
         if (userMaterial == null)
         {
-            var createUserMaterial = _mapper.Map<UserMaterialInfoDto, UserMaterial>(dto);
+            //TODO: Check if materialId is not included in the themes (or UserThemes or UserCourses)
+            
+            var createUserMaterial = 
+                _mapper.Map<UserMaterialSendDto, UserMaterial>(dto);
+            
+            createUserMaterial.UserId = userId;
+            
             await _context.UserMaterials.AddAsync(createUserMaterial);
             await _context.SaveChangesAsync();
+            
             if (createUserMaterial.Id == 0)
             {
                 return Problem();

@@ -3,7 +3,7 @@
 //TODO: Create Dto.
 public class UserMaterialSendDto
 {
-    public int MaterialId { get; set; }
+    public int Id { get; set; }
 
     public string? ResultUrl { get; set; }
 

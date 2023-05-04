@@ -1,7 +1,7 @@
 ﻿namespace PractiFly.WebApi.Dto.CourseDetails;
 
 // теми курсу (відкрита тема)
-public class CourseThemeWithMaterialsDto
+public class ThemeWithMaterialsDto
 {
     public int Id { get; set; }
     public string Name { get; set; } = null!;

@@ -18,41 +18,46 @@ public class CourseDetailsProfile : Profile
                     e => _context
                         .UserThemes
                         .Select(ut => ut.IsCompleted)
+                        .FirstOrDefault()
                 )
             );
-
-        CreateProjection<Theme, CourseThemeWithMaterialsDto>()
+        
+        CreateProjection<UserTheme, ThemeWithMaterialsDto>()
             .ForMember(
                 m => m.Materials,
                 par => par.MapFrom(
-                    m => _context
-                        .Themes
-                        .Where(c => c.Id == c.Id)
-                    //.Select(
-                    //    c => new MaterialItemDto()
-                    //    {
-                    //        Id = c.Id,
-                    //        Name = c.Name,
-                    //    }
-                    //)
+                    ut =>
+                        _context
+                            .UserMaterials
+                            .Where(um => um.UserId == ut.UserId)
+                            .Where(um => _context
+                                .ThemeMaterials
+                                .Where(tm => tm.ThemeId == ut.ThemeId) 
+                                .Any(tm => tm.MaterialId == um.MaterialId)
+                            )
                 )
             )
-            .ForMember(
-                t => t.IsCompleted,
-                par => par.MapFrom(
-                    e => _context
-                        .UserThemes
-                        .Select(ut => ut.IsCompleted)
-                )
-            );
-
-        CreateProjection<Material, MaterialDetailsViewDto>()
-            .ForMember(dto => dto.Url, par => par.MapFrom(m => m.Url));
+            .ForMember(m => m.Id, par => par.MapFrom(e => e.ThemeId))
+            .ForMember(m => m.Name, par => par.MapFrom(e => e.Theme.Name));
 
         CreateProjection<UserMaterial, CourseMaterialItemDto>()
             .ForMember(dto => dto.Id, par => par.MapFrom(m => m.MaterialId))
             .ForMember(dto => dto.Name, par => par.MapFrom(m => m.Material.Name));
+        
+        CreateProjection<ThemeMaterial, MaterialDetailsViewDto>()
+            .ForMember(dto => dto.Url, par => par.MapFrom(m => m.Material.Url))
+            .ForMember(dto => dto.Description, par => par.MapFrom(m => m.Description))
+            .ForMember(dto => dto.Name, par => par.MapFrom(m => m.Material.Name))
+            .ForMember(dto => dto.Id, par => par.MapFrom(m => m.Material.Id));
 
+        CreateMap<UserMaterialSendDto, UserMaterial>()
+            .ForMember(um => um.MaterialId, par => par.MapFrom(dto => dto.Id));
+        
+        
+        //TODO: Maybe delete
+        CreateProjection<Material, MaterialDetailsViewDto>()
+            .ForMember(dto => dto.Url, par => par.MapFrom(m => m.Url));
+        
         CreateProjection<ThemeMaterial, ThemeContentInfoDto>()
             .ForMember(dto => dto.Material, par => par.MapFrom(tm => tm.Material));
         //.ForMember(dto => dto.ViewStatus, par => par.MapFrom(

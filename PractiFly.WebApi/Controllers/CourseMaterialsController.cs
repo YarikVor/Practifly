@@ -9,7 +9,7 @@ using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace PractiFly.WebApi.Controllers;
 
-[Route("api")]
+[Route("api/course")]
 [ApiController]
 public class CourseMaterialsController : Controller
 {
@@ -48,12 +48,14 @@ public class CourseMaterialsController : Controller
     /// <returns>A JSON-encoded representation of the list of course headings.</returns>
     /// <response code="200"></response>
     [HttpGet]
-    [Route("course/headings")]
+    [Route("headings")]
     public async Task<IActionResult> CourseHeadings(int courseId)
     {
-        var result = await _context.CourseHeadings
+        var result = await _context
+            .CourseHeadings
             .AsNoTracking()
             .Where(e => e.CourseId == courseId)
+            .Select(e => e.Heading)
             .ProjectTo<CourseHeadingInfoDto>(_configurationProvider)
             .ToListAsync();
 
@@ -69,7 +71,7 @@ public class CourseMaterialsController : Controller
     /// <returns></returns>
     /// <response code="200">The rubric materials are returned.</response>
     [HttpGet]
-    [Route("course/heading/materials")]
+    [Route("heading/materials")]
     public async Task<IActionResult> GetMaterialForInclusion(
         int courseId, 
         int? headingId = null,
