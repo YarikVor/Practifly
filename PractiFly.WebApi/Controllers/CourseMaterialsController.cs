@@ -63,14 +63,17 @@ public class CourseMaterialsController : Controller
     /// <summary>
     ///     A method for extracting rubric materials and including them in the course.
     /// </summary>
+    /// <param name="courseId">Id of the course.</param>
     /// <param name="headingId">The ID of the rubric from which the materials are obtained.</param>
     /// <param name="code">Code pattern.</param>
-    /// <param name="courseId">Id of the course.</param>
     /// <returns></returns>
     /// <response code="200">The rubric materials are returned.</response>
     [HttpGet]
     [Route("course/heading/materials")]
-    public async Task<IActionResult> GetMaterialForInclusion(int? headingId, [RegularExpression(EntitiesConstants.HeadingPattern)] string code, int courseId)
+    public async Task<IActionResult> GetMaterialForInclusion(
+        int courseId, 
+        int? headingId = null,
+        [RegularExpression(EntitiesConstants.HeadingPattern)] string? code = null)
     {
         var query = _context.HeadingMaterials.AsNoTracking();
 

@@ -10,21 +10,23 @@ public class AdminProfile : Profile
 {
     public AdminProfile(IPractiflyContext _context)
     {
+       
         CreateProjection<User, UserProfileForAdminViewDto>()
-           .ForMember(
-               up => up.Name, par => par.MapFrom(
-                   e => e.FirstName))
-           .ForMember(
-               up => up.Surname, par => par.MapFrom(
-                   e => e.LastName))
-           .ForMember(
+            .ForMember(
+                up => up.Name, par => par.MapFrom(
+                    e => e.FirstName))
+            .ForMember(
+                up => up.Surname, par => par.MapFrom(
+                    e => e.LastName))
+            .ForMember(
                 up => up.Role, par => par.MapFrom(
                     e => _context
-                    .UserRoles
-                    .Where(ur => ur.UserId == e.Id)
-                    .Select(ur => ur.Role.Name)
-                    .FirstOrDefault()));
-          
+                        .UserRoles
+                        .Where(ur => ur.UserId == e.Id)
+                        .Select(ur => ur.Role.Name)
+                        .FirstOrDefault()));
+        
+        
         CreateMap<UserProfileForAdminCreateDto, User>()
             .ForMember(
                 user => user.RegistrationDate,

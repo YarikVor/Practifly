@@ -46,6 +46,8 @@ public class CourseMaterialsProfile : Profile
             .ForMember(dto => dto.Name, par => par.MapFrom(ch => ch.Name))
             .ForMember(dto => dto.Code, par => par.MapFrom(ch => ch.Code));
 
+
+        int courseId = 0;
         CreateProjection<HeadingMaterial, MaterialForInclusionDto>()
             .ForMember(
                 dto => dto.Id,
@@ -63,15 +65,16 @@ public class CourseMaterialsProfile : Profile
                 dto => dto.IsIncluded,
                 par => par.MapFrom(
                     m => _context
-                    .CourseMaterials
-                    .Any(cm => cm.MaterialId == m.Id)))
+                        .CourseMaterials
+                        .Any(cm => cm.CourseId == courseId && cm.MaterialId == m.Id)))
             .ForMember(dto => dto.PriorityLevel,
                 par => par.MapFrom(
                     m => _context
-                    .CourseMaterials
-                    .Where(cm => cm.MaterialId == m.Id)
-                    .Select(cm => cm.PriorityLevel)
-                    .First()));
-
+                        .CourseMaterials
+                        .Where(cm => cm.CourseId == courseId && cm.MaterialId == m.Id)
+                        .Select(cm => cm.PriorityLevel)
+                        .FirstOrDefault()
+                )
+            );
     }
 }

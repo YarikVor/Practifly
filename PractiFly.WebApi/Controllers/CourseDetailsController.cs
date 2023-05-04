@@ -100,7 +100,7 @@ public class CourseDetailsController : Controller
                 Id = um.MaterialId,
                 Name = um.Material.Name,
                 IsCompleted = um.IsCompleted,
-                Grade = um.Grade
+                Grade = um.Grade.GetValueOrDefault()
             })
             .ToArrayAsync();
 
