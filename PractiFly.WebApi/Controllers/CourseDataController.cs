@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities.Courses;
-using PractiFly.DbEntities.Users;
-using PractiFly.WebApi.AutoMapper;
 using PractiFly.WebApi.Dto.Admin.UserView;
 using PractiFly.WebApi.Dto.CourseData;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
@@ -22,11 +20,13 @@ public class CourseDataController : Controller
 
     public CourseDataController(
         IPractiflyContext context,
-        IConfigurationProvider configurationProvider
+        IConfigurationProvider configurationProvider,
+        IMapper mapper
         )
     {
         _context = context;
         _configurationProvider = configurationProvider;
+        _mapper = mapper;
     }
 
 
@@ -66,38 +66,11 @@ public class CourseDataController : Controller
     [Route("")]
     public async Task<IActionResult> GetCourseInfo(int courseId)
     {
-        //TODO: Mapper in mapper? (CourseDataProfile)
         var result = await _context
             .Courses
             .Where(e => e.Id == courseId)
-            .Select(e => new CourseFullInfoDto
-            {
-                OwnerInfoDto = new OwnerInfoDto
-                {
-                    Id = e.OwnerId,
-                    Owner = string.Concat(e.Owner.FirstName, " ", e.Owner.LastName),
-                    FilePhoto = e.Owner.FilePhoto
-                },
-                CourseInfoDto = new CourseInfoDto
-                {
-                    Id = e.Id,
-                    Language = e.Language.Name,
-                    CourseName = e.Name,
-                    Description = e.Description,
-                    Note = e.Note
-                },
-                UserFullnameItemDto = _context
-                    .UserCourses
-                    .Where(e => e.CourseId == courseId)
-                    .Select(uc => new UserFullnameItemDto
-                    {
-                        Id = uc.UserId,
-                        Fullname = string.Concat(uc.User.FirstName, " ", uc.User.LastName)
-                    })
-                    .ToArray()
-            })
+            .ProjectTo<CourseFullInfoDto>(_configurationProvider)
             .FirstOrDefaultAsync();
-
         return Json(result);
     }
 
@@ -116,9 +89,9 @@ public class CourseDataController : Controller
     {
         var result = await _context.UserCourses
             .Where(e => e.CourseId == courseId)
+            .Select(e => e.User)
             .ProjectTo<UserFullnameItemDto>(_configurationProvider)
             .ToListAsync();
-
         return Json(result);
     }
 
@@ -163,7 +136,10 @@ public class CourseDataController : Controller
         {
             return BadRequest();
         }
-        var result = _mapper.Map<Course, CourseInfoDto>(course);
+
+        var result = _mapper.Map<Course, CourseInfoDto>(course,
+            opts => opts.AfterMap((_, dest) => dest.Language = courseDto.Language));
+
         return Ok(result);
     }
 
@@ -185,10 +161,9 @@ public class CourseDataController : Controller
             .FirstOrDefaultAsync(e => e.Id == courseDto.Id);
 
         if (course == null) return NotFound();
-
-        course.Id = courseDto.Id;
+        
         course.Language = _context.Languages.First(l => l.Code == courseDto.Language);
-        course.Name = courseDto.CourseName;
+        course.Name = courseDto.Name;
         course.Note = courseDto.Note;
         course.Description = courseDto.Description;
 

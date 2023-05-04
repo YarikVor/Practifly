@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc.Testing;
+using Newtonsoft.Json;
 using Xunit.Abstractions;
 
 namespace PractiFly.WebApi.IntegrationTests;
@@ -25,7 +26,7 @@ public class UnitTest1
 
         var client = webHost.CreateClient();
 
-        var result = await client.GetAsync("api/material?materialId=1");
+        var result = await client.GetAsync("api/course?courseId=1");
 
         Assert.True(result.IsSuccessStatusCode);
 

@@ -4,7 +4,6 @@ using PractiFly.DbEntities.Courses;
 using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Dto.Admin.UserView;
 using PractiFly.WebApi.Dto.CourseData;
-using PractiFly.WebApi.Dto.CourseThemes;
 
 namespace PractiFly.WebApi.AutoMapper;
 
@@ -12,57 +11,41 @@ public class CourseDataProfile : Profile
 {
     public CourseDataProfile(IPractiflyContext _context)
     {
-        CreateProjection<Course, CourseFullInfoDto>()
-            .ForMember(dto => dto.OwnerInfoDto, par => par.MapFrom(
-                e => _context));
-
-        CreateProjection<Course, OwnerInfoDto>()
-            .ForMember(dto => dto.Id, par => par.MapFrom(
-                e => e.OwnerId))
-            .ForMember(dto => dto.Owner, par => par.MapFrom(
-                e => string.Concat(e.Owner.FirstName, " ", e.Owner.LastName)))
-            .ForMember(dto => dto.FilePhoto, par => par.MapFrom(
-                e => e.Owner.FilePhoto));
+        CreateProjection<User, OwnerInfoDto>()
+            .ForMember(dto => dto.FullName, par => par.MapFrom(
+                e => string.Concat(e.FirstName, " ", e.LastName)));
 
         CreateProjection<Course, CourseInfoDto>()
             .ForMember(dto => dto.Language, par => par.MapFrom(
-                e => e.Language.Name))
-            .ForMember(dto => dto.CourseName, par => par.MapFrom(
-                e => e.Name));
-
-        CreateProjection<UserCourse, UserFullnameItemDto>()
-            .ForMember(dto => dto.Id, par => par.MapFrom(
-                e => e.UserId))
-            .ForMember(dto => dto.Fullname, par => par.MapFrom(
-                e => string.Concat(e.User.FirstName, " ", e.User.LastName)));
-
-        CreateProjection<Course, OwnerInfoDto>()
-            .ForMember(dto => dto.Id, par => par.MapFrom(
-                o => o.OwnerId))
-            .ForMember(dto => dto.Owner, par => par.MapFrom(
-                o => string.Concat(o.Owner.FirstName, " ", o.Owner.LastName)))
-            .ForMember(dto => dto.FilePhoto, par => par.MapFrom(
-                o => o.Owner.FilePhoto));
-        
-        CreateProjection<User, OwnerInfoDto>()
-            .ForMember(dto => dto.Id, par => par.MapFrom(
-                o => o.Id))
-            .ForMember(dto => dto.Owner, par => par.MapFrom(
-                o => string.Concat(o.FirstName, " ", o.LastName)))
-            .ForMember(dto => dto.FilePhoto, par => par.MapFrom(
-                o => o.FilePhoto));
-
-        CreateMap<CreateCourseDto, Course>()
-            .ForMember(c => c.Language, par => par.MapFrom(
-                dto => _context
-                .Languages
-                .First(l => l.Code == dto.Language)))
-            .ForMember(c => c.Name, par => par.MapFrom(
-                dto => dto.CourseName));
-
-        CreateMap<Course, CourseInfoDto>()
-            .ForMember(dto => dto.Language, par => par.MapFrom(
                 e => e.Language.Name));
 
+        CreateProjection<User, UserFullnameItemDto>()
+            .ForMember(dto => dto.Fullname, par => par.MapFrom(
+                e => string.Concat(e.FirstName, " ", e.LastName)));
+
+        CreateProjection<Course, CourseFullInfoDto>()
+            .ForMember(dest => dest.CourseInfoDto, opt => opt.MapFrom(e => e))
+            .ForMember(dest => dest.OwnerInfoDto, opt => opt.MapFrom(e => e.Owner))
+            .ForMember(
+                dest => dest.UserFullnameItemDto,
+                opt => opt.MapFrom(
+                    e => _context
+                        .UserCourses
+                        .Where(uc => uc.CourseId == e.Id)
+                        .Select(e => e.User)
+                )
+            );
+
+        CreateMap<CreateCourseDto, Course>()
+            .ForMember(c => c.Language, par => par.Ignore())
+            .ForMember(c => c.Owner, par => par.Ignore())
+            .ForMember(c => c.LanguageId, par => par.MapFrom(
+                dto => _context
+                    .Languages
+                    .Where(l => l.Code == dto.Language)
+                    .Select(l => l.Id)
+                    .FirstOrDefault()));
+        
+        CreateMap<Course, CourseInfoDto>();
     }
 }

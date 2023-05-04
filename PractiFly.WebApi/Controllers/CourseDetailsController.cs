@@ -1,9 +1,11 @@
 using System.Security.Claims;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities.Users;
+using PractiFly.WebApi.AutoMapper;
 using PractiFly.WebApi.Dto.CourseDetails;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
@@ -16,15 +18,18 @@ public class CourseDetailsController : Controller
 {
     private readonly IPractiflyContext _context;
     private readonly IConfigurationProvider _configurationProvider;
+    private readonly IMapper _mapper;
 
 
     public CourseDetailsController(
         IPractiflyContext context,
-        IConfigurationProvider configurationProvider
+        IConfigurationProvider configurationProvider,
+        IMapper mapper
     )
     {
         _context = context;
         _configurationProvider = configurationProvider;
+        _mapper = mapper;
     }
 
     /// <summary>

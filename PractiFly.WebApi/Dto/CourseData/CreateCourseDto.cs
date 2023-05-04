@@ -11,7 +11,7 @@ public class CreateCourseDto
 
     [Required]
     [MaxLength(EntitiesConstantLengths.Name)]
-    public string CourseName { get; set; } = null!;
+    public string Name { get; set; } = null!;
 
     public int OwnerId { get; set; }
 
