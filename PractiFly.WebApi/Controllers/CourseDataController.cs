@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities.Courses;
+using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.AutoMapper;
 using PractiFly.WebApi.Dto.Admin.UserView;
 using PractiFly.WebApi.Dto.CourseData;
@@ -17,6 +18,7 @@ public class CourseDataController : Controller
 {
     private readonly IPractiflyContext _context;
     private readonly IConfigurationProvider _configurationProvider;
+    private readonly IMapper _mapper;
 
     public CourseDataController(
         IPractiflyContext context,
@@ -60,7 +62,6 @@ public class CourseDataController : Controller
     /// <response code="400">Operation was failed.</response>
     /// <response code="404">No courses found.</response>
     /// <returns>A JSON-encoded representation of the list of course information.</returns>
-    //TODO: Глянути тут, має бути інфа про один курс. ПЕРЕРОБЛЕНИЙ.
     [HttpGet]
     [Route("")]
     public async Task<IActionResult> GetCourseInfo(int courseId)
@@ -154,23 +155,16 @@ public class CourseDataController : Controller
     [Route("")]
     public async Task<IActionResult> CreateCourse(CreateCourseDto courseDto)
     {
-        /*if (!await
-                _context
-                    .Users
-                    .AnyAsync(e => e.Id == courseDto.OwnerId))
-            return BadRequest(new { message = "Course no have owner!" });*/
-        //TODO: Mapper
-        var course = new Course
-        {
-            Language = _context.Languages.First(l => l.Code == courseDto.Language),
-            Name = courseDto.CourseName,
-            Note = courseDto.Note,
-            Description = courseDto.Description
-        };
+
+        var course = _mapper.Map<CreateCourseDto, Course>(courseDto);//???
         await _context.Courses.AddAsync(course);
         await _context.SaveChangesAsync();
-        //TODO: if id == 0
-        return Ok();
+        if(course.Id == 0)
+        {
+            return BadRequest();
+        }
+        var result = _mapper.Map<Course, CourseInfoDto>(course);
+        return Ok(result);
     }
 
     /// <summary>

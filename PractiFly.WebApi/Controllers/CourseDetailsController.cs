@@ -1,8 +1,12 @@
 using System.Security.Claims;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
+using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Dto.CourseDetails;
+using IConfigurationProvider = AutoMapper.IConfigurationProvider;
+
 
 namespace PractiFly.WebApi.Controllers;
 
@@ -11,10 +15,16 @@ namespace PractiFly.WebApi.Controllers;
 public class CourseDetailsController : Controller
 {
     private readonly IPractiflyContext _context;
+    private readonly IConfigurationProvider _configurationProvider;
 
-    public CourseDetailsController(IPractiflyContext context)
+
+    public CourseDetailsController(
+        IPractiflyContext context,
+        IConfigurationProvider configurationProvider
+    )
     {
         _context = context;
+        _configurationProvider = configurationProvider;
     }
 
     /// <summary>
@@ -41,20 +51,10 @@ public class CourseDetailsController : Controller
         if (!userCourse)
             return NotFound();
 
-        //TODO: Mapper
         var themes = await _context
             .Themes
             .Where(e => e.CourseId == courseId)
-            .Select(e => new CourseThemeItemDto
-            {
-                Id = e.Id,
-                Name = e.Name,
-                IsCompleted = _context
-                    .UserThemes
-                    .Where(ut => ut.ThemeId == e.Id)
-                    .Select(ut => ut.IsCompleted)
-                    .FirstOrDefault()
-            })
+            .ProjectTo<CourseThemeItemDto>(_configurationProvider)
             .ToListAsync();
 
         return Json(themes);
@@ -75,7 +75,6 @@ public class CourseDetailsController : Controller
         var userId = User.GetUserIdInt();
 
         //if (userId) return NotFound();
-
         var userTheme = await _context
             .UserThemes
             .AnyAsync(e => e.UserId == userId && e.ThemeId == themeId);
@@ -84,9 +83,9 @@ public class CourseDetailsController : Controller
             return NotFound();
 
         //TODO: Mapper
+        //?
         var result = new CourseThemeWithMaterialsDto();
 
-        //TODO: Mapper
         result.Materials = await _context
             .UserMaterials
             .Where(um => um.UserId == userId)
@@ -95,13 +94,7 @@ public class CourseDetailsController : Controller
                 .Any(tm => tm.ThemeId == themeId
                            && tm.MaterialId == um.MaterialId)
             )
-            .Select(um => new CourseMaterialItemDto
-            {
-                Id = um.MaterialId,
-                Name = um.Material.Name,
-                IsCompleted = um.IsCompleted,
-                Grade = um.Grade.GetValueOrDefault()
-            })
+            .ProjectTo<CourseMaterialItemDto>(_configurationProvider)
             .ToArrayAsync();
 
         return Json(result);
@@ -120,7 +113,7 @@ public class CourseDetailsController : Controller
     [Route("theme/material")]
     public async Task<IActionResult> GetMaterialInfo(int themeId, int materialId)
     {
-        //TODO: Mapper
+        //TODO: Mapper (foregin parametr)
         var material = await _context
             .Materials
             .Where(e => e.Id == materialId)
@@ -159,17 +152,10 @@ public class CourseDetailsController : Controller
     {
         var userId = User.GetUserIdInt();
 
-        //TODO: Mapper
         var userMaterial = await _context
             .UserMaterials
             .Where(e => e.UserId == userId && e.MaterialId == materialId)
-            .Select(e => new UserMaterialInfoDto
-                {
-                    Grade = e.Grade,
-                    IsCompleted = e.IsCompleted,
-                    ResultUrl = e.ResultUrl
-                }
-            )
+            .ProjectTo<UserMaterialInfoDto>(_configurationProvider)
             .FirstOrDefaultAsync();
 
         return userMaterial == null ? NotFound() : Json(userMaterial);
@@ -196,15 +182,20 @@ public class CourseDetailsController : Controller
             .Where(e => e.UserId == userId && e.MaterialId == dto.MaterialId)
             .FirstOrDefaultAsync();
 
-        //TODO: Create userMaterial
-        //TODO: Mapper
         if (userMaterial == null)
-            return NotFound();
+        {
+            var createUserMaterial = _mapper.Map<UserMaterialInfoDto, UserMaterial>(dto);
+            await _context.UserMaterials.AddAsync(createUserMaterial);
+            await _context.SaveChangesAsync();
+            if (createUserMaterial.Id == 0)
+            {
+                return Problem();
+            }
 
-        //TODO: Extract to static method.
-        userMaterial.IsCompleted = dto.IsCompleted;
-        userMaterial.ResultUrl = dto.ResultUrl;
+            return Ok();
+        }
 
+        userMaterial.EditData(dto);
         await _context.SaveChangesAsync();
 
         return Ok();
