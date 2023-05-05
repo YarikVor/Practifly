@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PractiFly.XamarinApplication.View;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -10,7 +11,7 @@ namespace PractiFly.XamarinApplication
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new NavigationPage(new Login());
         }
 
         protected override void OnStart()
