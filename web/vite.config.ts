@@ -1,25 +1,29 @@
-import {defineConfig} from 'vite'
-import react from '@vitejs/plugin-react'
+import {defineConfig} from "vite";
+import reactRefresh from "@vitejs/plugin-react-refresh";
+import {visualizer} from "rollup-plugin-visualizer";
 import eslint from "@rollup/plugin-eslint";
+import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [
-        react(),
+  plugins: [
+    react(),
+    {
+      ...eslint(
         {
-            ...eslint(
-                {
-                    include: 'src/**/*.+(js|jxs|ts|tsx)'
-                },
-            ),
-            enforce: 'pre',
+          include: "src/**/*.+(js|jxs|ts|tsx)",
         },
-    ],
-    server: {
-        host: true,
-        port: 3030
+      ),
+      enforce: "pre",
     },
-    preview: {
-        port: 3030
-    }
-})
+    reactRefresh(),
+    visualizer(),
+  ],
+  server: {
+    host: true,
+    port: 3030,
+  },
+  preview: {
+    port: 3030,
+  },
+});
