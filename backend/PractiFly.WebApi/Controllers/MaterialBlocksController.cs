@@ -69,9 +69,7 @@ public class MaterialBlocksController : Controller
     /// <returns>A JSON-encoded representation of the new material block.</returns>
     [HttpPost]
     [Route("material")]
-    [Authorize(Roles = UserRoles.Teacher, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = UserRoles.Manager, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = UserRoles.Admin, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(Roles = $"{UserRoles.Admin},{UserRoles.Teacher},{UserRoles.Manager}", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> CreateMaterial(CreateMaterialDto blockDto)
     {
         var material = _mapper.Map<CreateMaterialDto, Material>(blockDto);
@@ -79,7 +77,8 @@ public class MaterialBlocksController : Controller
         await _context.SaveChangesAsync();
 
         if (material.Id == 0)
-            return Problem();
+            //return Problem(statusCode: 999);
+            return BadRequest();
 
         var materialDto = _mapper.Map<Material, MaterialDto>(material);
         return Json(materialDto);
@@ -95,9 +94,7 @@ public class MaterialBlocksController : Controller
     /// <returns>A JSON-encoded representation of the new material block.</returns>
     [HttpPost]
     [Route("material/edit")]
-    [Authorize(Roles = UserRoles.Teacher, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = UserRoles.Manager, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = UserRoles.Admin, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(Roles = $"{UserRoles.Admin},{UserRoles.Teacher},{UserRoles.Manager}", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> EditMaterial(EditMaterialDto blockDto)
     {
         if (!await _context.Materials.AnyAsync(e => e.Id == blockDto.Id))

@@ -48,13 +48,13 @@ public class MyCourseProfile : Profile
         CreateProjection<UserCourse, UserCourseStatusDto>()
             .ForMember(e => e.CourseId, par => par.MapFrom(e => e.CourseId))
             .ForMember(e => e.Language, par => par.MapFrom(e => e.Course.Language.Code))
-            // TODO: можливо оцінки беруться із тем та з матеріалів
+             //TODO: можливо оцінки беруться із тем та з матеріалів
             .ForMember(
                 e => e.GradeAverage,
                 par => par.MapFrom(
                     e =>
                         (float)
-                        _context
+                        (_context
                             .UserMaterials
                             .Where(cm => cm.UserId == e.UserId)
                             .Where(cm => _context.CourseMaterials
@@ -63,8 +63,8 @@ public class MyCourseProfile : Profile
                                 .Any(materialId => materialId == cm.MaterialId)
                             )
                             .Select(um => um.Grade)
-                            .DefaultIfEmpty()
-                            .Average()
+                            //.DefaultIfEmpty()
+                            .Average()??0)
                 )
             )
             .ForMember(
@@ -80,7 +80,7 @@ public class MyCourseProfile : Profile
                         )
                         .Select(um => um.Grade)
                         .OrderByDescending(grade => grade)
-                        .FirstOrDefault()
+                        .FirstOrDefault() ?? 0
                 )
             )
             .ForMember(

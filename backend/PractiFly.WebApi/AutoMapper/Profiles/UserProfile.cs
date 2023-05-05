@@ -17,5 +17,9 @@ public class UserProfile : Profile
             .ForMember(user => user.PhoneNumber, par => par.MapFrom(dto => dto.Phone))
             .ForMember(user => user.RegistrationDate, par => par.MapFrom(dto => DateOnly.FromDateTime(DateTime.Today)))
             .ForMember(user => user.FilePhoto, par => par.MapFrom(dto => DefaultPhotoUrl));
+        //TODO:
+        CreateMap<User, UserTokenInfoDto>()
+            .ForMember(dto => dto.User, par => par.MapFrom(
+                e => e));
     }
 }
