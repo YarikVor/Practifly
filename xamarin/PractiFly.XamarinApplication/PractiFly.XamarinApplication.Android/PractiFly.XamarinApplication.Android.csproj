@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{96CB6471-5104-4F36-B566-3F47AC5EE6DD}</ProjectGuid>
+    <ProjectGuid>{CD845B40-953D-46D0-8294-74DE7BC6A2BB}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TemplateGuid>{c9e5eea5-ca05-42a1-839b-61506e0a37df}</TemplateGuid>
     <OutputType>Library</OutputType>
@@ -88,7 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PractiFly.XamarinApplication\PractiFly.XamarinApplication.csproj">
-      <Project>{4622099B-0062-4BCB-B50C-E9FBD8D02B56}</Project>
+      <Project>{0140AAD9-C849-4B1C-BE94-1821826238ED}</Project>
       <Name>PractiFly.XamarinApplication</Name>
     </ProjectReference>
   </ItemGroup>

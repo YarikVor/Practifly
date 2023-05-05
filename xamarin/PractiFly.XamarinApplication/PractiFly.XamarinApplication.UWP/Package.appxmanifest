@@ -7,15 +7,15 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="1fbc6275-d254-478c-a1a8-cce12180c77f"
-    Publisher="CN=8ad583d5-5186-4378-a6e9-1bb130ede74d"
+    Name="670ecbbc-49fb-42e2-baf9-9f7f8ae5359b"
+    Publisher="CN=432ed256-c289-4115-87a9-cb34dc108b1e"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="ec0cc741-fd3e-485c-81be-68815c480690" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>PractiFly.XamarinApplication.UWP</DisplayName>
-    <PublisherDisplayName>8ad583d5-5186-4378-a6e9-1bb130ede74d</PublisherDisplayName>
+    <PublisherDisplayName>432ed256-c289-4115-87a9-cb34dc108b1e</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 

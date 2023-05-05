@@ -15,6 +15,16 @@ namespace PractiFly.XamarinApplication.View
         public Registration()
         {
             InitializeComponent();
+            login.GestureRecognizers.Add(tapGesture);
+
+            tapGesture.Tapped += async (s, e) =>
+            {
+                await Navigation.PushAsync(new Login());
+            };
         }
+        TapGestureRecognizer tapGesture = new TapGestureRecognizer
+        {
+            NumberOfTapsRequired = 1
+        };
     }
 }

@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProjectGuid>{63398CDF-3938-4C9E-995E-2AE3555D6C6B}</ProjectGuid>
+    <ProjectGuid>{6A54291B-1684-41CE-8FD6-1FB9666959A0}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PractiFly.XamarinApplication.UWP</RootNamespace>
@@ -150,7 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PractiFly.XamarinApplication\PractiFly.XamarinApplication.csproj">
-      <Project>{4622099B-0062-4BCB-B50C-E9FBD8D02B56}</Project>
+      <Project>{0140AAD9-C849-4B1C-BE94-1821826238ED}</Project>
       <Name>PractiFly.XamarinApplication</Name>
     </ProjectReference>
   </ItemGroup>
