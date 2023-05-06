@@ -18,6 +18,9 @@ export const useStyles = makeStyles({
       fontWeight: 500,
     },
   },
+  error:{
+    color: "red",
+  },
   inputStyles: {
     "&.MuiInputBase-root": {
       "&.Mui-focused fieldset": {

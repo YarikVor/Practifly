@@ -1,6 +1,7 @@
 import {makeStyles} from "@mui/styles";
 
 export const useStyles = makeStyles({
+  
   loginForm: {
     maxWidth: 580,
     margin: "0 auto",

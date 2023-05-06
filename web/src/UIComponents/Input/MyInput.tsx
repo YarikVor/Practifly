@@ -1,11 +1,12 @@
 import {FC} from "react";
-import {FormControl, InputLabel, OutlinedInput} from "@mui/material";
+import {FormControl, InputLabel, OutlinedInput, Typography} from "@mui/material";
 
 import {IInput} from "./input.interface";
 import {useStyles} from "./styles";
 
 export const MyInput: FC<IInput> = ({
   label,
+  type,
   id,
   placeholder,
   onChange,
@@ -13,6 +14,9 @@ export const MyInput: FC<IInput> = ({
   inputStyles,
   labelStyles,
   name,
+  register,
+  error,
+  helperText,
 }) => {
   const styles = useStyles();
   return (
@@ -22,11 +26,17 @@ export const MyInput: FC<IInput> = ({
         id={id}
         onChange={onChange}
         fullWidth
+        error={error}
         name={name}
+        type={type}
+        {...register(name)}
         placeholder={placeholder}
         value={value}
         className={`${styles.inputStyles} ${inputStyles}`}
       />
+      {helperText &&
+      <Typography className={styles.error}>{helperText}</Typography>
+      }
     </FormControl>
   );
 };

@@ -1,6 +1,27 @@
 import {makeStyles} from "@mui/styles";
 
 export const useStyles = makeStyles({
+  insideFormWrapper: {
+    display: "flex",
+    flexWrap: "wrap",
+  },
+  datePickerLabel: {
+    "& $notchedOutline": {
+      backgroundColor: "white",
+    },
+    "&.MuiFormLabel-root": {
+      "&.MuiInputLabel-root": {
+        "&.Mui-focused": {
+          color: "rgba(120, 63, 214, 0.5)",
+        },
+      },
+      position: "relative",
+      display: "block",
+      margin: "0 0 -10px -10px",
+      fontSize: 18,
+      fontWeight: 500,
+    },
+  },
   registrationForm: {
     maxWidth: 800,
     margin: "0 auto",

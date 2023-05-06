@@ -1,10 +1,10 @@
-import {BaseResponse} from "../../interfaces/response.interface";
+import {statusTypes} from "../../../types/status.types";
 
-export interface IAuthData {
-    token?: string;
+export interface AuthData  {
+    token: string;
 }
 
-export interface IUserRegisterData {
+export interface UserRegisterData {
     username: string;
     name: string;
     surname: string;
@@ -14,12 +14,21 @@ export interface IUserRegisterData {
     password: string
 }
 
-export interface IUserLoginData {
+export interface UserLoginData {
     email: string;
     password: string;
 }
 
-export interface AuthStateProps{
-    data?: BaseResponse<IAuthData> | null;
-    status: string;
+export interface InitialState {
+    data: AuthData | null;
+    status: statusTypes;
+    errorMessage?: string | null;
+}
+
+export interface ErrorData {
+    response:ResponseError;
+}
+
+export interface ResponseError {
+status: number
 }
