@@ -11,13 +11,14 @@ public class CourseDataProfile : Profile
 {
     public CourseDataProfile(IPractiflyContext _context)
     {
+        CreateMap<Course, CourseInfoDto>();
+        
         CreateProjection<User, OwnerInfoDto>()
             .ForMember(dto => dto.FullName, par => par.MapFrom(
                 e => string.Concat(e.FirstName, " ", e.LastName)));
 
         CreateProjection<Course, CourseInfoDto>()
-            .ForMember(dto => dto.Language, par => par.MapFrom(
-                e => e.Language.Name));
+            .ForMember(dto => dto.Language, par => par.MapFrom(e => e.Language.Name));
 
         CreateProjection<User, UserFullnameItemDto>()
             .ForMember(dto => dto.Fullname, par => par.MapFrom(
@@ -46,6 +47,6 @@ public class CourseDataProfile : Profile
                     .Select(l => l.Id)
                     .FirstOrDefault()));
 
-        CreateMap<Course, CourseInfoDto>();
+        
     }
 }
