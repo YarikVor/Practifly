@@ -79,6 +79,10 @@ public class UserController : Controller
     public async Task<IActionResult> Login(LoginDto loginDto)
     {
         var user = await _userManager.FindByEmailAsync(loginDto.Email);
+        
+        if(user == null)
+            return NotFound();
+        
         var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
         var role = (await _userManager.GetRolesAsync(user))[0];
