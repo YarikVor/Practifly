@@ -8,15 +8,15 @@ public class RegistrationDto
 {
     [Required]
     [MaxLength(64)]
-    public string Username { get; set; } = null!;
+    public string UserName { get; set; } = null!;
 
     [Required]
     [MaxLength(128)]
-    public string Name { get; set; } = null!;
+    public string FirstName { get; set; } = null!;
 
     [Required]
     [MaxLength(128)]
-    public string Surname { get; set; } = null!;
+    public string LastName { get; set; } = null!;
 
     [Required]
     [EmailAddress]
@@ -26,7 +26,7 @@ public class RegistrationDto
     [Required]
     [Phone]
     [MaxLength(32)]
-    public string Phone { get; set; } = null!;
+    public string PhoneNumber { get; set; } = null!;
 
     [Required]
     [TodayDateConstraint]

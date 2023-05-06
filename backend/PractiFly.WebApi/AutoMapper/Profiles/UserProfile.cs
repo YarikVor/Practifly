@@ -11,15 +11,10 @@ public class UserProfile : Profile
     public UserProfile()
     {
         CreateMap<RegistrationDto, User>()
-            .ForMember(user => user.UserName, par => par.MapFrom(dto => dto.Username))
-            .ForMember(user => user.FirstName, par => par.MapFrom(dto => dto.Name))
-            .ForMember(user => user.LastName, par => par.MapFrom(dto => dto.Surname))
-            .ForMember(user => user.PhoneNumber, par => par.MapFrom(dto => dto.Phone))
             .ForMember(user => user.RegistrationDate, par => par.MapFrom(dto => DateOnly.FromDateTime(DateTime.Today)))
             .ForMember(user => user.FilePhoto, par => par.MapFrom(dto => DefaultPhotoUrl));
-        //TODO:
+        //TODO: Add mapping for Map<User, UserProfileInfoViewDto>
         CreateMap<User, UserTokenInfoDto>()
-            .ForMember(dto => dto.User, par => par.MapFrom(
-                e => e));
+            .ForMember(dto => dto.User, par => par.MapFrom(e => e));
     }
 }

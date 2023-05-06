@@ -119,7 +119,7 @@ public class CourseThemesController : Controller
             .AsNoTracking()
             .Where(e => e.CourseId == courseId)
             .ProjectTo<MaterialsMenuDto>(_configurationProvider)
-            .OrderBy(e => e.Priority)
+            .OrderBy(e => e.PriorityLevel)
             .ToListAsync();
 
         return Json(result);

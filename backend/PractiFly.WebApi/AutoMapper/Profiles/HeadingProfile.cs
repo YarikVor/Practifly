@@ -16,6 +16,8 @@ public class HeadingProfile : Profile
         CreateMap<Heading, HeadingInfoDto>();
         CreateMap<HeadingEditDto, Heading>();
 
+        //TODO: IsIncluded in HeadingItemInCourseDto
+        //TODO: Maybe not CourseHeading, but Heading
         CreateProjection<CourseHeading, HeadingCourseItemDto>()
             .ForMember(
                 e => e.Id,

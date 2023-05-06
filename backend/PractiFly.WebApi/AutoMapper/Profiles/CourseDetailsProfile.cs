@@ -24,16 +24,15 @@ public class CourseDetailsProfile : Profile
                                 .ThemeMaterials
                                 .Where(tm => tm.ThemeId == ut.ThemeId)
                                 .Any(tm => tm.MaterialId == um.MaterialId))))
-            .ForMember(m => m.Id, par => par.MapFrom(e => e.ThemeId))
+            .ForMember(m => m.Id, par => par.MapFrom(e => e.Theme.Id))
             .ForMember(m => m.Name, par => par.MapFrom(e => e.Theme.Name));
 
         CreateProjection<UserMaterial, CourseMaterialItemDto>()
-            .ForMember(dto => dto.Id, par => par.MapFrom(m => m.MaterialId))
+            .ForMember(dto => dto.Id, par => par.MapFrom(m => m.Material.Id))
             .ForMember(dto => dto.Name, par => par.MapFrom(m => m.Material.Name));
 
         CreateProjection<ThemeMaterial, MaterialDetailsViewDto>()
             .ForMember(dto => dto.Url, par => par.MapFrom(m => m.Material.Url))
-            .ForMember(dto => dto.Description, par => par.MapFrom(m => m.Description))
             .ForMember(dto => dto.Name, par => par.MapFrom(m => m.Material.Name))
             .ForMember(dto => dto.Id, par => par.MapFrom(m => m.Material.Id));
 

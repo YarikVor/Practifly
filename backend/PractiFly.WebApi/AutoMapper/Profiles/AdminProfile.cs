@@ -11,12 +11,6 @@ public class AdminProfile : Profile
     {
         CreateProjection<User, UserProfileForAdminViewDto>()
             .ForMember(
-                up => up.Name, par => par.MapFrom(
-                    e => e.FirstName))
-            .ForMember(
-                up => up.Surname, par => par.MapFrom(
-                    e => e.LastName))
-            .ForMember(
                 up => up.Role, par => par.MapFrom(
                     e => _context
                         .UserRoles

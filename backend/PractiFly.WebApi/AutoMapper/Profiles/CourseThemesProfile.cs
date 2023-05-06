@@ -38,10 +38,6 @@ public class CourseThemesProfile : Profile
                 par => par.MapFrom(cm => cm.Material.Name)
             )
             .ForMember(
-                dto => dto.Priority,
-                par => par.MapFrom(cm => cm.PriorityLevel)
-            )
-            .ForMember(
                 dto => dto.IsIncluded,
                 par => par.MapFrom(
                     cm => _context

@@ -29,10 +29,7 @@ public class CourseMaterialsProfile : Profile
                     .Where(cm => cm.MaterialId == e.Id)
                     .Select(cm => cm.PriorityLevel)));
 
-        CreateProjection<Heading, CourseHeadingInfoDto>()
-            .ForMember(dto => dto.Id, par => par.MapFrom(ch => ch.Id))
-            .ForMember(dto => dto.Name, par => par.MapFrom(ch => ch.Name))
-            .ForMember(dto => dto.Code, par => par.MapFrom(ch => ch.Code));
+        CreateProjection<Heading, CourseHeadingInfoDto>();
 
 
         var courseId = 0;
@@ -40,7 +37,7 @@ public class CourseMaterialsProfile : Profile
             .ForMember(
                 dto => dto.Id,
                 par => par.MapFrom(
-                    m => m.MaterialId))
+                    m => m.Material.Id))
             .ForMember(
                 dto => dto.Name,
                 par => par.MapFrom(

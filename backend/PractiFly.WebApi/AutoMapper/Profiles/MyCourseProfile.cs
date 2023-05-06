@@ -46,9 +46,8 @@ public class MyCourseProfile : Profile
             );
         //TODO: Nect topic, grade for  current theme
         CreateProjection<UserCourse, UserCourseStatusDto>()
-            .ForMember(e => e.CourseId, par => par.MapFrom(e => e.CourseId))
             .ForMember(e => e.Language, par => par.MapFrom(e => e.Course.Language.Code))
-             //TODO: можливо оцінки беруться із тем та з матеріалів
+            //TODO: можливо оцінки беруться із тем та з матеріалів
             .ForMember(
                 e => e.GradeAverage,
                 par => par.MapFrom(
@@ -64,7 +63,7 @@ public class MyCourseProfile : Profile
                             )
                             .Select(um => um.Grade)
                             //.DefaultIfEmpty()
-                            .Average()??0)
+                            .Average() ?? 0)
                 )
             )
             .ForMember(
@@ -94,10 +93,6 @@ public class MyCourseProfile : Profile
             .ForMember(
                 e => e.Language,
                 par => par.MapFrom(e => e.Course.Language.Code)
-            )
-            .ForMember(
-                e => e.CourseId,
-                par => par.MapFrom(e => e.CourseId)
             );
     }
 }

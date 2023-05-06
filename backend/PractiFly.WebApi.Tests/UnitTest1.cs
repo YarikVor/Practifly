@@ -29,11 +29,11 @@ public class UserControllerTest
         {
             Birthday = DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-20)),
             Email = email,
-            Name = "Create",
+            FirstName = "Create",
             Password = "qqQQ11!!",
-            Surname = "Delete",
-            Username = "createanddelete",
-            Phone = "+380000000000"
+            LastName = "Delete",
+            UserName = "createanddelete",
+            PhoneNumber = "+380000000000"
         };
 
         // Act
