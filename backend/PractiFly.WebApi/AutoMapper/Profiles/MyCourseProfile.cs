@@ -4,7 +4,7 @@ using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Dto.MyCourse;
 using PractiFly.WebApi.Dto.Profile;
 
-namespace PractiFly.WebApi.AutoMappers;
+namespace PractiFly.WebApi.AutoMapper.Profiles;
 
 public class MyCourseProfile : Profile
 {
@@ -46,15 +46,14 @@ public class MyCourseProfile : Profile
             );
         //TODO: Nect topic, grade for  current theme
         CreateProjection<UserCourse, UserCourseStatusDto>()
-            .ForMember(e => e.CourseId, par => par.MapFrom(e => e.CourseId))
             .ForMember(e => e.Language, par => par.MapFrom(e => e.Course.Language.Code))
-            // TODO: можливо оцінки беруться із тем та з матеріалів
+            //TODO: можливо оцінки беруться із тем та з матеріалів
             .ForMember(
                 e => e.GradeAverage,
                 par => par.MapFrom(
                     e =>
                         (float)
-                        _context
+                        (_context
                             .UserMaterials
                             .Where(cm => cm.UserId == e.UserId)
                             .Where(cm => _context.CourseMaterials
@@ -63,8 +62,8 @@ public class MyCourseProfile : Profile
                                 .Any(materialId => materialId == cm.MaterialId)
                             )
                             .Select(um => um.Grade)
-                            .DefaultIfEmpty()
-                            .Average()
+                            //.DefaultIfEmpty()
+                            .Average() ?? 0)
                 )
             )
             .ForMember(
@@ -80,7 +79,7 @@ public class MyCourseProfile : Profile
                         )
                         .Select(um => um.Grade)
                         .OrderByDescending(grade => grade)
-                        .FirstOrDefault()
+                        .FirstOrDefault() ?? 0
                 )
             )
             .ForMember(
@@ -94,10 +93,6 @@ public class MyCourseProfile : Profile
             .ForMember(
                 e => e.Language,
                 par => par.MapFrom(e => e.Course.Language.Code)
-            )
-            .ForMember(
-                e => e.CourseId,
-                par => par.MapFrom(e => e.CourseId)
             );
     }
 }

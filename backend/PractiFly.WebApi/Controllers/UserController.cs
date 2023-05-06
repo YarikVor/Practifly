@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -60,7 +61,7 @@ public class UserController : Controller
         if (!identityResult.Succeeded)
             return BadRequest(identityResult.Errors);
 
-        var token = GenerateToken(identityUser, UserRoles.User);
+        var token = GenerateToken(identityUser.Id, UserRoles.User);
 
         return Ok(token);
     }
@@ -78,14 +79,23 @@ public class UserController : Controller
     public async Task<IActionResult> Login(LoginDto loginDto)
     {
         var user = await _userManager.FindByEmailAsync(loginDto.Email);
+        
+        if(user == null)
+            return NotFound();
+        
         var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
         var role = (await _userManager.GetRolesAsync(user))[0];
 
-        if (result.Succeeded)
-            return Ok(GenerateToken(user, role));
+        if (!result.Succeeded)
+        {
+            return BadRequest();
+        }
+        var resultDto = _mapper.Map<User, UserTokenInfoDto>(user);
+        resultDto.Token = GenerateToken(user.Id, role);
+        return Ok(resultDto);
 
-        return BadRequest();
+
     }
 
     //public async Task<IActionResult> Login(LoginDto loginDto)
@@ -116,11 +126,11 @@ public class UserController : Controller
     /// <response code="200">Token generate was successful.</response>
     /// <response code="400">Token generate was failed.</response>
     /// <returns>A JWT that contains the specified user's ID and assigned role.</returns>
-    private string GenerateToken(User user, string role)
+    private string GenerateToken(int userId, string role)
     {
         IEnumerable<Claim> claims = new[]
         {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
             new Claim(ClaimTypes.Role, role)
         };
         return _tokenGenerator.GenerateToken(claims);
@@ -143,7 +153,7 @@ public class UserController : Controller
         var user = await _userManager.FindByIdAsync(id);
 
         var role = (await _userManager.GetRolesAsync(user)).First();
-        return Ok(GenerateToken(user, role));
+        return Ok(GenerateToken(user.Id, role));
     }
 
     /// <summary>
@@ -155,7 +165,8 @@ public class UserController : Controller
     /// <returns>An IActionResult indicating success or failure.</returns>
     [HttpDelete]
     [Route("delete")]
-    [Authorize]
+
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> DeleteCurrentUserAsync()
     {
         // Отримання ідентифікатора поточного користувача з токена.

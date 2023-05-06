@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
@@ -33,13 +36,16 @@ public class MyCourseController : Controller
     /// <returns>A JSON-encoded representation of the list of courses and their statuses.</returns>
     [HttpGet]
     [Route("user/courses")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
     public async Task<IActionResult> UserCourse(int userId)
     {
         var result = await _context
             .UserCourses
             .AsNoTracking()
             .Where(e => e.UserId == userId)
-            .ProjectToArrayAsync<UserCourseStatusDto>(_configurationProvider);
+            .ProjectTo<UserCourseStatusDto>(_configurationProvider)
+            .ToListAsync();
 
         return Json(result);
     }

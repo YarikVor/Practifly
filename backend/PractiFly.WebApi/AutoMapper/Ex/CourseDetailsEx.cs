@@ -1,7 +1,7 @@
 ﻿using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Dto.CourseDetails;
 
-namespace PractiFly.WebApi.AutoMapper;
+namespace PractiFly.WebApi.AutoMapper.Ex;
 
 public static class CourseDetailsEx
 {

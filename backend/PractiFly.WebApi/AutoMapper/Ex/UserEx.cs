@@ -2,7 +2,7 @@
 using PractiFly.WebApi.Dto.Admin.UserView;
 using PractiFly.WebApi.Dto.Profile;
 
-namespace PractiFly.WebApi.AutoMapper;
+namespace PractiFly.WebApi.AutoMapper.Ex;
 
 public static class UserEx
 {

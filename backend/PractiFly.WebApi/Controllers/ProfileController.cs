@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities.Users;
-using PractiFly.WebApi.AutoMapper;
+using PractiFly.WebApi.AutoMapper.Ex;
 using PractiFly.WebApi.Dto.Profile;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 

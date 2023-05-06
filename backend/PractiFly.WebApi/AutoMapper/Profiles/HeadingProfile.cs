@@ -5,33 +5,19 @@ using PractiFly.DbEntities.Materials;
 using PractiFly.WebApi.Dto.Heading;
 using PractiFly.WebApi.Dto.HeadingCourse;
 
-namespace PractiFly.WebApi.AutoMappers;
+namespace PractiFly.WebApi.AutoMapper.Profiles;
 
 public class HeadingProfile : Profile
 {
     public HeadingProfile(IPractiflyContext _context)
     {
-        #region Heading
 
-        CreateProjection<Heading, HeadingItemDto>();
-        CreateProjection<Heading, HeadingInfoDto>();
         CreateMap<HeadingCreateDto, Heading>();
         CreateMap<Heading, HeadingInfoDto>();
         CreateMap<HeadingEditDto, Heading>();
 
-        #endregion
-
-
-        #region HeadingCourse
-
-        //TODO: Dto for Editing
-
-        //CreateProjection<Heading, HeadingCourseEditDto>()
-        //    .ForMember(
-        //    e => e.IsIncluded,
-        //    par => par.MapFrom(e => e.) //має бути булеве поле, що відповідає полю IsIncluded
-        //    ); 
-
+        //TODO: IsIncluded in HeadingItemInCourseDto
+        //TODO: Maybe not CourseHeading, but Heading
         CreateProjection<CourseHeading, HeadingCourseItemDto>()
             .ForMember(
                 e => e.Id,
@@ -51,8 +37,5 @@ public class HeadingProfile : Profile
                 e => _context
                     .CourseHeadings
                     .Any(cm => cm.HeadingId == e.Id)));
-        //CreateProjection<Course, CourseItemDto>();
-
-        #endregion
     }
 }

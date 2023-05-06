@@ -3,19 +3,13 @@ using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Dto.Admin.UserView;
 
-namespace PractiFly.WebApi.AutoMapper;
+namespace PractiFly.WebApi.AutoMapper.Profiles;
 
 public class AdminProfile : Profile
 {
     public AdminProfile(IPractiflyContext _context)
     {
         CreateProjection<User, UserProfileForAdminViewDto>()
-            .ForMember(
-                up => up.Name, par => par.MapFrom(
-                    e => e.FirstName))
-            .ForMember(
-                up => up.Surname, par => par.MapFrom(
-                    e => e.LastName))
             .ForMember(
                 up => up.Role, par => par.MapFrom(
                     e => _context

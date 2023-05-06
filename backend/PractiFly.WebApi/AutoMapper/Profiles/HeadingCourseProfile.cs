@@ -3,7 +3,7 @@ using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities.Materials;
 using PractiFly.WebApi.Dto.Heading;
 
-namespace PractiFly.WebApi.AutoMapper;
+namespace PractiFly.WebApi.AutoMapper.Profiles;
 
 public class HeadingCourseProfile : Profile
 {
