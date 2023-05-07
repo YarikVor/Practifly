@@ -82,7 +82,7 @@ public class HeadingCourseController : Controller
             .Where(e => e.CourseId == courseId)
             .Select(e => e.Heading)
             .Where(e => EF.Functions.Like(e.Code, patternSubheadingCode))
-            .ProjectTo<HeadingItemInCourseDto>(_configurationProvider)
+            .ProjectTo<HeadingItemInCourseDto>(_configurationProvider, new { courseId })
             .ToListAsync();
 
         return Json(result);

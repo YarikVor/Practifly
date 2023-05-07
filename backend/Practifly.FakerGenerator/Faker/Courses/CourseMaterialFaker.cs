@@ -7,7 +7,6 @@ public sealed class CourseMaterialFaker : FakerFkRandomizer<CourseMaterial>, IFa
 {
     public CourseMaterialFaker(int count) : base(count)
     {
-        RuleFor(cm => cm.Id, f => f.IndexFaker + 1);
         RuleFor(cm => cm.CourseId, RandomId);
         RuleFor(cm => cm.MaterialId, RandomId);
         RuleFor(cm => cm.PriorityLevel, f => f.Random.Int(0, 100));

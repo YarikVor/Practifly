@@ -7,7 +7,6 @@ public sealed class UserThemeFaker : FakerFkRandomizer<UserTheme>, IFakerGenerat
 {
     public UserThemeFaker(int count) : base(count)
     {
-        RuleFor(ut => ut.Id, f => f.IndexFaker + 1);
         RuleFor(ut => ut.UserId, RandomId);
         RuleFor(ut => ut.ThemeId, RandomId);
         RuleFor(ut => ut.LevelId, RandomId);

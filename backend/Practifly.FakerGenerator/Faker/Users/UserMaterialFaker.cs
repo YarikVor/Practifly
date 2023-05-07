@@ -7,7 +7,6 @@ public sealed class UserMaterialFaker : FakerFkRandomizer<UserMaterial>, IFakerG
 {
     public UserMaterialFaker(int count) : base(count)
     {
-        RuleFor(um => um.Id, f => f.IndexFaker + 1);
         RuleFor(um => um.UserId, RandomId);
         RuleFor(um => um.MaterialId, RandomId);
         RuleFor(um => um.IsCompleted, f => f.Random.Bool());

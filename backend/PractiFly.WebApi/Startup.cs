@@ -295,7 +295,7 @@ public class Startup
 
     private static void InitTables(IServiceCollection services)
     {
-        // TODO: Make init tables
+        // TODO: Make init tables with migration and fakers
     }
 
     #endregion

@@ -7,7 +7,6 @@ public sealed class UserCourseFaker : FakerFkRandomizer<UserCourse>, IFakerGener
 {
     public UserCourseFaker(int count) : base(count)
     {
-        RuleFor(uc => uc.Id, f => f.IndexFaker + 1);
         RuleFor(uc => uc.UserId, RandomId);
         RuleFor(uc => uc.CourseId, RandomId);
         RuleFor(uc => uc.LevelId, RandomId);
