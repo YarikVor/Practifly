@@ -166,7 +166,6 @@
                     <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="✔️"/>
                     <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="📝"/>
                     <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="🗑"/>
-
                 </StackLayout>
             </Grid>
             <!--</StackLayout>-->
