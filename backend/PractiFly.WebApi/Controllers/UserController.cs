@@ -61,9 +61,9 @@ public class UserController : Controller
         if (!identityResult.Succeeded)
             return BadRequest(identityResult.Errors);
 
-        var token = GenerateToken(identityUser.Id, UserRoles.User);
-
-        return Ok(token);
+        var resultDto = _mapper.Map<User, UserTokenInfoDto>(identityUser);
+        resultDto.Token = GenerateToken(identityUser.Id, UserRoles.User);
+        return Ok(resultDto);
     }
 
     /// <summary>
