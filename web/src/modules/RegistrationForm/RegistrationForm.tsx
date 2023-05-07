@@ -62,17 +62,17 @@ const RegistrationForm = () => {
         />
         <MyInput
           label="Ім`я"
-          error={Boolean(errors.name?.message)}
-          helperText={errors.name?.message}
+          error={Boolean(errors.firstname?.message)}
+          helperText={errors.firstname?.message}
           register={register}
-          name="name"
+          name="firstname"
         />
         <MyInput
           label="Прізвище"
-          error={Boolean(errors.surname?.message)}
-          helperText={errors.surname?.message}
+          error={Boolean(errors.lastname?.message)}
+          helperText={errors.lastname?.message}
           register={register}
-          name="surname"
+          name="lastname"
         />
         <MyInput
           label="Email"
@@ -83,10 +83,10 @@ const RegistrationForm = () => {
         />
         <MyInput
           label="Телефон"
-          error={Boolean(errors.phone?.message)}
-          helperText={errors.phone?.message}
+          error={Boolean(errors.phoneNumber?.message)}
+          helperText={errors.phoneNumber?.message}
           register={register}
-          name="phone"
+          name="phoneNumber"
         />
         <MyInput
           register={register}

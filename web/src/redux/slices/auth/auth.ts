@@ -18,6 +18,7 @@ export const fetchLogin = createAsyncThunk<AuthData, UserLoginData, {rejectValue
         `${authEndpoint}/login`,
         loginData
       );
+      console.log(response);
       return response.data;
     } catch (e) {
       return thunkAPI.rejectWithValue("Something went wrong. Check please entered data");
@@ -30,7 +31,7 @@ export const fetchRegistration = createAsyncThunk<AuthData, UserRegisterData, {r
   async (registrationData, thunkAPI) => {
     try {
       const response = await axios.post<AuthData>(
-        `${authEndpoint}/registration`,
+        `${authEndpoint}/register`,
         registrationData
       );
       return response.data;

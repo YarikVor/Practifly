@@ -6,10 +6,10 @@ export interface AuthData  {
 
 export interface UserRegisterData {
     username: string;
-    name: string;
-    surname: string;
+    firstname: string;
+    lastname: string;
     email: string;
-    phone: string;
+    phoneNumber: string;
     birthday: string;
     password: string
 }
