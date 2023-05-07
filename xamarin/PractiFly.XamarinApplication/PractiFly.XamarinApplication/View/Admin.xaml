@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PractiFly.XamarinApplication.View.Admin">
     <ContentPage.Content>
+        
         <StackLayout >
                 <StackLayout HorizontalOptions="Center"  Margin="0,20">
                     <Label Text="Користувачі" FontSize="Title" FontAttributes="Bold"/>
@@ -18,9 +19,20 @@
                         <Button TextColor="White" Text="Навчання" WidthRequest="150"/>
                     </StackLayout>
                 </Frame>
-                <StackLayout Spacing="20"  Orientation="Horizontal" Margin="10" HorizontalOptions="Center">
-                    <Frame  HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0">
-                        <StackLayout Spacing="10" WidthRequest="180">
+            <Grid  ColumnSpacing="20" Margin="20" HorizontalOptions="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <!--<StackLayout Spacing="20"  Orientation="Horizontal" Margin="10" HorizontalOptions="Center">-->
+                <Frame  HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0" Grid.Column="0" Grid.Row="0">
+                    <ScrollView>
+                        <StackLayout Spacing="10" WidthRequest="180" Margin="0,0,20,0">
                             <Label Text="Відбір користувачів" TextColor="#9062F2" FontAttributes="Bold"/>
                             <StackLayout>
                                 <Label Text="Ім'я"/>
@@ -56,55 +68,65 @@
                                 <Entry />
                             </StackLayout>
                         </StackLayout>
-                    </Frame>
-                    <Frame HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0">
-                        <ScrollView  WidthRequest="180">
-                            <StackLayout Spacing="30">
-                                <Label Text="Прізвище ім'я"/>
-                                <Label Text="Прізвище ім'я"/>
-                                <Label Text="Прізвище ім'я"/>
-                                <Label Text="Прізвище ім'я"/>
-                                <Label Text="Прізвище ім'я"/>
-                                <Label Text="Прізвище ім'я"/>
-                                <Label Text="Прізвище ім'я"/>
-                                <Label Text="Прізвище ім'я"/>
-                                <Label Text="Прізвище ім'я"/>
-                                <Label Text="Прізвище ім'я"/>
-                                <Label Text="Прізвище ім'я"/>
-                                <Label Text="Прізвище ім'я"/>
-                                <Label Text="Прізвище ім'я"/>
-                                <Label Text="Прізвище ім'я"/>
-                                <Label Text="Прізвище ім'я"/>
+                    </ScrollView>
+                </Frame >
+                <StackLayout Grid.Column="0" Grid.Row="1">
+                    <Button HorizontalOptions="End" Padding="10" FontSize="Medium" CornerRadius="8" Text="🔍"/>
+                </StackLayout>
+                <Frame HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0" Grid.Column="1" Grid.Row="0">
+                    <ScrollView  WidthRequest="180">
+                        <StackLayout Spacing="30">
+                            <Label Text="Прізвище ім'я"/>
+                            <Label Text="Прізвище ім'я"/>
+                            <Label Text="Прізвище ім'я"/>
+                            <Label Text="Прізвище ім'я"/>
+                            <Label Text="Прізвище ім'я"/>
+                            <Label Text="Прізвище ім'я"/>
+                            <Label Text="Прізвище ім'я"/>
+                            <Label Text="Прізвище ім'я"/>
+                            <Label Text="Прізвище ім'я"/>
+                            <Label Text="Прізвище ім'я"/>
+                            <Label Text="Прізвище ім'я"/>
+                            <Label Text="Прізвище ім'я"/>
+                            <Label Text="Прізвище ім'я"/>
+                            <Label Text="Прізвище ім'я"/>
+                            <Label Text="Прізвище ім'я"/>
+                        </StackLayout>
+
+                    </ScrollView>
+                </Frame>
+                <StackLayout Orientation="Horizontal" Grid.Column="1" Grid.Row="1" HorizontalOptions="End">
+                    <Button  Padding="15,0" FontSize="Medium" CornerRadius="8" Text="#"/>
+                    <Button  Padding="15,0" FontSize="Medium" CornerRadius="8" Text="#"/>
+                    <Button  Padding="15,0" FontSize="Medium" CornerRadius="8" Text="#"/>
+                </StackLayout>
+                <Frame  HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0"  Grid.Column="2" Grid.Row="0">
+                    <ScrollView>
+                        <StackLayout Spacing="10" WidthRequest="600"  Margin="0,0,20,0">
+                        <Grid  ColumnSpacing="50" RowSpacing="20">
+
+                            <StackLayout Grid.Column="0" Grid.Row="0"   >
+                                <Label Text="Ім'я"/>
+                                <Entry />
                             </StackLayout>
-
-                        </ScrollView>
-                    </Frame>
-                    <Frame  HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0" >
-                        <StackLayout Spacing="10" WidthRequest="600">
-                            <Grid  ColumnSpacing="50" RowSpacing="20">
-
-                                <StackLayout Grid.Column="0" Grid.Row="0"   >
-                                    <Label Text="Ім'я"/>
-                                    <Entry />
+                            <StackLayout Grid.Column="1" Grid.Row="0"   >
+                                <Label Text="Прізвище"/>
+                                <Entry />
+                            </StackLayout>
+                            <StackLayout Grid.Column="0" Grid.Row="1" >
+                                <Label Text="Email"/>
+                                <StackLayout  Orientation="Horizontal">
+                                    <Entry HorizontalOptions="FillAndExpand"  />
+                                    <Button  Text="✉" CornerRadius="8" />
                                 </StackLayout>
-                                <StackLayout Grid.Column="1" Grid.Row="0"   >
-                                    <Label Text="Прізвище"/>
-                                    <Entry />
+                            </StackLayout>
+                            <StackLayout Grid.Column="1" Grid.Row="1" >
+                                <Label Text="Телефон"/>
+                                <StackLayout  Orientation="Horizontal">
+                                    <Entry HorizontalOptions="FillAndExpand"  />
+                                    <Button  Text="✉" CornerRadius="8" />
                                 </StackLayout>
-                                <StackLayout Grid.Column="0" Grid.Row="1" >
-                                    <Label Text="Email"/>
-                                    <StackLayout  Orientation="Horizontal">
-                                        <Entry HorizontalOptions="FillAndExpand"  />
-                                        <Button  Text="✉" CornerRadius="8" />
-                                    </StackLayout>
-                                </StackLayout>
-                                <StackLayout Grid.Column="1" Grid.Row="1" >
-                                    <Label Text="Телефон"/>
-                                    <StackLayout  Orientation="Horizontal">
-                                        <Entry HorizontalOptions="FillAndExpand"  />
-                                        <Button  Text="✉" CornerRadius="8" />
-                                    </StackLayout>
-                                </StackLayout>
+                            </StackLayout>
                             <StackLayout Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Margin="160,0">
                                 <Label Text="Дата реєстрації"/>
                                 <StackLayout  Orientation="Horizontal" >
@@ -113,7 +135,7 @@
                                 </StackLayout>
                             </StackLayout>
                         </Grid>
-                        <Grid  ColumnSpacing="50" RowSpacing="20">
+                        <Grid  ColumnSpacing="50" RowSpacing="20" Margin="0,20">
                             <StackLayout Grid.Column="0" Grid.Row="0" >
                                 <Label Text="Фото профіля"/>
                                 <Image Margin="0,10" HorizontalOptions="StartAndExpand"  x:Name="fotoProfile"/>
@@ -137,8 +159,17 @@
                             </StackLayout>
                         </Grid>
                     </StackLayout>
-                    </Frame>
+                    </ScrollView>
+                </Frame>
+                <StackLayout Orientation="Horizontal" Grid.Column="2" Grid.Row="1" HorizontalOptions="End">
+                    <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="🔁"/>
+                    <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="✔️"/>
+                    <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="📝"/>
+                    <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="🗑"/>
+
                 </StackLayout>
+            </Grid>
+            <!--</StackLayout>-->
             </StackLayout>
     </ContentPage.Content>
 </ContentPage>
