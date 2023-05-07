@@ -109,7 +109,6 @@ public class CourseThemesController : Controller
     /// <response code="400">Operation was failed.</response>
     /// <response code="404">No materials found.</response>
     /// <returns>A JSON-encoded representation of the list of materials.</returns>
-    //TODO: ViewMaterialsList
     [HttpGet]
     [Route("course/materials")]
     public async Task<IActionResult> GetMaterialsFromCourse(int courseId)
@@ -133,7 +132,7 @@ public class CourseThemesController : Controller
     /// <response code="400">Operation was failed.</response>
     /// <response code="404">No courses found.</response>
     /// <returns>A JSON-encoded representation of the list of courses.</returns>
-    // TODO: Цей метод поверне лише один курс, а не список курсів. ПЕРЕПРОВІРИТИ
+    TODO: Цей метод поверне лише один курс, а не список курсів. ПЕРЕПРОВІРИТИ
     [HttpGet]
     [Route("[action]")]
     public async Task<IActionResult> GetCoursesList(int courseId)
@@ -200,7 +199,7 @@ public class CourseThemesController : Controller
         return Ok();
     }
 
-    //TODO: метод для перегляду всіх курсів наявний в CourseController.UserCourse
+    //метод для перегляду всіх курсів наявний в CourseController.UserCourse
 
     /// <summary>
     ///     Method for create themes of course.

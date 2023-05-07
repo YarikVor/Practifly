@@ -119,7 +119,7 @@ public class MaterialBlocksController : Controller
     /// <response code="400">Operation was failed.</response>
     /// <response code="404">No blocks found.</response>
     /// <returns>A JSON-encoded representation of the list of material blocks.</returns>
-    // TODO: ПЕРЕДИВИТИСЯ (певно цей метод має видалитись, оскільки елемент сторінки з блоками матеріалів був викинутий)
+    TODO: ПЕРЕДИВИТИСЯ (певно цей метод має видалитись, оскільки елемент сторінки з блоками матеріалів був викинутий)
     [HttpGet]
     [Route("[action]")]
     public async Task<IActionResult> GetBlocksWithMaterials(int blockId)
@@ -127,7 +127,7 @@ public class MaterialBlocksController : Controller
         //var result = await _context
         //    .MaterialBlocks
         //    .AsNoTracking()
-        //    //TODO:
+        //    TODO:
         //    //При натисканні на блок відображаються ті матеріали,
         //    //що включені  в цей блок, а також ті,
         //    //що не включені взагалі ні в один блок

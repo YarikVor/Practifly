@@ -103,7 +103,7 @@ public class CourseMaterialsController : Controller
     [Route("material")]
     public async Task<IActionResult> GetMaterialsFromHeading(int headingId)
     {
-        //TODO: Select from HeadingMaterials and get Materials
+        TODO: Select from HeadingMaterials and get Materials
         var result = await _context
             .Materials
             .AsNoTracking()

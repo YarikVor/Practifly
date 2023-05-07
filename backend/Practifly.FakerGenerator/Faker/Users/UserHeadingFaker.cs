@@ -7,7 +7,6 @@ public sealed class UserHeadingFaker : FakerFkRandomizer<UserHeading>, IFakerGen
 {
     public UserHeadingFaker(int count) : base(count)
     {
-        RuleFor(uh => uh.Id, f => f.IndexFaker + 1);
         RuleFor(uh => uh.UserId, RandomId);
         RuleFor(uh => uh.HeadingId, RandomId);
         RuleFor(uh => uh.LevelId, RandomId);

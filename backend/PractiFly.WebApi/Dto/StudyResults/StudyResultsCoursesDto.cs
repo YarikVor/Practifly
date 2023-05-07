@@ -10,6 +10,5 @@ public class StudyResultsCoursesDto
     [Required]
     public int CourseId { get; set; }
 
-    //TODO: Check here.
     public string Course { get; set; } = null!;
 }

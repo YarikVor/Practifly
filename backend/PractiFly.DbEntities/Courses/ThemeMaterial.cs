@@ -43,7 +43,6 @@ public class ThemeMaterial
     [MaxLength(EntitiesConstantLengths.Note)]
     public string? Note { get; set; }
 
-    //TODO: Description?
     [Column("Description")]
     [MaxLength(65536)]
     public string? Description { get; set; }

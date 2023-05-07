@@ -34,7 +34,6 @@ public class AuthOptions : IAuthOptions
         ?? throw new NullReferenceException(ValueNotFound(TimeLifeKey))
     );
 
-    // TODO: Lifetime
 
     public SecurityKey SymmetricSecurityKey
     {

@@ -9,11 +9,11 @@ public class UserProfileForAdminUpdateDto
 
     [Required]
     [MaxLength(128)]
-    public string Name { get; set; } = null!;
+    public string FirstName { get; set; } = null!;
 
     [Required]
     [MaxLength(128)]
-    public string Surname { get; set; } = null!;
+    public string LastName { get; set; } = null!;
 
     [Required]
     [EmailAddress]

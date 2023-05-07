@@ -7,7 +7,6 @@ public sealed class HeadingMaterialFaker : FakerFkRandomizer<HeadingMaterial>, I
 {
     public HeadingMaterialFaker(int count) : base(count)
     {
-        RuleFor(hm => hm.Id, f => f.IndexFaker + 1);
         RuleFor(hm => hm.HeadingId, RandomId);
         RuleFor(hm => hm.MaterialId, RandomId);
         RuleFor(hm => hm.Note, f => f.Lorem.Sentence());
