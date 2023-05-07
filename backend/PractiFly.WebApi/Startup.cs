@@ -49,7 +49,16 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddCors();
+        services.AddCors(options =>
+                {
+                    options.AddPolicy(name: "_MyPolicy",
+                                      policy  =>
+                                      {
+                                          policy.WithOrigins("*")
+                                              .AllowAnyHeader()
+                                              .AllowAnyMethod();
+                                      });
+                });
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
         services
@@ -92,7 +101,7 @@ public class Startup
         //UseExceptionHandler(app, services);
         app.UseRouting();
 
-        app.UseCors(builder => builder.AllowAnyOrigin());
+        app.UseCors("_MyPolicy");
         app.UseHttpsRedirection();
 
         app.UseAuthentication();
