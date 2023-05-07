@@ -7,7 +7,6 @@ public sealed class CourseDependencyFaker : FakerFkRandomizer<CourseDependency>,
 {
     public CourseDependencyFaker(int count) : base(count)
     {
-        RuleFor(cd => cd.Id, f => f.IndexFaker + 1);
         RuleFor(cd => cd.CourseId, RandomId);
         RuleFor(cd => cd.BaseCourseId, RandomId);
         RuleFor(cd => cd.CourseDependencyTypeId, RandomId);

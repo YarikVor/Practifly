@@ -119,7 +119,8 @@ public class AdminController : Controller
         if (user == null) return NotFound();
 
         user.ChangeUserInAdmin(userDto);
-        //Add UserName
+        //Add
+        //
         var result = await _userManager.UpdateAsync(user);
 
         if (!result.Succeeded)

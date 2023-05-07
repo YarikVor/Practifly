@@ -8,7 +8,6 @@ public sealed class UserFaker : Faker<User>, IFakerGenerate<User>
 {
     public UserFaker(string lang = "uk") : base(lang)
     {
-        RuleFor(o => o.Id, f => f.IndexFaker + 1);
         RuleFor(o => o.FirstName, f => f.Name.FirstName());
         RuleFor(o => o.LastName, f => f.Name.LastName());
         RuleFor(o => o.Email, f => f.Internet.Email());

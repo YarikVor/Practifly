@@ -7,7 +7,6 @@ public sealed class MaterialFaker : FakerFkRandomizer<Material>, IFakerGenerate<
 {
     public MaterialFaker(int count) : base(count)
     {
-        RuleFor(m => m.Id, f => f.IndexFaker + 1);
         RuleFor(m => m.Name, f => f.Name.FirstName());
         RuleFor(m => m.Url, f => f.Internet.Url());
         RuleFor(m => m.IsPractical, f => f.Random.Bool());

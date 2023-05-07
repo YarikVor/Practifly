@@ -18,8 +18,8 @@ public static class UserEx
 
     public static void ChangeUserInAdmin(this User user, UserProfileForAdminUpdateDto userDto)
     {
-        user.UserName = userDto.Name;
-        user.LastName = userDto.Surname;
+        user.FirstName = userDto.FirstName;
+        user.LastName = userDto.LastName;
         user.Email = userDto.Email;
         user.PhoneNumber = userDto.Phone;
         user.FilePhoto = userDto.FilePhoto;

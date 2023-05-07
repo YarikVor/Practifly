@@ -43,7 +43,6 @@ public class CourseDetailsController : Controller
     /// <response code="400">Operation was failed.</response>
     /// <response code="404">No themes found.</response>
     /// <returns>A JSON-encoded representation of the list of themes, with completion information included for each theme.</returns>
-    //TODO: Check Route.
     [HttpGet]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("user/course/themes")]
@@ -82,10 +81,6 @@ public class CourseDetailsController : Controller
     public async Task<IActionResult> GetMaterialsInUserThemes(int themeId)
     {
         var userId = User.GetUserIdInt();
-
-        //TODO: Mapper
-        //?
-
         var result = await _context
             .UserThemes
             .Where(ut => ut.UserId == userId && ut.ThemeId == themeId)
@@ -109,7 +104,6 @@ public class CourseDetailsController : Controller
     [Route("theme/material")]
     public async Task<IActionResult> GetMaterialInfo(int themeId, int materialId)
     {
-        //TODO: Mapper (foregin parametr)
         var material = await _context
             .ThemeMaterials
             .Where(tm => tm.MaterialId == materialId && tm.ThemeId == themeId)

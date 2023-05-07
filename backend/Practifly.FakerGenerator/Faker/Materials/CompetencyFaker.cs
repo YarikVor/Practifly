@@ -7,7 +7,6 @@ public sealed class CompetencyFaker : FakerFkRandomizer<Competency>, IFakerGener
 {
     public CompetencyFaker(int count) : base(count)
     {
-        RuleFor(x => x.Id, f => f.IndexFaker + 1);
         RuleFor(x => x.Name, f => f.Lorem.Word());
         RuleFor(x => x.HeadingId, RandomId);
         RuleFor(x => x.ParentId, () => null);

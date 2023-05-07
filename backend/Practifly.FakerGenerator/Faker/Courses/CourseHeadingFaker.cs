@@ -7,10 +7,8 @@ public sealed class CourseHeadingFaker : FakerFkRandomizer<CourseHeading>, IFake
 {
     public CourseHeadingFaker(int count) : base(count)
     {
-        RuleFor(ch => ch.Id, f => f.IndexFaker + 1);
         RuleFor(ch => ch.CourseId, RandomId);
         RuleFor(ch => ch.HeadingId, RandomId);
-
         RuleFor(ch => ch.IsBasic, f => f.Random.Bool());
         RuleFor(ch => ch.Note, f => f.Lorem.Sentence());
     }
