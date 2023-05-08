@@ -10,12 +10,11 @@ using Xamarin.Forms.Xaml;
 namespace PractiFly.XamarinApplication.View
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class Category : ContentPage
+    public partial class CourseTheme : ContentPage
     {
-        public Category()
+        public CourseTheme()
         {
             InitializeComponent();
         }
-        
     }
 }

@@ -4,9 +4,90 @@
              x:Class="PractiFly.XamarinApplication.View.Category">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <StackLayout HorizontalOptions="Center"  Margin="0,20">
+                <Label Text="Рубрики" FontSize="Title" FontAttributes="Bold"/>
+            </StackLayout>
+            <Frame BackgroundColor="#9062F2" Padding="0" CornerRadius="0">
+                <StackLayout BackgroundColor="#9062F2" Orientation="Horizontal" HorizontalOptions="Center" Spacing="1">
+                    <Button TextColor="White" Text="Рубрики" WidthRequest="150"/>
+                    <Button TextColor="White" Text="Матеріали" WidthRequest="150" />
+                    <Button TextColor="White" Text="Курси" WidthRequest="150"/>
+                    <Button TextColor="White" Text="Керування" WidthRequest="150"/>
+                    <Button TextColor="White" Text="Групи" WidthRequest="150"/>
+                    <Button TextColor="White" Text="Довідники" WidthRequest="150"/>
+                    <Button TextColor="White" Text="Навчання" WidthRequest="150"/>
+                </StackLayout>
+            </Frame>
+            <Grid  ColumnSpacing="20" Margin="20" HorizontalOptions="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <!--<StackLayout Spacing="20"  Orientation="Horizontal" Margin="10" HorizontalOptions="Center">-->
+                <Frame  HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0" Grid.Column="0" Grid.Row="0">
+                    <StackLayout>
+                        <Label Text="Ієрархія рубрик" Margin="0,10" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <ScrollView  WidthRequest="180">
+                            <StackLayout Spacing="30">
+                                <Label Text="Рубрика 1"/>
+                                <Label Text="Рубрика 2"/>
+                                <Label Text="Рубрика 3"/>
+                                <Label Text="Рубрика 4"/>
+                                <Label Text="Рубрика 5"/>
+                                <Label Text="Рубрика 6"/>
+                                <Label Text="Рубрика 7"/>
+                                <Label Text="Рубрика 8"/>
+                                <Label Text="Рубрика 9"/>
+                                <Label Text="Рубрика 10"/>
+                                <Label Text="Рубрика 11"/>
+                                <Label Text="Рубрика 12"/>
+                            </StackLayout>
+
+                        </ScrollView>
+                    </StackLayout>
+                </Frame >
+
+                <Frame  HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0"  Grid.Column="1" Grid.Row="0">
+                    <ScrollView>
+                        <StackLayout Spacing="10" WidthRequest="500"  Margin="0,0,20,0" >
+                            <Label Text="Home/Liberi/sdsfsfsfsds" FontSize="Medium"/>
+                            <StackLayout HorizontalOptions="Start" Spacing="10">
+                                <Label Text="Назва" VerticalOptions="Center" HorizontalOptions="Fill"/>
+                                <Entry WidthRequest="480" HorizontalOptions="CenterAndExpand"/>
+                            </StackLayout>
+                            <StackLayout HorizontalOptions="Start" Spacing="10">
+                                <Label Text="Опис"  HorizontalOptions="Fill"/>
+                                <Editor WidthRequest="480" HeightRequest="150"  HorizontalOptions="CenterAndExpand"/>
+                            </StackLayout>
+                            <StackLayout HorizontalOptions="Start" Spacing="10">
+                                <Label Text="Код" VerticalOptions="Center" HorizontalOptions="Fill"/>
+                                <Entry WidthRequest="480"/>
+                            </StackLayout>
+                            <StackLayout  HorizontalOptions="Start" Spacing="10">
+                                <Label Text="УДК" VerticalOptions="Center" HorizontalOptions="Fill"/>
+                                <Entry WidthRequest="480"/>
+                            </StackLayout>
+                            <StackLayout  HorizontalOptions="Start" Spacing="10">
+                                <Label Text="Примітка"  HorizontalOptions="Fill"/>
+                                <Editor WidthRequest="480" HeightRequest="150"/>
+                            </StackLayout>
+                        </StackLayout>
+                    </ScrollView>
+                </Frame>
+                <StackLayout Orientation="Horizontal" Grid.Column="1" Grid.Row="1" HorizontalOptions="End">
+                    <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="➕"/>
+                    <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="🔁"/>
+                    <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="✔️"/>
+                    <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="📝"/>
+                    <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="🗑"/>
+                </StackLayout>
+            </Grid>
+
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
