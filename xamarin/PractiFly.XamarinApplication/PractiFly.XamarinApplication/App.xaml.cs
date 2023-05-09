@@ -12,7 +12,10 @@ namespace PractiFly.XamarinApplication
             InitializeComponent();
 
             //MainPage = new NavigationPage(new Login());
-            MainPage = new CourseTheme();
+            //MainPage = new CourseTheme();
+            //MainPage = new Admin();
+            MainPage = new RubricsCourse();
+
         }
 
         protected override void OnStart()
