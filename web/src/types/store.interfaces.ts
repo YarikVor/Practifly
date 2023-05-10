@@ -1,4 +1,4 @@
-import { InitialState} from "../redux/slices/auth/auth.interfaces";
+import { InitialState} from "./auth.interfaces";
 
 export interface IStore {
     auth: InitialState,

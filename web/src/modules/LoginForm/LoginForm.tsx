@@ -1,5 +1,5 @@
 import {useMemo} from "react";
-import {Form} from "react-router-dom";
+import {Form, useNavigate} from "react-router-dom";
 
 import {Box, Button, Typography} from "@mui/material";
 
@@ -10,8 +10,6 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import {MyInput} from "../../UIComponents/Input/MyInput";
 
 
-import {UserLoginData} from "../../redux/slices/auth/auth.interfaces";
-
 import {useAppDispatch, useAppSelector} from "../../hooks/hooks";
 import {fetchLogin} from "../../redux/slices/auth/auth";
 
@@ -19,11 +17,16 @@ import {loginSchema} from "../../validations/login.schema";
 
 import {statusTypes} from "../../types/status.types";
 
+import {setTokenToLocalStorage} from "../../handlers/handlers";
+
+import {UserLoginData} from "../../types/user.interface";
+
 import {useStyles} from "./styles";
 
 const LoginForm = () => {
   const styles = useStyles();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const isSubmitted = useAppSelector(store => store.auth.status === statusTypes.LOADING);
 
   const validationSchema = useMemo(() => {
@@ -31,32 +34,35 @@ const LoginForm = () => {
   }, []);
 
   const {
-    formState: {errors},
+    formState: {errors, isValid},
     handleSubmit,
     register,
   } = useForm<UserLoginData>(
     {
+      mode: "onChange",
       resolver: yupResolver(validationSchema),
     }
   );
 
-  console.log(errors);
-
   const customSubmit = async (data: UserLoginData) => {
-    await dispatch(fetchLogin(data));
+    const {token} = await dispatch(fetchLogin(data)).unwrap();
+    if(token) {
+      await setTokenToLocalStorage("token", token);
+      navigate("/");
+    }
   };
 
   return (
     <Form onSubmit={handleSubmit(customSubmit)} className={styles.loginForm}>
       <MyInput
-        placeholder="Email"
+        label="Email"
         error={Boolean(errors.email?.message)}
         helperText={errors.email?.message}
         register={register}
         name="email"
       />
       <MyInput
-        placeholder="Password"
+        label="Password"
         error={Boolean(errors.password?.message)}
         helperText={errors.password?.message}
         register={register}
@@ -66,7 +72,7 @@ const LoginForm = () => {
         <Typography>Забули пароль?</Typography>
         <Button
           type="submit"
-          disabled={isSubmitted}
+          disabled={isSubmitted || !isValid}
           variant="contained"
           className={styles.submitButton}
           children="Ввійти"

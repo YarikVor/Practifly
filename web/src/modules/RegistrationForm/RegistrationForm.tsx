@@ -1,5 +1,5 @@
 import React, {useMemo} from "react";
-import {Form} from "react-router-dom";
+import {Form, useNavigate} from "react-router-dom";
 
 import {Box, Button} from "@mui/material";
 
@@ -11,12 +11,14 @@ import moment from "moment";
 
 import {useAppDispatch, useAppSelector} from "../../hooks/hooks";
 import {statusTypes} from "../../types/status.types";
-import {UserRegisterData} from "../../redux/slices/auth/auth.interfaces";
+import {UserRegisterData} from "../../types/auth.interfaces";
 
 import {MyInput} from "../../UIComponents/Input/MyInput";
 import {fetchRegistration} from "../../redux/slices/auth/auth";
 
 import {registrationSchema} from "../../validations/registration.schema";
+
+import {setTokenToLocalStorage} from "../../handlers/handlers";
 
 import {useStyles} from "./styles";
 
@@ -24,6 +26,7 @@ import {useStyles} from "./styles";
 const RegistrationForm = () => {
   const styles = useStyles();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const isSubmitted = useAppSelector(store => store.auth.status === statusTypes.LOADING);
 
   const validationSchema = useMemo(() => {
@@ -32,11 +35,12 @@ const RegistrationForm = () => {
 
 
   const {
-    formState:{errors},
+    formState:{errors, isValid},
     handleSubmit,
     register,
   } = useForm<UserRegisterData>(
     {
+      mode: "onChange",
       defaultValues:{
         birthday: moment("01-01-2024").format("DD/MM/YYYY"),
       },
@@ -44,11 +48,13 @@ const RegistrationForm = () => {
     }
   );
 
-  console.log(errors);
   const customSubmit = async (data: UserRegisterData) => {
     const birthday = moment(data.birthday).format("D/MM/YYYY");
-    const response = await dispatch(fetchRegistration({...data, birthday: birthday}));
-    console.log(response);
+    const {token} = await dispatch(fetchRegistration({...data, birthday: birthday})).unwrap();
+    if(token) {
+      await setTokenToLocalStorage("token", token);
+      navigate("/");
+    }
   };
   return (
     <Form onSubmit={handleSubmit(customSubmit)} className={styles.registrationForm}>
@@ -92,7 +98,6 @@ const RegistrationForm = () => {
           register={register}
           name="birthday"
           type="date"
-          label="Дата народження"
           error={Boolean(errors.birthday?.message)}
           helperText={errors.birthday?.message}
         />
@@ -104,7 +109,7 @@ const RegistrationForm = () => {
           name="password"
         />
       </Box>
-      <Button type="submit" disabled={isSubmitted} variant="contained" className={styles.submitButton}>Зареєструватися</Button>
+      <Button type="submit" disabled={isSubmitted || !isValid} variant="contained" className={styles.submitButton}>Зареєструватися</Button>
     </Form>
   );
 };

@@ -1,5 +1,5 @@
-import {FC} from "react";
-import {FormControl, InputLabel, OutlinedInput, Typography} from "@mui/material";
+import React, {FC} from "react";
+import {Box, InputLabel, TextField} from "@mui/material";
 
 import {IInput} from "./input.interface";
 import {useStyles} from "./styles";
@@ -7,36 +7,41 @@ import {useStyles} from "./styles";
 export const MyInput: FC<IInput> = ({
   label,
   type,
-  id,
-  placeholder,
-  onChange,
-  value,
-  inputStyles,
-  labelStyles,
   name,
   register,
   error,
   helperText,
+  width,
+  outsideLabel,
 }) => {
-  const styles = useStyles();
+  const {classes} = useStyles({"width": width, "isBlock": Boolean(outsideLabel)});
   return (
-    <FormControl>
-      <InputLabel className={`${styles.labelStyles} ${labelStyles}`} shrink>{label}</InputLabel>
-      <OutlinedInput
-        id={id}
-        onChange={onChange}
-        fullWidth
-        error={error}
-        name={name}
-        type={type}
-        {...register(name)}
-        placeholder={placeholder}
-        value={value}
-        className={`${styles.inputStyles} ${inputStyles}`}
-      />
-      {helperText &&
-      <Typography className={styles.error}>{helperText}</Typography>
+    <>
+      {outsideLabel ?
+        (<Box className={classes.wrapper}>
+          <InputLabel className={classes.labelStyles} shrink htmlFor={name}>{outsideLabel}</InputLabel>
+          <TextField
+            id={name}
+            fullWidth
+            error={error}
+            helperText={helperText}
+            {...register(name)}
+            type={type}
+            className={classes.root}
+          />
+        </Box>
+        ) : (
+          <TextField
+            id={name}
+            label={label}
+            error={error}
+            helperText={helperText}
+            {...register(name)}
+            type={type}
+            className={classes.root}
+          />
+        )
       }
-    </FormControl>
+    </>
   );
 };

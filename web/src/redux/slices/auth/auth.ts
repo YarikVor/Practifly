@@ -1,40 +1,37 @@
 import {createAsyncThunk, createSlice, SliceCaseReducers} from "@reduxjs/toolkit";
 
-
 import axios from "../../../configure/axios";
 
 
 import {statusTypes} from "../../../types/status.types";
-
-import {AuthData, InitialState, UserLoginData, UserRegisterData} from "./auth.interfaces";
+import {AuthResponseData, InitialState, UserLoginData, UserRegisterData} from "../../../types/user.interface";
 
 const authEndpoint = "/user";
 
-export const fetchLogin = createAsyncThunk<AuthData, UserLoginData, {rejectValue: string}>(
+export const fetchLogin = createAsyncThunk<AuthResponseData, UserLoginData, {rejectValue: string}>(
   "auth/fetchLogin",
   async (loginData, thunkAPI) => {
     try {
-      const response = await axios.post<AuthData>(
+      const {data} = await axios.post<AuthResponseData>(
         `${authEndpoint}/login`,
         loginData
       );
-      console.log(response);
-      return response.data;
+      return data;
     } catch (e) {
       return thunkAPI.rejectWithValue("Something went wrong. Check please entered data");
     }
   }
 );
 
-export const fetchRegistration = createAsyncThunk<AuthData, UserRegisterData, {rejectValue: string}>(
+export const fetchRegistration = createAsyncThunk<AuthResponseData, UserRegisterData, {rejectValue: string}>(
   "auth/fetchRegistration",
   async (registrationData, thunkAPI) => {
     try {
-      const response = await axios.post<AuthData>(
+      const {data} = await axios.post<AuthResponseData>(
         `${authEndpoint}/register`,
         registrationData
       );
-      return response.data;
+      return data;
     } catch (e) {
       return thunkAPI.rejectWithValue("Something went wrong. Check please entered data");
     }
@@ -60,7 +57,7 @@ const authSlice = createSlice<
     });
     builder.addCase(fetchLogin.fulfilled, (state, {payload}) => {
       state.status = statusTypes.SUCCESS;
-      state.data = payload;
+      state.data = {...payload};
       state.errorMessage = null;
     });
     builder.addCase(fetchLogin.rejected, (state, action) => {
