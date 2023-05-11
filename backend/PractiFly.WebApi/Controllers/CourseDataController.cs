@@ -213,6 +213,7 @@ public class CourseDataController : Controller
             .AnyAsync(e => e.Id == userDto.CourseId)) { return NotFound("A course with such an ID does not exist"); }   
 
         var courseUsers = _mapper.Map<CourseUsersDto, UserCourse>(userDto);
+        //TODO: NumberTheme
         courseUsers.LastThemeId = 1;
         //courseUsers.LastTheme.Number = 1;
         await _context.UserCourses.AddAsync(courseUsers);
