@@ -35,13 +35,12 @@ public class MyCourseProfile : Profile
                 e => e.AverageGrade,
                 par => par.MapFrom(
                     e =>
-                        (float)
+                        (float)(
                         _context
                             .UserCourses
                             .Where(uc => uc.UserId == e.Id)
                             .Select(uc => uc.Grade)
-                            .DefaultIfEmpty()
-                            .Average()
+                            .Average() ?? 0)
                 )
             );
         //TODO: Nect topic, grade for  current theme

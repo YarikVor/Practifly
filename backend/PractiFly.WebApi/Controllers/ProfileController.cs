@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,16 @@ public class ProfileController : Controller
         _context = context;
         _configurationProvider = configurationProvider;
         _userManager = userManager;
+    }
+
+    [HttpGet]
+    [Route("me")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<IActionResult> GetUserProfileFromToken()
+    {
+        int id = User.GetUserIdInt();
+
+        return await GetUserProfileInfo(id);
     }
 
     /// <summary>
