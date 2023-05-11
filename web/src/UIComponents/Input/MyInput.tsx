@@ -25,7 +25,7 @@ export const MyInput: FC<IInput> = ({
             fullWidth
             error={error}
             helperText={helperText}
-            {...register(name)}
+            {...!register ? "" : {...register(name)}}
             type={type}
             className={classes.root}
           />
@@ -36,7 +36,7 @@ export const MyInput: FC<IInput> = ({
             label={label}
             error={error}
             helperText={helperText}
-            {...register(name)}
+            {...!register ? "" : {...register(name)}}
             type={type}
             className={classes.root}
           />

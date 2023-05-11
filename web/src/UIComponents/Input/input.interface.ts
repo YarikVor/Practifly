@@ -13,7 +13,7 @@ export interface IInput {
   name: string;
   error?: boolean;
   helperText?: string;
-  register: UseFormRegister<any>;
+  register?: UseFormRegister<any>;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   labelStyles?: string;
   value?: string;
