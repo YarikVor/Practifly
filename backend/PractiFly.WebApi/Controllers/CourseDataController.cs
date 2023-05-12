@@ -7,8 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities.Courses;
 using PractiFly.WebApi.Context;
+using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Dto.Admin.UserView;
 using PractiFly.WebApi.Dto.CourseData;
+using PractiFly.WebApi.Dto.CourseThemes;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace PractiFly.WebApi.Controllers;
@@ -215,4 +217,46 @@ public class CourseDataController : Controller
 
         return Ok();
     }
+
+    [HttpPost]
+    [Route("addUsers")]
+
+    public async Task<ActionResult> AddUserToCourse(CourseUsersDto userDto)
+    {
+        if (!await _context
+                .Users
+                .AnyAsync(e => e.Id == userDto.UserId)) { return NotFound("A user with such an ID does not exist"); }
+        if(!await _context
+            .Courses
+            .AnyAsync(e => e.Id == userDto.CourseId)) { return NotFound("A course with such an ID does not exist"); }   
+
+        var courseUsers = _mapper.Map<CourseUsersDto, UserCourse>(userDto);
+        //TODO: NumberTheme
+        courseUsers.LastThemeId = 1;
+        //courseUsers.LastTheme.Number = 1;
+        await _context.UserCourses.AddAsync(courseUsers);
+        await _context.SaveChangesAsync();
+        //TODO: return?
+        //var updatedCourseDto = _mapper.Map<UserCourse, CourseUsersDto>(courseUsers);
+        return Ok();
+    }
+    //public async Task<IActionResult> AddMaterialToTheme(ThemeMaterialCreateDto themeMaterialDto)
+    //{
+    //    if (await _context
+    //            .ThemeMaterials
+    //            .AnyAsync(e => e.ThemeId == themeMaterialDto.ThemeId
+    //                           && e.MaterialId == themeMaterialDto.MaterialId))
+    //        return BadRequest();
+
+    //    var themeMaterial = _mapper.Map<ThemeMaterialCreateDto, ThemeMaterial>(themeMaterialDto);
+
+    //    await _context.ThemeMaterials.AddAsync(themeMaterial);
+    //    await _context.SaveChangesAsync();
+
+    //    if (themeMaterial.Id == 0) return BadRequest();
+
+    //    var themeMaterialInfoDto = _mapper.Map<ThemeMaterial, ThemeMaterialInfoDto>(themeMaterial);
+
+    //    return Json(themeMaterialInfoDto);
+    //}
 }
