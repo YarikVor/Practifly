@@ -49,4 +49,15 @@ public class MyCourseController : Controller
 
         return Json(result);
     }
+
+    [HttpGet]
+    [Route("user/my/courses")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
+    public async Task<IActionResult> GetUserCourseByToken()
+    {
+        int id = User.GetUserIdInt();
+
+        return await UserCourse(id);
+    }
 }

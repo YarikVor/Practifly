@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities.Courses;
+using PractiFly.WebApi.Context;
 using PractiFly.WebApi.Dto.Admin.UserView;
 using PractiFly.WebApi.Dto.CourseData;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
@@ -54,6 +57,18 @@ public class CourseDataController : Controller
 
         return Json(courseItemDtos);
     }
+
+    [HttpGet]
+    [Route("/teacher/course/all")]
+    [Authorize(Roles = $"{UserRoles.Teacher}, {UserRoles.Admin}, {UserRoles.Manager}",
+        AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<IActionResult> GetMyOwnerCourseInfo()
+    {
+        int id = User.GetUserIdInt();
+
+        return await Courses(id);
+    }
+
 
     /// <summary>
     ///     Returns a list of course information.
@@ -128,6 +143,7 @@ public class CourseDataController : Controller
     /// <returns>An HTTP response indicating the result of the operation.</returns>
     [HttpPost]
     [Route("")]
+    //TODO: Create owner
     public async Task<IActionResult> CreateCourse(CreateCourseDto courseDto)
     {
         var course = _mapper.Map<CreateCourseDto, Course>(courseDto); //???
@@ -151,6 +167,7 @@ public class CourseDataController : Controller
     /// <returns>Returns HTTP status response.</returns>
     [HttpPost]
     [Route("edit")]
+    //TODO: Owner edits his course
     public async Task<IActionResult> EditCourse(EditCourseDto courseDto)
     {
         var course = await _context
@@ -182,6 +199,7 @@ public class CourseDataController : Controller
     /// <returns>An HTTP response status code.</returns>
     [HttpDelete]
     [Route("")]
+    // TODO: Owner deletes his course
     public async Task<IActionResult> DeleteCourse(int courseId)
     {
         var course = await _context
