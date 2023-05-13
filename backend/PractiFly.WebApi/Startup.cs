@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 using AutoMapper;
+using Amazon.Extensions.NETCore.Setup;
+using Amazon.S3;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
@@ -60,7 +62,6 @@ public class Startup
                                       });
                 });
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
         services
             .AddSingleton<IAuthOptions, AuthOptions>()
             .AddSingleton<ITokenGenerator, TokenGenerator>();
@@ -84,6 +85,8 @@ public class Startup
 
         services.AddScoped<IConfigurationProvider, PractiFlyMapperConfiguration>();
         services.AddScoped<IMapper, PractiFlyMapper>();
+        services.AddDefaultAWSOptions(_configuration.GetAWSOptions());
+        services.AddAWSService<IAmazonS3>();
     }
 
     #endregion

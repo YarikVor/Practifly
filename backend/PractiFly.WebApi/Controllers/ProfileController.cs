@@ -13,6 +13,7 @@ using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace PractiFly.WebApi.Controllers;
 
+
 [ApiController]
 [Route("api/user/profile")]
 public class ProfileController : Controller
@@ -94,4 +95,5 @@ public class ProfileController : Controller
 
         return Ok();
     }
+
 }
