@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PractiFly.MauiApplication.View.Course">
+    <StackLayout>
+        <StackLayout HorizontalOptions="Center"  Margin="0,20">
+            <Label Text="Дані курсів" FontSize="Title" FontAttributes="Bold"/>
+        </StackLayout>
+        <Frame BackgroundColor="#9062F2" Padding="0" CornerRadius="0">
+            <StackLayout BackgroundColor="#9062F2" Orientation="Horizontal" HorizontalOptions="Center" Spacing="1">
+                <Button TextColor="White" Text="Рубрики" WidthRequest="150"/>
+                <Button TextColor="White" Text="Матеріали" WidthRequest="150" />
+                <Button TextColor="White" Text="Курси" WidthRequest="150"/>
+                <Button TextColor="White" Text="Керування" WidthRequest="150"/>
+                <Button TextColor="White" Text="Групи" WidthRequest="150"/>
+                <Button TextColor="White" Text="Довідники" WidthRequest="150"/>
+                <Button TextColor="White" Text="Навчання" WidthRequest="150"/>
+            </StackLayout>
+        </Frame>
+        <Grid  ColumnSpacing="20" Margin="20" HorizontalOptions="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <!--<StackLayout Spacing="20"  Orientation="Horizontal" Margin="10" HorizontalOptions="Center">-->
+            <Frame  HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0" Grid.Column="0" Grid.Row="0">
+                <StackLayout>
+                    <Label Text="Меню курсів" Margin="0,10" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    <ScrollView  WidthRequest="180">
+                        <StackLayout Spacing="30">
+                            <Label Text="Курс 1"/>
+                            <Label Text="Курс 2"/>
+                            <Label Text="Курс 3"/>
+                            <Label Text="Курс 4"/>
+                            <Label Text="Курс 5"/>
+                            <Label Text="Курс 6"/>
+                            <Label Text="Курс 7"/>
+                            <Label Text="Курс 8"/>
+                            <Label Text="Курс 9"/>
+                            <Label Text="Курс 10"/>
+                            <Label Text="Курс 11"/>
+                            <Label Text="Курс 12"/>
+                        </StackLayout>
+
+                    </ScrollView>
+                </StackLayout>
+            </Frame >
+
+
+            <Frame  HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0"  Grid.Column="1" Grid.Row="0">
+                <ScrollView>
+                    <StackLayout Spacing="10" WidthRequest="600"  Margin="0,0,20,0">
+                        <Frame  BackgroundColor="White" >
+                            <StackLayout Spacing="30">
+                                <StackLayout>
+                                    <Label Text="Назва"/>
+                                    <Entry BackgroundColor="#ebf2ed"/>
+                                </StackLayout>
+                                <StackLayout>
+                                    <Label Text="Опис"/>
+                                    <Editor BackgroundColor="#ebf2ed" HeightRequest="200"/>
+                                </StackLayout>
+
+                            </StackLayout>
+                        </Frame>
+                        <Frame  BackgroundColor="White"  >
+                            <StackLayout Spacing="30">
+                                <StackLayout>
+                                    <Label Text="Примітка"/>
+                                    <Editor HeightRequest="60" BackgroundColor="#ebf2ed"/>
+                                </StackLayout>
+                            </StackLayout>
+                        </Frame >
+                    </StackLayout>
+                </ScrollView>
+            </Frame>
+            <StackLayout Orientation="Horizontal" Grid.Column="1" Grid.Row="1" HorizontalOptions="End">
+                <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="🔁"/>
+                <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="✔️"/>
+                <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="📝"/>
+                <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="🗑"/>
+            </StackLayout>
+            <Frame  HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0" Grid.Column="2" Grid.Row="0">
+                <StackLayout WidthRequest="210">
+                    <Frame HasShadow="True" BackgroundColor="White" BorderColor="#aeb5b0">
+                        <StackLayout >
+                            <Label Text="Викладач" HorizontalOptions="Center"/>
+                            <Image Margin="0,10" WidthRequest="120" HorizontalOptions="Center" x:Name="fotoProfile"/>
+                            <Label Text="ПІБ" HorizontalOptions="Center"/>
+                        </StackLayout>
+                    </Frame>
+                    <Frame HasShadow="True"  BackgroundColor="White" BorderColor="#aeb5b0">
+                        <StackLayout HorizontalOptions="Center" >
+                            <Label Text="Користувач" Margin="0,0,0,20"/>
+                            <ScrollView Padding="0,0,30,0">
+                                <StackLayout Spacing="20">
+                                    <Label Text="Ім'я користувача 1"/>
+                                    <Label Text="Ім'я користувача 2"/>
+                                    <Label Text="Ім'я користувача 3"/>
+                                    <Label Text="Ім'я користувача 4"/>
+                                    <Label Text="Ім'я користувача 5"/>
+                                    <Label Text="Ім'я користувача 6"/>
+                                    <Label Text="Ім'я користувача 7"/>
+                                    <Label Text="Ім'я користувача 8"/>
+                                    <Label Text="Ім'я користувача 9"/>
+                                    <Label Text="Ім'я користувача 10"/>
+                                </StackLayout>
+                            </ScrollView>
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
+            </Frame >
+        </Grid>
+    </StackLayout>
+</ContentPage>

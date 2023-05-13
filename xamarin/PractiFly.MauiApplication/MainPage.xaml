@@ -3,15 +3,23 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PractiFly.MauiApplication.MainPage">
 
-    <ScrollView>
-        <StackLayout
-            
-            Spacing="25"
-            Padding="30,0"
-            VerticalOptions="Center">
-
-            <Label x:Name="label"/>
+    <StackLayout >
+        <Frame BackgroundColor="#2196F3" Padding="24" CornerRadius="0">
+            <Label Text="MainPage" HorizontalTextAlignment="Center" TextColor="White" FontSize="36"/>
+        </Frame>
+        <StackLayout WidthRequest="200" HorizontalOptions="Center" Spacing="20">
+            <Button Text="Login" Clicked="Login"/>
+            <Button Text="Registration" Clicked="Registration"/>
+            <Button Text="Admin" Clicked="Admin"/>
+            <Button Text="Category" Clicked="Category"/>
+            <Button Text="Course" Clicked="Course"/>
+            <Button Text="CourseMaterial" Clicked="CourseMaterial"/>
+            <Button Text="CourseTheme" Clicked="CourseTheme"/>
+            <Button Text="MaterialBlocks" Clicked="MaterialBlocks"/>
+            <Button Text="RubricsCourse" Clicked="RubricsCourse"/>
         </StackLayout>
-    </ScrollView>
+    </StackLayout>
+
+
 
 </ContentPage>

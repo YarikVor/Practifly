@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PractiFly.MauiApplication.View.MaterialBlocks">
+    <StackLayout>
+        <StackLayout HorizontalOptions="Center"  Margin="0,20">
+            <Label Text="Матеріали курсів" FontSize="Title" FontAttributes="Bold"/>
+        </StackLayout>
+        <Frame BackgroundColor="#9062F2" Padding="0" CornerRadius="0">
+            <StackLayout BackgroundColor="#9062F2" Orientation="Horizontal" HorizontalOptions="Center" Spacing="1">
+                <Button TextColor="White" Text="Рубрики" WidthRequest="150"/>
+                <Button TextColor="White" Text="Матеріали" WidthRequest="150" />
+                <Button TextColor="White" Text="Курси" WidthRequest="150"/>
+                <Button TextColor="White" Text="Керування" WidthRequest="150"/>
+                <Button TextColor="White" Text="Групи" WidthRequest="150"/>
+                <Button TextColor="White" Text="Довідники" WidthRequest="150"/>
+                <Button TextColor="White" Text="Навчання" WidthRequest="150"/>
+            </StackLayout>
+        </Frame>
+
+        <Grid  ColumnSpacing="20" Margin="20" HorizontalOptions="Center" HeightRequest="490">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <!--<StackLayout Spacing="20"  Orientation="Horizontal" Margin="10" HorizontalOptions="Center">-->
+            <StackLayout Grid.Column="0" Grid.Row="0">
+                <Label Text="Ієрархія рубрик"/>
+                <Label Text="Home/Libery/asdasdasdasdasd"/>
+                <Frame  HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0" >
+                    <StackLayout>
+
+                        <ScrollView  WidthRequest="180">
+                            <StackLayout Spacing="30">
+                                <Label Text="Рубрика 1 рівня"/>
+                                <Label Text="Рубрика 2 рівня"/>
+                                <Label Text="Рубрика 3 рівня"/>
+                                <Label Text="Рубрика 4 рівня"/>
+                                <Label Text="Рубрика 5 рівня"/>
+                                <Label Text="Рубрика 6 рівня"/>
+                                <Label Text="Рубрика 7 рівня"/>
+                                <Label Text="Рубрика 8 рівня"/>
+                                <Label Text="Рубрика 9 рівня"/>
+                                <Label Text="Рубрика 10 рівня"/>
+                            </StackLayout>
+
+                        </ScrollView>
+                    </StackLayout>
+                </Frame >
+            </StackLayout>
+
+            <StackLayout Grid.Column="1" Grid.Row="0">
+                <Label Text="Матеріали рубрик"/>
+                <Frame  HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0" >
+                    <StackLayout>
+                        <ScrollView  WidthRequest="300" Padding="12,0">
+                            <StackLayout Spacing="30" >
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Назва" VerticalOptions="Center" />
+                                    <CheckBox HorizontalOptions="EndAndExpand" Margin="15,0,0,0"/>
+                                    <CheckBox HorizontalOptions="End" Margin="15,0,0,0"/>
+                                    <Frame Padding="10" HorizontalOptions="End"  BackgroundColor="White">
+                                        <Label     FontSize="12" Text="20"/>
+                                    </Frame>
+                                    <CheckBox HorizontalOptions="End" Margin="15,0,0,0"/>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Назва" VerticalOptions="Center" />
+                                    <CheckBox HorizontalOptions="EndAndExpand" Margin="15,0,0,0"/>
+                                    <CheckBox HorizontalOptions="End" Margin="15,0,0,0"/>
+                                    <Frame Padding="10" HorizontalOptions="End"  BackgroundColor="White">
+                                        <Label     FontSize="12" Text="20"/>
+                                    </Frame>
+                                    <CheckBox HorizontalOptions="End" Margin="15,0,0,0"/>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Назва" VerticalOptions="Center" />
+                                    <CheckBox HorizontalOptions="EndAndExpand" Margin="15,0,0,0"/>
+                                    <CheckBox HorizontalOptions="End" Margin="15,0,0,0"/>
+                                    <Frame Padding="10" HorizontalOptions="End"  BackgroundColor="White">
+                                        <Label     FontSize="12" Text="20"/>
+                                    </Frame>
+                                    <CheckBox HorizontalOptions="End" Margin="15,0,0,0"/>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Назва" VerticalOptions="Center" />
+                                    <CheckBox HorizontalOptions="EndAndExpand" Margin="15,0,0,0"/>
+                                    <CheckBox HorizontalOptions="End" Margin="15,0,0,0"/>
+                                    <Frame Padding="10" HorizontalOptions="End"  BackgroundColor="White">
+                                        <Label     FontSize="12" Text="20"/>
+                                    </Frame>
+                                    <CheckBox HorizontalOptions="End" Margin="15,0,0,0"/>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Назва" VerticalOptions="Center" />
+                                    <CheckBox HorizontalOptions="EndAndExpand" Margin="15,0,0,0"/>
+                                    <CheckBox HorizontalOptions="End" Margin="15,0,0,0"/>
+                                    <Frame Padding="10" HorizontalOptions="End"  BackgroundColor="White">
+                                        <Label     FontSize="12" Text="20"/>
+                                    </Frame>
+                                    <CheckBox HorizontalOptions="End" Margin="15,0,0,0"/>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Назва" VerticalOptions="Center" />
+                                    <CheckBox HorizontalOptions="EndAndExpand" Margin="15,0,0,0"/>
+                                    <CheckBox HorizontalOptions="End" Margin="15,0,0,0"/>
+                                    <Frame Padding="10" HorizontalOptions="End"  BackgroundColor="White">
+                                        <Label     FontSize="12" Text="20"/>
+                                    </Frame>
+                                    <CheckBox HorizontalOptions="End" Margin="15,0,0,0"/>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Назва" VerticalOptions="Center" />
+                                    <CheckBox HorizontalOptions="EndAndExpand" Margin="15,0,0,0"/>
+                                    <CheckBox HorizontalOptions="End" Margin="15,0,0,0"/>
+                                    <Frame Padding="10" HorizontalOptions="End"  BackgroundColor="White">
+                                        <Label     FontSize="12" Text="20"/>
+                                    </Frame>
+                                    <CheckBox HorizontalOptions="End" Margin="15,0,0,0"/>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Назва" VerticalOptions="Center" />
+                                    <CheckBox HorizontalOptions="EndAndExpand" Margin="15,0,0,0"/>
+                                    <CheckBox HorizontalOptions="End" Margin="15,0,0,0"/>
+                                    <Frame Padding="10" HorizontalOptions="End"  BackgroundColor="White">
+                                        <Label     FontSize="12" Text="20"/>
+                                    </Frame>
+                                    <CheckBox HorizontalOptions="End" Margin="15,0,0,0"/>
+                                </StackLayout>
+
+                            </StackLayout>
+
+                        </ScrollView>
+                    </StackLayout>
+                </Frame >
+            </StackLayout>
+            <StackLayout Grid.Column="2" Grid.Row="0" WidthRequest="300" >
+                <Label Text="Створити новий матеріал"/>
+                <Frame BackgroundColor="#ebf2ed" BorderColor="#aeb5b0">
+                    <StackLayout Spacing="15">
+                        <Label Text="Назва"/>
+                        <Entry Placeholder="Назва"/>
+                        <Label Text="Примітка"/>
+                        <Editor HeightRequest="100" Placeholder="Опис" />
+                        <Label Text="URL"/>
+                        <Entry Placeholder="Посилання"/>
+                        <StackLayout Orientation="Horizontal">
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Практичне" VerticalOptions="Center"/>
+                                <CheckBox/>
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Пріорітетність" VerticalOptions="Center"/>
+                                <CheckBox/>
+                            </StackLayout>
+                        </StackLayout>
+
+                    </StackLayout>
+                </Frame>
+                <StackLayout Orientation="Horizontal"  HorizontalOptions="End">
+                    <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="✔️"/>
+                    <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="➕"/>
+                    <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="📝"/>
+                    <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="🗑"/>
+                </StackLayout>
+            </StackLayout>
+        </Grid>
+    </StackLayout>
+</ContentPage>
