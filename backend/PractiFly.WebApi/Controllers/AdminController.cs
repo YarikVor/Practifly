@@ -160,11 +160,11 @@ public class AdminController : Controller
         if (roleId != 0)
             users = users.Where(u => _context.UserRoles.Any(ur => ur.UserId == u.Id && ur.RoleId == roleId));
 
-        if (!string.IsNullOrEmpty(filter.Name))
-            users = users.Where(u => u.FirstName.Contains(filter.Name));
+        if (!string.IsNullOrEmpty(filter.FirstName))
+            users = users.Where(u => u.FirstName.Contains(filter.FirstName));
 
-        if (!string.IsNullOrEmpty(filter.Surname))
-            users = users.Where(u => u.LastName.Contains(filter.Surname));
+        if (!string.IsNullOrEmpty(filter.LastName))
+            users = users.Where(u => u.LastName.Contains(filter.LastName));
 
         if (!string.IsNullOrEmpty(filter.Phone))
             users = users.Where(u => u.PhoneNumber == filter.Phone);

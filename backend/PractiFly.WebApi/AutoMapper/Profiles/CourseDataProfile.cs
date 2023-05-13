@@ -19,13 +19,12 @@ public class CourseDataProfile : Profile
 
         CreateProjection<Course, CourseInfoDto>()
             .ForMember(dto => dto.Language, par => par.MapFrom(e => e.Language.Name));
-
-
+        
         CreateProjection<Course, CourseFullInfoDto>()
-            .ForMember(dest => dest.CourseInfoDto, opt => opt.MapFrom(e => e))
-            .ForMember(dest => dest.OwnerInfoDto, opt => opt.MapFrom(e => e.Owner))
+            .ForMember(dest => dest.Course, opt => opt.MapFrom(e => e))
+            .ForMember(dest => dest.Owner, opt => opt.MapFrom(e => e.Owner))
             .ForMember(
-                dest => dest.UserFullnameItemDto,
+                dest => dest.Users,
                 opt => opt.MapFrom(
                     e => _context
                         .UserCourses
@@ -43,8 +42,6 @@ public class CourseDataProfile : Profile
                     .Where(l => l.Code == dto.Language)
                     .Select(l => l.Id)
                     .FirstOrDefault()));
-
-        CreateMap<Course, CourseInfoDto>();
 
         CreateMap<CourseUsersDto, UserCourse>();
             //.ForMember(e => e.UserId, par => par.MapFrom(
