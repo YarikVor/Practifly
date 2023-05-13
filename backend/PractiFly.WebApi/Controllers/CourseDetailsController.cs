@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -184,18 +183,5 @@ public class CourseDetailsController : Controller
         await _context.SaveChangesAsync();
 
         return Ok();
-    }
-}
-
-public static class ClaimsPrincipalEx
-{
-    public static string GetUserId(this ClaimsPrincipal principal)
-    {
-        return principal.FindFirstValue(ClaimTypes.NameIdentifier);
-    }
-
-    public static int GetUserIdInt(this ClaimsPrincipal principal)
-    {
-        return int.Parse(principal.FindFirstValue(ClaimTypes.NameIdentifier));
     }
 }
