@@ -14,7 +14,7 @@ namespace PractiFly.XamarinApplication
             //MainPage = new NavigationPage(new Login());
             //MainPage = new CourseTheme();
             //MainPage = new Admin();
-            MainPage = new RubricsCourse();
+            MainPage =new NavigationPage(new MainPage());
 
         }
 
