@@ -85,8 +85,6 @@ public class Startup
 
         services.AddScoped<IConfigurationProvider, PractiFlyMapperConfiguration>();
         services.AddScoped<IMapper, PractiFlyMapper>();
-        services.AddDefaultAWSOptions(_configuration.GetAWSOptions());
-        services.AddAWSService<IAmazonS3>();
     }
 
     #endregion
