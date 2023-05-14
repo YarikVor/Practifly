@@ -21,16 +21,19 @@ public class ProfileController : Controller
     private readonly IConfigurationProvider _configurationProvider;
     private readonly IPractiflyContext _context;
     private readonly UserManager<User> _userManager;
+    private readonly IPractiFlyAmazonS3ClientManager _amazonClient;
 
     public ProfileController(
         IPractiflyContext context,
         IConfigurationProvider configurationProvider,
-        UserManager<User> userManager
+        UserManager<User> userManager,
+        IPractiFlyAmazonS3ClientManager amazonClient
     )
     {
         _context = context;
         _configurationProvider = configurationProvider;
         _userManager = userManager;
+        _amazonClient = amazonClient;
     }
 
     [HttpGet]
@@ -79,7 +82,7 @@ public class ProfileController : Controller
     [Authorize(AuthenticationSchemes = "Bearer")]
     [Route("edit")]
     [HttpPost]
-    public async Task<IActionResult> UpdateUser(UserProfileInfoCreateDto userDto)
+    public async Task<IActionResult> UpdateUser(UserProfileInfoEditDto userDto)
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -88,12 +91,14 @@ public class ProfileController : Controller
         if (user == null) return NotFound();
 
         user.ChangeUser(userDto);
+        
+        var filePhoto = _amazonClient.UploadFileAsync(userDto.FilePhoto, userId);
 
         var result = await _userManager.UpdateAsync(user);
 
-        if (!result.Succeeded) return BadRequest();
+        if (!result.Succeeded || filePhoto == null) return BadRequest();
 
-        return Ok();
+        return Ok(new {filePhoto});
     }
 
 }
