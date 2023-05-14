@@ -15,10 +15,10 @@ public partial class MainPage : ContentPage
 
     protected override async void OnAppearing()
     {
-        PractiFlyClient client = new PractiFlyClient("");
-        label.Text =  ( await client.GetLoginResponseAsync
-            (new Api.Api.Login.LoginRequestDto() 
-            { Email = "svvaleron@gmail.com", Password = "Qwerty@2003" })).Token;
+        //PractiFlyClient client = new PractiFlyClient("");
+        //label.Text =  ( await client.GetLoginResponseAsync
+        //    (new Api.Api.Login.LoginRequestDto() 
+        //    { Email = "svvaleron@gmail.com", Password = "Qwerty@2003" })).Token;
     }
     private async void Login(object sender, EventArgs e)
     {

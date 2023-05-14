@@ -8,8 +8,11 @@
 
   <ItemGroup>
     <Folder Include="Client\Abstraction\" />
-    <Folder Include="Login\" />
     <Folder Include="Registrition\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WebSerializer" Version="1.3.0" />
   </ItemGroup>
 
 </Project>

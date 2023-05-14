@@ -17,7 +17,7 @@
                 <Entry Placeholder="Пароль" BackgroundColor="White" />
                 <StackLayout Orientation="Horizontal" Margin="0,10,0,0">
                     <Label Text="Забули пароль?" Margin="0,5,0,0" />
-                    <Button Text="Ввійти"  BackgroundColor="#e0efff" WidthRequest="100" HorizontalOptions="EndAndExpand" CornerRadius="5"/>
+                    <Button TextColor="Black" Text="Ввійти"  BackgroundColor="#e0efff" WidthRequest="100" HorizontalOptions="EndAndExpand" CornerRadius="5"/>
                 </StackLayout>
             </StackLayout>
         </Frame>
