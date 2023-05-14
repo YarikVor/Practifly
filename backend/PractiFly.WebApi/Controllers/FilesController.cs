@@ -1,6 +1,8 @@
 ﻿using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace PractiFly.WebApi.Controllers
@@ -27,21 +29,23 @@ namespace PractiFly.WebApi.Controllers
 
         [Route("upload")]
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> UploadFileAsync(IFormFile file)
         {
+            var id = User.GetUserIdInt();
             const string bucketName = "practiflybucket";
             var bucketExists = await Amazon.S3.Util.AmazonS3Util.DoesS3BucketExistV2Async(_s3Client, bucketName);
             if (!bucketExists) return NotFound($"Bucket {bucketName} doesnt exist.");
             var request = new PutObjectRequest()
             {
                 BucketName = bucketName,
-                Key = file.Name,
+                Key = $"{id}",
                 InputStream = file.OpenReadStream()
             };
             request.Metadata.Add("Content-Type", file.ContentType);
             await _s3Client.PutObjectAsync(request);
             var baseurl = "https://practiflybucket.s3.eu-north-1.amazonaws.com/";
-            return Ok($"{baseurl}{file.Name}");
+            return Ok($"{baseurl}{id}");
         }
     }
 }

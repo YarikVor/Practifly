@@ -1,4 +1,4 @@
-import {ProfileForm} from "../../modules/Profile/ProfileForm";
+import {ProfileForm} from "../../modules/ProfileForm/ProfileForm";
 
 export const Profile = () => {
 

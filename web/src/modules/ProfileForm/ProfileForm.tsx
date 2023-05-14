@@ -1,10 +1,13 @@
 import {Avatar, Box, Typography} from "@mui/material";
 
-import {ChangeEvent, FC, memo, useEffect, useMemo, useRef, useState} from "react";
+import {ChangeEvent, FC  , useLayoutEffect, useMemo, useState} from "react";
 
 import {useForm} from "react-hook-form";
 
 import {yupResolver} from "@hookform/resolvers/yup";
+
+import {toast} from "react-toastify";
+
 
 import {MyInput} from "../../UIComponents/Input/MyInput";
 
@@ -16,17 +19,10 @@ import {useAppDispatch} from "../../hooks/hooks";
 import {fetchMe, uploadPhoto} from "../../redux/slices/auth/auth";
 
 import {useStyles} from "./styles";
-
-
 export const ProfileForm: FC = () => {
   const styles = useStyles();
   const dispatch = useAppDispatch();
-
-  const inputAvatarRef = useRef<HTMLInputElement>(null);
-  const [image, setImage] = useState({
-    image: "",
-    key: "",
-  });
+  const [image, setImage] = useState("");
   const validationSchema = useMemo(() => {
     return profileSchema;
   }, []);
@@ -42,18 +38,21 @@ export const ProfileForm: FC = () => {
   );
 
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    if(!e.target.files) {
+      return toast.error("please choose file");
+    }
     const formData = new FormData();
-    formData.append("file", e.target.files![0]);
+    formData.append("file", e.target.files[0]);
     const {payload} = await dispatch(uploadPhoto(formData));
-    setImage({
-      image: payload!,
-      key: `${payload}12345`,
-    });
+    if(!payload){
+      return toast.error("Something went wrong");
+    }
+    setImage(`${payload}?${Math.random()}`);
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const fetchData = async () => {
-      const {payload} = await dispatch(fetchMe());
+      const {payload} = await dispatch(fetchMe()); 
       if(!payload || typeof payload === "string"){
         return;
       }
@@ -66,12 +65,11 @@ export const ProfileForm: FC = () => {
         birthday: payload?.birthday,
         registrationDate: payload?.registrationDate,
       });
-      setImage({
-        image: payload?.filePhoto,
-        key: payload?.firstName,
-      });
+      setImage(`https://practiflybucket.s3.eu-north-1.amazonaws.com/${payload?.id}`);
     };
-    fetchData();
+    fetchData().catch((e) => {
+      return e.message;
+    });
   }, []);
 
   return (
@@ -120,18 +118,19 @@ export const ProfileForm: FC = () => {
         <Box className={styles.rightBlock}>
           <Typography>Фото профіля</Typography>
           <Box className={styles.imageWrapper}>
-            <Avatar
-              onClick={() => inputAvatarRef.current?.click()}
-              sx={{ borderRadius: 0, width: 250, height: 200 }}
-              src={image.image}
-            />
+            <label htmlFor="filePhoto">
+              <Avatar
+                sx={{ borderRadius: 0, width: 250, height: 200 }}
+                src={image}
+              />
+            </label>
             <input
-              ref={inputAvatarRef}
               type="file"
               accept="image/*"
               onChange={handleImageChange}
-              name="avatarUrl"
+              name="filePhoto"
               hidden
+              id="filePhoto"
             />
           </Box>
           <Box className={styles.registrationDate}>
