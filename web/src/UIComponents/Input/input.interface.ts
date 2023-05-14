@@ -9,6 +9,7 @@ export interface IInput {
   outsideLabel?: string;
   variant?: "standard" | "filled" | "outlined";
   placeholder?: string;
+  disabled?: boolean;
   width?: React.CSSProperties["width"] | number | undefined;
   name: string;
   error?: boolean;

@@ -6,5 +6,6 @@ export const useStyles = makeStyles()(() => ({
   },
   listSubheader:{
     textAlign: "center",
+    fontSize: 22,
   },
 }));

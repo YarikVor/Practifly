@@ -11,7 +11,6 @@ import moment from "moment";
 
 import {useAppDispatch, useAppSelector} from "../../hooks/hooks";
 import {statusTypes} from "../../types/status.types";
-import {UserRegisterData} from "../../types/auth.interfaces";
 
 import {MyInput} from "../../UIComponents/Input/MyInput";
 import {fetchRegistration} from "../../redux/slices/auth/auth";
@@ -19,6 +18,8 @@ import {fetchRegistration} from "../../redux/slices/auth/auth";
 import {registrationSchema} from "../../validations/registration.schema";
 
 import {setTokenToLocalStorage} from "../../handlers/handlers";
+
+import {UserRegisterData} from "../../types/user.interface";
 
 import {useStyles} from "./styles";
 
@@ -49,7 +50,7 @@ const RegistrationForm = () => {
   );
 
   const customSubmit = async (data: UserRegisterData) => {
-    const birthday = moment(data.birthday).format("D/MM/YYYY");
+    const birthday = moment(data.birthday).format("DD/MM/YYYY");
     const {token} = await dispatch(fetchRegistration({...data, birthday: birthday})).unwrap();
     if(token) {
       await setTokenToLocalStorage("token", token);

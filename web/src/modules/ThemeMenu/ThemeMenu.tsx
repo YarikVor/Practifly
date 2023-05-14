@@ -1,39 +1,51 @@
-import {Box, Collapse, List, ListItemButton, ListItemIcon, ListItemText, ListSubheader} from "@mui/material";
+import {Box} from "@mui/material";
 
-import {StarBorder} from "@mui/icons-material";
-import {useState} from "react";
+import { useState} from "react";
 
 import {useStyles} from "./styles";
 
 export const ThemeMenu = () => {
   const {classes} = useStyles();
 
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState({});
 
-  const handleClick = () => {
-    setOpen(!open);
+  const handleClick = (event: any) => {
+    setOpen({[event.target.name]: !!event.target.value});
   };
   return (
     <Box className={classes.root}>
-      <List
-        sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-        subheader={
-          <ListSubheader className={classes.listSubheader}component="div">
-              Меню тем
-          </ListSubheader>
-        }
-      >
-        <Collapse in={open} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            <ListItemButton sx={{ pl: 4 }}>
-              <ListItemIcon>
-                <StarBorder />
-              </ListItemIcon>
-              <ListItemText primary="Starred" />
-            </ListItemButton>
-          </List>
-        </Collapse>
-      </List>
+      {/*{items.list.map((list) => {*/}
+      {/*  return (*/}
+      {/*      <List className={classes.root} key={list.id} subheader={<ListSubheader>{list.title}</ListSubheader>}>*/}
+      {/*        {list.items.map((item) => {*/}
+      {/*          return (*/}
+
+      {/*              <div key={item.id}>*/}
+      {/*                {item.subitems != null ?  (*/}
+      {/*                    <div key={item.id}>*/}
+      {/*                      <ListItem button key={item.id} onClick={this.handleClick.bind(this, item.name)} >*/}
+      {/*                        <ListItemText primary={item.name} />*/}
+      {/*                        {this.state[item.name] ? <ExpandLess /> : <ExpandMore />}*/}
+      {/*                      </ListItem>*/}
+      {/*                      <Collapse key={list.items.id} component="li" in={this.state[item.name]} timeout="auto" unmountOnExit>*/}
+      {/*                        <List disablePadding>*/}
+      {/*                          {item.subitems.map((sitem) => {*/}
+      {/*                            return (*/}
+      {/*                                <ListItem button key={sitem.id} className={classes.nested}>*/}
+      {/*                                  <ListItemText key={sitem.id} primary={sitem.name} />*/}
+      {/*                                </ListItem>*/}
+      {/*                            )*/}
+      {/*                          })}*/}
+      {/*                        </List>*/}
+      {/*                      </Collapse> </div>*/}
+      {/*                ) : (*/}
+      {/*                    <ListItem button onClick={this.handleClickLink.bind(this, item.name)} key={item.id}>*/}
+      {/*                      <ListItemText primary={item.name}  />*/}
+      {/*                    </ListItem> )}*/}
+      {/*              </div>*/}
+
+      {/*          )*/}
+      {/*        })}*/}
     </Box>
   );
 };

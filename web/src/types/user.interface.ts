@@ -29,13 +29,18 @@ export interface UserRegisterData {
 }
 
 export interface UserProfileData {
-    username: string;
-    firstname: string;
-    lastname: string;
-    email: string;
-    phoneNumber: string;
-    birthday: string;
-    password: string
+    countCompleted: number
+    countInProgress: number
+    averageGrade: number
+    id: number
+    username: string
+    firstName: string
+    lastName: string
+    phoneNumber: string
+    email: string
+    birthday: string
+    filePhoto: string
+    registrationDate: string
 }
 
 export interface UserLoginData {
@@ -43,8 +48,25 @@ export interface UserLoginData {
     password: string;
 }
 
+export interface ProfileData {
+    countCompleted: number
+    countInProgress: number
+    averageGrade: number
+    id: number
+    username: string
+    firstName: string
+    lastName: string
+    phoneNumber: string
+    email: string
+    birthday: string
+    filePhoto: string
+    registrationDate: string
+}
+
+
 export interface InitialState {
     data: AuthResponseData | null;
+    profileData: ProfileData | null;
     status: statusTypes;
     errorMessage?: string | null;
 }

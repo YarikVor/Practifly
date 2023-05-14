@@ -5,6 +5,9 @@ export const useStyles = makeStyles<{width?: string | number, isBlock: boolean}>
   wrapper:{
     width: isBlock ? width : "",
   },
+  image: {
+    marginLeft: 10,
+  },
   root: {
     "& .MuiInputLabel-root": {
       "&.Mui-focused": {
@@ -25,6 +28,8 @@ export const useStyles = makeStyles<{width?: string | number, isBlock: boolean}>
     },
   },
   labelStyles: {
+    display: "flex",
+    alignItems: "center",
     color: "#808485",
     "&.MuiFormLabel-root": {
       fontSize: 23,
