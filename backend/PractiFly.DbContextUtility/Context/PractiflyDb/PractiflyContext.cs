@@ -9,7 +9,7 @@ public class PractiFlyContext : DbContext, IPractiflyContext
 {
     static PractiFlyContext()
     {
-        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        //AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }
 
     public PractiFlyContext(DbContextOptions<PractiFlyContext> options) : base(options)

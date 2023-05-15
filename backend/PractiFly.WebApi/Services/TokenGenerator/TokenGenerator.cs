@@ -31,6 +31,4 @@ public class TokenGenerator : ITokenGenerator
 
         return _handler.WriteToken(token);
     }
-
-    // TODO: Refresh tokens
 }

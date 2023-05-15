@@ -24,5 +24,4 @@ public class UserCourseStatusDto
     public float GradeAverage { get; set; }
 
     public int? ThemeId { get; set; }
-    //TODO: список оцінок
 }
