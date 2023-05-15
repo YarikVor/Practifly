@@ -3,10 +3,14 @@ using PractiFly.Api.Admin;
 using PractiFly.Api.Api.Admin;
 using PractiFly.Api.Api.CourseData;
 using PractiFly.Api.Api.CourseDetails;
+using PractiFly.Api.Api.CourseMaterials;
 using PractiFly.Api.Api.Login;
+using PractiFly.Api.Api.MaterialBlocks;
 using PractiFly.Api.CourseData;
 using PractiFly.Api.CourseDetails;
+using PractiFly.Api.CourseMaterials;
 using PractiFly.Api.Login;
+using PractiFly.Api.MaterialBlocks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,8 +55,21 @@ public class PractiFlyClient
 
     #region CourseDetails
     private const string DetailsMaterialUrl = "theme/material";
-    
     #endregion
+
+
+    #region CourseMaterials
+    private const string ListsHeadingsCoursesUrl = "course/headings?courseId={0}";
+    private const string MaterialIncludingCourseDtoUrl = "course/heading/materials";
+
+    #endregion
+    #region MaterialBlocks
+    private const string GetListMaterialsUrl = "heading/materials?headingId={0}";
+    private const string CreateMaterialBlockUrl = "material";
+    private const string EditMaterialBlockUrl = "material/edit";
+
+    #endregion
+
     #endregion
 
     private readonly HttpClient _httpClient;
@@ -204,15 +221,56 @@ public class PractiFlyClient
 
     #endregion
 
-    #region CourseDetails 
-    public async Task<DetailsMaterialDto?> DetailsMaterialAsync(DetailsMaterialInfoDto detailsMaterialInfoDto)
+    #region CourseDetails
+    public async Task<DetailsMaterialInfoDto?> GetDetailsMaterialAsync(DetailsMaterialDto detailsMaterialInfoDto)
     {
         var query = WebSerializer.ToQueryString(DetailsMaterialUrl, detailsMaterialInfoDto);
-        var result = await _httpClient.GetFromJsonAsync<DetailsMaterialDto>(query);
+        var result = await _httpClient.GetFromJsonAsync<DetailsMaterialInfoDto>(query);
 
         return result;
     }
     #endregion
 
 
+    # region CourseMaterials
+
+    public async Task<ListsHeadingsCoursesInfoDto[]> GetListHeadingCourseByIdAsync(int Id)
+    {
+        string uri = string.Format(ListsHeadingsCoursesUrl, Id.ToString());
+        var result = await _httpClient.GetFromJsonAsync<ListsHeadingsCoursesInfoDto[]>(uri)
+            ?? throw new NullReferenceException("result");
+
+        return result;
+    }
+
+    public async Task<MaterialIncludingCourseInfoDto[]?> GetDetailsMaterialAsync(MaterialIncludingCourseDto materialIncludingCourseDto)
+    {
+        var query = WebSerializer.ToQueryString(MaterialIncludingCourseDtoUrl, materialIncludingCourseDto);
+        var result = await _httpClient.GetFromJsonAsync<MaterialIncludingCourseInfoDto[]>(query);
+
+        return result;
+    }
+
+    #endregion
+
+    # region MaterialBlocks
+    public async Task<ListMaterialsInfoDto[]> GetListMaterialsByIdAsync(int Id)
+    {
+        string uri = string.Format(GetListMaterialsUrl, Id.ToString());
+        var result = await _httpClient.GetFromJsonAsync<ListMaterialsInfoDto[]>(uri)
+            ?? throw new NullReferenceException("result");
+
+        return result;
+    }
+
+    public async Task<bool> CreateMaterialAsync(CreateMaterialBlockDto createMaterialsDto)
+    {
+        return await CreateAsync<CreateMaterialBlockDto, bool>(CreateMaterialBlockUrl, createMaterialsDto);
+    }
+
+    public async Task<bool> EditMaterialAsync(EditMaterialBlockDto createMaterialsDto)
+    {
+        return await CreateAsync<EditMaterialBlockDto, bool>(EditMaterialBlockUrl, createMaterialsDto);
+    }
+    #endregion
 }
