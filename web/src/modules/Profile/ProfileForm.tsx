@@ -23,10 +23,11 @@ export const ProfileForm: FC = () => {
   const dispatch = useAppDispatch();
 
   const inputAvatarRef = useRef<HTMLInputElement>(null);
-  const [image, setImage] = useState({
-    image: "",
-    key: "",
-  });
+  const [image, setImage]
+    = useState("");
+  const [key, setKey] = useState(0);
+  const incKey = () => setKey(paramKey => paramKey + 1);
+
   const validationSchema = useMemo(() => {
     return profileSchema;
   }, []);
@@ -44,14 +45,14 @@ export const ProfileForm: FC = () => {
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const formData = new FormData();
     formData.append("file", e.target.files![0]);
-    const {payload} = await dispatch(uploadPhoto(formData));
-    setImage({
-      image: payload!,
-      key: `${payload}12345`,
-    });
+    const {payload} = (await dispatch(uploadPhoto(formData))) as {url: string};
+    setImage(payload.url + "?" + key);
+    console.log("key", key);
+    console.log(payload);
+    incKey();
   };
 
-  useEffect(() => {
+  useEffect( () => {
     const fetchData = async () => {
       const {payload} = await dispatch(fetchMe());
       if(!payload || typeof payload === "string"){
@@ -66,10 +67,8 @@ export const ProfileForm: FC = () => {
         birthday: payload?.birthday,
         registrationDate: payload?.registrationDate,
       });
-      setImage({
-        image: payload?.filePhoto,
-        key: payload?.firstName,
-      });
+      console.log(payload.filePhoto);
+      setImage(payload.filePhoto);
     };
     fetchData();
   }, []);
@@ -123,7 +122,7 @@ export const ProfileForm: FC = () => {
             <Avatar
               onClick={() => inputAvatarRef.current?.click()}
               sx={{ borderRadius: 0, width: 250, height: 200 }}
-              src={image.image}
+              src={image}
             />
             <input
               ref={inputAvatarRef}
