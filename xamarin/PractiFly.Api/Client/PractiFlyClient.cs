@@ -4,11 +4,17 @@ using PractiFly.Api.Api.Admin;
 using PractiFly.Api.Api.CourseData;
 using PractiFly.Api.Api.CourseDetails;
 using PractiFly.Api.Api.CourseMaterials;
+using PractiFly.Api.Api.CourseThemes;
+using PractiFly.Api.Api.Heading;
+using PractiFly.Api.Api.HeadingCourse;
 using PractiFly.Api.Api.Login;
 using PractiFly.Api.Api.MaterialBlocks;
 using PractiFly.Api.CourseData;
 using PractiFly.Api.CourseDetails;
 using PractiFly.Api.CourseMaterials;
+using PractiFly.Api.CourseThemes;
+using PractiFly.Api.Heading;
+using PractiFly.Api.HeadingCourse;
 using PractiFly.Api.Login;
 using PractiFly.Api.MaterialBlocks;
 using System;
@@ -24,13 +30,14 @@ namespace PractiFly.Api.Client;
 
 public class PractiFlyClient 
 {
+    private readonly HttpClient _httpClient;
+
     #region Constants
     private const string BasicUrl = "https://localhost:5001/api/";
     private const string JwtDefaultFormat = "Bearer {0}";
     private const string JwtDefaultScheme = "Bearer";
     private const string Authorization = "Authorization";
 
-    #endregion
 
     #region ConstantsUrl
     #region User
@@ -57,7 +64,6 @@ public class PractiFlyClient
     private const string DetailsMaterialUrl = "theme/material";
     #endregion
 
-
     #region CourseMaterials
     private const string ListsHeadingsCoursesUrl = "course/headings?courseId={0}";
     private const string MaterialIncludingCourseDtoUrl = "course/heading/materials";
@@ -69,11 +75,32 @@ public class PractiFlyClient
     private const string EditMaterialBlockUrl = "material/edit";
 
     #endregion
-
+    #region Heading 
+    private const string GetHeadingUrl = "heading";
+    private const string CreateHeadingUrl = "heading";
+    private const string DeleteHeadingUrl = "heading";
+    private const string EditHeadingUrl = "heading/edit";
+    #endregion
+    #region HeadingCourse
+    private const string GetHeadingByBeginHeadUrl = "heading/sub";
+    private const string ChangeHeadingInCourseUrl = "heading/include";
     #endregion
 
-    private readonly HttpClient _httpClient;
-    
+    # region CourseThemes
+    private const string ListThemesUrl = "course/themes";
+    private const string ListMaterialsCourseUrl = "course/materials";
+    private const string InformationThemeUrl = "theme";
+    private const string CreateThemesUrl = "theme";
+    private const string DeleteThemesUrl = "theme";
+    private const string UpdateThemesUrl = "theme/edit";
+    private const string AddMaterialToThemeUrl = "theme_material";
+    private const string DeleteThemeMaterialUrl = "theme_material";
+    private const string UpdateThemeMaterialUrl = "theme_material/edit";
+    #endregion
+    #endregion
+    #endregion
+
+
 
     public PractiFlyClient(string token)
     {
@@ -135,7 +162,6 @@ public class PractiFlyClient
 
     }
     #endregion
-   
 
     #region Admin
     public async Task<UserAdminInfoDto?> GetUserByIdAsAdminAsync(int id)
@@ -178,7 +204,6 @@ public class PractiFlyClient
     }
     #endregion
 
-    //CourseData
     #region CourseData
     public async Task<CourseItemInfoDto[]> GetAllCourseAsync(int? ownerId)
     {
@@ -231,7 +256,6 @@ public class PractiFlyClient
     }
     #endregion
 
-
     # region CourseMaterials
 
     public async Task<ListsHeadingsCoursesInfoDto[]> GetListHeadingCourseByIdAsync(int Id)
@@ -271,6 +295,115 @@ public class PractiFlyClient
     public async Task<bool> EditMaterialAsync(EditMaterialBlockDto createMaterialsDto)
     {
         return await CreateAsync<EditMaterialBlockDto, bool>(EditMaterialBlockUrl, createMaterialsDto);
+    }
+    #endregion
+
+    #region Heading
+
+    public async Task<GetHeadingInfoDto>  GetHeadingByUdcOrHeadIdAsync(GetHeadingDto getHeading)
+    {
+        var query = WebSerializer.ToQueryString(GetHeadingUrl, getHeading);
+        var result = await _httpClient.GetFromJsonAsync<GetHeadingInfoDto>(query)
+            ?? throw new NullReferenceException("result");
+
+        return result;
+    }
+    public async Task<bool> CreateHeadingAsync(CreateHeadingDto createHeadingDto)
+    {
+        return await CreateAsync<CreateHeadingDto, bool>(CreateHeadingUrl, createHeadingDto);
+    }
+
+    public async Task<bool> DeleteHeadingAsync(int id)
+    {
+        string uri = string.Format(DeleteHeadingUrl, id);
+        var response = await _httpClient.DeleteAsync(uri);
+
+        return response.IsSuccessStatusCode;
+    }
+    public async Task<bool> EditHeadingAsync(EditHeadingDto editHeadingDto)
+    {
+        return await CreateAsync<EditHeadingDto, bool>(EditHeadingUrl, editHeadingDto);
+    }
+
+    #endregion
+
+    #region HeadingCourse
+    public async Task<GetHeadingBeginInfoDto[]> GetHeadingByBeginHeadCodeAsync(string code)
+    {
+        string uri = string.Format(GetHeadingByBeginHeadUrl, code);
+        var result = await _httpClient.GetFromJsonAsync<GetHeadingBeginInfoDto[]>(uri)
+            ?? throw new NullReferenceException("result");
+
+        return result;
+    }
+
+    public async Task<bool> ChangeHeadingInCourseAsync(ChangeHeadingInCourseDto changeHeadingInCourseDto)
+    {
+        return await CreateAsync<ChangeHeadingInCourseDto, bool>(ChangeHeadingInCourseUrl, changeHeadingInCourseDto);
+    }
+
+    #endregion
+
+    #region CourseThemes
+    public async Task<ListThemesInfoDto[]> GetListThemesCourseByIdAsync(int id)
+    {
+        string uri = string.Format(ListThemesUrl, id);
+        var result = await _httpClient.GetFromJsonAsync<ListThemesInfoDto[]>(uri)
+            ?? throw new NullReferenceException("result");
+
+        return result;
+    }
+    public async Task<ListMaterialsCourseInfoDto[]> GetListMaterialsCourseByIdAsync(int id)
+    {
+        string uri = string.Format(ListMaterialsCourseUrl, id);
+        var result = await _httpClient.GetFromJsonAsync<ListMaterialsCourseInfoDto[]>(uri)
+            ?? throw new NullReferenceException("result");
+
+        return result;
+    }
+
+    public async Task<ThemeInformationDto> GetInformationThemeByIdAsync(int themeId)
+    {
+        string uri = string.Format(InformationThemeUrl, themeId);
+        var result = await _httpClient.GetFromJsonAsync<ThemeInformationDto>(uri)
+            ?? throw new NullReferenceException("result");
+
+        return result;
+    }
+
+    public async Task<bool> CreateThemesOfCourseAsync(CreateThemesOfCourseDto createThemesOfCourseDto)
+    {
+        return await CreateAsync<CreateThemesOfCourseDto, bool>(CreateThemesUrl, createThemesOfCourseDto);
+    }
+    public async Task<bool> DeleteThemesAsync(int id)
+    {
+        string uri = string.Format(DeleteThemesUrl, id);
+        var response = await _httpClient.DeleteAsync(uri);
+
+        return response.IsSuccessStatusCode;
+    }
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public async Task<bool> UpdateThemesAsync(UpdateThemesDto updateThemesDto)
+    {
+        return await CreateAsync<UpdateThemesDto, bool>(UpdateThemesUrl, updateThemesDto);
+    }
+
+    public async Task<bool> AddMaterialToThemeAsync(AddMaterialToThemeDto addMaterialToTheme)
+    {
+        return await CreateAsync<AddMaterialToThemeDto, bool>(AddMaterialToThemeUrl, addMaterialToTheme);
+    }
+
+    public async Task<bool> DeleteThemeMaterialAsync(int id)
+    {
+        string uri = string.Format(DeleteThemeMaterialUrl, id);
+        var response = await _httpClient.DeleteAsync(uri);
+
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<bool> UpdateThemeMaterialAsync(UpdateThemeMaterialDto updateThemeMaterial)
+    {
+        return await CreateAsync<UpdateThemeMaterialDto, bool>(UpdateThemeMaterialUrl, updateThemeMaterial);
     }
     #endregion
 }
