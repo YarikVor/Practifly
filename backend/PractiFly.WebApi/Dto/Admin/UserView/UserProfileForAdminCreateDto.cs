@@ -35,10 +35,6 @@ public class UserProfileForAdminCreateDto
     [TodayDateConstraint]
     public DateOnly Birthday { get; set; }
 
-    [Required]
-    [TodayDateConstraint]
-    public DateOnly RegistrationDate { get; set; }
-
     [Url]
     [MaxLength(2048)]
     public string? FilePhoto { get; set; }

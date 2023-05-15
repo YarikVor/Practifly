@@ -87,7 +87,7 @@ public class Startup
         services.AddScoped<IMapper, PractiFlyMapper>();
 
         services.AddScoped<IAmazonS3, PractiFlyAmazonS3Client>();
-        services.AddScoped<IPractiFlyAmazonS3ClientManager, PractiFlyAmazonS3ClientManager>();
+        services.AddScoped<IAmazonS3ClientManager, PractiFlyAmazonS3ClientManager>();
     }
 
     #endregion

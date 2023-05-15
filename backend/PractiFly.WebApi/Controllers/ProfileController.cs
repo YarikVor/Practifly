@@ -21,13 +21,13 @@ public class ProfileController : Controller
     private readonly IConfigurationProvider _configurationProvider;
     private readonly IPractiflyContext _context;
     private readonly UserManager<User> _userManager;
-    private readonly IPractiFlyAmazonS3ClientManager _amazonClient;
+    private readonly IAmazonS3ClientManager _amazonClient;
 
     public ProfileController(
         IPractiflyContext context,
         IConfigurationProvider configurationProvider,
         UserManager<User> userManager,
-        IPractiFlyAmazonS3ClientManager amazonClient
+        IAmazonS3ClientManager amazonClient
     )
     {
         _context = context;
