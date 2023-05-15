@@ -1,6 +1,6 @@
 import {Avatar, Box, Typography} from "@mui/material";
 
-import {ChangeEvent, FC  , useLayoutEffect, useMemo, useState} from "react";
+import {ChangeEvent, FC, useLayoutEffect, useMemo, useState} from "react";
 
 import {useForm} from "react-hook-form";
 
@@ -47,6 +47,8 @@ export const ProfileForm: FC = () => {
     if(!payload){
       return toast.error("Something went wrong");
     }
+    // Maybe 'Date.now()'?
+    // In backend result equals : {"url": "https://..."}
     setImage(`${payload}?${Math.random()}`);
   };
 
@@ -128,7 +130,7 @@ export const ProfileForm: FC = () => {
               type="file"
               accept="image/*"
               onChange={handleImageChange}
-              name="filePhoto"
+              name="avatarUrl"
               hidden
               id="filePhoto"
             />
