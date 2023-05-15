@@ -43,7 +43,7 @@ public class MyCourseProfile : Profile
                             .Average() ?? 0)
                 )
             );
-        //TODO: Nect topic, grade for  current theme
+        //TODO: Next topic, grade for current theme
         CreateProjection<UserCourse, UserCourseStatusDto>()
             .ForMember(e => e.Language, par => par.MapFrom(e => e.Course.Language.Code))
             //TODO: можливо оцінки беруться із тем та з матеріалів

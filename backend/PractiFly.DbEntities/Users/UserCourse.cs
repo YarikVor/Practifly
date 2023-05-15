@@ -45,7 +45,6 @@ public class UserCourse
     public virtual Theme LastTheme { get; set; } = null!;
 
     [Column("Grade")]
-    //TODO: можливо не обов'язкове поле
     public int? Grade { get; set; }
 
     [Column("Note")]

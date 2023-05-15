@@ -237,8 +237,6 @@ public class CourseDataController : Controller
         //courseUsers.LastTheme.Number = 1;
         await _context.UserCourses.AddAsync(courseUsers);
         await _context.SaveChangesAsync();
-        //TODO: return?
-        //var updatedCourseDto = _mapper.Map<UserCourse, CourseUsersDto>(courseUsers);
         return courseUsers.Id == 0 ? BadRequest() : Ok();
     }
     //public async Task<IActionResult> AddMaterialToTheme(ThemeMaterialCreateDto themeMaterialDto)
