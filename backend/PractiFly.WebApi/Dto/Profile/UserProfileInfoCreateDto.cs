@@ -3,7 +3,7 @@ using PractiFly.WebApi.Attributes;
 
 namespace PractiFly.WebApi.Dto.Profile;
 
-public class UserProfileInfoCreateDto
+public class UserProfileInfoEditDto
 {
     [Required]
     [MaxLength(128)]
@@ -27,5 +27,5 @@ public class UserProfileInfoCreateDto
 
     [Url]
     [MaxLength(2048)]
-    public string? FilePhoto { get; set; }
+    public IFormFile? FilePhoto { get; set; }
 }

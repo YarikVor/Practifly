@@ -1,6 +1,3 @@
-﻿using Amazon.Runtime;
-using Amazon.S3;
-using Amazon.S3.Model;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,44 +5,33 @@ using Microsoft.AspNetCore.Mvc;
 namespace PractiFly.WebApi.Controllers
 {
     [ApiController]
-    [Route("api/bucket")]
+    [Route("api/")]
     public class FilesController : ControllerBase
     {
-        private readonly IAmazonS3 _s3Client;
+        private readonly IAmazonS3ClientManager _amazonClient;
 
-        public FilesController()
+        public FilesController(IAmazonS3ClientManager amazonClient)
         {
-            AmazonS3Config config = new AmazonS3Config()
-            {
-                RegionEndpoint = Amazon.RegionEndpoint.EUNorth1
-
-            };
-
-            BasicAWSCredentials credentials =
-                new BasicAWSCredentials("AKIAYICM4SLLBL4MZZ5F", "Zi0p4Z0YgjrpNcqZuTSRaOCSEZWN++8FV240899H");
-            
-            _s3Client = new AmazonS3Client(credentials, config);
+            _amazonClient = amazonClient;
         }
 
-        [Route("upload")]
+        [Route("admin/user/upload_avatar")]
+        [HttpPost]
+        public async Task<IActionResult> UploadUserAvatarAsync(int userId, IFormFile file)
+        {
+            var url = await _amazonClient.UploadFileAsync(file, userId.ToString());
+
+            return url == null ? BadRequest() : Ok(new {url});
+        }
+        
+        [Route("user/upload_avatar")]
         [HttpPost]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> UploadFileAsync(IFormFile file)
+        public async Task<IActionResult> UploadSelfAvatarAsync(IFormFile file)
         {
-            var id = User.GetUserIdInt();
-            const string bucketName = "practiflybucket";
-            var bucketExists = await Amazon.S3.Util.AmazonS3Util.DoesS3BucketExistV2Async(_s3Client, bucketName);
-            if (!bucketExists) return NotFound($"Bucket {bucketName} doesnt exist.");
-            var request = new PutObjectRequest()
-            {
-                BucketName = bucketName,
-                Key = $"{id}",
-                InputStream = file.OpenReadStream()
-            };
-            request.Metadata.Add("Content-Type", file.ContentType);
-            await _s3Client.PutObjectAsync(request);
-            var baseurl = "https://practiflybucket.s3.eu-north-1.amazonaws.com/";
-            return Ok($"{baseurl}{id}");
+            int id = User.GetUserIdInt();
+            
+            return await UploadUserAvatarAsync(id, file);
         }
     }
 }

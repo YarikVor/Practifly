@@ -67,9 +67,9 @@ public class AdminController : Controller
     [HttpDelete]
     [Route("")]
     //[Authorize(Roles = UserRoles.Admin)]
-    public async Task<IActionResult> DeleteUserByIdAsync(string userId)
+    public async Task<IActionResult> DeleteUserByIdAsync(int userId)
     {
-        var user = await _userManager.FindByIdAsync(userId);
+        var user = await _userManager.FindByIdAsync(userId.ToString());
 
         if (user == null)
             return NotFound();
@@ -98,8 +98,15 @@ public class AdminController : Controller
             return BadRequest();
 
         var roleResult = await _userManager.AddToRoleAsync(user, userDto.Role);
-        //TODO: reyurn userId
-        return !roleResult.Succeeded ? BadRequest() : Ok();
+
+        if (!roleResult.Succeeded)
+        {
+            return BadRequest();
+        }
+
+        var dto = _mapper.Map<User, UserProfileForAdminViewDto>(user);
+        dto.Role = userDto.Role;
+        return Json(dto);
     }
 
     /// <summary>

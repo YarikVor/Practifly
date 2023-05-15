@@ -6,14 +6,14 @@ namespace PractiFly.WebApi.AutoMapper.Ex;
 
 public static class UserEx
 {
-    public static void ChangeUser(this User user, UserProfileInfoCreateDto userDto)
+    public static void ChangeUser(this User user, UserProfileInfoEditDto userDto)
     {
         user.FirstName = userDto.FirstName;
         user.LastName = userDto.LastName;
         user.PhoneNumber = userDto.PhoneNumber;
         user.Email = userDto.Email;
         user.Birthday = userDto.Birthday;
-        user.FilePhoto = userDto.FilePhoto;
+        //user.FilePhoto = userDto.FilePhoto;
     }
 
     public static void ChangeUserInAdmin(this User user, UserProfileForAdminUpdateDto userDto)

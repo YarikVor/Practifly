@@ -11,7 +11,7 @@ public class MyCourseProfile : Profile
     public MyCourseProfile(IPractiflyContext _context)
     {
         CreateProjection<User, UserProfileInfoViewDto>();
-        CreateProjection<User, UserProfileInfoCreateDto>();
+        //CreateProjection<User, UserProfileInfoCreateDto>();
         CreateProjection<User, UserInfoDto>()
             .ForMember(
                 dto => dto.CountCompleted,

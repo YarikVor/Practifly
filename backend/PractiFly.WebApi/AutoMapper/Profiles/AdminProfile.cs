@@ -28,5 +28,7 @@ public class AdminProfile : Profile
         CreateProjection<User, UserFullnameItemDto>()
             .ForMember(dto => dto.Fullname, par => par.MapFrom(
                 e => string.Concat(e.FirstName, " ", e.LastName)));
+
+        CreateMap<User, UserProfileForAdminViewDto>();
     }
 }
