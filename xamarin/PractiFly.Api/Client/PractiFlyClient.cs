@@ -28,7 +28,7 @@ using System.Threading.Tasks;
 
 namespace PractiFly.Api.Client;
 
-public class PractiFlyClient 
+public class PractiFlyClient : IPractiFlyClient
 {
     private readonly HttpClient _httpClient;
 
