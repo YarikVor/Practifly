@@ -1,19 +1,40 @@
+using PractiFly.Api;
+using PractiFly.Api.Api.Login;
+using PractiFly.Api.Login;
+
+
 namespace PractiFly.MauiApplication.View;
 
 public partial class Login : ContentPage
 {
-	public Login()
+    private readonly PractiFlyClientWrapper _clientWrapper;
+
+    public Login(PractiFlyClientWrapper clientWrapper)
 	{
 		InitializeComponent();
-        registration.GestureRecognizers.Add(tapGesture);
 
-        tapGesture.Tapped += async (s, e) =>
-        {
-            await Navigation.PushAsync(new Registration());
-        };
+        _clientWrapper = clientWrapper;
+ 
     }
-    TapGestureRecognizer tapGesture = new TapGestureRecognizer
+
+    private async void Input_Clicked(object sender, EventArgs e)
     {
-        NumberOfTapsRequired = 1
-    };
+        LoginRequestDto loginRequestDto = new LoginRequestDto
+        {
+            Email = email.Text,
+            Password = password.Text
+        };
+        try
+        {
+            UserInfoDto userInfo = await _clientWrapper.LoginAsync(loginRequestDto);
+            await DisplayAlert(null,"Ok", "Yes");
+            //await Navigation.PushModalAsync();
+
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert(null,ex.Message,"Yes");
+        }
+
+    }
 }

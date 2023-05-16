@@ -83,10 +83,10 @@ public class Startup
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        // TODO: Add support DateTime, DateOnly and TimeOnly where UTC = +00:00
-        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", false);
-        AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
-        //if (env.IsDevelopment())
+        //Add support DateTime, DateOnly and TimeOnly where UTC = +00:00
+        //AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", false);
+        //AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
+        if (env.IsDevelopment())
             UseSwagger(app);
 
         //UseExceptionHandler(app, services);

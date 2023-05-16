@@ -22,7 +22,7 @@ public partial class MainPage : ContentPage
     }
     private async void Login(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new Login());
+        await Navigation.PushAsync(new Login(new Api.PractiFlyClientWrapper(new PractiFlyClient(""))));
     }
 
     private async void Registration(object sender, EventArgs e)

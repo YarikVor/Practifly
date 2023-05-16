@@ -13,11 +13,18 @@
                 </LinearGradientBrush>
             </Frame.Background>
             <StackLayout   WidthRequest="300" Margin="0,10">
-                <Entry Placeholder="Email" BackgroundColor="White" />
-                <Entry Placeholder="Пароль" BackgroundColor="White" />
+                <Entry x:Name="email" Placeholder="Email" BackgroundColor="White" />
+                <Entry x:Name="password" Placeholder="Пароль" BackgroundColor="White" />
                 <StackLayout Orientation="Horizontal" Margin="0,10,0,0">
                     <Label Text="Забули пароль?" Margin="0,5,0,0" />
-                    <Button TextColor="Black" Text="Ввійти"  BackgroundColor="#e0efff" WidthRequest="100" HorizontalOptions="EndAndExpand" CornerRadius="5"/>
+                    <Button x:Name="exit"  
+                            TextColor="Black" 
+                            Text="Ввійти"  
+                            BackgroundColor="#e0efff" 
+                            WidthRequest="100" 
+                            HorizontalOptions="EndAndExpand" 
+                            CornerRadius="5"
+                            Clicked="Input_Clicked"/>
                 </StackLayout>
             </StackLayout>
         </Frame>
