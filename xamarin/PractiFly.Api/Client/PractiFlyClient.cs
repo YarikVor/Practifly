@@ -382,7 +382,7 @@ public class PractiFlyClient
 
         return response.IsSuccessStatusCode;
     }
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public async Task<bool> UpdateThemesAsync(UpdateThemesDto updateThemesDto)
     {
         return await CreateAsync<UpdateThemesDto, bool>(UpdateThemesUrl, updateThemesDto);
