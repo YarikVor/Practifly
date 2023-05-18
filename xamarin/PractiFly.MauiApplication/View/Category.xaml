@@ -33,7 +33,7 @@
             <Frame  HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0" Grid.Column="0" Grid.Row="0" >
                     <StackLayout >
                     <Label Text="Ієрархія рубрик" Margin="0,10" FontAttributes="Bold" HorizontalOptions="Center"/>
-                    <ScrollView  WidthRequest="180"  HeightRequest="470">
+                    <ScrollView  WidthRequest="180"  HeightRequest="390">
                             <StackLayout Spacing="30" >
                                 <Label Text="Рубрика 1"/>
                                 <Label Text="Рубрика 2"/>

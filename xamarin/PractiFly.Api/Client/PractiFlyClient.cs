@@ -59,11 +59,9 @@ public class PractiFlyClient : IPractiFlyClient
     private const string DeleteCourseUrl = "course";
     private const string UpdateCourseUrl = "course/edit";
     #endregion 
-
     #region CourseDetails
     private const string DetailsMaterialUrl = "theme/material";
     #endregion
-
     #region CourseMaterials
     private const string ListsHeadingsCoursesUrl = "course/headings?courseId={0}";
     private const string MaterialIncludingCourseDtoUrl = "course/heading/materials";
@@ -197,9 +195,10 @@ public class PractiFlyClient : IPractiFlyClient
     {
         var query = WebSerializer.ToQueryString(AdminFilterUserUrl,userFilterInfoDto);
 
-        var result = await _httpClient.GetFromJsonAsync<UserItemInfoDto[]>(query) 
-            ??  throw new NullReferenceException("result");
-
+        //var result = await _httpClient.GetFromJsonAsync<UserItemInfoDto[]>(query) 
+        //    ??  throw new NullReferenceException("result");
+        var result = await _httpClient.GetFromJsonAsync<UserItemInfoDto[]>(query)
+            ?? throw new NullReferenceException("result");
         return result;
     }
     #endregion

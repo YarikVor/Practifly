@@ -27,8 +27,8 @@ public partial class Login : ContentPage
         try
         {
             UserInfoDto userInfo = await _clientWrapper.LoginAsync(loginRequestDto);
-            await DisplayAlert(null,"Ok", "Yes");
-            //await Navigation.PushModalAsync();
+            //await DisplayAlert(null,"Ok", "Yes");
+            await Navigation.PushModalAsync(new Admin());
 
         }
         catch (Exception ex)
