@@ -8,10 +8,9 @@ namespace PractiFly.Api.Api.CourseThemes
 {
     public class CreateThemesOfCourseDto
     {
-        public int Id { get; set; }
         public string Name { get; set; } = null!;
-        public int CourseId { get; set; }
-        public int LevelId { get; set; }
+        public int CourseId { get; set; } 
+        public int LevelId { get; set; } 
         public int Number { get; set; }
         public string Note { get; set; } = null!;
         public string Description { get; set; } = null!;

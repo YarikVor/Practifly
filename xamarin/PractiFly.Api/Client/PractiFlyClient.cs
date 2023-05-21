@@ -54,10 +54,12 @@ public class PractiFlyClient : IPractiFlyClient
     #endregion
     #region CourseData
     private const string CourseDataItemAllUrl = "course/all?ownerId={0}";
-    private const string CourseInfoDataUrl = "course?courseId={0}";
+    private const string CourseInfoDataUrl = "course/info?courseId={0}";
     private const string CreateCourseUrl = "course";
-    private const string DeleteCourseUrl = "course";
+    private const string DeleteCourseUrl = "course?courseId={0}";
     private const string UpdateCourseUrl = "course/edit";
+    private const string CourseUsersUrl = "course/users?courseId={0}";
+    private const string CourseOwnerUrl = "course/owner?courseId={0}";
     #endregion 
     #region CourseDetails
     private const string DetailsMaterialUrl = "theme/material";
@@ -85,11 +87,11 @@ public class PractiFlyClient : IPractiFlyClient
     #endregion
 
     # region CourseThemes
-    private const string ListThemesUrl = "course/themes";
+    private const string ListThemesUrl = "course/themes?courseId={0}";
     private const string ListMaterialsCourseUrl = "course/materials";
-    private const string InformationThemeUrl = "theme";
+    private const string InformationThemeUrl = "theme?themeId={0}";
     private const string CreateThemesUrl = "theme";
-    private const string DeleteThemesUrl = "theme";
+    private const string DeleteThemesUrl = "theme?themeId={0}";
     private const string UpdateThemesUrl = "theme/edit";
     private const string AddMaterialToThemeUrl = "theme_material";
     private const string DeleteThemeMaterialUrl = "theme_material";
@@ -162,10 +164,10 @@ public class PractiFlyClient : IPractiFlyClient
     #endregion
 
     #region Admin
-    public async Task<UserAdminInfoDto?> GetUserByIdAsAdminAsync(int id)
+    public async Task<AdminUserInfoDto?> GetUserByIdAsAdminAsync(int id)
     {
         string uri = string.Format(AdminGetUserByIdUrl, id);
-        var result = await _httpClient.GetFromJsonAsync<UserAdminInfoDto>(uri);
+        var result = await _httpClient.GetFromJsonAsync<AdminUserInfoDto?>(uri);
         
         return result;
     }
@@ -185,9 +187,10 @@ public class PractiFlyClient : IPractiFlyClient
         return await CreateAsync<UserCreateInfoDto, AdminUserInfoDto>(AdminCreateUserByIdUrl, userInfoDto); ;
     }
 
-    public async Task<AdminUserInfoDto> UpdateUserByAdminAsync(UserUpdateInfoDto userInfoDto)
+    public async Task<bool> UpdateUserByAdminAsync(UserUpdateInfoDto userInfoDto)
     {
-        return await CreateAsync<UserUpdateInfoDto, AdminUserInfoDto>(AdminUpdateUserByIdUrl, userInfoDto);
+        var response = await _httpClient.PostAsJsonAsync(AdminUpdateUserByIdUrl, userInfoDto);
+        return response.IsSuccessStatusCode;
     }
 
     
@@ -222,9 +225,10 @@ public class PractiFlyClient : IPractiFlyClient
         return result;
     }
 
-    public async Task<CreateCourseInfoDto> CreateCourseAsync(CreateCourseDto createCourseDto)
+    public async Task<bool> CreateCourseAsync(CreateCourseDto createCourseDto)
     {
-        return await CreateAsync<CreateCourseDto, CreateCourseInfoDto>(CreateCourseUrl, createCourseDto);
+        var response = await _httpClient.PostAsJsonAsync(CreateCourseUrl, createCourseDto);
+        return response.IsSuccessStatusCode;
     }
 
     public async Task<bool> DeleteCourseAsync(int id)
@@ -233,6 +237,8 @@ public class PractiFlyClient : IPractiFlyClient
         var response = await _httpClient.DeleteAsync(uri);
 
         return response.IsSuccessStatusCode;
+
+        
     }
 
     public async Task<bool> UpdateCourseAsync(UpdateCourseDto updateCourse)
@@ -242,7 +248,23 @@ public class PractiFlyClient : IPractiFlyClient
 
         return response.IsSuccessStatusCode;
     }
+    //CourseUsersUrl
+    public async Task<UserItemInfoDto[]> GetUserCourseAsync(int Id)
+    {
+        string uri = string.Format(CourseUsersUrl, Id);
+        var result = await _httpClient.GetFromJsonAsync<UserItemInfoDto[]>(uri)
+            ?? throw new NullReferenceException("result");
 
+        return result;
+    }
+    public async Task<OwnerInfoDto> GetOwnerCourseAsync(int Id)
+    {
+        string uri = string.Format(CourseOwnerUrl, Id);
+        var result = await _httpClient.GetFromJsonAsync<OwnerInfoDto>(uri)
+            ?? throw new NullReferenceException("result");
+
+        return result;
+    }
     #endregion
 
     #region CourseDetails
@@ -372,7 +394,8 @@ public class PractiFlyClient : IPractiFlyClient
 
     public async Task<bool> CreateThemesOfCourseAsync(CreateThemesOfCourseDto createThemesOfCourseDto)
     {
-        return await CreateAsync<CreateThemesOfCourseDto, bool>(CreateThemesUrl, createThemesOfCourseDto);
+        var response = await _httpClient.PostAsJsonAsync(CreateThemesUrl, createThemesOfCourseDto);
+        return response.IsSuccessStatusCode;
     }
     public async Task<bool> DeleteThemesAsync(int id)
     {
@@ -384,7 +407,8 @@ public class PractiFlyClient : IPractiFlyClient
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public async Task<bool> UpdateThemesAsync(UpdateThemesDto updateThemesDto)
     {
-        return await CreateAsync<UpdateThemesDto, bool>(UpdateThemesUrl, updateThemesDto);
+        var response = await _httpClient.PostAsJsonAsync(UpdateThemesUrl, updateThemesDto);
+        return response.IsSuccessStatusCode;
     }
 
     public async Task<bool> AddMaterialToThemeAsync(AddMaterialToThemeDto addMaterialToTheme)

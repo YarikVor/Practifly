@@ -17,7 +17,7 @@
                 <Button TextColor="White" Text="Навчання" WidthRequest="150"/>
             </StackLayout>
         </Frame>
-        <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,20">
+        <StackLayout Orientation="Horizontal" Spacing="10" HorizontalOptions="Center" Margin="0,20" >
             <Label Text="Курс" FontSize="Title" VerticalOptions="Center"/>
             <Entry WidthRequest="550"/>
             <Label Text="Всьго рубрик" FontSize="Title" VerticalOptions="Center"/>

@@ -26,14 +26,14 @@ public interface IPractiFlyClient
     void UpdateToken(string token);
     void DeleteToken();
     Task<bool> DeleteSelfAsync();
-    Task<UserAdminInfoDto?> GetUserByIdAsAdminAsync(int id);
+    Task<AdminUserInfoDto?> GetUserByIdAsAdminAsync(int id);
     Task<bool> DeleteUserByIdAsAdminAsync(int id);
     Task<AdminUserInfoDto> CreateUserByAdminAsync(UserCreateInfoDto userInfoDto);
-    Task<AdminUserInfoDto> UpdateUserByAdminAsync(UserUpdateInfoDto userInfoDto);
+    Task<bool> UpdateUserByAdminAsync(UserUpdateInfoDto userInfoDto);
     Task<UserItemInfoDto[]> GetFilterUserAsync(UserFilterInfoDto userFilterInfoDto);
     Task<CourseItemInfoDto[]> GetAllCourseAsync(int? ownerId);
     Task<CourseFullInfoDto> GetCourseById(int courseId);
-    Task<CreateCourseInfoDto> CreateCourseAsync(CreateCourseDto createCourseDto);
+    Task<bool> CreateCourseAsync(CreateCourseDto createCourseDto);
     Task<bool> DeleteCourseAsync(int id);
     Task<bool> UpdateCourseAsync(UpdateCourseDto updateCourse);
     Task<DetailsMaterialInfoDto?> GetDetailsMaterialAsync(DetailsMaterialDto detailsMaterialInfoDto);
