@@ -2,7 +2,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace PractiFly.WebApi.Services.AuthenticationOptions;
 
-public interface IAuthOptions
+public interface IAuthConfiguration
 {
     string Issuer { get; }
     string Audience { get; }

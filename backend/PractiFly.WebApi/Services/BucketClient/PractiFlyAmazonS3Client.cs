@@ -6,14 +6,13 @@ namespace PractiFly.WebApi;
 
 public sealed class PractiFlyAmazonS3Client: AmazonS3Client
 {
-    public PractiFlyAmazonS3Client(IConfiguration configuration): base(
-        configuration["AWS:AccessKey"],
-        configuration["AWS:SecretKey"],
-        RegionEndpoint.GetBySystemName(configuration["AWS:Region"])
+    public PractiFlyAmazonS3Client(IBucketConfiguration configuration): base(
+        configuration.AccessKey,
+        configuration.SecretKey,
+        configuration.GetRegionEndpoint()
         )
     {
-        var bucketName = configuration["AWS:BucketName"] 
-                         ?? throw new KeyNotFoundException("Bucket name is not found.");
+        var bucketName = configuration.BucketName;
         
         CheckBucketExists(bucketName).Wait();
     }
@@ -23,6 +22,6 @@ public sealed class PractiFlyAmazonS3Client: AmazonS3Client
         var bucketExists = await Amazon.S3.Util.AmazonS3Util.DoesS3BucketExistV2Async(this, bucketName);
         
         if(!bucketExists)
-            throw new ValidationException($"Bucket {bucketName} is not found.");
+            throw new KeyNotFoundException($"Bucket {bucketName} is not found.");
     }
 }
