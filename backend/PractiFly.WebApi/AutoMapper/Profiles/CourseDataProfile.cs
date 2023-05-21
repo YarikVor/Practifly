@@ -17,7 +17,7 @@ public class CourseDataProfile : Profile
             .ForMember(dto => dto.FullName, par => par.MapFrom(
                 e => string.Concat(e.FirstName, " ", e.LastName)))
             .ForMember(dto => dto.FilePhoto, par => par.MapFrom(
-                e => baseUrl + (e.IsDefaultPhoto ? 0 : e.Id)));
+                e => baseUrl + (e.IsCustomPhoto ? e.Id : 0)));
 
         CreateProjection<Course, CourseInfoDto>()
             .ForMember(dto => dto.Language, par => par.MapFrom(e => e.Language.Name));

@@ -1,6 +1,5 @@
 ﻿namespace PractiFly.WebApi.Dto.Profile;
 
-//TODO: Safely remove this class
 public class UserProfileInfoViewDto
 {
     public int Id { get; set; }

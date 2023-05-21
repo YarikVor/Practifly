@@ -29,7 +29,7 @@ public class FilesController : ControllerBase
             .Users
             .AsNoTracking()
             .Where(u => u.Id == userId)
-            .ExecuteUpdateAsync(calls => calls.SetProperty(u => u.IsDefaultPhoto, true));
+            .ExecuteUpdateAsync(calls => calls.SetProperty(u => u.IsCustomPhoto, true));
 
         return url == null || count == 0 ? BadRequest() : Ok(new UrlResult(url));
     }
@@ -52,7 +52,7 @@ public class FilesController : ControllerBase
             .Users
             .AsNoTracking()
             .Where(u => u.Id == userId)
-            .ExecuteUpdateAsync(calls => calls.SetProperty(u => u.IsDefaultPhoto, false));
+            .ExecuteUpdateAsync(calls => calls.SetProperty(u => u.IsCustomPhoto, false));
 
         var result = await _amazonClient.DeleteFileAsync(userId.ToString());
 

@@ -19,18 +19,22 @@ public class UserController : Controller
     private readonly SignInManager<User> _signInManager;
     private readonly ITokenGenerator _tokenGenerator;
     private readonly UserManager<User> _userManager;
+    private readonly IAmazonS3ClientManager _amazonClient;
 
     public UserController(
         ITokenGenerator tokenGenerator,
         UserManager<User> userManager,
         SignInManager<User> signInManager,
-        IMapper mapper
+        IMapper mapper,
+        IAmazonS3ClientManager amazonClient
     )
     {
         _tokenGenerator = tokenGenerator;
         _userManager = userManager;
         _signInManager = signInManager;
         _mapper = mapper;
+        _amazonClient = amazonClient;
+        
     }
 
     /// <summary>
@@ -61,7 +65,7 @@ public class UserController : Controller
         if (!identityResult.Succeeded)
             return BadRequest(identityResult.Errors);
 
-        var resultDto = _mapper.Map<User, UserTokenInfoDto>(identityUser);
+        var resultDto = _mapper.Map<User, UserTokenInfoDto>(identityUser, opt => opt.Items["baseUrl"] = _amazonClient.GetFileUrl());
         resultDto.Token = GenerateToken(identityUser.Id, UserRoles.User);
         return Ok(resultDto);
     }
@@ -88,7 +92,7 @@ public class UserController : Controller
         var role = (await _userManager.GetRolesAsync(user))[0];
 
         if (!result.Succeeded) return BadRequest();
-        var resultDto = _mapper.Map<User, UserTokenInfoDto>(user);
+        var resultDto = _mapper.Map<User, UserTokenInfoDto>(user, opt => opt.Items["baseUrl"] = _amazonClient.GetFileUrl());
         resultDto.Token = GenerateToken(user.Id, role);
         return Ok(resultDto);
     }
@@ -142,9 +146,7 @@ public class UserController : Controller
     [Authorize(AuthenticationSchemes = "Bearer")]
     public async Task<IActionResult> RefreshToken()
     {
-        var currentUser = HttpContext.User;
-        var id = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-
+        var id = User.GetUserId();
         var user = await _userManager.FindByIdAsync(id);
 
         var role = (await _userManager.GetRolesAsync(user)).First();
@@ -164,12 +166,8 @@ public class UserController : Controller
     public async Task<IActionResult> DeleteCurrentUserAsync()
     {
         // Отримання ідентифікатора поточного користувача з токена.
-        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (userId == null)
-            // Якщо ідентифікатор користувача не було знайдено в токені, видається помилка.
-            return BadRequest();
-
-        // Знаходження користувача за його ідентифікатором.
+        var userId = User.GetUserId();
+        
         var user = await _userManager.FindByIdAsync(userId);
 
         if (user == null)

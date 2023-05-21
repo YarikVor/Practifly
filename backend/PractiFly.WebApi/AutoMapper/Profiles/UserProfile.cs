@@ -19,7 +19,7 @@ public class UserProfile : Profile
         string baseUrl = null!;
         CreateMap<User, UserProfileInfoViewDto>()
             .ForMember(dto => dto.FilePhoto, par => par.MapFrom(
-                (user, _, _, opt) => (string)opt.Items["baseUrl"] + (user.IsDefaultPhoto ? 0 : user.Id)));
+                (user, _, _, opt) => (string)opt.Items["baseUrl"] + (user.IsCustomPhoto ? user.Id : 0)));
         CreateMap<User, UserTokenInfoDto>()
             .ForMember(dto => dto.User, par => par.MapFrom(e => e));
     }

@@ -13,7 +13,7 @@ public class MyCourseProfile : Profile
         string baseUrl = null!;
         CreateProjection<User, UserProfileInfoViewDto>()
             .ForMember(dto => dto.FilePhoto, par => par.MapFrom(
-                e => baseUrl + (e.IsDefaultPhoto ? 0 : e.Id)));
+                e => baseUrl + (e.IsCustomPhoto ? e.Id : 0)));
         //CreateProjection<User, UserProfileInfoCreateDto>();
         CreateProjection<User, UserInfoDto>()
             .ForMember(
@@ -45,7 +45,9 @@ public class MyCourseProfile : Profile
                                 .Select(uc => uc.Grade)
                                 .Average() ?? 0)
                 )
-            );
+            )
+            .ForMember(
+                e => e.FilePhoto, par => par.MapFrom(e => baseUrl + (e.IsCustomPhoto ? e.Id : 0)));
         //TODO: Next topic, grade for current theme
         CreateProjection<UserCourse, UserCourseStatusDto>()
             .ForMember(e => e.Language, par => par.MapFrom(e => e.Course.Language.Code))

@@ -90,7 +90,7 @@ public class HeadingCourseController : Controller
     public async Task<IActionResult> CourseSubHeading(
         int courseId,
         [RegularExpression(EntitiesConstants.SubHeadingPattern)]
-        string beginCode
+        string? beginCode = ""
     )
     {
         var patternSubheadingCode = beginCode.GetCodeLike();

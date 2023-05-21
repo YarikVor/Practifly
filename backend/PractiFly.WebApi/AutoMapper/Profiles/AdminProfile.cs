@@ -11,7 +11,7 @@ public class AdminProfile : Profile
     {
         CreateMap<User, UserProfileForAdminViewDto>()
             .ForMember(dto => dto.FilePhoto, par => par.MapFrom(
-                (user, _, _, opt) => (string)opt.Items["baseUrl"] + (user.IsDefaultPhoto ? 0 : user.Id)));
+                (user, _, _, opt) => (string)opt.Items["baseUrl"] + (user.IsCustomPhoto ? user.Id : 0)));
 
         string baseUrl = null!;
         CreateProjection<User, UserProfileForAdminViewDto>()
@@ -23,7 +23,7 @@ public class AdminProfile : Profile
                         .Select(ur => ur.Role.Name)
                         .FirstOrDefault()))
             .ForMember(dto => dto.FilePhoto, par => par.MapFrom(
-                e => baseUrl + (e.IsDefaultPhoto ? 0 : e.Id)));
+                e => baseUrl + (e.IsCustomPhoto ? e.Id : 0)));
 
 
         CreateMap<UserProfileForAdminCreateDto, User>()

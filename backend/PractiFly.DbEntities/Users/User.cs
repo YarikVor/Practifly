@@ -23,8 +23,8 @@ public class User : IdentityUser<int>
     [Required]
     public string FilePhoto { get; set; } = null!;*/
 
-    [Column("DefaultPhoto")]
-    public bool IsDefaultPhoto { get; set; }
+    [Column("CustomPhoto")]
+    public bool IsCustomPhoto { get; set; }
 
     [Column("Birthday")]
     public DateOnly Birthday { get; set; }
