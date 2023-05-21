@@ -13,15 +13,14 @@ using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace PractiFly.WebApi.Controllers;
 
-
 [ApiController]
 [Route("api/user/profile")]
 public class ProfileController : Controller
 {
+    private readonly IAmazonS3ClientManager _amazonClient;
     private readonly IConfigurationProvider _configurationProvider;
     private readonly IPractiflyContext _context;
     private readonly UserManager<User> _userManager;
-    private readonly IAmazonS3ClientManager _amazonClient;
 
     public ProfileController(
         IPractiflyContext context,
@@ -41,7 +40,7 @@ public class ProfileController : Controller
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> GetUserProfileFromToken()
     {
-        int id = User.GetUserIdInt();
+        var id = User.GetUserIdInt();
 
         return await GetUserProfileInfo(id);
     }
@@ -96,5 +95,4 @@ public class ProfileController : Controller
 
         return !result.Succeeded ? BadRequest() : Ok();
     }
-
 }

@@ -22,13 +22,13 @@ public class User : IdentityUser<int>
     [MaxLength(EntitiesConstantLengths.Url)]
     [Required]
     public string FilePhoto { get; set; } = null!;*/
-    
+
     [Column("DefaultPhoto")]
     public bool IsDefaultPhoto { get; set; }
-    
+
     [Column("Birthday")]
     public DateOnly Birthday { get; set; }
-    
+
     [Column("RegistrationDate")]
     public DateOnly RegistrationDate { get; set; }
 

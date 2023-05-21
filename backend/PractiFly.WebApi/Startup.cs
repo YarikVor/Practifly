@@ -1,13 +1,11 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
-using AutoMapper;
-using Amazon.Extensions.NETCore.Setup;
 using Amazon.S3;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PractiFly.DateJsonConverter;
@@ -46,21 +44,21 @@ public class Startup
     }
 
     #endregion
-    
+
     #region Configure Services
 
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddCors(options =>
+        {
+            options.AddPolicy("_MyPolicy",
+                policy =>
                 {
-                    options.AddPolicy(name: "_MyPolicy",
-                                      policy  =>
-                                      {
-                                          policy.WithOrigins("*")
-                                              .AllowAnyHeader()
-                                              .AllowAnyMethod();
-                                      });
+                    policy.WithOrigins("*")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
                 });
+        });
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services
             .AddSingleton<IAuthConfiguration, AuthConfiguration>()

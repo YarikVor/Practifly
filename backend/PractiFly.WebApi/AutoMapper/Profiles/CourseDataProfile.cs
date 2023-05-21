@@ -2,7 +2,6 @@
 using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities.Courses;
 using PractiFly.DbEntities.Users;
-using PractiFly.WebApi.Dto.Admin.UserView;
 using PractiFly.WebApi.Dto.CourseData;
 
 namespace PractiFly.WebApi.AutoMapper.Profiles;
@@ -19,10 +18,10 @@ public class CourseDataProfile : Profile
                 e => string.Concat(e.FirstName, " ", e.LastName)))
             .ForMember(dto => dto.FilePhoto, par => par.MapFrom(
                 e => baseUrl + (e.IsDefaultPhoto ? 0 : e.Id)));
-        
+
         CreateProjection<Course, CourseInfoDto>()
             .ForMember(dto => dto.Language, par => par.MapFrom(e => e.Language.Name));
-        
+
         CreateProjection<Course, CourseFullInfoDto>()
             .ForMember(dest => dest.Course, opt => opt.MapFrom(e => e))
             .ForMember(dest => dest.Owner, opt => opt.MapFrom(e => e.Owner))
@@ -47,14 +46,11 @@ public class CourseDataProfile : Profile
                     .FirstOrDefault()));
 
         CreateMap<CourseUsersDto, UserCourse>();
-            //.ForMember(e => e.UserId, par => par.MapFrom(
-            //    dto => dto.UserId));
-               // _context
-               // .Users
-               //.Where(u => u.Id == dto.UserId)
-               //.Any(u => u.Id == dto.UserId)));
-
+        //.ForMember(e => e.UserId, par => par.MapFrom(
+        //    dto => dto.UserId));
+        // _context
+        // .Users
+        //.Where(u => u.Id == dto.UserId)
+        //.Any(u => u.Id == dto.UserId)));
     }
-
 }
-

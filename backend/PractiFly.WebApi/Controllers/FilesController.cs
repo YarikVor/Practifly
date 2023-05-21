@@ -13,7 +13,7 @@ public class FilesController : ControllerBase
 {
     private readonly IAmazonS3ClientManager _amazonClient;
     private readonly IPractiflyContext _context;
-    
+
     public FilesController(IAmazonS3ClientManager amazonClient, IPractiflyContext context)
     {
         _amazonClient = amazonClient;
@@ -33,17 +33,17 @@ public class FilesController : ControllerBase
 
         return url == null || count == 0 ? BadRequest() : Ok(new UrlResult(url));
     }
-        
+
     [Route("user/avatar")]
     [HttpPost]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> UploadSelfAvatarAsync(IFormFile file)
     {
-        int id = User.GetUserIdInt();
-            
+        var id = User.GetUserIdInt();
+
         return await UploadUserAvatarAsync(file, id);
     }
-        
+
     [Route("admin/user/avatar")]
     [HttpDelete]
     public async Task<IActionResult> DeleteUserAvatarAsync(int userId)
@@ -53,21 +53,21 @@ public class FilesController : ControllerBase
             .AsNoTracking()
             .Where(u => u.Id == userId)
             .ExecuteUpdateAsync(calls => calls.SetProperty(u => u.IsDefaultPhoto, false));
-        
+
         var result = await _amazonClient.DeleteFileAsync(userId.ToString());
-        
+
         var url = _amazonClient.GetFileUrl("0");
-        
+
         return result && count != 0 ? Ok(new UrlResult(url)) : BadRequest();
     }
-    
+
     [Route("user/avatar")]
     [HttpDelete]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> DeleteSelfAvatarAsync()
     {
-        int id = User.GetUserIdInt();
-            
+        var id = User.GetUserIdInt();
+
         return await DeleteUserAvatarAsync(id);
     }
 }

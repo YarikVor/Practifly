@@ -9,18 +9,18 @@ public class AuthConfiguration : ConfigurationAbstraction, IAuthConfiguration
     private const string AudienceKey = "Audience";
     private const string SecretKey = "Key";
     private const string TimeLifeKey = "TimeLife";
-    
-    protected override string SectionName => "Secret";
-    
+
     public AuthConfiguration(IConfiguration configuration) : base(configuration)
     {
     }
+
+    protected override string SectionName => "Secret";
 
     public string Issuer => GetValue(IssuerKey);
     public string Audience => GetValue(AudienceKey);
     public string Secret => GetValue(SecretKey);
     public int TimeLife => int.Parse(GetValue(TimeLifeKey));
-    
+
     public SecurityKey SymmetricSecurityKey
     {
         get

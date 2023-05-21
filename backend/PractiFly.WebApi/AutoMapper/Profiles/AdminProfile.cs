@@ -9,11 +9,10 @@ public class AdminProfile : Profile
 {
     public AdminProfile(IPractiflyContext _context)
     {
-        
         CreateMap<User, UserProfileForAdminViewDto>()
             .ForMember(dto => dto.FilePhoto, par => par.MapFrom(
-                (user, _, _, opt) => (string)opt.Items["baseUrl"] + (user.IsDefaultPhoto ? 0 : user.Id).ToString()));
-        
+                (user, _, _, opt) => (string)opt.Items["baseUrl"] + (user.IsDefaultPhoto ? 0 : user.Id)));
+
         string baseUrl = null!;
         CreateProjection<User, UserProfileForAdminViewDto>()
             .ForMember(
@@ -36,7 +35,5 @@ public class AdminProfile : Profile
         CreateProjection<User, UserFullnameItemDto>()
             .ForMember(dto => dto.Fullname, par => par.MapFrom(
                 e => string.Concat(e.FirstName, " ", e.LastName)));
-
-        
     }
 }

@@ -79,23 +79,18 @@ public class UserController : Controller
     public async Task<IActionResult> Login(LoginDto loginDto)
     {
         var user = await _userManager.FindByEmailAsync(loginDto.Email);
-        
-        if(user == null)
+
+        if (user == null)
             return NotFound();
-        
+
         var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
         var role = (await _userManager.GetRolesAsync(user))[0];
 
-        if (!result.Succeeded)
-        {
-            return BadRequest();
-        }
+        if (!result.Succeeded) return BadRequest();
         var resultDto = _mapper.Map<User, UserTokenInfoDto>(user);
         resultDto.Token = GenerateToken(user.Id, role);
         return Ok(resultDto);
-
-
     }
 
     //public async Task<IActionResult> Login(LoginDto loginDto)
@@ -165,7 +160,6 @@ public class UserController : Controller
     /// <returns>An IActionResult indicating success or failure.</returns>
     [HttpDelete]
     [Route("delete")]
-
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> DeleteCurrentUserAsync()
     {

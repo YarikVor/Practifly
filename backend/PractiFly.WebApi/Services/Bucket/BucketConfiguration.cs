@@ -1,11 +1,10 @@
 using PractiFly.WebApi.Services.AuthenticationOptions;
 
 namespace PractiFly.WebApi;
+
 //Bucket
 public class BucketConfiguration : ConfigurationAbstraction, IBucketConfiguration
 {
-    protected override string SectionName => "AWS";
-    
     private const string AccessKeyName = "AccessKeyId";
     private const string SecretKeyName = "SecretAccessKey";
     private const string RegionKeyName = "Region";
@@ -16,6 +15,8 @@ public class BucketConfiguration : ConfigurationAbstraction, IBucketConfiguratio
     public BucketConfiguration(IConfiguration configuration) : base(configuration)
     {
     }
+
+    protected override string SectionName => "AWS";
 
     public string AccessKey => GetValue(AccessKeyName);
     public string SecretKey => GetValue(SecretKeyName);

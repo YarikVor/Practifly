@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using PractiFly.DbEntities.Users;
+﻿using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Dto.Admin.UserView;
 using PractiFly.WebApi.Dto.Profile;
 

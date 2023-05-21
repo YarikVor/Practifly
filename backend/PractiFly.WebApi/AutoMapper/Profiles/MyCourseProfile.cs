@@ -39,11 +39,11 @@ public class MyCourseProfile : Profile
                 par => par.MapFrom(
                     e =>
                         (float)(
-                        _context
-                            .UserCourses
-                            .Where(uc => uc.UserId == e.Id)
-                            .Select(uc => uc.Grade)
-                            .Average() ?? 0)
+                            _context
+                                .UserCourses
+                                .Where(uc => uc.UserId == e.Id)
+                                .Select(uc => uc.Grade)
+                                .Average() ?? 0)
                 )
             );
         //TODO: Next topic, grade for current theme
