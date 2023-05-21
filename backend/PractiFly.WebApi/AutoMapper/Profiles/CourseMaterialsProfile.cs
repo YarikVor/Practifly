@@ -21,7 +21,7 @@ public class CourseMaterialsProfile : Profile
                     .CourseMaterials
                     .Where(cm => cm.MaterialId == e.Id)
                     .Select(cm => cm.PriorityLevel)));
-            
+
         CreateProjection<Material, MaterialFromIncludedBlockViewDto>()
             .ForMember(dto => dto.PriorityLevel, par => par.MapFrom(
                 e => _context

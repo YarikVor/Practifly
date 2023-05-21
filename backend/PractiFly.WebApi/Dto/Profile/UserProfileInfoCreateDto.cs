@@ -24,8 +24,4 @@ public class UserProfileInfoEditDto
 
     [TodayDateConstraint]
     public DateOnly Birthday { get; set; }
-
-    [Url]
-    [MaxLength(2048)]
-    public IFormFile? FilePhoto { get; set; }
 }

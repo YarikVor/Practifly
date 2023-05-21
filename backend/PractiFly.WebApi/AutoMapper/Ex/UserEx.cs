@@ -22,7 +22,7 @@ public static class UserEx
         user.LastName = userDto.LastName;
         user.Email = userDto.Email;
         user.PhoneNumber = userDto.Phone;
-        user.FilePhoto = userDto.FilePhoto;
+        //user.FilePhoto = userDto.FilePhoto;
         user.Birthday = userDto.Birthday;
     }
 }

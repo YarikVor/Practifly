@@ -16,6 +16,7 @@ namespace PractiFly.WebApi.Controllers;
 //[Authorize(Roles = UserRoles.Admin, AuthenticationSchemes = "Bearer")]
 public class AdminController : Controller
 {
+    private readonly IAmazonS3ClientManager _amazonClient;
     private readonly IConfigurationProvider _configurationProvider;
     private readonly IPractiflyContext _context;
     private readonly IMapper _mapper;
@@ -25,13 +26,15 @@ public class AdminController : Controller
     public AdminController(IPractiflyContext practiflyContext,
         UserManager<User> userManager,
         IConfigurationProvider configurationProvider,
-        IMapper mapper
+        IMapper mapper,
+        IAmazonS3ClientManager amazonClient
     )
     {
         _userManager = userManager;
         _context = practiflyContext;
         _configurationProvider = configurationProvider;
         _mapper = mapper;
+        _amazonClient = amazonClient;
     }
 
     /// <summary>
@@ -50,7 +53,7 @@ public class AdminController : Controller
             .Users
             .AsNoTracking()
             .Where(u => u.Id == userId)
-            .ProjectTo<UserProfileForAdminViewDto>(_configurationProvider)
+            .ProjectTo<UserProfileForAdminViewDto>(_configurationProvider, new { baseUrl = _amazonClient.GetFileUrl() })
             .FirstOrDefaultAsync();
 
         return result == null ? NotFound() : Json(result);
@@ -99,12 +102,13 @@ public class AdminController : Controller
 
         var roleResult = await _userManager.AddToRoleAsync(user, userDto.Role);
 
-        if (!roleResult.Succeeded)
-        {
-            return BadRequest();
-        }
+        if (!roleResult.Succeeded) return BadRequest();
 
-        var dto = _mapper.Map<User, UserProfileForAdminViewDto>(user);
+        var dto = _mapper.Map<User, UserProfileForAdminViewDto>(
+            user,
+            options => options.Items["baseUrl"] = _amazonClient.GetFileUrl()
+        );
+
         dto.Role = userDto.Role;
         return Json(dto);
     }

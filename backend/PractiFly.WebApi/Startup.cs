@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
-using AutoMapper;
-using Amazon.Extensions.NETCore.Setup;
 using Amazon.S3;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
@@ -46,24 +45,23 @@ public class Startup
 
     #endregion
 
-
     #region Configure Services
 
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddCors(options =>
+        {
+            options.AddPolicy("_MyPolicy",
+                policy =>
                 {
-                    options.AddPolicy(name: "_MyPolicy",
-                                      policy  =>
-                                      {
-                                          policy.WithOrigins("*")
-                                              .AllowAnyHeader()
-                                              .AllowAnyMethod();
-                                      });
+                    policy.WithOrigins("*")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
                 });
+        });
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services
-            .AddSingleton<IAuthOptions, AuthOptions>()
+            .AddSingleton<IAuthConfiguration, AuthConfiguration>()
             .AddSingleton<ITokenGenerator, TokenGenerator>();
 
         services.AddSingleton<IFakerManager, PractiFlyFakerManager>();
@@ -87,6 +85,8 @@ public class Startup
         services.AddScoped<IMapper, PractiFlyMapper>();
 
         services.AddScoped<IAmazonS3, PractiFlyAmazonS3Client>();
+        services.AddSingleton<IAuthConfiguration, AuthConfiguration>();
+        services.AddSingleton<IBucketConfiguration, BucketConfiguration>();
         services.AddScoped<IAmazonS3ClientManager, PractiFlyAmazonS3ClientManager>();
     }
 
@@ -121,7 +121,7 @@ public class Startup
 
     private static void AddAuthorizationAndAuthentication(IServiceCollection services)
     {
-        var authOptions = services.BuildServiceProvider().GetService<IAuthOptions>()
+        var authOptions = services.BuildServiceProvider().GetService<IAuthConfiguration>()
                           ?? throw new NullReferenceException("IAuthOptions is not found");
 
         services.AddAuthorization();

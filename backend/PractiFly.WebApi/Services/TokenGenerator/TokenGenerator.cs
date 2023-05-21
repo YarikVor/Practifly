@@ -7,11 +7,11 @@ namespace PractiFly.WebApi.Services.TokenGenerator;
 
 public class TokenGenerator : ITokenGenerator
 {
-    private readonly IAuthOptions _authOptions;
+    private readonly IAuthConfiguration _authOptions;
 
     private readonly JwtSecurityTokenHandler _handler = new();
 
-    public TokenGenerator(IAuthOptions authOptions)
+    public TokenGenerator(IAuthConfiguration authOptions)
     {
         _authOptions = authOptions;
     }

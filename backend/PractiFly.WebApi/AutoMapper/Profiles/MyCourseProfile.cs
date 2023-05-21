@@ -10,7 +10,10 @@ public class MyCourseProfile : Profile
 {
     public MyCourseProfile(IPractiflyContext _context)
     {
-        CreateProjection<User, UserProfileInfoViewDto>();
+        string baseUrl = null!;
+        CreateProjection<User, UserProfileInfoViewDto>()
+            .ForMember(dto => dto.FilePhoto, par => par.MapFrom(
+                e => baseUrl + (e.IsCustomPhoto ? e.Id : 0)));
         //CreateProjection<User, UserProfileInfoCreateDto>();
         CreateProjection<User, UserInfoDto>()
             .ForMember(
@@ -36,13 +39,15 @@ public class MyCourseProfile : Profile
                 par => par.MapFrom(
                     e =>
                         (float)(
-                        _context
-                            .UserCourses
-                            .Where(uc => uc.UserId == e.Id)
-                            .Select(uc => uc.Grade)
-                            .Average() ?? 0)
+                            _context
+                                .UserCourses
+                                .Where(uc => uc.UserId == e.Id)
+                                .Select(uc => uc.Grade)
+                                .Average() ?? 0)
                 )
-            );
+            )
+            .ForMember(
+                e => e.FilePhoto, par => par.MapFrom(e => baseUrl + (e.IsCustomPhoto ? e.Id : 0)));
         //TODO: Next topic, grade for current theme
         CreateProjection<UserCourse, UserCourseStatusDto>()
             .ForMember(e => e.Language, par => par.MapFrom(e => e.Course.Language.Code))

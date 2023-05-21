@@ -40,14 +40,33 @@ public class HeadingCourseController : Controller
     [Route("heading/sub")]
     public async Task<IActionResult> GetSubheading(
         [RegularExpression(EntitiesConstants.SubHeadingPattern)]
-        string beginCode
+        string? beginCode = "",
+        int? headingId = null
     )
     {
-        var patternSubRubricCode = beginCode.GetCodeLike();
+        var query = _context
+            .Headings
+            .AsNoTracking();
 
-        var result = await _context.Headings
-            .AsNoTracking()
-            .Where(e => EF.Functions.Like(e.Code, patternSubRubricCode))
+        if (headingId is null or 0)
+        {
+            var patternSubRubricCode = beginCode.GetCodeLike();
+            query = query.Where(e => EF.Functions.Like(e.Code, patternSubRubricCode));
+        }
+        else
+        {
+            query = query.Where(
+                e => EF.Functions.Like(
+                    e.Code, _context
+                        .Headings
+                        .Where(h => h.Id == headingId)
+                        .Select(h => h.Code)
+                        .FirstOrDefault() + ".__"
+                )
+            );
+        }
+
+        var result = await query
             .ProjectTo<HeadingItemDto>(_configurationProvider)
             .ToListAsync();
 
@@ -71,7 +90,7 @@ public class HeadingCourseController : Controller
     public async Task<IActionResult> CourseSubHeading(
         int courseId,
         [RegularExpression(EntitiesConstants.SubHeadingPattern)]
-        string beginCode
+        string? beginCode = ""
     )
     {
         var patternSubheadingCode = beginCode.GetCodeLike();

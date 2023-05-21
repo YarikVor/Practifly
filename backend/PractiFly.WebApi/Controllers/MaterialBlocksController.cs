@@ -69,7 +69,8 @@ public class MaterialBlocksController : Controller
     /// <returns>A JSON-encoded representation of the new material block.</returns>
     [HttpPost]
     [Route("material")]
-    [Authorize(Roles = $"{UserRoles.Admin},{UserRoles.Teacher},{UserRoles.Manager}", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(Roles = $"{UserRoles.Admin},{UserRoles.Teacher},{UserRoles.Manager}",
+        AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> CreateMaterial(CreateMaterialDto blockDto)
     {
         var material = _mapper.Map<CreateMaterialDto, Material>(blockDto);
@@ -94,7 +95,8 @@ public class MaterialBlocksController : Controller
     /// <returns>A JSON-encoded representation of the new material block.</returns>
     [HttpPost]
     [Route("material/edit")]
-    [Authorize(Roles = $"{UserRoles.Admin},{UserRoles.Teacher},{UserRoles.Manager}", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(Roles = $"{UserRoles.Admin},{UserRoles.Teacher},{UserRoles.Manager}",
+        AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> EditMaterial(EditMaterialDto blockDto)
     {
         if (!await _context.Materials.AnyAsync(e => e.Id == blockDto.Id))

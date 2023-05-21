@@ -6,12 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities.Courses;
-using PractiFly.WebApi.Context;
 using PractiFly.DbEntities.Users;
+using PractiFly.WebApi.Context;
 using PractiFly.WebApi.Dto.Admin.UserView;
 using PractiFly.WebApi.Dto.CourseData;
 using PractiFly.WebApi.Dto.CourseDetails;
-using PractiFly.WebApi.Dto.CourseThemes;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace PractiFly.WebApi.Controllers;
@@ -20,6 +19,7 @@ namespace PractiFly.WebApi.Controllers;
 [ApiController]
 public class CourseDataController : Controller
 {
+    private readonly IAmazonS3ClientManager _amazonClient;
     private readonly IConfigurationProvider _configurationProvider;
     private readonly IPractiflyContext _context;
     private readonly IMapper _mapper;
@@ -27,12 +27,14 @@ public class CourseDataController : Controller
     public CourseDataController(
         IPractiflyContext context,
         IConfigurationProvider configurationProvider,
-        IMapper mapper
+        IMapper mapper,
+        IAmazonS3ClientManager amazonClient
     )
     {
         _context = context;
         _configurationProvider = configurationProvider;
         _mapper = mapper;
+        _amazonClient = amazonClient;
     }
 
 
@@ -67,7 +69,7 @@ public class CourseDataController : Controller
         AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> GetMyOwnerCourseInfo()
     {
-        int id = User.GetUserIdInt();
+        var id = User.GetUserIdInt();
 
         return await Courses(id);
     }
@@ -130,7 +132,7 @@ public class CourseDataController : Controller
         var result = await _context.Courses
             .Where(e => e.Id == courseId)
             .Select(e => e.Owner)
-            .ProjectTo<OwnerInfoDto>(_configurationProvider)
+            .ProjectTo<OwnerInfoDto>(_configurationProvider, new { baseUrl = _amazonClient.GetFileUrl() })
             .FirstOrDefaultAsync();
 
         return Json(result);
@@ -221,15 +223,16 @@ public class CourseDataController : Controller
 
     [HttpPost]
     [Route("course/add-users")]
-
     public async Task<ActionResult> AddUserToCourse(CourseUsersDto userDto)
     {
         if (!await _context
                 .Users
-                .AnyAsync(e => e.Id == userDto.UserId)) { return NotFound("A user with such an ID does not exist"); }
-        if(!await _context
-            .Courses
-            .AnyAsync(e => e.Id == userDto.CourseId)) { return NotFound("A course with such an ID does not exist"); }   
+                .AnyAsync(e => e.Id == userDto.UserId))
+            return NotFound("A user with such an ID does not exist");
+        if (!await _context
+                .Courses
+                .AnyAsync(e => e.Id == userDto.CourseId))
+            return NotFound("A course with such an ID does not exist");
 
         var courseUsers = _mapper.Map<CourseUsersDto, UserCourse>(userDto);
         //TODO: NumberTheme
@@ -258,62 +261,62 @@ public class CourseDataController : Controller
 
     //    return Json(themeMaterialInfoDto);
     //}
-    
-    
+
+
     [HttpGet]
     [Route("course/themes/full-info")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> GetUserCourseFullInfo(int courseId)
     {
-        int userId = User.GetUserIdInt();
-        
-        if(!await _context.UserCourses.AnyAsync(uc => uc.CourseId == courseId && uc.UserId == userId))
-            return NotFound("A user with such an ID does not exist");
-        
-        var Mapper = new Mapper(
-                new MapperConfiguration(expression =>
-                {
-                    //int userId = 0;
-                    expression.CreateProjection<Course, UserCourseInfoDto>()
-                        .ForMember(dto => dto.Themes, par => par.MapFrom(c => _context
-                            .Themes
-                            .Where(t => t.CourseId == c.Id)
-                        ));
+        var userId = User.GetUserIdInt();
 
-                    expression.CreateProjection<Theme, FullThemeWithMaterialsDto>()
-                        .ForMember(dto => dto.IsCompleted, par => par.MapFrom(t => _context
-                            .UserThemes
-                            .Where(ut => ut.UserId == userId && ut.ThemeId == t.Id)
-                            .Select(ut => ut.IsCompleted)
-                            .FirstOrDefault()
-                        ))
-                        .ForMember(dto => dto.Grade, par => par.MapFrom(t => _context
-                            .UserThemes
-                            .Where(ut => ut.UserId == userId && ut.ThemeId == t.Id)
-                            .Select(ut => ut.Grade)
-                            .FirstOrDefault()))
-                        .ForMember(dto => dto.Materials, par => par.MapFrom(t => _context
-                            .ThemeMaterials
-                            .Where(tm => tm.ThemeId == t.Id)
-                            .Select(tm => tm.Material)
-                            .Select(m => new
-                            {
-                                Material = m,
-                                UserMaterial = _context
-                                    .UserMaterials
-                                    .FirstOrDefault(um => um.UserId == userId && um.MaterialId == m.Id)
-                            })
-                            .Select(m => new CourseMaterialItemDto
-                            {
-                                Id = m.Material.Id,
-                                Name = m.Material.Name,
-                                IsCompleted = m.UserMaterial != null && m.UserMaterial.IsCompleted,
-                                Grade = m.UserMaterial == null ? 0 : m.UserMaterial.Grade,
-                            })
-                        ))
-                        ;
-                })
-            );
+        if (!await _context.UserCourses.AnyAsync(uc => uc.CourseId == courseId && uc.UserId == userId))
+            return NotFound("A user with such an ID does not exist");
+
+        var Mapper = new Mapper(
+            new MapperConfiguration(expression =>
+            {
+                //int userId = 0;
+                expression.CreateProjection<Course, UserCourseInfoDto>()
+                    .ForMember(dto => dto.Themes, par => par.MapFrom(c => _context
+                        .Themes
+                        .Where(t => t.CourseId == c.Id)
+                    ));
+
+                expression.CreateProjection<Theme, FullThemeWithMaterialsDto>()
+                    .ForMember(dto => dto.IsCompleted, par => par.MapFrom(t => _context
+                        .UserThemes
+                        .Where(ut => ut.UserId == userId && ut.ThemeId == t.Id)
+                        .Select(ut => ut.IsCompleted)
+                        .FirstOrDefault()
+                    ))
+                    .ForMember(dto => dto.Grade, par => par.MapFrom(t => _context
+                        .UserThemes
+                        .Where(ut => ut.UserId == userId && ut.ThemeId == t.Id)
+                        .Select(ut => ut.Grade)
+                        .FirstOrDefault()))
+                    .ForMember(dto => dto.Materials, par => par.MapFrom(t => _context
+                        .ThemeMaterials
+                        .Where(tm => tm.ThemeId == t.Id)
+                        .Select(tm => tm.Material)
+                        .Select(m => new
+                        {
+                            Material = m,
+                            UserMaterial = _context
+                                .UserMaterials
+                                .FirstOrDefault(um => um.UserId == userId && um.MaterialId == m.Id)
+                        })
+                        .Select(m => new CourseMaterialItemDto
+                        {
+                            Id = m.Material.Id,
+                            Name = m.Material.Name,
+                            IsCompleted = m.UserMaterial != null && m.UserMaterial.IsCompleted,
+                            Grade = m.UserMaterial == null ? 0 : m.UserMaterial.Grade
+                        })
+                    ))
+                    ;
+            })
+        );
 
 
         var result = await _context
@@ -370,7 +373,7 @@ public class CourseDataController : Controller
                     }).ToArray()
             })
             .FirstOrDefaultAsync();*/
-            /**/
+        /**/
 
         return result == null ? BadRequest() : Json(result);
     }

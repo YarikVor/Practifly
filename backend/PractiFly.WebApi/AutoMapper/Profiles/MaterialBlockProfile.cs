@@ -17,7 +17,7 @@ public class MaterialBlockProfile : Profile
             .ForMember(dto => dto.Id, opt => opt.MapFrom(e => e.Material.Id))
             .ForMember(dto => dto.Name, opt => opt.MapFrom(e => e.Material.Name))
             .ForMember(dto => dto.IsPractical, opt => opt.MapFrom(e => e.Material.IsPractical));
-        
+
         CreateProjection<Material, MaterialItemDto>();
     }
 }
