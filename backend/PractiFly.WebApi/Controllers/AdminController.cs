@@ -20,18 +20,21 @@ public class AdminController : Controller
     private readonly IPractiflyContext _context;
     private readonly IMapper _mapper;
     private readonly UserManager<User> _userManager;
+    private readonly IAmazonS3ClientManager _amazonClient;
 
 
     public AdminController(IPractiflyContext practiflyContext,
         UserManager<User> userManager,
         IConfigurationProvider configurationProvider,
-        IMapper mapper
+        IMapper mapper,
+        IAmazonS3ClientManager amazonClient
     )
     {
         _userManager = userManager;
         _context = practiflyContext;
         _configurationProvider = configurationProvider;
         _mapper = mapper;
+        _amazonClient = amazonClient;
     }
 
     /// <summary>
@@ -50,7 +53,7 @@ public class AdminController : Controller
             .Users
             .AsNoTracking()
             .Where(u => u.Id == userId)
-            .ProjectTo<UserProfileForAdminViewDto>(_configurationProvider)
+            .ProjectTo<UserProfileForAdminViewDto>(_configurationProvider, new {baseUrl = _amazonClient.GetFileUrl()})
             .FirstOrDefaultAsync();
 
         return result == null ? NotFound() : Json(result);
@@ -104,7 +107,11 @@ public class AdminController : Controller
             return BadRequest();
         }
 
-        var dto = _mapper.Map<User, UserProfileForAdminViewDto>(user);
+        var dto = _mapper.Map<User, UserProfileForAdminViewDto>(
+            user,
+            options => options.Items["baseUrl"] = _amazonClient.GetFileUrl()
+        );
+
         dto.Role = userDto.Role;
         return Json(dto);
     }

@@ -10,7 +10,10 @@ public class MyCourseProfile : Profile
 {
     public MyCourseProfile(IPractiflyContext _context)
     {
-        CreateProjection<User, UserProfileInfoViewDto>();
+        string baseUrl = null!;
+        CreateProjection<User, UserProfileInfoViewDto>()
+            .ForMember(dto => dto.FilePhoto, par => par.MapFrom(
+                e => baseUrl + (e.IsDefaultPhoto ? 0 : e.Id)));
         //CreateProjection<User, UserProfileInfoCreateDto>();
         CreateProjection<User, UserInfoDto>()
             .ForMember(

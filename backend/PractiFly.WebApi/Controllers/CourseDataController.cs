@@ -23,16 +23,19 @@ public class CourseDataController : Controller
     private readonly IConfigurationProvider _configurationProvider;
     private readonly IPractiflyContext _context;
     private readonly IMapper _mapper;
+    private readonly IAmazonS3ClientManager _amazonClient;
 
     public CourseDataController(
         IPractiflyContext context,
         IConfigurationProvider configurationProvider,
-        IMapper mapper
+        IMapper mapper,
+        IAmazonS3ClientManager amazonClient
     )
     {
         _context = context;
         _configurationProvider = configurationProvider;
         _mapper = mapper;
+        _amazonClient = amazonClient;
     }
 
 
@@ -130,7 +133,7 @@ public class CourseDataController : Controller
         var result = await _context.Courses
             .Where(e => e.Id == courseId)
             .Select(e => e.Owner)
-            .ProjectTo<OwnerInfoDto>(_configurationProvider)
+            .ProjectTo<OwnerInfoDto>(_configurationProvider, new {baseUrl = _amazonClient.GetFileUrl()})
             .FirstOrDefaultAsync();
 
         return Json(result);

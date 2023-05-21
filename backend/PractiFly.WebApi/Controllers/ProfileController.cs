@@ -91,14 +91,10 @@ public class ProfileController : Controller
         if (user == null) return NotFound();
 
         user.ChangeUser(userDto);
-        
-        var filePhoto = _amazonClient.UploadFileAsync(userDto.FilePhoto, userId);
 
         var result = await _userManager.UpdateAsync(user);
 
-        if (!result.Succeeded || filePhoto == null) return BadRequest();
-
-        return Ok(new {filePhoto});
+        return !result.Succeeded ? BadRequest() : Ok();
     }
 
 }

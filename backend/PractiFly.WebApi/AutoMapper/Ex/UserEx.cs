@@ -1,4 +1,5 @@
-﻿using PractiFly.DbEntities.Users;
+﻿using AutoMapper;
+using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Dto.Admin.UserView;
 using PractiFly.WebApi.Dto.Profile;
 
@@ -22,7 +23,7 @@ public static class UserEx
         user.LastName = userDto.LastName;
         user.Email = userDto.Email;
         user.PhoneNumber = userDto.Phone;
-        user.FilePhoto = userDto.FilePhoto;
+        //user.FilePhoto = userDto.FilePhoto;
         user.Birthday = userDto.Birthday;
     }
 }

@@ -13,10 +13,13 @@ public class CourseDataProfile : Profile
     {
         CreateMap<Course, CourseInfoDto>();
 
+        string baseUrl = null!;
         CreateProjection<User, OwnerInfoDto>()
             .ForMember(dto => dto.FullName, par => par.MapFrom(
-                e => string.Concat(e.FirstName, " ", e.LastName)));
-
+                e => string.Concat(e.FirstName, " ", e.LastName)))
+            .ForMember(dto => dto.FilePhoto, par => par.MapFrom(
+                e => baseUrl + (e.IsDefaultPhoto ? 0 : e.Id)));
+        
         CreateProjection<Course, CourseInfoDto>()
             .ForMember(dto => dto.Language, par => par.MapFrom(e => e.Language.Name));
         
@@ -52,4 +55,6 @@ public class CourseDataProfile : Profile
                //.Any(u => u.Id == dto.UserId)));
 
     }
+
 }
+

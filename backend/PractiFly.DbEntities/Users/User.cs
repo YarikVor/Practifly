@@ -17,16 +17,18 @@ public class User : IdentityUser<int>
     [Required]
     public string LastName { get; set; } = null!;
 
-    [Url]
+    /*[Url]
     [Column("FilePhoto")]
     [MaxLength(EntitiesConstantLengths.Url)]
     [Required]
-    public string FilePhoto { get; set; } = null!;
-
+    public string FilePhoto { get; set; } = null!;*/
+    
+    [Column("DefaultPhoto")]
+    public bool IsDefaultPhoto { get; set; }
+    
     [Column("Birthday")]
     public DateOnly Birthday { get; set; }
-
-
+    
     [Column("RegistrationDate")]
     public DateOnly RegistrationDate { get; set; }
 
