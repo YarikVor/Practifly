@@ -114,28 +114,22 @@
                     <Label Text="Меню матеріалів" Margin="0,10" FontAttributes="Bold" HorizontalOptions="Center"/>
                     <ScrollView  WidthRequest="230" Padding="12,0">
                         <StackLayout Spacing="30" >
-                           
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="Курсddddddddddddddd 2" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
-                                <Frame Padding="10" HorizontalOptions="EndAndExpand"  BackgroundColor="White">
-                                    <Label     FontSize="12" Text="20"/>
-                                </Frame>
-                                <CheckBox HorizontalOptions="EndAndExpand" Margin="15,0,0,0"/>
-                            </StackLayout>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="Курсddddddddddddddd 2" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
-                                <Frame Padding="10" HorizontalOptions="EndAndExpand"  BackgroundColor="White">
-                                    <Label     FontSize="12" Text="20"/>
-                                </Frame>
-                                <CheckBox HorizontalOptions="EndAndExpand" Margin="15,0,0,0"/>
-                            </StackLayout>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="Курсddd 2" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
-                                <Frame Padding="10" HorizontalOptions="EndAndExpand"  BackgroundColor="White">
-                                    <Label     FontSize="12" Text="20"/>
-                                </Frame>
-                                <CheckBox HorizontalOptions="EndAndExpand" Margin="15,0,0,0"/>
-                            </StackLayout>
+                            <CollectionView x:Name="MaterialsCourseCollectionView"
+                                            SelectionMode="Single">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="{Binding Name}" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
+                                            <Frame Padding="10" HorizontalOptions="EndAndExpand"  BackgroundColor="White">
+                                                <Label  Text="{Binding PriorityLevel}" HorizontalOptions="Center"  FontSize="12"/>
+                                            </Frame>
+                                            <CheckBox IsChecked="{Binding IsIncluded}" HorizontalOptions="EndAndExpand" Margin="15,0,0,0"/>
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                            
+                            
 
                         </StackLayout>
 

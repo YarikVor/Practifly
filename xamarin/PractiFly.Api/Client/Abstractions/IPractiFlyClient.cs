@@ -42,11 +42,11 @@ public interface IPractiFlyClient
     Task<ListMaterialsInfoDto[]> GetListMaterialsByIdAsync(int Id);
     Task<bool> CreateMaterialAsync(CreateMaterialBlockDto createMaterialsDto);
     Task<bool> EditMaterialAsync(EditMaterialBlockDto createMaterialsDto);
-    Task<GetHeadingInfoDto>  GetHeadingByUdcOrHeadIdAsync(GetHeadingDto getHeading);
+    Task<GetHeadingInfoDto>  GetHeadingByHeadIdAsync(int headingId);
     Task<bool> CreateHeadingAsync(CreateHeadingDto createHeadingDto);
     Task<bool> DeleteHeadingAsync(int id);
     Task<bool> EditHeadingAsync(EditHeadingDto editHeadingDto);
-    Task<GetHeadingBeginInfoDto[]> GetHeadingByBeginHeadCodeAsync(string code);
+    Task<GetHeadingBeginInfoDto[]> GetHeadingByBeginHeadCodeAsync(int? headingId);
     Task<bool> ChangeHeadingInCourseAsync(ChangeHeadingInCourseDto changeHeadingInCourseDto);
     Task<ListThemesInfoDto[]> GetListThemesCourseByIdAsync(int id);
     Task<ListMaterialsCourseInfoDto[]> GetListMaterialsCourseByIdAsync(int id);

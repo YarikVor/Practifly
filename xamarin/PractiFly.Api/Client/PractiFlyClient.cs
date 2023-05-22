@@ -76,19 +76,19 @@ public class PractiFlyClient : IPractiFlyClient
 
     #endregion
     #region Heading 
-    private const string GetHeadingUrl = "heading";
+    private const string GetHeadingUrl = "heading?headingId={0}";
     private const string CreateHeadingUrl = "heading";
-    private const string DeleteHeadingUrl = "heading";
+    private const string DeleteHeadingUrl = "heading?headingId={0}";
     private const string EditHeadingUrl = "heading/edit";
     #endregion
     #region HeadingCourse
-    private const string GetHeadingByBeginHeadUrl = "heading/sub";
+    private const string GetHeadingByBeginHeadUrl = "heading/sub?headingId={0}";
     private const string ChangeHeadingInCourseUrl = "heading/include";
     #endregion
 
     # region CourseThemes
     private const string ListThemesUrl = "course/themes?courseId={0}";
-    private const string ListMaterialsCourseUrl = "course/materials";
+    private const string ListMaterialsCourseUrl = "course/materials?courseId={0}";
     private const string InformationThemeUrl = "theme?themeId={0}";
     private const string CreateThemesUrl = "theme";
     private const string DeleteThemesUrl = "theme?themeId={0}";
@@ -321,17 +321,18 @@ public class PractiFlyClient : IPractiFlyClient
 
     #region Heading
 
-    public async Task<GetHeadingInfoDto>  GetHeadingByUdcOrHeadIdAsync(GetHeadingDto getHeading)
+    public async Task<GetHeadingInfoDto> GetHeadingByHeadIdAsync(int headingId)
     {
-        var query = WebSerializer.ToQueryString(GetHeadingUrl, getHeading);
-        var result = await _httpClient.GetFromJsonAsync<GetHeadingInfoDto>(query)
+        var uri = string.Format(GetHeadingUrl, headingId);
+        var result = await _httpClient.GetFromJsonAsync<GetHeadingInfoDto>(uri)
             ?? throw new NullReferenceException("result");
 
         return result;
     }
     public async Task<bool> CreateHeadingAsync(CreateHeadingDto createHeadingDto)
     {
-        return await CreateAsync<CreateHeadingDto, bool>(CreateHeadingUrl, createHeadingDto);
+        var response = await _httpClient.PostAsJsonAsync(CreateHeadingUrl, createHeadingDto);
+        return response.IsSuccessStatusCode;
     }
 
     public async Task<bool> DeleteHeadingAsync(int id)
@@ -343,15 +344,16 @@ public class PractiFlyClient : IPractiFlyClient
     }
     public async Task<bool> EditHeadingAsync(EditHeadingDto editHeadingDto)
     {
-        return await CreateAsync<EditHeadingDto, bool>(EditHeadingUrl, editHeadingDto);
+        var response = await _httpClient.PostAsJsonAsync(EditHeadingUrl, editHeadingDto);
+        return response.IsSuccessStatusCode;
     }
 
     #endregion
 
     #region HeadingCourse
-    public async Task<GetHeadingBeginInfoDto[]> GetHeadingByBeginHeadCodeAsync(string code)
+    public async Task<GetHeadingBeginInfoDto[]> GetHeadingByBeginHeadCodeAsync(int? headingId)
     {
-        string uri = string.Format(GetHeadingByBeginHeadUrl, code);
+        string uri = string.Format(GetHeadingByBeginHeadUrl, headingId);
         var result = await _httpClient.GetFromJsonAsync<GetHeadingBeginInfoDto[]>(uri)
             ?? throw new NullReferenceException("result");
 

@@ -16,7 +16,7 @@
             <Button Text="CourseTheme" Clicked="CourseTheme"/>
             <Button Text="Category" Clicked="Category"/>
             <Button Text="MaterialBlocks" Clicked="MaterialBlocks"/>
-            <Button Text="RubricsCourse +/-" Clicked="RubricsCourse"/>
+            <Button Text="RubricsCourse" Clicked="RubricsCourse"/>
             <Button Text="CourseMaterial +/-" Clicked="CourseMaterial"/>
         </StackLayout>
     </StackLayout>

@@ -27,8 +27,6 @@ public partial class CourseTheme : ContentPage
 
         if (!isInitialized)
         {
-
-            UserFilterInfoDto user = new UserFilterInfoDto();
             var course = await client.GetAllCourseAsync(null);
             CourseCollectionView.ItemsSource = course;
             isInitialized = true;
@@ -41,8 +39,12 @@ public partial class CourseTheme : ContentPage
         var selectedItem = e.CurrentSelection[0] as CourseItemInfoDto;
         var idCourse = selectedItem.Id;
         IDCourse = idCourse;
+
         var themes = await client.GetListThemesCourseByIdAsync(idCourse);
         ThemesCourseCollectionView.ItemsSource = themes;
+
+        var materials = await client.GetListMaterialsCourseByIdAsync(idCourse);
+        MaterialsCourseCollectionView.ItemsSource = materials;
     }
 
     private async void ThemeCollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
