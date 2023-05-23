@@ -10,6 +10,11 @@ import {toast, ToastContainer} from "react-toastify";
 
 import {Footer} from "../../UIComponents/Footer/Footer";
 
+import Header from "../../UIComponents/Header/Header";
+
+
+
+
 import {useAppSelector} from "../../hooks/hooks";
 
 import {useStyles} from "./styles";
@@ -28,12 +33,17 @@ const Container = () => {
   },[isError]);
 
   return (
+
     <>
+
       <ToastContainer />
+      <Header/>
       <MUIContainer className={styles.root} maxWidth={false}>
         <Outlet/>
       </MUIContainer>
+
       <Footer/>
+
     </>
   );
 };
