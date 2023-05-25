@@ -22,7 +22,8 @@ public partial class Admin : ContentPage
     public Admin()
 	{
         InitializeComponent();
-     
+
+
         role.Items.Add(" ");
         role.Items.Add("teacher");
         role.Items.Add("admin");
@@ -34,7 +35,8 @@ public partial class Admin : ContentPage
         DateFrom.Date = new DateTime(2000, 1, 1);
         DateTo.Date = DateTime.Now;
     }
-    
+
+   
     protected async override void OnAppearing()
     {
         
@@ -42,11 +44,18 @@ public partial class Admin : ContentPage
 
         if (!isInitialized)
         {
-            UserFilterInfoDto user = new UserFilterInfoDto();
-            var filter = await client.GetFilterUserAsync(user);
-            UsersCollectionView.ItemsSource = filter;
-            //date.Text = DateFrom.Date.ToString();
-            isInitialized = true;
+            try
+            {
+                UserFilterInfoDto user = new UserFilterInfoDto();
+                var filter = await client.GetFilterUserAsync(user);
+                UsersCollectionView.ItemsSource = filter;
+                //date.Text = DateFrom.Date.ToString();
+                isInitialized = true;
+            }
+            catch(Exception ex) 
+            {
+                await DisplayAlert(null, ex.Message, "ОК)");
+            }
         }
     }
 
@@ -106,6 +115,15 @@ public partial class Admin : ContentPage
 
         int ID = (int)IDUser;
         //UpdateUserByAdminAsync
+        string role = "user" ;
+        if (radioButtonAdmin.IsChecked == true)
+            role = "admin";
+        else if (radioButtonManager.IsChecked == true)
+            role = "manager";
+        else if (radioButtonTeacher.IsChecked == true)
+            role = "teacher";
+        else if (radioButtonUser.IsChecked == true)
+            role = "user";
         UserUpdateInfoDto userUpdate = new UserUpdateInfoDto
         {
             Id = (int)IDUser,
@@ -115,7 +133,7 @@ public partial class Admin : ContentPage
             Phone = itemPhoneNumber.Text,
             Birthday = DateTime.ParseExact(itemDateBirthday.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture),
             FilePhoto = foto,
-            Role = "user",
+            Role = role,
 
         };
         try
@@ -213,6 +231,30 @@ public partial class Admin : ContentPage
         {
             await DisplayAlert(null, "Помилка створення нового користувача", "ОК)");
         }
+    }
 
+    private async void AdminPanel(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new Admin());
+    }
+    private async void CategoryPanel(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new Category());
+    }
+    private async void CoursePanel(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new Course());
+    }
+    private async void CourseThemePanel(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new CourseTheme());
+    }
+    private async void MaterialBlocksPanel(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new MaterialBlocks());
+    }
+    private async void RubricsCoursePanel(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new RubricsCourse());
     }
 }

@@ -14,7 +14,7 @@ public partial class MainPage : ContentPage
 
     }
 
-    protected override async void OnAppearing()
+    protected override  void OnAppearing()
     {
         //PractiFlyClient client = new PractiFlyClient("");
         //label.Text =  ( await client.GetLoginResponseAsync

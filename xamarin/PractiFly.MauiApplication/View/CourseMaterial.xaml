@@ -4,18 +4,10 @@
              x:Class="PractiFly.MauiApplication.View.CourseMaterial">
     <StackLayout  >
         <StackLayout HorizontalOptions="Center"  Margin="0,20">
-            <Label Text="Матеріали курсів" FontSize="Title" FontAttributes="Bold"/>
+            <Label Text="Матеріали" FontSize="Title" FontAttributes="Bold"/>
         </StackLayout>
         <Frame BackgroundColor="#9062F2" Padding="0" CornerRadius="0">
-            <StackLayout BackgroundColor="#9062F2" Orientation="Horizontal" HorizontalOptions="Center" Spacing="1">
-                <Button TextColor="White" Text="Рубрики" WidthRequest="150"/>
-                <Button TextColor="White" Text="Матеріали" WidthRequest="150" />
-                <Button TextColor="White" Text="Курси" WidthRequest="150"/>
-                <Button TextColor="White" Text="Керування" WidthRequest="150"/>
-                <Button TextColor="White" Text="Групи" WidthRequest="150"/>
-                <Button TextColor="White" Text="Довідники" WidthRequest="150"/>
-                <Button TextColor="White" Text="Навчання" WidthRequest="150"/>
-            </StackLayout>
+            
         </Frame>
         <Grid  ColumnSpacing="20" Margin="20" HorizontalOptions="Center" >
             <Grid.ColumnDefinitions>

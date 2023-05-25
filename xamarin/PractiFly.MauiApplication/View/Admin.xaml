@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PractiFly.MauiApplication.View.Admin">
+    
     <ScrollView >
         <StackLayout>
             <StackLayout HorizontalOptions="Center"   Margin="0,20">
@@ -9,13 +10,12 @@
             </StackLayout>
             <Frame BackgroundColor="#9062F2" Padding="0" CornerRadius="0">
             <StackLayout BackgroundColor="#9062F2" Orientation="Horizontal" HorizontalOptions="Center" Spacing="1">
-                <Button TextColor="White" Text="Рубрики" WidthRequest="150"/>
-                <Button TextColor="White" Text="Матеріали" WidthRequest="150" />
-                <Button TextColor="White" Text="Курси" WidthRequest="150"/>
-                <Button TextColor="White" Text="Керування" WidthRequest="150"/>
-                <Button TextColor="White" Text="Групи" WidthRequest="150"/>
-                <Button TextColor="White" Text="Довідники" WidthRequest="150"/>
-                <Button TextColor="White" Text="Навчання" WidthRequest="150"/>
+                <Button TextColor="White" Text="Користувачі" WidthRequest="150" Clicked="AdminPanel"/>
+                <Button TextColor="White" Text="Рубрики" WidthRequest="150" Clicked="CategoryPanel" />
+                <Button TextColor="White" Text="Рубрики курсів" WidthRequest="150" Clicked="RubricsCoursePanel"/>
+                <Button TextColor="White" Text="Матеріали курсів" WidthRequest="150" Clicked="MaterialBlocksPanel"/>
+                <Button TextColor="White" Text="Дані курсів" WidthRequest="150" Clicked="CoursePanel"/>
+                <Button TextColor="White" Text="Теми курсів" WidthRequest="150" Clicked="CourseThemePanel"/>
             </StackLayout>
         </Frame>
             <Grid  ColumnSpacing="30" Margin="20" HorizontalOptions="Center">

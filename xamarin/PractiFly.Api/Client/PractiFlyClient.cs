@@ -28,7 +28,7 @@ using System.Threading.Tasks;
 
 namespace PractiFly.Api.Client;
 
-public class PractiFlyClient : IPractiFlyClient
+public class PractiFlyClient 
 {
     private readonly HttpClient _httpClient;
 
@@ -72,7 +72,8 @@ public class PractiFlyClient : IPractiFlyClient
     #region MaterialBlocks
     private const string GetListMaterialsUrl = "heading/materials?headingId={0}";
     private const string CreateMaterialBlockUrl = "material";
-    private const string EditMaterialBlockUrl = "material/edit";
+    private const string EditMaterialBlockUrl = "material/edit"; 
+    private const string AllMaterialUrl = "material/all";
 
     #endregion
     #region Heading 
@@ -82,8 +83,11 @@ public class PractiFlyClient : IPractiFlyClient
     private const string EditHeadingUrl = "heading/edit";
     #endregion
     #region HeadingCourse
+    //
     private const string GetHeadingByBeginHeadUrl = "heading/sub?headingId={0}";
-    private const string ChangeHeadingInCourseUrl = "heading/include";
+    private const string GetHeadingCourseUrl = "course/heading/sub?courseId={0}&beginCode={1}";
+    private const string GetHeadingByCourseUrl = "course/heading/sub?courseId={0}";
+    private const string ChangeHeadingInCourseUrl = "course/heading/include";
     #endregion
 
     # region CourseThemes
@@ -118,6 +122,25 @@ public class PractiFlyClient : IPractiFlyClient
         var response = await _httpClient.PostAsJsonAsync(url, dto);
         var result = await response.Content.ReadFromJsonAsync<TOutput>()
             ?? throw new NullReferenceException("result");
+        return result;
+    }
+    private async Task<bool> DeleteAsync(string url, int id)
+    {
+        string uri = string.Format(url, id);
+        var response = await _httpClient.DeleteAsync(uri);
+
+        return response.IsSuccessStatusCode;
+    }
+    private async Task<bool> CreateUpdateAsync<TInput>(string url, TInput dto)
+    {
+        var response = await _httpClient.PostAsJsonAsync(url, dto);
+        return response.IsSuccessStatusCode;
+    }
+ 
+    private async Task<TOutput?> GetAsync<TInput, TOutput>(string url, TInput dto)
+    {
+        string uri = string.Format(url, dto);
+        var result = await _httpClient.GetFromJsonAsync<TOutput?>(uri);
         return result;
     }
     #endregion
@@ -166,40 +189,31 @@ public class PractiFlyClient : IPractiFlyClient
     #region Admin
     public async Task<AdminUserInfoDto?> GetUserByIdAsAdminAsync(int id)
     {
-        string uri = string.Format(AdminGetUserByIdUrl, id);
-        var result = await _httpClient.GetFromJsonAsync<AdminUserInfoDto?>(uri);
-        
-        return result;
+        return await GetAsync<int, AdminUserInfoDto>(AdminGetUserByIdUrl, id);
     }
 
     public async Task<bool> DeleteUserByIdAsAdminAsync(int id)
     {
-        string uri = string.Format(AdminDeleteUserByIdUrl, id);
-        var response = await _httpClient.DeleteAsync(uri);
-
-        return response.IsSuccessStatusCode;
+        return await DeleteAsync(AdminDeleteUserByIdUrl,id);
     }
 
-    public async Task<AdminUserInfoDto> CreateUserByAdminAsync(UserCreateInfoDto userInfoDto)
+    public async Task<bool> CreateUserByAdminAsync(UserCreateInfoDto userInfoDto)
     {
         //AdminCreateUserByIdUrl
+        return await CreateUpdateAsync(AdminCreateUserByIdUrl, userInfoDto);
         
-        return await CreateAsync<UserCreateInfoDto, AdminUserInfoDto>(AdminCreateUserByIdUrl, userInfoDto); ;
     }
 
     public async Task<bool> UpdateUserByAdminAsync(UserUpdateInfoDto userInfoDto)
     {
-        var response = await _httpClient.PostAsJsonAsync(AdminUpdateUserByIdUrl, userInfoDto);
-        return response.IsSuccessStatusCode;
-    }
 
-    
+        return await CreateUpdateAsync(AdminUpdateUserByIdUrl, userInfoDto);
+
+    }
     public async Task<UserItemInfoDto[]> GetFilterUserAsync(UserFilterInfoDto userFilterInfoDto)
     {
         var query = WebSerializer.ToQueryString(AdminFilterUserUrl,userFilterInfoDto);
 
-        //var result = await _httpClient.GetFromJsonAsync<UserItemInfoDto[]>(query) 
-        //    ??  throw new NullReferenceException("result");
         var result = await _httpClient.GetFromJsonAsync<UserItemInfoDto[]>(query)
             ?? throw new NullReferenceException("result");
         return result;
@@ -207,13 +221,11 @@ public class PractiFlyClient : IPractiFlyClient
     #endregion
 
     #region CourseData
-    public async Task<CourseItemInfoDto[]> GetAllCourseAsync(int? ownerId)
+    public async Task<CourseItemInfoDto[]?> GetAllCourseAsync(int? ownerId)
     {
-        string uri = string.Format(CourseDataItemAllUrl, ownerId.ToString());
-        var result = await _httpClient.GetFromJsonAsync<CourseItemInfoDto[]>(uri)
-            ?? throw new NullReferenceException("result");
 
-        return result;
+        return await GetAsync<string, CourseItemInfoDto[]>(CourseDataItemAllUrl, ownerId.ToString());
+
     }
 
     public async Task<CourseFullInfoDto> GetCourseById(int courseId)
@@ -227,43 +239,27 @@ public class PractiFlyClient : IPractiFlyClient
 
     public async Task<bool> CreateCourseAsync(CreateCourseDto createCourseDto)
     {
-        var response = await _httpClient.PostAsJsonAsync(CreateCourseUrl, createCourseDto);
-        return response.IsSuccessStatusCode;
+        return await CreateUpdateAsync(CreateCourseUrl, createCourseDto);
     }
 
     public async Task<bool> DeleteCourseAsync(int id)
     {
-        string uri = string.Format(DeleteCourseUrl, id);
-        var response = await _httpClient.DeleteAsync(uri);
-
-        return response.IsSuccessStatusCode;
-
-        
+        return await DeleteAsync(DeleteCourseUrl, id);
     }
 
     public async Task<bool> UpdateCourseAsync(UpdateCourseDto updateCourse)
     {
-       
-        var response = await _httpClient.PostAsJsonAsync(UpdateCourseUrl, updateCourse);
-
-        return response.IsSuccessStatusCode;
+        return await CreateUpdateAsync(UpdateCourseUrl, updateCourse);
     }
     //CourseUsersUrl
-    public async Task<UserItemInfoDto[]> GetUserCourseAsync(int Id)
+    public async Task<UserItemInfoDto[]?> GetUserCourseAsync(int Id)
     {
-        string uri = string.Format(CourseUsersUrl, Id);
-        var result = await _httpClient.GetFromJsonAsync<UserItemInfoDto[]>(uri)
-            ?? throw new NullReferenceException("result");
-
-        return result;
+        return await GetAsync<int, UserItemInfoDto[]>(CourseUsersUrl, Id);
     }
-    public async Task<OwnerInfoDto> GetOwnerCourseAsync(int Id)
+    public async Task<OwnerInfoDto?> GetOwnerCourseAsync(int Id)
     {
-        string uri = string.Format(CourseOwnerUrl, Id);
-        var result = await _httpClient.GetFromJsonAsync<OwnerInfoDto>(uri)
-            ?? throw new NullReferenceException("result");
-
-        return result;
+      
+        return await GetAsync<int, OwnerInfoDto>(CourseOwnerUrl, Id);
     }
     #endregion
 
@@ -279,13 +275,9 @@ public class PractiFlyClient : IPractiFlyClient
 
     # region CourseMaterials
 
-    public async Task<ListsHeadingsCoursesInfoDto[]> GetListHeadingCourseByIdAsync(int Id)
+    public async Task<ListsHeadingsCoursesInfoDto[]?> GetListHeadingCourseByIdAsync(int id)
     {
-        string uri = string.Format(ListsHeadingsCoursesUrl, Id.ToString());
-        var result = await _httpClient.GetFromJsonAsync<ListsHeadingsCoursesInfoDto[]>(uri)
-            ?? throw new NullReferenceException("result");
-
-        return result;
+        return await GetAsync<int, ListsHeadingsCoursesInfoDto[]>(ListsHeadingsCoursesUrl, id);
     }
 
     public async Task<MaterialIncludingCourseInfoDto[]?> GetDetailsMaterialAsync(MaterialIncludingCourseDto materialIncludingCourseDto)
@@ -299,35 +291,34 @@ public class PractiFlyClient : IPractiFlyClient
     #endregion
 
     # region MaterialBlocks
-    public async Task<ListMaterialsInfoDto[]> GetListMaterialsByIdAsync(int Id)
+    public async Task<ListMaterialsInfoDto[]?> GetListMaterialsByIdAsync(int id)
     {
-        string uri = string.Format(GetListMaterialsUrl, Id.ToString());
-        var result = await _httpClient.GetFromJsonAsync<ListMaterialsInfoDto[]>(uri)
-            ?? throw new NullReferenceException("result");
-
-        return result;
+        return await GetAsync<int, ListMaterialsInfoDto[]>(GetListMaterialsUrl, id);
     }
 
     public async Task<bool> CreateMaterialAsync(CreateMaterialBlockDto createMaterialsDto)
     {
-        return await CreateAsync<CreateMaterialBlockDto, bool>(CreateMaterialBlockUrl, createMaterialsDto);
+        return await CreateUpdateAsync(CreateMaterialBlockUrl, createMaterialsDto);
     }
 
-    public async Task<bool> EditMaterialAsync(EditMaterialBlockDto createMaterialsDto)
+    public async Task<bool> EditMaterialAsync(EditMaterialBlockDto editMaterialsDto)
     {
-        return await CreateAsync<EditMaterialBlockDto, bool>(EditMaterialBlockUrl, createMaterialsDto);
+        return await CreateUpdateAsync(EditMaterialBlockUrl, editMaterialsDto);
+    }
+
+    public async Task<ListAllMaterialInfoDto[]?> GetAllListMaterialsAsync()
+    {
+        var result = await _httpClient.GetFromJsonAsync<ListAllMaterialInfoDto[]>(AllMaterialUrl)
+            ?? throw new NullReferenceException("result");
+        return result;
     }
     #endregion
 
     #region Heading
 
-    public async Task<GetHeadingInfoDto> GetHeadingByHeadIdAsync(int headingId)
+    public async Task<GetHeadingInfoDto?> GetHeadingByHeadIdAsync(int headingId)
     {
-        var uri = string.Format(GetHeadingUrl, headingId);
-        var result = await _httpClient.GetFromJsonAsync<GetHeadingInfoDto>(uri)
-            ?? throw new NullReferenceException("result");
-
-        return result;
+        return await GetAsync<int, GetHeadingInfoDto>(GetHeadingUrl, headingId);
     }
     public async Task<bool> CreateHeadingAsync(CreateHeadingDto createHeadingDto)
     {
@@ -337,10 +328,7 @@ public class PractiFlyClient : IPractiFlyClient
 
     public async Task<bool> DeleteHeadingAsync(int id)
     {
-        string uri = string.Format(DeleteHeadingUrl, id);
-        var response = await _httpClient.DeleteAsync(uri);
-
-        return response.IsSuccessStatusCode;
+        return await DeleteAsync(DeleteHeadingUrl, id);
     }
     public async Task<bool> EditHeadingAsync(EditHeadingDto editHeadingDto)
     {
@@ -351,6 +339,7 @@ public class PractiFlyClient : IPractiFlyClient
     #endregion
 
     #region HeadingCourse
+
     public async Task<GetHeadingBeginInfoDto[]> GetHeadingByBeginHeadCodeAsync(int? headingId)
     {
         string uri = string.Format(GetHeadingByBeginHeadUrl, headingId);
@@ -359,76 +348,80 @@ public class PractiFlyClient : IPractiFlyClient
 
         return result;
     }
+    
+    //public async Task<GetHeadingBeginInfoDto[]> GetHeadingCourseAsync(HeadingsInCourseDto heading)
+    //{
+    //    var query = WebSerializer.ToQueryString(GetHeadingCourseUrl, heading);
+
+    //    var result = await _httpClient.GetFromJsonAsync<GetHeadingBeginInfoDto[]>(query)
+    //        ?? throw new NullReferenceException("result");
+
+    //    return result;
+    //}
+    public async Task<GetHeadingBeginInfoDto[]?> GetHeadingCourseAsync(int heading)
+    {
+        return await GetAsync<int, GetHeadingBeginInfoDto[]>(GetHeadingByCourseUrl, heading);
+    }
+    public async Task<GetHeadingBeginInfoDto[]?> GetHeadingCourseAsync(int courseId, string beginCode)
+    {
+        object[] mas = { courseId, beginCode };
+        var uri = string.Format(GetHeadingCourseUrl, mas);
+
+        var result = await _httpClient.GetFromJsonAsync<GetHeadingBeginInfoDto[]>(uri);
+        return result;
+    }
 
     public async Task<bool> ChangeHeadingInCourseAsync(ChangeHeadingInCourseDto changeHeadingInCourseDto)
     {
-        return await CreateAsync<ChangeHeadingInCourseDto, bool>(ChangeHeadingInCourseUrl, changeHeadingInCourseDto);
+        return await CreateUpdateAsync(ChangeHeadingInCourseUrl, changeHeadingInCourseDto);
     }
 
     #endregion
 
     #region CourseThemes
-    public async Task<ListThemesInfoDto[]> GetListThemesCourseByIdAsync(int id)
+    public async Task<ListThemesInfoDto[]?> GetListThemesCourseByIdAsync(int id)
     {
-        string uri = string.Format(ListThemesUrl, id);
-        var result = await _httpClient.GetFromJsonAsync<ListThemesInfoDto[]>(uri)
-            ?? throw new NullReferenceException("result");
-
-        return result;
+        
+        return await GetAsync<int, ListThemesInfoDto[]>(ListThemesUrl, id);
     }
-    public async Task<ListMaterialsCourseInfoDto[]> GetListMaterialsCourseByIdAsync(int id)
+    public async Task<ListMaterialsCourseInfoDto[]?> GetListMaterialsCourseByIdAsync(int id)
     {
-        string uri = string.Format(ListMaterialsCourseUrl, id);
-        var result = await _httpClient.GetFromJsonAsync<ListMaterialsCourseInfoDto[]>(uri)
-            ?? throw new NullReferenceException("result");
-
-        return result;
+        return await GetAsync<int, ListMaterialsCourseInfoDto[]>(ListMaterialsCourseUrl, id);
     }
 
-    public async Task<ThemeInformationDto> GetInformationThemeByIdAsync(int themeId)
+    public async Task<ThemeInformationDto?> GetInformationThemeByIdAsync(int themeId)
     {
-        string uri = string.Format(InformationThemeUrl, themeId);
-        var result = await _httpClient.GetFromJsonAsync<ThemeInformationDto>(uri)
-            ?? throw new NullReferenceException("result");
-
-        return result;
+        return await GetAsync<int, ThemeInformationDto>(InformationThemeUrl, themeId);
     }
 
     public async Task<bool> CreateThemesOfCourseAsync(CreateThemesOfCourseDto createThemesOfCourseDto)
     {
-        var response = await _httpClient.PostAsJsonAsync(CreateThemesUrl, createThemesOfCourseDto);
-        return response.IsSuccessStatusCode;
+        return await CreateUpdateAsync(CreateThemesUrl, createThemesOfCourseDto);
     }
     public async Task<bool> DeleteThemesAsync(int id)
     {
-        string uri = string.Format(DeleteThemesUrl, id);
-        var response = await _httpClient.DeleteAsync(uri);
-
-        return response.IsSuccessStatusCode;
+        return await DeleteAsync(DeleteThemesUrl, id);
     }
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public async Task<bool> UpdateThemesAsync(UpdateThemesDto updateThemesDto)
     {
-        var response = await _httpClient.PostAsJsonAsync(UpdateThemesUrl, updateThemesDto);
-        return response.IsSuccessStatusCode;
+        return await CreateUpdateAsync(UpdateThemesUrl, updateThemesDto);
     }
 
     public async Task<bool> AddMaterialToThemeAsync(AddMaterialToThemeDto addMaterialToTheme)
     {
-        return await CreateAsync<AddMaterialToThemeDto, bool>(AddMaterialToThemeUrl, addMaterialToTheme);
+        return await CreateUpdateAsync(AddMaterialToThemeUrl, addMaterialToTheme);
     }
 
     public async Task<bool> DeleteThemeMaterialAsync(int id)
     {
-        string uri = string.Format(DeleteThemeMaterialUrl, id);
-        var response = await _httpClient.DeleteAsync(uri);
-
-        return response.IsSuccessStatusCode;
+        return await DeleteAsync(DeleteThemeMaterialUrl, id);
     }
 
     public async Task<bool> UpdateThemeMaterialAsync(UpdateThemeMaterialDto updateThemeMaterial)
     {
-        return await CreateAsync<UpdateThemeMaterialDto, bool>(UpdateThemeMaterialUrl, updateThemeMaterial);
+        return await CreateUpdateAsync(UpdateThemeMaterialUrl, updateThemeMaterial);
+
     }
     #endregion
 }
