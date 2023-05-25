@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Net;
 using System.Net.Http.Json;
 using System.Net.NetworkInformation;
+using System.Text.RegularExpressions;
 
 namespace PractiFly.MauiApplication.View;
 
@@ -112,42 +113,84 @@ public partial class Admin : ContentPage
 
     private async void Edit_Clicked(object sender, EventArgs e)
     {
+        bool result = await DisplayAlert("Підтвердження дії", "Бажаєте змінити дані користувача?", "Так", "Ні");
+        if (result)
+        {
+            try
+            {
 
-        int ID = (int)IDUser;
-        //UpdateUserByAdminAsync
-        string role = "user" ;
-        if (radioButtonAdmin.IsChecked == true)
-            role = "admin";
-        else if (radioButtonManager.IsChecked == true)
-            role = "manager";
-        else if (radioButtonTeacher.IsChecked == true)
-            role = "teacher";
-        else if (radioButtonUser.IsChecked == true)
-            role = "user";
-        UserUpdateInfoDto userUpdate = new UserUpdateInfoDto
-        {
-            Id = (int)IDUser,
-            FirstName = itemfirstName.Text,
-            LastName = itemlastName.Text,
-            Email = itemEmail.Text,
-            Phone = itemPhoneNumber.Text,
-            Birthday = DateTime.ParseExact(itemDateBirthday.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture),
-            FilePhoto = foto,
-            Role = role,
+                int ID = (int)IDUser;
 
-        };
-        try
-        {
-            var user = await client.UpdateUserByAdminAsync(userUpdate);
-            
+                string emailPattern = @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$";
+                Regex regex = new Regex(emailPattern);
+
+                if (!regex.IsMatch(itemEmail.Text))
+                {
+                    await DisplayAlert(null, "Невірний формат електронної пошти", "ОК)");
+                    return;
+                    // 
+                }
+
+                string phonePattern = @"^\+\d+$";
+                regex = new Regex(phonePattern);
+
+                if (!regex.IsMatch(itemPhoneNumber.Text))
+                {
+                    await DisplayAlert(null, "Невірний формат номеру телефона", "ОК)");
+                    return;
+                }
+                string datePattern = @"^\d{4}-\d{2}-\d{2}$";
+                regex = new Regex(datePattern);
+                if (!regex.IsMatch(itemDateBirthday.Text))
+                {
+                    await DisplayAlert(null, "Невірний формат дати народження", "ОК)");
+                    return;
+                }
+                if (itemfirstName.Text == "")
+                {
+                    await DisplayAlert(null, "Введіть ім'я", "ОК)");
+                    return;
+                }
+                if (itemlastName.Text == "")
+                {
+                    await DisplayAlert(null, "Введіть прізвище", "ОК)");
+                    return;
+                }
+
+                //UpdateUserByAdminAsyncA
+                string role = "user";
+                if (radioButtonAdmin.IsChecked == true)
+                    role = "admin";
+                else if (radioButtonManager.IsChecked == true)
+                    role = "manager";
+                else if (radioButtonTeacher.IsChecked == true)
+                    role = "teacher";
+                else if (radioButtonUser.IsChecked == true)
+                    role = "user";
+                UserUpdateInfoDto userUpdate = new UserUpdateInfoDto
+                {
+                    Id = (int)IDUser,
+                    FirstName = itemfirstName.Text,
+                    LastName = itemlastName.Text,
+                    Email = itemEmail.Text,
+                    Phone = itemPhoneNumber.Text,
+                    Birthday = DateTime.ParseExact(itemDateBirthday.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture),
+                    FilePhoto = foto,
+                    Role = role,
+
+                };
+                var user = await client.UpdateUserByAdminAsync(userUpdate);
+                Search_Clicked(sender, e);
+                await DisplayAlert(null, "Данні користувача змінено", "ОК)");
+            }
+        
+            catch (Exception ex)
+            {
+                await DisplayAlert(null, ex.Message, "ОК)");
+                return;
+            }
         }
-        catch (Exception ex)
-        {
-            await DisplayAlert(null, ex.Message, "ОК)");
-            return;
-        }
-        Search_Clicked(sender, e);
-        await DisplayAlert(null, "Данні користувача змінено", "ОК)");
+
     }
     private async void ReversDataUser_Clicked(object sender, EventArgs e)
     {
@@ -168,70 +211,80 @@ public partial class Admin : ContentPage
 
     private async void Delete_Clicked(object sender, EventArgs e)
     {
-        
-        if(IDUser != null)
+        bool result = await DisplayAlert("Підтвердження дії", "Бажаєте видалити курс?", "Так", "Ні");
+        //Вікно для пітдвердження видалення
+        if (result)
         {
-            //Вікно для пітдвердження видалення
-            int ID = (int)IDUser;
-            var user = await client.DeleteUserByIdAsAdminAsync(ID);
-            Search_Clicked( sender, e);
-            id.Text = null;
-            IDUser = null;
-            itemlastName.Text = null;
-            itemfirstName.Text = null;
-            itemEmail.Text = null;
-            itemPhoneNumber.Text = null;
-            itemDate.Text = null;
-            itemDateBirthday.Text = null;
-            fotoProfile.Source = null;
-            await DisplayAlert(null, "Користувача видалено", "ОК)");
-        }
-        else
-        {
-            await DisplayAlert(null,"Для видалення виберіть користувача зі списку", "ОК)");
-        }
-    }
-    private async void CreateUser_Clicked(object sender, EventArgs e)
-    {
-        try
-        {
-            if (string.IsNullOrEmpty(itemfirstName.Text) && string.IsNullOrEmpty(itemlastName.Text)
-                && string.IsNullOrEmpty(itemPhoneNumber.Text) && string.IsNullOrEmpty(itemEmail.Text)
-                && string.IsNullOrEmpty(itemDateBirthday.Text))
+            if (IDUser != null)
             {
-                await DisplayAlert(null, "Введіть всі поля для створення нового користувача", "ОК)");
-                return;
+                try
+                {
+                    int ID = (int)IDUser;
+                    var user = await client.DeleteUserByIdAsAdminAsync(ID);
+                    Search_Clicked(sender, e);
+                    id.Text = null;
+                    IDUser = null;
+                    itemlastName.Text = null;
+                    itemfirstName.Text = null;
+                    itemEmail.Text = null;
+                    itemPhoneNumber.Text = null;
+                    itemDate.Text = null;
+                    itemDateBirthday.Text = null;
+                    fotoProfile.Source = null;
+                    await DisplayAlert(null, "Користувача видалено", "ОК)");
+                }
+                catch(Exception ex)
+                {
+                    await DisplayAlert(null, ex.Message, "ОК)");
+                }
             }
-            //CreateUserByAdminAsync
-            UserCreateInfoDto user = new UserCreateInfoDto
+            else
             {
-                FirstName = itemfirstName.Text,
-                LastName = itemlastName.Text,
-                Email = itemEmail.Text,
-                PhoneNumber = itemPhoneNumber.Text,
-                Birthday = DateTime.ParseExact(itemDateBirthday.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture),
-                FilePhoto = foto,
-            };
-
-            if (radioButtonAdmin.IsChecked)
-                user.Role = "admin";
-            else if (radioButtonManager.IsChecked)
-                user.Role = "manager";
-            else if (radioButtonTeacher.IsChecked)
-                user.Role = "teacher";
-            else if (radioButtonUser.IsChecked)
-                user.Role = "user";
-
-
-            var newUser = await client.CreateUserByAdminAsync(user);
-            Search_Clicked(sender, e);
-            await DisplayAlert(null, "Нового користувача створено", "ОК)");
-        }
-        catch
-        {
-            await DisplayAlert(null, "Помилка створення нового користувача", "ОК)");
+                await DisplayAlert(null,"Для видалення виберіть користувача зі списку", "ОК)");
+            }
         }
     }
+    //private async void CreateUser_Clicked(object sender, EventArgs e)
+    //{
+    //    try
+    //    {
+    //        if (string.IsNullOrEmpty(itemfirstName.Text) && string.IsNullOrEmpty(itemlastName.Text)
+    //            && string.IsNullOrEmpty(itemPhoneNumber.Text) && string.IsNullOrEmpty(itemEmail.Text)
+    //            && string.IsNullOrEmpty(itemDateBirthday.Text))
+    //        {
+    //            await DisplayAlert(null, "Введіть всі поля для створення нового користувача", "ОК)");
+    //            return;
+    //        }
+    //        //CreateUserByAdminAsync
+    //        UserCreateInfoDto user = new UserCreateInfoDto
+    //        {
+    //            FirstName = itemfirstName.Text,
+    //            LastName = itemlastName.Text,
+    //            Email = itemEmail.Text,
+    //            PhoneNumber = itemPhoneNumber.Text,
+    //            Birthday = DateTime.ParseExact(itemDateBirthday.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture),
+    //            FilePhoto = foto,
+    //        };
+
+    //        if (radioButtonAdmin.IsChecked)
+    //            user.Role = "admin";
+    //        else if (radioButtonManager.IsChecked)
+    //            user.Role = "manager";
+    //        else if (radioButtonTeacher.IsChecked)
+    //            user.Role = "teacher";
+    //        else if (radioButtonUser.IsChecked)
+    //            user.Role = "user";
+
+
+    //        var newUser = await client.CreateUserByAdminAsync(user);
+    //        Search_Clicked(sender, e);
+    //        await DisplayAlert(null, "Нового користувача створено", "ОК)");
+    //    }
+    //    catch
+    //    {
+    //        await DisplayAlert(null, "Помилка створення нового користувача", "ОК)");
+    //    }
+    //}
 
     private async void AdminPanel(object sender, EventArgs e)
     {

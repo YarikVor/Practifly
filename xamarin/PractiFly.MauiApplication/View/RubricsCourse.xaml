@@ -11,7 +11,7 @@
                 <Button TextColor="White" Text="Користувачі" WidthRequest="150" Clicked="AdminPanel"/>
                 <Button TextColor="White" Text="Рубрики" WidthRequest="150" Clicked="CategoryPanel" />
                 <Button TextColor="White" Text="Рубрики курсів" WidthRequest="150" Clicked="RubricsCoursePanel"/>
-                <Button TextColor="White" Text="Матеріали курсів" WidthRequest="150" Clicked="MaterialBlocksPanel"/>
+                <Button TextColor="White" Text="Матеріали" WidthRequest="150" Clicked="MaterialBlocksPanel"/>
                 <Button TextColor="White" Text="Дані курсів" WidthRequest="150" Clicked="CoursePanel"/>
                 <Button TextColor="White" Text="Теми курсів" WidthRequest="150" Clicked="CourseThemePanel"/>
             </StackLayout>
@@ -35,8 +35,8 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Button Text="Вилучити рубрику з курсу" Clicked="DeleteHeadingInCourse_Clicked" Grid.Column="1" Grid.Row="0" HeightRequest="50" WidthRequest="250"/>
-            <Button Text="Додати рубрику до курсу" Clicked="AddHeadingInCourse_Clicked" Grid.Column="2" Grid.Row="0" HeightRequest="50" WidthRequest="250"/>
+            <Button Text="🗑 Вилучити рубрику з курсу" Clicked="DeleteHeadingInCourse_Clicked" Grid.Column="1" Grid.Row="0" HeightRequest="50" WidthRequest="250"/>
+            <Button Text="➕ Додати рубрику до курсу" Clicked="AddHeadingInCourse_Clicked" Grid.Column="2" Grid.Row="0" HeightRequest="50" WidthRequest="250"/>
             <!--<StackLayout Spacing="20"  Orientation="Horizontal" Margin="10" HorizontalOptions="Center">-->
             <Frame  HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0" Grid.Column="0" Grid.Row="1">
                 <StackLayout>

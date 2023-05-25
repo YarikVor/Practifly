@@ -146,22 +146,15 @@ public class PractiFlyClient
     #endregion
 
     #region Login
-    public async Task<LoginResponseDto> GetLoginResponseAsync(LoginRequestDto loginRequestDto)
+    //LoginResponseDto
+    public async Task<bool> GetLoginResponseAsync(LoginRequestDto loginRequestDto)
     {
-        var response = await _httpClient.PostAsJsonAsync(LoginUrl, loginRequestDto);
-        //TODO: Add throw helper
-        //var str = await response.Content.ReadAsStringAsync();
-        var result =  await response.Content.ReadFromJsonAsync<LoginResponseDto>() 
-            ?? throw new NullReferenceException("result");
-        //ArgumentNullException.ThrowIfNull(result);
-        return result;
+        return await CreateUpdateAsync(LoginUrl, loginRequestDto);
     }
     public async Task<string> GetRefreshTokenAsync()
     {
         var result = await _httpClient.GetStringAsync(RefreshTokenUrl) 
             ?? throw new NullReferenceException("result"); 
-        //TODO: Add throw helper
-       
         return result;
     }
 

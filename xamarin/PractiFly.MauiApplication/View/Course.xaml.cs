@@ -38,7 +38,6 @@ public partial class Course : ContentPage
             CourseCollectionView.ItemsSource = course;
             isInitialized = true;
         }
-        
     }
     
     private async void UsersCollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -65,71 +64,110 @@ public partial class Course : ContentPage
     {
         if (IDCourse != null)
         {
-            //Вікно для пітдвердження 
-            int ID = (int)IDCourse;
-            var course = await client.GetCourseById(ID);
-            name.Text = course.Course.Name;
-            note.Text = course.Course.Note;
-            description.Text = course.Course.Description;
+            try
+            {
+                int ID = (int)IDCourse;
+                var course = await client.GetCourseById(ID);
+                name.Text = course.Course.Name;
+                note.Text = course.Course.Note;
+                description.Text = course.Course.Description;
+            }
+            catch(Exception ex)
+            {
+                await DisplayAlert(null, ex.Message, "OK)");
+            }
+            
+            
         }
     }
     private async void CreateCourse_Clicked(object sender, EventArgs e)
     {
-        //Вікно для пітдвердження 
-        try
+        if (name.Text == "")
         {
-            CreateCourseDto cours = new CreateCourseDto()
-            {
-                OwnerId = 8,//Отримати свій ID
-                Name = name.Text,
-                Note = note.Text,
-                Description = description.Text,
-                Language = "ua",
-            };
-
-            var createCourse = await client.CreateCourseAsync(cours);
-
-        }
-        catch (Exception ex)
-        {
-            await DisplayAlert(null, ex.Message, "ОК)");
+            await DisplayAlert(null, "Введіть ім'я", "ОК)");
             return;
         }
-        var course = await client.GetAllCourseAsync(null);
-        CourseCollectionView.ItemsSource = course;
-        await DisplayAlert(null, "Курс додано", "ОК)");
-        
-    }
-    private async void Edit_Clicked(object sender, EventArgs e)
-    {
-        //Вікно для пітдвердження 
-        if (IDCourse != null)
+        if (note.Text == "")
         {
-            int ID = (int)IDCourse;
-            //UpdateUserByAdminAsync
-
+            await DisplayAlert(null, "Введіть опис", "ОК)");
+            return;
+        }
+        if (description.Text == "")
+        {
+            await DisplayAlert(null, "Введіть примітку", "ОК)");
+            return;
+        }
+        bool result = await DisplayAlert("Підтвердження дії", "Бажаєте додати новий курсу?", "Так", "Ні");
+        if (result)
+        {
             try
             {
-                UpdateCourseDto cours = new UpdateCourseDto()
+                CreateCourseDto cours = new CreateCourseDto()
                 {
-                    Id = ID,
+                    OwnerId = 8,//Отримати свій ID
                     Name = name.Text,
                     Note = note.Text,
                     Description = description.Text,
                     Language = "ua",
                 };
 
-                var updatecourse = await client.UpdateCourseAsync(cours);
-
+                var createCourse = await client.CreateCourseAsync(cours);
+                var course = await client.GetAllCourseAsync(null);
+                CourseCollectionView.ItemsSource = course;
+                await DisplayAlert(null, "Курс додано", "ОК)");
             }
             catch (Exception ex)
             {
                 await DisplayAlert(null, ex.Message, "ОК)");
+            }
+        }
+        
+    }
+    private async void Edit_Clicked(object sender, EventArgs e)
+    {
+        if (IDCourse != null)
+        {
+            if (name.Text == "")
+            {
+                await DisplayAlert(null, "Введіть назву", "ОК)");
                 return;
             }
-            var course = await client.GetAllCourseAsync(null);
-            CourseCollectionView.ItemsSource = course;
-            await DisplayAlert(null, "Данні курсу змінено", "ОК)");
+            if (note.Text == "")
+            {
+                await DisplayAlert(null, "Введіть опис", "ОК)");
+                return;
+            }
+            if (description.Text == "")
+            {
+                await DisplayAlert(null, "Введіть примітку", "ОК)");
+                return;
+            }
+            bool result = await DisplayAlert("Підтвердження дії", "Бажаєте змінити дані курсу?", "Так", "Ні");
+            if (result)
+            {
+                int ID = (int)IDCourse;
+                try
+                {
+                    UpdateCourseDto cours = new UpdateCourseDto()
+                    {
+                        Id = ID,
+                        Name = name.Text,
+                        Note = note.Text,
+                        Description = description.Text,
+                        Language = "ua",
+                    };
+
+                    var updatecourse = await client.UpdateCourseAsync(cours);
+                    var course = await client.GetAllCourseAsync(null);
+                    CourseCollectionView.ItemsSource = course;
+                    await DisplayAlert(null, "Данні курсу змінено", "ОК)");
+                }
+                catch (Exception ex)
+                {
+                    await DisplayAlert(null, ex.Message, "ОК)");
+                    return;
+                }
+            }
         }
         else
         {
@@ -141,19 +179,31 @@ public partial class Course : ContentPage
 
         if (IDCourse != null)
         {
-            //Вікно для пітдвердження видалення
-            int ID = (int)IDCourse;
-            var user = await client.DeleteCourseAsync(ID);
+            bool result = await DisplayAlert("Підтвердження дії", "Бажаєте видалити курс?", "Так", "Ні");
+            if(result) 
+            {
+                try
+                {
+                    int ID = (int)IDCourse;
+                    var user = await client.DeleteCourseAsync(ID);
 
-            IDCourse = null;
-            id.Text = null;
-            name.Text = null;
-            note.Text = null;
-            description.Text = null;
-            await DisplayAlert(null, "Курс видалено", "ОК)");
+                    IDCourse = null;
+                    id.Text = null;
+                    name.Text = null;
+                    note.Text = null;
+                    description.Text = null;
+                    await DisplayAlert(null, "Курс видалено", "ОК)");
 
-            var course = await client.GetAllCourseAsync(null);
-            CourseCollectionView.ItemsSource = course;
+                    var course = await client.GetAllCourseAsync(null);
+                    CourseCollectionView.ItemsSource = course;
+                }
+                catch (Exception ex)
+                {
+                    await DisplayAlert(null, ex.Message, "ОК)");
+                }
+                
+            }
+            
         }
         else
         {

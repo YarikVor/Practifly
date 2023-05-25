@@ -5,14 +5,14 @@
     <ScrollView>
     <StackLayout>
         <StackLayout HorizontalOptions="Center"  Margin="0,20">
-            <Label Text="Матеріали курсів" FontSize="Title" FontAttributes="Bold"/>
+            <Label Text="Матеріали" FontSize="Title" FontAttributes="Bold"/>
         </StackLayout>
         <Frame BackgroundColor="#9062F2" Padding="0" CornerRadius="0">
             <StackLayout BackgroundColor="#9062F2" Orientation="Horizontal" HorizontalOptions="Center" Spacing="1">
                 <Button TextColor="White" Text="Користувачі" WidthRequest="150" Clicked="AdminPanel"/>
                 <Button TextColor="White" Text="Рубрики" WidthRequest="150" Clicked="CategoryPanel" />
                 <Button TextColor="White" Text="Рубрики курсів" WidthRequest="150" Clicked="RubricsCoursePanel"/>
-                <Button TextColor="White" Text="Матеріали курсів" WidthRequest="150" Clicked="MaterialBlocksPanel"/>
+                <Button TextColor="White" Text="Матеріали" WidthRequest="150" Clicked="MaterialBlocksPanel"/>
                 <Button TextColor="White" Text="Дані курсів" WidthRequest="150" Clicked="CoursePanel"/>
                 <Button TextColor="White" Text="Теми курсів" WidthRequest="150" Clicked="CourseThemePanel"/>
             </StackLayout>
@@ -61,7 +61,7 @@
             </StackLayout>-->
 
             <StackLayout Grid.Column="0" Grid.Row="0">
-                <Label Text="Матеріали рубрик"/>
+                <Label Text="Матеріали"/>
                 <Frame  HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0" >
                     <StackLayout>
                         <ScrollView  WidthRequest="300" Padding="12,0" HeightRequest="450">
@@ -97,13 +97,13 @@
                 <Frame BackgroundColor="#ebf2ed" BorderColor="#aeb5b0">
                     <StackLayout Spacing="10">
                         <Label Text="Назва"/>
-                        <Entry x:Name="name" Placeholder="Назва"/>
+                        <Entry x:Name="name" Placeholder="Назва" BackgroundColor="White"/>
                         <Label Text="Примітка"/>
-                        <Editor x:Name="note" HeightRequest="100" Placeholder="Опис" />
+                        <Editor x:Name="note" HeightRequest="100" Placeholder="Опис" BackgroundColor="White"/>
                         <Label Text="URL"/>
-                        <Entry x:Name="url" Placeholder="Посилання"/>
+                        <Entry x:Name="url" Placeholder="Посилання" BackgroundColor="White"/>
                         <Label Text="Приорітетність" />
-                        <Entry x:Name="priority" Placeholder="Приорітетність"/>
+                        <Entry x:Name="priority" Placeholder="Приорітетність" BackgroundColor="White"/>
 
                         <StackLayout Orientation="Horizontal">
                             <Label Text="Практичне" VerticalOptions="Center"/>

@@ -4,7 +4,7 @@ using PractiFly.Api.Api.CourseThemes;
 using PractiFly.Api.Client;
 using PractiFly.Api.CourseData;
 using PractiFly.Api.CourseThemes;
-
+using System.Text.RegularExpressions;
 
 namespace PractiFly.MauiApplication.View;
 
@@ -77,30 +77,54 @@ public partial class CourseTheme : ContentPage
     }
     private async void CreateTheme_Clicked(object sender, EventArgs e)
     {
-        //Вікно для пітдвердження 
-        try
+        string codePattern = @"^\d+$";
+        if (name.Text == "")
         {
-
-            CreateThemesOfCourseDto themes = new CreateThemesOfCourseDto()
-            {
-                Name = name.Text,
-                Note = note.Text,
-                Description = description.Text,
-                Number = 1,
-                LevelId = Int32.Parse(levelId.Text),
-                CourseId = (int)IDCourse,
-            };
-            var createCourse = await client.CreateThemesOfCourseAsync(themes);
-            var updatethemes = await client.GetListThemesCourseByIdAsync(themes.CourseId);
-            ThemesCourseCollectionView.ItemsSource = updatethemes;
-        }
-        catch (Exception ex)
-        {
-            await DisplayAlert(null, ex.Message, "ОК)");
+            await DisplayAlert(null, "Введіть ім'я", "ОК)");
             return;
         }
-        
-        await DisplayAlert(null, "Тему додано", "ОК)");
+
+        Regex regex = new Regex(codePattern);
+        if (!regex.IsMatch(levelId.Text))
+        {
+            await DisplayAlert(null, "Приорітетність має дорівнювати числовому значеню", "ОК)");
+            return;
+        }
+        if (note.Text == "")
+        {
+            await DisplayAlert(null, "Введіть опис", "ОК)");
+            return;
+        }
+        if (description.Text == "")
+        {
+            await DisplayAlert(null, "Введіть примітку", "ОК)");
+            return;
+        }
+        bool result = await DisplayAlert("Підтвердження дії", "Бажаєте додати нову тему?", "Так", "Ні");
+        if (result)
+        {
+            
+            try
+            {
+                CreateThemesOfCourseDto themes = new CreateThemesOfCourseDto()
+                {
+                    Name = name.Text,
+                    Note = note.Text,
+                    Description = description.Text,
+                    Number = 1,
+                    LevelId = Int32.Parse(levelId.Text),
+                    CourseId = (int)IDCourse,
+                };
+                var createCourse = await client.CreateThemesOfCourseAsync(themes);
+                var updatethemes = await client.GetListThemesCourseByIdAsync(themes.CourseId);
+                ThemesCourseCollectionView.ItemsSource = updatethemes;
+                await DisplayAlert(null, "Тему додано", "ОК)");
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert(null, ex.Message, "ОК)");
+            }
+        }
 
     }
     private async void Delete_Clicked(object sender, EventArgs e)
@@ -108,19 +132,30 @@ public partial class CourseTheme : ContentPage
 
         if (IDTheme != null)
         {
+            bool result = await DisplayAlert("Підтвердження дії", "Бажаєте видалити тему?", "Так", "Ні");
             //Вікно для пітдвердження видалення
-            int ID = (int)IDTheme;
-            var user = await client.DeleteThemesAsync(ID);
+            if (result)
+            {
+                try
+                {
+                    int ID = (int)IDTheme;
+                    var user = await client.DeleteThemesAsync(ID);
 
-            name.Text = null;
-            note.Text = null;
-            description.Text = null;
-            levelId.Text = null;
+                    name.Text = null;
+                    note.Text = null;
+                    description.Text = null;
+                    levelId.Text = null;
 
-            await DisplayAlert(null, "Тему видалено", "ОК)");
+                    await DisplayAlert(null, "Тему видалено", "ОК)");
 
-            var updatethemes = await client.GetListThemesCourseByIdAsync((int)IDCourse);
-            ThemesCourseCollectionView.ItemsSource = updatethemes;
+                    var updatethemes = await client.GetListThemesCourseByIdAsync((int)IDCourse);
+                    ThemesCourseCollectionView.ItemsSource = updatethemes;
+                }
+                catch (Exception ex)
+                {
+                    await DisplayAlert(null, ex.Message, "ОК)");
+                }
+            }
         }
         else
         {
@@ -129,33 +164,59 @@ public partial class CourseTheme : ContentPage
     }
     private async void EditTheme_Clicked(object sender, EventArgs e)
     {
-        //Вікно для пітдвердження 
-        if(IDTheme != null)
+        string codePattern = @"^\d+$";
+        if (name.Text == "")
         {
-            try
-            {
+            await DisplayAlert(null, "Введіть ім'я", "ОК)");
+            return;
+        }
 
-                UpdateThemesDto themes = new UpdateThemesDto()
-                {
-                    Id = (int)IDTheme,
-                    Name = name.Text,
-                    Note = note.Text,
-                    Description = description.Text,
-                    Number = 1,
-                    LevelId = Int32.Parse(levelId.Text),
+        Regex regex = new Regex(codePattern);
+        if (!regex.IsMatch(levelId.Text))
+        {
+            await DisplayAlert(null, "Приорітетність має дорівнювати числовому значеню", "ОК)");
+            return;
+        }
+        if (note.Text == "")
+        {
+            await DisplayAlert(null, "Введіть опис", "ОК)");
+            return;
+        }
+        if (description.Text == "")
+        {
+            await DisplayAlert(null, "Введіть примітку", "ОК)");
+            return;
+        }
+        if (IDTheme != null)
+        {
+            bool result = await DisplayAlert("Підтвердження дії", "Бажаєте змінити дані теми?", "Так", "Ні");
+            if (result)
+            {
                 
-                };
-                var createCourse = await client.UpdateThemesAsync(themes);
-                var updatethemes = await client.GetListThemesCourseByIdAsync((int)IDCourse);
-                ThemesCourseCollectionView.ItemsSource = updatethemes;
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert(null, ex.Message, "ОК)");
-                return;
-            }
+                try
+                {
 
-            await DisplayAlert(null, "Дані теми змінено", "ОК)");
+                    UpdateThemesDto themes = new UpdateThemesDto()
+                    {
+                        Id = (int)IDTheme,
+                        Name = name.Text,
+                        Note = note.Text,
+                        Description = description.Text,
+                        Number = 1,
+                        LevelId = Int32.Parse(levelId.Text),
+
+                    };
+                    var createCourse = await client.UpdateThemesAsync(themes);
+                    var updatethemes = await client.GetListThemesCourseByIdAsync((int)IDCourse);
+                    ThemesCourseCollectionView.ItemsSource = updatethemes;
+                    await DisplayAlert(null, "Дані теми змінено", "ОК)");
+                }
+                catch (Exception ex)
+                {
+                    await DisplayAlert(null, ex.Message, "ОК)");
+                }
+            }
+            
         }
         else
         {

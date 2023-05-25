@@ -31,19 +31,30 @@ public partial class MaterialBlocks : ContentPage
     {
         if (IDMaterial != null)
         {
-
-            EditMaterialBlockDto editMaterial = new EditMaterialBlockDto()
+            bool result = await DisplayAlert("Підтвердження дії", "Бажаєте змінити дані матеріалу?", "Так", "Ні");
+            if (result)
             {
-                Name = name.Text,
-                Priority = Int32.Parse(priority.Text),
-                Note = note.Text,
-                Url = url.Text,
-                IsPractical = isPractical.IsChecked,
-                Id =(int)IDMaterial,
-            };
+                try
+                {
+                    EditMaterialBlockDto editMaterial = new EditMaterialBlockDto()
+                    {
+                        Name = name.Text,
+                        Priority = Int32.Parse(priority.Text),
+                        Note = note.Text,
+                        Url = url.Text,
+                        IsPractical = isPractical.IsChecked,
+                        Id = (int)IDMaterial,
+                    };
 
-            var edit = await client.EditMaterialAsync(editMaterial);
-            AllMaterial();
+                    var edit = await client.EditMaterialAsync(editMaterial);
+                    AllMaterial();
+                }
+                catch(Exception ex)
+                {
+                    await DisplayAlert(null, ex.Message, "ОК)");
+                }
+                
+            }
         }
         else
         {
@@ -53,15 +64,28 @@ public partial class MaterialBlocks : ContentPage
     }
     private async void DeleteHeading(object sender, EventArgs e)
     {
+
         if (IDMaterial != null)
         {
-            var delete = await client.DeleteHeadingAsync((int)IDMaterial);
-            AllMaterial();
-            name.Text = null;
-            priority.Text = null;
-            note.Text = null;
-            url.Text = null;
-            await DisplayAlert(null, "Матеріал видалено", "ОК)");
+            bool result = await DisplayAlert("Підтвердження дії", "Бажаєте видалити матеріал?", "Так", "Ні");
+            if (result)
+            {
+                try
+                {
+                    var delete = await client.DeleteHeadingAsync((int)IDMaterial);
+                    AllMaterial();
+                    name.Text = null;
+                    priority.Text = null;
+                    note.Text = null;
+                    url.Text = null;
+                    await DisplayAlert(null, "Матеріал видалено", "ОК)");
+                }
+                catch(Exception ex)
+                {
+                    await DisplayAlert(null, ex.Message, "ОК)");
+                }
+                
+            }
         }
         else
         {
@@ -71,27 +95,35 @@ public partial class MaterialBlocks : ContentPage
     }
     private async void CreateMaterial(object sender, EventArgs e)
     {
-
-        CreateMaterialBlockDto createMaterial = new CreateMaterialBlockDto()
+        bool result = await DisplayAlert("Підтвердження дії", "Бажаєте створити новий матеріал?", "Так", "Ні");
+        if (result)
         {
-            Name = name.Text,
-            Priority = Int32.Parse(priority.Text),
-            Note = note.Text,
-            Url = url.Text,
-            IsPractical = isPractical.IsChecked,
-        };
+            try
+            {
+                CreateMaterialBlockDto createMaterial = new CreateMaterialBlockDto()
+                {
+                    Name = name.Text,
+                    Priority = Int32.Parse(priority.Text),
+                    Note = note.Text,
+                    Url = url.Text,
+                    IsPractical = isPractical.IsChecked,
+                };
 
-        var create = await client.CreateMaterialAsync(createMaterial);
-        AllMaterial();
+                var create = await client.CreateMaterialAsync(createMaterial);
+                AllMaterial();
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert(null, ex.Message, "ОК)");
+            }
 
+        }
     }
     private void MaterialCollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         var selectedItem = e.CurrentSelection[0] as ListAllMaterialInfoDto;
         var idmaterial = selectedItem.Id;
         IDMaterial = idmaterial;
-
-
     }
 
     private async void AdminPanel(object sender, EventArgs e)
@@ -118,7 +150,8 @@ public partial class MaterialBlocks : ContentPage
     {
         await Navigation.PushAsync(new RubricsCourse());
     }
-
+    
+    #region
     //private async void HeadingCollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
     //{
     //    var selectedItem = e.CurrentSelection[0] as GetHeadingBeginInfoDto;
@@ -152,4 +185,7 @@ public partial class MaterialBlocks : ContentPage
     //       NextCategory(id);
     //       AllMaterial();
     //   }
+    #endregion
+
+
 }

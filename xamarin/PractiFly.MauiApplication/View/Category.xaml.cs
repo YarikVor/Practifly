@@ -5,8 +5,7 @@ using PractiFly.Api.Client;
 using PractiFly.Api.CourseData;
 using PractiFly.Api.Heading;
 using PractiFly.Api.HeadingCourse;
-
-
+using System.Text.RegularExpressions;
 
 namespace PractiFly.MauiApplication.View;
 
@@ -66,13 +65,22 @@ public partial class Category : ContentPage
         if (IDHead != null)
         {
             //Вікно для пітдвердження 
-            var getHeading = await client.GetHeadingByHeadIdAsync((int)IDHead);
+            try
+            {
+                var getHeading = await client.GetHeadingByHeadIdAsync((int)IDHead);
+                name.Text = getHeading.Name;
+                note.Text = getHeading.Note;
+                code.Text = getHeading.Code;
+                udc.Text = getHeading.Udc;
+                description.Text = getHeading.Description;
+            }
+            catch(Exception ex)
+            {
+                await DisplayAlert(null, ex.Message, "ОК)");
+            }
+           
 
-            name.Text = getHeading.Name;
-            note.Text = getHeading.Note;
-            code.Text = getHeading.Code;
-            udc.Text = getHeading.Udc;
-            description.Text = getHeading.Description;
+           
 
         }
     }
@@ -80,19 +88,58 @@ public partial class Category : ContentPage
     {
         if (IDHead != null)
         {
-
-            EditHeadingDto editHeading = new EditHeadingDto()
+            string codePattern = @"^(?:\d{2}(?:.\d{2}){0,2})$";
+            if (name.Text == "")
             {
-                Id = (int)IDHead,
-                Name = name.Text,
-                Code = code.Text,
-                Udc = udc.Text,
-                Note = note.Text,
-                Description = description.Text,
-            };
+                await DisplayAlert(null, "Введіть ім'я", "ОК)");
+                return;
+            }
+           
+            Regex regex = new Regex(codePattern);
+            if (!regex.IsMatch(code.Text))
+            {
+                await DisplayAlert(null, "Невірний формат коду (01.01.01.01)", "ОК)");
+                return;
+            }
+            if (udc.Text == "")
+            {
+                await DisplayAlert(null, "Введіть УДК", "ОК)");
+                return;
+            }
+            if (note.Text == "")
+            {
+                await DisplayAlert(null, "Введіть опис", "ОК)");
+                return;
+            }
+            if (description.Text == "")
+            {
+                await DisplayAlert(null, "Введіть примітку", "ОК)");
+                return;
+            }
+            bool result = await DisplayAlert("Підтвердження дії", "Бажаєте змінити дані рубрики?", "Так", "Ні");
+            if (result)
+            {
+                try
+                {
+                    EditHeadingDto editHeading = new EditHeadingDto()
+                    {
+                        Id = (int)IDHead,
+                        Name = name.Text,
+                        Code = code.Text,
+                        Udc = udc.Text,
+                        Note = note.Text,
+                        Description = description.Text,
+                    };
 
-            var edit = await client.EditHeadingAsync(editHeading);
-            NextCategory(IDStartHead);
+                    var edit = await client.EditHeadingAsync(editHeading);
+                    NextCategory(IDStartHead);
+                    await DisplayAlert(null, "Рубрику видалено", "ОК)");
+                }
+                catch (Exception ex)
+                {
+                    await DisplayAlert(null, ex.Message, "ОК)");
+                }
+            }
         }
         else
         {
@@ -102,29 +149,78 @@ public partial class Category : ContentPage
     }
     private async void CreateHeading(object sender, EventArgs e)
     {
-        CreateHeadingDto createHeading = new CreateHeadingDto()
+        string codePattern = @"^(?:\d{2}(?:.\d{2}){0,2})$";
+        if (name.Text == "")
         {
-            Name = name.Text,
-            Code = code.Text,
-            Udc = udc.Text,
-            Note = note.Text,
-            Description = description.Text,
-        };
-        name.Text = null;
-        note.Text = null;
-        code.Text = null;
-        udc.Text = null;
-        description.Text = null;
-        var create = await client.CreateHeadingAsync(createHeading);
-        NextCategory(IDStartHead);
+            await DisplayAlert(null, "Введіть ім'я", "ОК)");
+            return;
+        }
+
+        Regex regex = new Regex(codePattern);
+        if (!regex.IsMatch(code.Text))
+        {
+            await DisplayAlert(null, "Невірний формат коду (01.01.01.01)", "ОК)");
+            return;
+        }
+        if (udc.Text == "")
+        {
+            await DisplayAlert(null, "Введіть УДК", "ОК)");
+            return;
+        }
+        if (note.Text == "")
+        {
+            await DisplayAlert(null, "Введіть опис", "ОК)");
+            return;
+        }
+        if (description.Text == "")
+        {
+            await DisplayAlert(null, "Введіть примітку", "ОК)");
+            return;
+        }
+        bool result = await DisplayAlert("Підтвердження дії", "Бажаєте створити нову рубрику?", "Так", "Ні");
+        if (result)
+        {
+            
+            try
+            {
+                CreateHeadingDto createHeading = new CreateHeadingDto()
+                {
+                    Name = name.Text,
+                    Code = code.Text,
+                    Udc = udc.Text,
+                    Note = note.Text,
+                    Description = description.Text,
+                };
+                name.Text = null;
+                note.Text = null;
+                code.Text = null;
+                udc.Text = null;
+                description.Text = null;
+                var create = await client.CreateHeadingAsync(createHeading);
+                NextCategory(IDStartHead);
+                await DisplayAlert(null, "Рубрику створено", "ОК)");
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert(null, ex.Message, "ОК)");
+            }
+        }
+        
     }
     private async void DeleteHeading(object sender, EventArgs e)
     {
         if (IDHead != null)
         {
-            
-            var create = await client.DeleteHeadingAsync((int)IDHead);
-            NextCategory(IDStartHead);
+            try
+            {
+                var create = await client.DeleteHeadingAsync((int)IDHead);
+                NextCategory(IDStartHead);
+            }
+            catch(Exception ex)
+            {
+                await DisplayAlert(null, ex.Message, "ОК)");
+            }
+           
         }
         else
         {
@@ -134,26 +230,26 @@ public partial class Category : ContentPage
     }
     private async void AdminPanel(object sender, EventArgs e)
     {
-        await Navigation.PushModalAsync(new Admin());
+        await Navigation.PushAsync(new Admin());
     }
     private async void CategoryPanel(object sender, EventArgs e)
     {
-        await Navigation.PushModalAsync(new Category());
+        await Navigation.PushAsync(new Category());
     }
     private async void CoursePanel(object sender, EventArgs e)
     {
-        await Navigation.PushModalAsync(new Course());
+        await Navigation.PushAsync(new Course());
     }
     private async void CourseThemePanel(object sender, EventArgs e)
     {
-        await Navigation.PushModalAsync(new CourseTheme());
+        await Navigation.PushAsync(new CourseTheme());
     }
     private async void MaterialBlocksPanel(object sender, EventArgs e)
     {
-        await Navigation.PushModalAsync(new MaterialBlocks());
+        await Navigation.PushAsync(new MaterialBlocks());
     }
     private async void RubricsCoursePanel(object sender, EventArgs e)
     {
-        await Navigation.PushModalAsync(new RubricsCourse());
+        await Navigation.PushAsync(new RubricsCourse());
     }
 }
