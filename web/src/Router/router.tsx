@@ -8,6 +8,8 @@ import Container from "../modules/Container/Container";
 import Login from "../Pages/Login/Login";
 import {Profile} from "../Pages/Profile/Profile";
 import {CourseDetails} from "../Pages/CourseDetails/CourseDetails";
+import RubricsCourse from "../Pages/RubricsCourse/RubricsCourse";
+import CourseMaterial from "../Pages/CourseMaterial/CourseMaterial";
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +35,14 @@ export const router = createBrowserRouter([
       {
         path: "/courseDetails",
         element: <CourseDetails/>,
+      },
+      {
+        path: "/rubricsCourse",
+        element: <RubricsCourse/>,
+      },
+      {
+        path: "/courseMaterial",
+        element: <CourseMaterial/>,
       },
     ],
   },
