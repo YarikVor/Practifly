@@ -29,14 +29,14 @@ public class CourseThemesController : Controller
     }
 
 
-    /// <summary>
-    /// Returns an information of theme associated with a course identified by the special Id.
-    /// </summary>
-    /// <param name="courseId">ID of the course.</param>
-    /// <response code="200">Getting information of theme was successful.</response>
-    /// <response code="400">Operation was failed.</response>
-    /// <response code="404">No themes found.</response>
-    /// <returns>A JSON-encoded representation of the information of course theme.</returns>
+    ///// <summary>
+    ///// Returns an information of theme associated with a course identified by the special Id.
+    ///// </summary>
+    ///// <param name="courseId">ID of the course.</param>
+    ///// <response code="200">Getting information of theme was successful.</response>
+    ///// <response code="400">Operation was failed.</response>
+    ///// <response code="404">No themes found.</response>
+    ///// <returns>A JSON-encoded representation of the information of course theme.</returns>
     /*[HttpGet]
     [Route("course/themes/notunderstand")]
 

@@ -263,69 +263,6 @@ public class CourseDataController : Controller
     //}
 
 
-    [HttpGet]
-    [Route("course/themes/full-info")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<IActionResult> GetUserCourseFullInfo(int courseId)
-    {
-        var userId = User.GetUserIdInt();
-
-        if (!await _context.UserCourses.AnyAsync(uc => uc.CourseId == courseId && uc.UserId == userId))
-            return NotFound("A user with such an ID does not exist");
-
-        var Mapper = new Mapper(
-            new MapperConfiguration(expression =>
-            {
-                //int userId = 0;
-                expression.CreateProjection<Course, UserCourseInfoDto>()
-                    .ForMember(dto => dto.Themes, par => par.MapFrom(c => _context
-                        .Themes
-                        .Where(t => t.CourseId == c.Id)
-                    ));
-
-                expression.CreateProjection<Theme, FullThemeWithMaterialsDto>()
-                    .ForMember(dto => dto.IsCompleted, par => par.MapFrom(t => _context
-                        .UserThemes
-                        .Where(ut => ut.UserId == userId && ut.ThemeId == t.Id)
-                        .Select(ut => ut.IsCompleted)
-                        .FirstOrDefault()
-                    ))
-                    .ForMember(dto => dto.Grade, par => par.MapFrom(t => _context
-                        .UserThemes
-                        .Where(ut => ut.UserId == userId && ut.ThemeId == t.Id)
-                        .Select(ut => ut.Grade)
-                        .FirstOrDefault()))
-                    .ForMember(dto => dto.Materials, par => par.MapFrom(t => _context
-                        .ThemeMaterials
-                        .Where(tm => tm.ThemeId == t.Id)
-                        .Select(tm => tm.Material)
-                        .Select(m => new
-                        {
-                            Material = m,
-                            UserMaterial = _context
-                                .UserMaterials
-                                .FirstOrDefault(um => um.UserId == userId && um.MaterialId == m.Id)
-                        })
-                        .Select(m => new CourseMaterialItemDto
-                        {
-                            Id = m.Material.Id,
-                            Name = m.Material.Name,
-                            IsCompleted = m.UserMaterial != null && m.UserMaterial.IsCompleted,
-                            Grade = m.UserMaterial == null ? 0 : m.UserMaterial.Grade
-                        })
-                    ))
-                    ;
-            })
-        );
-
-
-        var result = await _context
-            .Courses
-            .AsNoTracking()
-            .Where(c => c.Id == courseId)
-            .ProjectTo<UserCourseInfoDto>(Mapper.ConfigurationProvider)
-            .FirstOrDefaultAsync();
-
         /*
             var result = await _context
             .Courses
@@ -375,6 +312,6 @@ public class CourseDataController : Controller
             .FirstOrDefaultAsync();*/
         /**/
 
-        return result == null ? BadRequest() : Json(result);
-    }
+        //return result == null ? BadRequest() : Json(result);
+    //}
 }
