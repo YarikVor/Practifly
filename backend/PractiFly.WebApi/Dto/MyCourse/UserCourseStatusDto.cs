@@ -17,11 +17,9 @@ public class UserCourseStatusDto
     [Description("Course completion status")]
     public bool IsCompleted { get; set; }
 
-    public bool IsChecked { get; set; }
-
     public string? Description { get; set; }
-    public int Grade { get; set; }
+    //public int Grade { get; set; }
     public float GradeAverage { get; set; }
 
-    public int? ThemeId { get; set; }
-}
+    //public int? ThemeId { get; set; }
+} 

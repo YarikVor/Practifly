@@ -48,7 +48,7 @@ public class MyCourseProfile : Profile
             )
             .ForMember(
                 e => e.FilePhoto, par => par.MapFrom(e => baseUrl + (e.IsCustomPhoto ? e.Id : 0)));
-        //TODO: Next topic, grade for current theme
+        //TODO: Next topic, grade for current theme - відкинули
         CreateProjection<UserCourse, UserCourseStatusDto>()
             .ForMember(e => e.Language, par => par.MapFrom(e => e.Course.Language.Code))
             //TODO: можливо оцінки беруться із тем та з матеріалів
@@ -58,34 +58,52 @@ public class MyCourseProfile : Profile
                     e =>
                         (float)
                         (_context
-                            .UserMaterials
-                            .Where(cm => cm.UserId == e.UserId)
-                            .Where(cm => _context.CourseMaterials
-                                .Where(courseMaterial => courseMaterial.CourseId == e.CourseId)
-                                .Select(courseMaterial => courseMaterial.MaterialId)
-                                .Any(materialId => materialId == cm.MaterialId)
-                            )
-                            .Select(um => um.Grade)
+
+                            .UserThemes
+                            .Where(ut => ut.UserId == e.UserId)
+                            .Where(ut => ut.Theme.CourseId == e.CourseId)
+                            .Select(ut => ut.Grade)
                             //.DefaultIfEmpty()
                             .Average() ?? 0)
                 )
             )
             .ForMember(
-                e => e.Grade,
+                dto => dto.CountThemes,
                 par => par.MapFrom(
-                    e => _context
-                        .UserMaterials
-                        .Where(cm => cm.UserId == e.UserId)
-                        .Where(cm => _context.CourseMaterials
-                            .Where(courseMaterial => courseMaterial.CourseId == e.CourseId)
-                            .Select(courseMaterial => courseMaterial.MaterialId)
-                            .Any(materialId => materialId == cm.MaterialId)
-                        )
-                        .Select(um => um.Grade)
-                        .OrderByDescending(grade => grade)
-                        .FirstOrDefault() ?? 0
+                    user =>
+                        _context
+                        .Themes
+                        .Count(t => t.CourseId == user.CourseId)
                 )
             )
+            //TODO: CountProgress
+            .ForMember(
+                dto => dto.CountProgress,
+                par => par.MapFrom(
+                    user =>
+                        _context
+                        .UserThemes
+                       .Where(ut => ut.ThemeId == user.Id)
+                       //.Select(ut => ut.IsCompleted)
+                       .Count(uc => uc.IsCompleted)
+                )
+            )
+            //.ForMember(
+            //    e => e.Grade,
+            //    par => par.MapFrom(
+            //        e => _context
+            //            .UserMaterials
+            //            .Where(cm => cm.UserId == e.UserId)
+            //            .Where(cm => _context.CourseMaterials
+            //                .Where(courseMaterial => courseMaterial.CourseId == e.CourseId)
+            //                .Select(courseMaterial => courseMaterial.MaterialId)
+            //                .Any(materialId => materialId == cm.MaterialId)
+            //            )
+            //            .Select(um => um.Grade)
+            //            .OrderByDescending(grade => grade)
+            //            .FirstOrDefault() ?? 0
+            //    )
+            //)
             .ForMember(
                 e => e.Description,
                 par => par.MapFrom(e => e.Course.Description)
