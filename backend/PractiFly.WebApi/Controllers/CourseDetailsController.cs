@@ -5,9 +5,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
+using PractiFly.DbEntities.Courses;
 using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.AutoMapper.Ex;
 using PractiFly.WebApi.Dto.CourseDetails;
+using PractiFly.WebApi.Dto.Heading;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace PractiFly.WebApi.Controllers;
@@ -143,7 +145,6 @@ public class CourseDetailsController : Controller
     /// <summary>
     ///     Sets information about a user's progress on a specified material identified by the materialId parameter.
     /// </summary>
-    /// <param name="materialId">Id of the material.</param>
     /// <param name="dto">A Data Transfer Object which containing information about the user's progress on the material.</param>
     /// <returns>
     ///     Returns an IActionResult that represents the result of the operation.
@@ -184,4 +185,30 @@ public class CourseDetailsController : Controller
 
         return Ok();
     }
-}
+    /// <summary>
+    ///  Returns advanced information about the course, including information. its themes and their materials
+    /// </summary>
+    /// <param name="courseId">Id of the course about which information is received</param>
+    /// <returns></returns>
+    /// <response code="200">Operation is successful.</response>
+    /// <response code="400">Operation was failed</response>
+
+    [HttpGet]
+    [Route("course/themes/full-info")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<IActionResult> GetUserCourseFullInfo(int courseId)
+    {
+        var userId = User.GetUserIdInt();
+
+        if (!await _context.UserCourses.AnyAsync(uc => uc.CourseId == courseId && uc.UserId == userId))
+            return NotFound("A user with such an ID does not exist");
+        var result = await _context
+            .Courses
+            .AsNoTracking()
+            .Where(c => c.Id == courseId)
+            .ProjectTo<UserCourseInfoDto>(_configurationProvider, new { userId })
+
+            .FirstOrDefaultAsync();
+        return result == null ? BadRequest() : Json(result);
+    }
+    }
