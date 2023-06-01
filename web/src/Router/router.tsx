@@ -8,6 +8,7 @@ import Container from "../modules/Container/Container";
 import Login from "../Pages/Login/Login";
 import {Profile} from "../Pages/Profile/Profile";
 import {CourseDetails} from "../Pages/CourseDetails/CourseDetails";
+import {MyCourses} from "../Pages/MyCourses/MyCourses";
 import RubricsCourse from "../Pages/RubricsCourse/RubricsCourse";
 import CourseMaterial from "../Pages/CourseMaterial/CourseMaterial";
 
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
         element: <Registration/>,
       },
       {
+        path: "/myCourses",
+        element: <MyCourses />,
+      },
+      {
         path: "/login",
         element: <Login/>,
       },
@@ -33,7 +38,7 @@ export const router = createBrowserRouter([
         element: <Profile/>,
       },
       {
-        path: "/courseDetails",
+        path: "/courseDetails/:id",
         element: <CourseDetails/>,
       },
       {

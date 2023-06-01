@@ -13,5 +13,7 @@ export const profileSchema = yup.object({
   birthday: yup.date().min(minDate, "Date cannot be les than 1900 year").max(moment(),"Please select correct date").required("Field is required").typeError("Incorrect date!"),
   registrationDate: yup.date().min(minDate, "Date cannot be les than 1900 year").required("Field is required").typeError("Incorrect date!"),
   filePhoto: yup.string(),
-  password: yup.string().min(8, "Password cannot be less, than 8 symbols").max(256, "Password length cannot be more, that 256").required("Field is required"),
+  countInProgress: yup.number(),
+  countCompleted: yup.number(),
+  averageGrade: yup.number(),
 });

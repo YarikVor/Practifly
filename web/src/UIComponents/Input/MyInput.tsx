@@ -15,8 +15,11 @@ export const MyInput: FC<IInput> = ({
   error,
   helperText,
   width,
+  value,
   outsideLabel,
+  defaultValue,
   disabled,
+  isCenter,
 }) => {
   const {classes} = useStyles({"width": width, "isBlock": Boolean(outsideLabel)});
   return (
@@ -30,9 +33,20 @@ export const MyInput: FC<IInput> = ({
             }
           </InputLabel>
           <TextField
+            InputProps={{
+              inputProps: {
+                style: {
+                  textAlign: isCenter ? "center" : "unset",
+                  WebkitTextFillColor: (disabled && isCenter) ? "green" : "",
+                  fontWeight: (disabled && isCenter) ? "bold" : "",
+                },
+              },
+            }}
             disabled={disabled}
+            defaultValue={defaultValue}
             id={name}
             fullWidth
+            value={value}
             error={error}
             helperText={helperText}
             {...!register ? "" : {...register(name)}}
@@ -44,8 +58,19 @@ export const MyInput: FC<IInput> = ({
           <TextField
             id={name}
             disabled={disabled}
+            defaultValue={defaultValue}
             label={label}
             error={error}
+            value={value}
+            InputProps={{
+              inputProps: {
+                style: {
+                  textAlign: isCenter ? "center" : "unset",
+                  WebkitTextFillColor: (disabled && isCenter) ? "green" : "",
+                  fontWeight: (disabled && isCenter) ? "bold" : "",
+                },
+              },
+            }}
             helperText={helperText}
             {...!register ? "" : {...register(name)}}
             type={type}

@@ -1,6 +1,7 @@
-import {Avatar, Box, Typography} from "@mui/material";
+import {Avatar, Box, Button, CircularProgress, Typography} from "@mui/material";
 
-import {ChangeEvent, FC, useLayoutEffect, useMemo, useState} from "react";
+import React, {ChangeEvent, FC, useLayoutEffect, useMemo, useState} from "react";
+
 
 import {useForm} from "react-hook-form";
 
@@ -8,21 +9,40 @@ import {yupResolver} from "@hookform/resolvers/yup";
 
 import {toast} from "react-toastify";
 
+import _ from "lodash";
+
+import {Image} from "mui-image";
+
+import {Form} from "react-router-dom";
+
+import moment from "moment/moment";
+
+import editIcon from "../../assets/edit.png";
+
+import defaultAvatar from "../../assets/defaultAvatar.png";
 
 import {MyInput} from "../../UIComponents/Input/MyInput";
 
-import {UserProfileData} from "../../types/user.interface";
 
 import {profileSchema} from "../../validations/profile.schema";
 
-import {useAppDispatch} from "../../hooks/hooks";
-import {fetchMe, uploadPhoto} from "../../redux/slices/auth/auth";
+import {useAppDispatch, useAppSelector} from "../../hooks/hooks";
+import {fetchMe, updateProfile, uploadPhoto} from "../../redux/slices/user/user.slice";
+
+
+import lockImage from "../../assets/lock.png";
+
+import {ProfileData, UpdateProfile} from "../../types/user.interface";
+
+import {statusTypes} from "../../types/enums";
 
 import {useStyles} from "./styles";
+
 export const ProfileForm: FC = () => {
   const styles = useStyles();
   const dispatch = useAppDispatch();
   const [image, setImage] = useState("");
+  const isFetching = useAppSelector((store) => store.user.status);
   const validationSchema = useMemo(() => {
     return profileSchema;
   }, []);
@@ -30,7 +50,9 @@ export const ProfileForm: FC = () => {
   const {
     register,
     reset,
-  } = useForm<UserProfileData>(
+    handleSubmit,
+    formState,
+  } = useForm<ProfileData>(
     {
       mode: "onChange",
       resolver: yupResolver(validationSchema),
@@ -43,107 +65,174 @@ export const ProfileForm: FC = () => {
     }
     const formData = new FormData();
     formData.append("file", e.target.files[0]);
-    const {payload} = await dispatch(uploadPhoto(formData));
-    if(!payload){
+    const {url} = await dispatch(uploadPhoto(formData)).unwrap();
+    if(!url){
       return toast.error("Something went wrong");
     }
-    setImage(`${payload}?${Math.random()}`);
+    setImage(`${url}?${Math.random()}`);
+  };
+
+  const handleImageError = () => {
+    setImage(defaultAvatar);
+  };
+
+  const customSubmit = async (data: ProfileData) => {
+    const dataForCompare = {...data, birthday: moment(data.birthday).format("YYYY-MM-DD"), registrationDate: moment(data.registrationDate).format("YYYY-MM-DD")};
+    if(_.isEqual(dataForCompare, formState.defaultValues)){
+      toast.error("You must change the data for update the profile info");
+    } else {
+      const rewrittenData: UpdateProfile = _.omit(dataForCompare, ["registrationDate", "countCompleted", "countInProgress", "averageGrade"]);
+      const response = await dispatch(updateProfile(rewrittenData)).unwrap();
+      toast.success(response);
+      const myData = await dispatch(fetchMe()).unwrap();
+      reset({
+        username: myData.username,
+        firstName: myData.firstName,
+        lastName: myData.lastName,
+        email: myData.email,
+        phoneNumber: myData.phoneNumber,
+        birthday: myData.birthday,
+        registrationDate: myData.registrationDate,
+        countCompleted: myData.countCompleted,
+        countInProgress: myData.countCompleted,
+        averageGrade: myData.averageGrade,
+      });
+    }
   };
 
   useLayoutEffect(() => {
     const fetchData = async () => {
-      const {payload} = await dispatch(fetchMe()); 
-      if(!payload || typeof payload === "string"){
-        return;
-      }
+      const response = await dispatch(fetchMe()).unwrap();
       reset({
-        username: payload?.username,
-        firstName: payload?.firstName,
-        lastName: payload?.lastName,
-        email: payload?.email,
-        phoneNumber: payload?.phoneNumber,
-        birthday: payload?.birthday,
-        registrationDate: payload?.registrationDate,
+        username: response.username,
+        firstName: response.firstName,
+        lastName: response.lastName,
+        email: response.email,
+        phoneNumber: response.phoneNumber,
+        birthday: response.birthday,
+        registrationDate: response.registrationDate,
+        countCompleted: response.countCompleted,
+        countInProgress: response.countCompleted,
+        averageGrade: response.averageGrade,
       });
-      setImage(`https://practiflybucket.s3.eu-north-1.amazonaws.com/${payload?.id}`);
+      setImage(response.filePhoto);
     };
     fetchData().catch((e) => {
-      return e.message;
+      toast.error(e.message);
     });
   }, []);
 
   return (
-    <>
+    <Form onSubmit={handleSubmit(customSubmit)}>
       <Box className={styles.rootForm}>
-        <Box className={styles.infoBlock}>
-          <MyInput
-            outsideLabel="Логін"
-            width={300}
-            name="username"
-            disabled
-            register={register}/>
-          <MyInput
-            outsideLabel="Ім'я"
-            width={300}
-            name="firstName"
-            register={register}/>
-          <MyInput
-            outsideLabel="Прізвище"
-            width={300}
-            name="lastName"
-            register={register}/>
-          <MyInput
-            outsideLabel="Email"
-            width={310}
-            name="email"
-            register={register}/>
-          <MyInput
-            outsideLabel="Номер телефону"
-            width={310}
-            name="phoneNumber"
-            register={register}/>
-          <MyInput
-            outsideLabel="Дата народження"
-            width={310}
-            register={register}
-            name="birthday"
-            type="date"/>
-          <MyInput
-            outsideLabel="Пароль"
-            type="password"
-            width={310}
-            name="password"
-            register={register}/>
-        </Box>
-        <Box className={styles.rightBlock}>
-          <Typography>Фото профіля</Typography>
-          <Box className={styles.imageWrapper}>
-            <label htmlFor="filePhoto">
-              <Avatar
-                sx={{ borderRadius: 0, width: 250, height: 200 }}
-                src={image}
-              />
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              name="filePhoto"
-              hidden
-              id="filePhoto"
-            />
-          </Box>
-          <Box className={styles.registrationDate}>
-            <Typography style={{color: "#808485"}}>Дата реєстрації</Typography>
-            <MyInput
-              width={200}
-              register={register}
-              name="registrationDate"
-              type="date"/>
-          </Box>
-        </Box>
+        {(isFetching === statusTypes.LOADING) ? (
+          <CircularProgress style={{margin: "auto"}}/>
+        ) : (
+          <>
+            <Box>
+              <Box className={styles.infoBlock}>
+                <MyInput
+                  outsideLabel="Логін"
+                  width={310}
+                  name="username"
+                  disabled
+                  register={register}/>
+                <MyInput
+                  outsideLabel="Ім'я"
+                  width={310}
+                  name="firstName"
+                  register={register}/>
+                <MyInput
+                  outsideLabel="Прізвище"
+                  width={310}
+                  name="lastName"
+                  register={register}/>
+                <MyInput
+                  outsideLabel="Email"
+                  width={310}
+                  name="email"
+                  register={register}/>
+                <MyInput
+                  outsideLabel="Номер телефону"
+                  width={310}
+                  name="phoneNumber"
+                  register={register}/>
+                <MyInput
+                  outsideLabel="Дата народження"
+                  width={310}
+                  register={register}
+                  name="birthday"
+                  type="date"/>
+              </Box>
+              <Box style={{display: "flex", alignItems: "center", justifyContent:"space-between", marginTop: 20}}>
+                <Box style={{display: "flex", alignItems: "center"}}>
+                  <Typography style={{margin: "auto 20px auto 0"}}>Курсів пройдено/в процесі</Typography>
+                  <MyInput
+                    name="countCompleted"
+                    width={60}
+                    register={register}
+                    isCenter={true}
+                    disabled/>
+                  <MyInput
+                    name="countInProgress"
+                    width={60}
+                    register={register}
+                    isCenter={true}
+                    disabled/>
+                </Box>
+                <Box style={{display: "flex", alignItems: "center"}}>
+                  <Typography style={{margin: "auto 20px auto 0"}}>Середня оцінка за всі курси</Typography>
+                  <MyInput
+                    disabled
+                    width={60}
+                    isCenter={true}
+                    name="averageGrade"
+                    register={register}
+                  />
+                </Box>
+                <Button type="submit">
+                  <img src={editIcon}/>
+                </Button>
+              </Box>
+            </Box>
+            <Box className={styles.rightBlock}>
+              <Typography variant="h6" style={{marginBottom: 10}}>Фото профіля</Typography>
+              <Box className={styles.imageWrapper}>
+                <label htmlFor="filePhoto">
+                  <Avatar
+                    sx={{ borderRadius: 0, width: "100%", height: 200 }}
+                    srcSet={image}
+                    imgProps={{
+                      onError: handleImageError,
+                    }}
+                  />
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  name="filePhoto"
+                  hidden
+                  id="filePhoto"
+                />
+              </Box>
+              <Box className={styles.registrationDate}>
+                <Typography variant="h6" style={{color: "#808485", fontSize: 18, paddingRight: 20, display: "flex", alignItems: "center"}}>
+                  Дата реєстрації
+                  <Image width={20} height={20} style={{marginLeft: 10}} src={lockImage}/>
+                </Typography>
+                <MyInput
+                  width={150}
+                  register={register} 
+                  disabled
+                  name="registrationDate"
+                  type="date"/>
+              </Box>
+            </Box>
+          </>
+        )}
       </Box>
-    </>
+    </Form>
   );
 };
 

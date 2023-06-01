@@ -7,6 +7,8 @@ export interface IInput {
   label?: string;
   type?:string;
   outsideLabel?: string;
+  defaultValue?: string;
+  isCenter?: boolean;
   variant?: "standard" | "filled" | "outlined";
   placeholder?: string;
   disabled?: boolean;

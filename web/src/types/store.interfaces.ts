@@ -1,5 +1,7 @@
-import {InitialState} from "./auth.interfaces";
+import {UserInitialState} from "./user.interface";
+import {CourseInitialState} from "./course.interface";
 
 export interface IStore {
-    auth: InitialState,
+    user: UserInitialState,
+    course: CourseInitialState,
 }

@@ -11,15 +11,16 @@ import {MyInput} from "../../UIComponents/Input/MyInput";
 
 
 import {useAppDispatch, useAppSelector} from "../../hooks/hooks";
-import {fetchLogin} from "../../redux/slices/auth/auth";
+import {fetchLogin} from "../../redux/slices/user/user.slice";
 
 import {loginSchema} from "../../validations/login.schema";
 
-import {statusTypes} from "../../types/status.types";
 
 import {setTokenToLocalStorage} from "../../handlers/handlers";
 
 import {UserLoginData} from "../../types/user.interface";
+
+import {statusTypes} from "../../types/enums";
 
 import {useStyles} from "./styles";
 
@@ -27,7 +28,7 @@ const LoginForm = () => {
   const styles = useStyles();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const isSubmitted = useAppSelector(store => store.auth.status === statusTypes.LOADING);
+  const isSubmitted = useAppSelector(store => store.user.status === statusTypes.LOADING);
 
   const validationSchema = useMemo(() => {
     return loginSchema;
@@ -51,6 +52,7 @@ const LoginForm = () => {
       navigate("/");
     }
   };
+
 
   return (
     <Form onSubmit={handleSubmit(customSubmit)} className={styles.loginForm}>

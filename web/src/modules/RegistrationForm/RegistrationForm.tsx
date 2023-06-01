@@ -10,16 +10,17 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import moment from "moment";
 
 import {useAppDispatch, useAppSelector} from "../../hooks/hooks";
-import {statusTypes} from "../../types/status.types";
 
 import {MyInput} from "../../UIComponents/Input/MyInput";
-import {fetchRegistration} from "../../redux/slices/auth/auth";
+import {fetchRegistration} from "../../redux/slices/user/user.slice";
 
 import {registrationSchema} from "../../validations/registration.schema";
 
 import {setTokenToLocalStorage} from "../../handlers/handlers";
 
 import {UserRegisterData} from "../../types/user.interface";
+
+import {statusTypes} from "../../types/enums";
 
 import {useStyles} from "./styles";
 
@@ -28,7 +29,7 @@ const RegistrationForm = () => {
   const styles = useStyles();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const isSubmitted = useAppSelector(store => store.auth.status === statusTypes.LOADING);
+  const isSubmitted = useAppSelector(store => store.user.status === statusTypes.LOADING);
 
   const validationSchema = useMemo(() => {
     return registrationSchema;
@@ -50,9 +51,10 @@ const RegistrationForm = () => {
   );
 
   const customSubmit = async (data: UserRegisterData) => {
-    const birthday = moment(data.birthday).format("DD/MM/YYYY");
-    const {token} = await dispatch(fetchRegistration({...data, birthday: birthday})).unwrap();
-    if(token) {
+    const birthday = moment(data.birthday).format("DD/MM/YYYY");//Перетворюємо дату до потрібного формату
+    const {token} = await dispatch(fetchRegistration({...data, birthday: birthday})).unwrap();//За допомогою оператор SPREAD добавляємо до переданих формою даних нашу відформатовану дату.Spread оператор (...) в JavaScript - це синтаксична конструкція, яка дозволяє розгортати (spread) елементи масиву або властивості об'єкта, додаючи їх в новий масив або об'єкт. Він дозволяє використовувати значення з одного масиву або об'єкта в іншому масиві або об'єкті без необхідності вказувати кожний елемент окремо.
+    //fetchRegistration Відправляє дані, які які користувач ввів для регістрації та відсилає запит на сервер після чого очікує на відповідь. Якщо дані не коректні, тобто сервер вернув не токен, то випливає помилка.
+    if(token) { //якщо токен прийшов і він валідний, то спрацьовує умова наступна умова.
       await setTokenToLocalStorage("token", token);
       navigate("/");
     }
@@ -110,7 +112,7 @@ const RegistrationForm = () => {
           name="password"
         />
       </Box>
-      <Button type="submit" disabled={isSubmitted || !isValid} variant="contained" className={styles.submitButton}>Зареєструватися</Button>
+      <Button type="submit" disabled={isSubmitted || !isValid} variant="contained" className={styles.submitButton}>Зареєструватися</Button> {/* isSubmitted вказує чи форма була відправлена та isValid вказує на те, чи дані, які введені, відповідають валідації. Кнопка відправлення вимкнена, якщо дані не валідні або дані в процесі відправлення. */}
     </Form>
   );
 };

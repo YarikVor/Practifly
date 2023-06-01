@@ -8,6 +8,8 @@ public class CourseMaterialItemDto
     public string Name { get; set; } = null!;
 
     public int? Grade { get; set; }
+    
+    public string? Note { get; set; } 
 
     public bool IsCompleted { get; set; }
 }

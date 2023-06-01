@@ -1,4 +1,4 @@
-import {statusTypes} from "./status.types";
+import {statusTypes} from "./enums";
 
 export interface AuthResponseData  {
     token: string;
@@ -6,6 +6,9 @@ export interface AuthResponseData  {
 
 }
 
+export interface PhotoURL{
+    url: string;
+}
 export interface UserData {
     birthday: string;
     email: string
@@ -28,43 +31,19 @@ export interface UserRegisterData {
     password: string
 }
 
-export interface UserProfileData {
-    countCompleted: number
-    countInProgress: number
-    averageGrade: number
-    id: number
-    username: string
-    firstName: string
-    lastName: string
-    phoneNumber: string
-    email: string
-    birthday: string
-    filePhoto: string
-    registrationDate: string
-}
-
 export interface UserLoginData {
     email: string;
     password: string;
 }
 
-export interface ProfileData {
+export interface ProfileData extends UserData{
     countCompleted: number
     countInProgress: number
     averageGrade: number
-    id: number
-    username: string
-    firstName: string
-    lastName: string
-    phoneNumber: string
-    email: string
-    birthday: string
-    filePhoto: string
-    registrationDate: string
 }
 
-
-export interface InitialState {
+export type UpdateProfile = Omit<UserData, "id" | "filePhoto" | "registrationDate">;
+export interface UserInitialState {
     data: AuthResponseData | null;
     profileData: ProfileData | null;
     status: statusTypes;

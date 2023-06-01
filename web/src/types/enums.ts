@@ -5,3 +5,8 @@ export enum statusTypes {
     SUCCESS="success",
     ERROR="error",
 }
+
+export enum endpointTypes {
+    USER="user",
+    COURSE="course",
+}

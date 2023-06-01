@@ -10,11 +10,6 @@ import {toast, ToastContainer} from "react-toastify";
 
 import {Footer} from "../../UIComponents/Footer/Footer";
 
-import Header from "../../UIComponents/Header/Header";
-
-
-
-
 import {useAppSelector} from "../../hooks/hooks";
 
 import {useStyles} from "./styles";
@@ -24,8 +19,8 @@ import {useStyles} from "./styles";
 
 const Container = () => {
   const styles = useStyles();
-  const isError = useAppSelector(store => store.auth.status);
-  const message = useAppSelector(store => store.auth.errorMessage);
+  const isError = useAppSelector(store => store.user.status);
+  const message = useAppSelector(store => store.user.errorMessage);
   useEffect(() => {
     if(isError === "error") {
       toast.error(message, {position: "top-center"});
@@ -33,17 +28,12 @@ const Container = () => {
   },[isError]);
 
   return (
-
     <>
-
-      <ToastContainer />
-      <Header/>
+      <ToastContainer position="top-center"/>
       <MUIContainer className={styles.root} maxWidth={false}>
         <Outlet/>
       </MUIContainer>
-
       <Footer/>
-
     </>
   );
 };

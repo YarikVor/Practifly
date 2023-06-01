@@ -2,12 +2,14 @@ import {configureStore} from "@reduxjs/toolkit";
 
 import {IStore} from "../types/store.interfaces";
 
-import {authReducer} from "./slices/auth/auth";
+import {userReducer} from "./slices/user/user.slice";
+import {courseReducer} from "./slices/course/course.slice";
 
 
 const store = configureStore<IStore>({
   reducer: {
-    auth: authReducer,
+    user: userReducer,
+    course: courseReducer,
   },
   devTools: true, 
 });

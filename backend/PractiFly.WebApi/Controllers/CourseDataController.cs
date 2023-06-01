@@ -311,6 +311,7 @@ public class CourseDataController : Controller
                             Id = m.Material.Id,
                             Name = m.Material.Name,
                             IsCompleted = m.UserMaterial != null && m.UserMaterial.IsCompleted,
+                            Note = m.Material.Note,
                             Grade = m.UserMaterial == null ? 0 : m.UserMaterial.Grade
                         })
                     ))

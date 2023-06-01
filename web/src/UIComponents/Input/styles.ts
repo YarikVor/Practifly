@@ -4,6 +4,7 @@ export const useStyles = makeStyles<{width?: string | number, isBlock: boolean}>
   theme, {width, isBlock}) => ({
   wrapper:{
     width: isBlock ? width : "",
+
   },
   image: {
     marginLeft: 10,
@@ -41,7 +42,7 @@ export const useStyles = makeStyles<{width?: string | number, isBlock: boolean}>
     color: "red",
   },
   inputStyles: {
-    "&.MuiInputBase-root": {
+    "& .MuiInputBase-root": {
       "&.Mui-focused fieldset": {
         borderColor: "rgba(120, 63, 214, 0.5)",
       },

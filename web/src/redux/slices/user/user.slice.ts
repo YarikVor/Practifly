@@ -2,27 +2,23 @@ import {createAsyncThunk, createSlice, SliceCaseReducers} from "@reduxjs/toolkit
 
 import axios from "../../../configure/axios";
 
-
-import {statusTypes} from "../../../types/status.types";
+import {statusTypes, endpointTypes} from "../../../types/enums";
 import {
   AuthResponseData,
-  InitialState,
-  ProfileData,
+  PhotoURL,
+  ProfileData, UpdateProfile, UserInitialState,
   UserLoginData,
   UserRegisterData,
 } from "../../../types/user.interface";
 
-const authEndpoint = "/user";
-
 export const fetchLogin = createAsyncThunk<AuthResponseData, UserLoginData, {rejectValue: string}>(
-  "auth/fetchLogin",
+  "user/fetchLogin",
   async (loginData, thunkAPI) => {
     try {
       const {data} = await axios.post<AuthResponseData>(
-        `${authEndpoint}/login`,
+        `${endpointTypes.USER}/login`,
         loginData
       );
-      console.log(data);
       return data;
     } catch (e) {
       return thunkAPI.rejectWithValue("Something went wrong. Check please entered data");
@@ -30,12 +26,27 @@ export const fetchLogin = createAsyncThunk<AuthResponseData, UserLoginData, {rej
   }
 );
 
-export const uploadPhoto = createAsyncThunk<string, FormData, {rejectValue: string}>(
+export const updateProfile = createAsyncThunk<string, UpdateProfile, {rejectValue: string}>(
+  "user/updateProfile",
+  async (updateProfileData, thunkAPI) => {
+    try {
+      const {data} = await axios.post<string>(
+        `${endpointTypes.USER}/profile/edit`,
+        updateProfileData
+      );
+      return data;
+    } catch (e) {
+      return thunkAPI.rejectWithValue("Something went wrong. Check please entered data");
+    }
+  }
+);
+
+export const uploadPhoto = createAsyncThunk<PhotoURL, FormData, {rejectValue: string}>(
   "file/uploadPhoto",
   async (formData, thunkAPI) => {
     try {
-      const {data} = await axios.post<string>(
-        "bucket/upload", formData,{
+      const {data} = await axios.post<PhotoURL>(
+        `${endpointTypes.USER}/avatar`, formData,{
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -49,11 +60,11 @@ export const uploadPhoto = createAsyncThunk<string, FormData, {rejectValue: stri
 );
 
 export const fetchRegistration = createAsyncThunk<AuthResponseData, UserRegisterData, {rejectValue: string}>(
-  "auth/fetchRegistration",
+  "user/fetchRegistration",
   async (registrationData, thunkAPI) => {
     try {
       const {data} = await axios.post<AuthResponseData>(
-        `${authEndpoint}/register`,
+        `${endpointTypes.USER}/register`,
         registrationData
       );
       return data;
@@ -64,10 +75,10 @@ export const fetchRegistration = createAsyncThunk<AuthResponseData, UserRegister
 );
 
 export const fetchMe = createAsyncThunk<ProfileData, void, {rejectValue: string}>(
-  "auth/fetchMe",
+  "user/fetchMe",
   async (_, thunkAPI) => {
     const response = await axios.get<ProfileData>(
-      `${authEndpoint}/profile/me`
+      `${endpointTypes.USER}/profile/me`
     );
     if(!response) {
       return thunkAPI.rejectWithValue("Something went wrong. Check please entered data");
@@ -76,17 +87,17 @@ export const fetchMe = createAsyncThunk<ProfileData, void, {rejectValue: string}
   }
 );
 
-const initialState: InitialState = {
+const initialState: UserInitialState = {
   data: null,
   profileData: null,
   status: statusTypes.INIT,
   errorMessage: "",
 };
-const authSlice = createSlice<
-    InitialState,
-    SliceCaseReducers<InitialState>
+const userSlice = createSlice<
+    UserInitialState,
+    SliceCaseReducers<UserInitialState>
 >({
-  name: "auth",
+  name: "user",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -132,15 +143,25 @@ const authSlice = createSlice<
     builder.addCase(uploadPhoto.pending, (state) => {
       state.status = statusTypes.LOADING;
     });
-    builder.addCase(uploadPhoto.fulfilled, (state, {payload}) => {
+    builder.addCase(uploadPhoto.fulfilled, (state) => {
       state.status = statusTypes.SUCCESS;
-      state.profileData!.filePhoto = payload;
       state.errorMessage = null;
     });
     builder.addCase(uploadPhoto.rejected, (state, action) => {
       state.status = statusTypes.ERROR;
       state.errorMessage = action.payload;
     });
+    builder.addCase(updateProfile.pending, (state) => {
+      state.status = statusTypes.LOADING;
+    });
+    builder.addCase(updateProfile.fulfilled, (state) => {
+      state.status = statusTypes.SUCCESS;
+      state.errorMessage = null;
+    });
+    builder.addCase(updateProfile.rejected, (state, action) => {
+      state.status = statusTypes.ERROR;
+      state.errorMessage = action.payload;
+    });
   }});
-export const {reducer: authReducer} = authSlice;
+export const {reducer: userReducer} = userSlice;
 
