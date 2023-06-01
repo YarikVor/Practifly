@@ -3,6 +3,7 @@ using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities.Courses;
 using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Dto.CourseDetails;
+using System.Linq.Expressions;
 
 namespace PractiFly.WebApi.AutoMapper.Profiles;
 
@@ -46,6 +47,46 @@ public class CourseDetailsProfile : Profile
                     .UserThemes
                     .Where(ut => ut.ThemeId == e.Id)
                     .Select(ut => ut.IsCompleted)
-                    .FirstOrDefault()));
+                .FirstOrDefault()));
+        //
+        var userId = 0;
+        CreateProjection<Course, UserCourseInfoDto>()
+                    .ForMember(dto => dto.Themes, par => par.MapFrom(c => _context
+                        .Themes
+                        .Where(t => t.CourseId == c.Id)
+                    ));
+
+        CreateProjection<Theme, FullThemeWithMaterialsDto>()
+            .ForMember(dto => dto.IsCompleted, par => par.MapFrom(t => _context
+                .UserThemes
+                .Where(ut => ut.UserId == userId && ut.ThemeId == t.Id)
+                .Select(ut => ut.IsCompleted)
+                .FirstOrDefault()
+            ))
+            .ForMember(dto => dto.Grade, par => par.MapFrom(t => _context
+                .UserThemes
+                .Where(ut => ut.UserId == userId && ut.ThemeId == t.Id)
+                .Select(ut => ut.Grade)
+                .FirstOrDefault()))
+            .ForMember(dto => dto.Materials, par => par.MapFrom(t => _context
+                .ThemeMaterials
+                .Where(tm => tm.ThemeId == t.Id)
+                .Select(tm => tm.Material)
+                .Select(m => new
+                {
+                    Material = m,
+                    UserMaterial = _context
+                        .UserMaterials
+                        .FirstOrDefault(um => um.UserId == userId && um.MaterialId == m.Id)
+                })
+                .Select(m => new CourseMaterialItemDto
+                {
+                    Id = m.Material.Id,
+                    Name = m.Material.Name,
+                    IsCompleted = m.UserMaterial != null && m.UserMaterial.IsCompleted,
+                    Grade = m.UserMaterial == null ? 0 : m.UserMaterial.Grade
+                })
+            ))
+            ;
     }
 }

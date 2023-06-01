@@ -120,7 +120,7 @@ public class UserController : Controller
     /// <summary>
     ///     Generates a JWT (JSON Web Token) for the specified user with the given role.
     /// </summary>
-    /// <param name="user">The User object for whom the token is generated.</param>
+    /// <param name="userId">The User object for whom the token is generated.</param>
     /// <param name="role">The role assigned to the user.</param>
     /// <response code="200">Token generate was successful.</response>
     /// <response code="400">Token generate was failed.</response>

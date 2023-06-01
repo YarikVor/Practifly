@@ -94,11 +94,11 @@ public class CourseMaterialsController : Controller
         return Json(result);
     }
 
-    /// <summary>
-    ///     Returns a list of course headings associated with a course identified by the specified courseId.
-    /// </summary>
-    /// <param name="materialId">Id of the material.</param>
-    /// <returns>A JSON-encoded representation of the list of course headings.</returns>
+    ///// <summary>
+    /////     Returns a list of course headings associated with a course identified by the specified courseId.
+    ///// </summary>
+    ///// <param name="materialId">Id of the material.</param>
+    ///// <returns>A JSON-encoded representation of the list of course headings.</returns>
     /*[HttpGet]
     [Route("material")]
     public async Task<IActionResult> GetMaterialsFromHeading(int headingId)
