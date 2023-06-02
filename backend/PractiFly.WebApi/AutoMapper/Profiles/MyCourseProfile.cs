@@ -91,10 +91,11 @@ public class MyCourseProfile : Profile
             .ForMember(
                 dto => dto.CountProgress,
                 par => par.MapFrom(
-                    user => _context
+                    uc => _context
                     .UserThemes
-                    .Where(ut => ut.UserId == user.UserId)
-                    .Count (uc => uc.IsCompleted)))
+                    .Where(ut => ut.Theme.CourseId == uc.CourseId)
+                    .Where(ut => ut.UserId == uc.UserId)
+                    .Count (ut => ut.IsCompleted)))
             //.ForMember(
             //    e => e.Grade,
             //    par => par.MapFrom(
