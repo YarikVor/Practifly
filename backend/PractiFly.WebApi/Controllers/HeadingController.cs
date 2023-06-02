@@ -97,25 +97,24 @@ public class HeadingController : Controller
     /// <returns></returns>
     /// <response code="200">Heading edited successfully.</response>
     /// <response code="404">Heading not found.</response>
-    [HttpPost]
-    [Route("edit")]
-    //[Authorize(UserRoles.Admin)]
-    public async Task<IActionResult> Edit(HeadingEditDto dto)
-    {
-        if (!await _context.Headings.AnyAsync(e => e.Id == dto.Id))
-            return NotFound();
+[HttpPost]
+[Route("edit")]
+//[Authorize(UserRoles.Admin)]
+public async Task<IActionResult> Edit(HeadingEditDto dto)
+{
+    if (!await _context.Headings.AnyAsync(e => e.Id == dto.Id))
+        return NotFound();
+    if (await _context.Headings.AnyAsync(e => e.Code == dto.Code && e.Id != dto.Id))
+        return BadRequest(new { message = "Heading with this code already exists" });
 
-        if (_context.Headings.Any(e => e.Code == dto.Code && e.Id != dto.Id))
-            return BadRequest(new { message = "Heading with this code already exists" });
+    var changedHeading = _mapper.Map<HeadingEditDto, Heading>(dto);
 
-        var changedHeading = _mapper.Map<HeadingEditDto, Heading>(dto);
+    _context.Headings.Update(changedHeading);
 
-        _context.Headings.Update(changedHeading);
+    await _context.SaveChangesAsync();
 
-        await _context.SaveChangesAsync();
-
-        return Ok();
-    }
+    return Ok();
+}
 
     /// <summary>
     ///     Method for delete heading.
@@ -127,17 +126,11 @@ public class HeadingController : Controller
     //[Authorize(UserRoles.Admin)]
     public async Task<IActionResult> Delete(int headingId)
     {
-        var isAvaibleHeading = await _context
+        var count = await _context
             .Headings
-            .AnyAsync(e => e.Id == headingId);
+            .Where(h => h.Id == headingId)
+            .ExecuteDeleteAsync();
 
-        if (!isAvaibleHeading)
-            return NotFound();
-
-        _context.Headings.Remove(new Heading { Id = headingId });
-
-        await _context.SaveChangesAsync();
-
-        return Ok();
+        return count == 0 ? NotFound() : Ok();
     }
 }

@@ -66,6 +66,7 @@ public class UserController : Controller
             return BadRequest(identityResult.Errors);
 
         var resultDto = _mapper.Map<User, UserTokenInfoDto>(identityUser, opt => opt.Items["baseUrl"] = _amazonClient.GetFileUrl());
+        
         resultDto.Token = GenerateToken(identityUser.Id, UserRoles.User);
         return Ok(resultDto);
     }
