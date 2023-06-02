@@ -1,15 +1,22 @@
 import {makeStyles} from "tss-react/mui";
 
 export const useStyles = makeStyles()(() => ({
+  myCourseContainer:{
+    display: "flex",
+    flexWrap: "wrap",
+    gap:50,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   mainWrapper: {
-    maxWidth: 650,
     padding: 10,
+    width: 750,
     backgroundColor: "#F1F0FA",
     boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.25)",
     borderRadius: 10,
   },
   main:{
-    maxWidth: 650,
+    maxWidth: 750,
     background: "#FFFFFF",
     border: "0.5px solid #9062F2",
     borderRadius: 10,

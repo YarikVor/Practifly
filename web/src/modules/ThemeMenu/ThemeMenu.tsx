@@ -96,6 +96,10 @@ export const ThemeMenu:FC<ThemeMenuProps> = ({
             {courseDetails?.themes.map((theme) => (
               <React.Fragment key={theme.name + Math.random()}>
                 <ListItemButton style={{margin: 2, backgroundColor: "#F1F0FA"}} onClick={() => handleClick(theme.id)}>
+                  <Checkbox
+                    checked={theme.isCompleted}
+                    className={classes.disabledCheckbox}
+                  />
                   <ListItemText primary={theme.name} />
                   {theme.materials.length !== 0 && (open[theme.id] ? <ExpandLess /> : <ExpandMore />)}
                 </ListItemButton>

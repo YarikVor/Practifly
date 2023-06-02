@@ -3,6 +3,8 @@ import {Box, Button, CircularProgress, InputAdornment, InputLabel, TextField, Ty
 import React, {Fragment} from "react";
 
 
+import {useNavigate} from "react-router-dom";
+
 import {useMyCourses} from "../../hooks/courses/useMyCourses";
 import ukraine from "../../assets/ukraine.png";
 import cells from "../../assets/cells.png";
@@ -12,8 +14,9 @@ import {useStyles} from "./styles";
 export const MyCourses = () => {
   const [myCourses, isCoursesLoading] = useMyCourses();//викликаємо хук, який відправляє запит на сервер на отримання курсів, до яких причетний користувач
   const {classes} = useStyles();
+  const navigate = useNavigate();
   return (
-    <Box>
+    <Box className={classes.myCourseContainer}>
       {isCoursesLoading ? (//Якщо курси завантажуються - показуємо лоудер, інакше - перебираємо всі курси за допомогою методу масива(циклу) мар та відображаємо кожний
         <CircularProgress />
       ) : (
@@ -58,7 +61,7 @@ export const MyCourses = () => {
                         defaultValue={course.gradeAverage}
                         inputProps={{
                           style: {
-                            width: 40,
+                            width: 45,
                             height: 15,
                             color: "green",
                             textAlign: "center",
@@ -71,7 +74,7 @@ export const MyCourses = () => {
                           </Box>
                       }
                     </Box>
-                    <Button className={classes.button}>Переглянути курс</Button>
+                    <Button onClick={() => navigate(`../courseDetails/${course.courseId}`)} className={classes.button}>Переглянути курс</Button>
                   </Box>
                 </Box>
               </Box>
