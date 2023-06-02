@@ -6,7 +6,7 @@ namespace Practifly.FakerGenerator.Faker.Materials;
 
 public sealed class HeadingFaker : Faker<Heading>, IFakerGenerate<Heading>
 {
-    public HeadingFaker(string lang = "uk") : base(lang)
+    public HeadingFaker() : base("uk")
     {
         RuleFor(h => h.Code, f => f.Random.Replace("##.##.##.##"));
         RuleFor(h => h.Name, f => f.Company.CompanyName());
