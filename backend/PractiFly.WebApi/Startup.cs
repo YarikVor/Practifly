@@ -77,9 +77,9 @@ public class Startup
 
         ConfigureDatabase(services);
 
-        InitTables(services);
-
         AddIdentityUserAndRole(services);
+
+        InitTables(services);
 
         services.AddScoped<IConfigurationProvider, PractiFlyMapperConfiguration>();
         services.AddScoped<IMapper, PractiFlyMapper>();
@@ -293,22 +293,46 @@ public class Startup
             .AddDbContext<IPractiflyContext, PractiFlyContext>(SetConnectionString)
             .AddDbContext<UserIdentityDbContext>(SetConnectionString);
 
-        //services.BuildServiceProvider().GetService<UserIdentityDbContext>().Database.Migrate();
-
-        var context = services.BuildServiceProvider().GetService<IPractiflyContext>() as PractiFlyContext;
-        //context.GenerateTestDataIfEmpty();
-        //context.Database.Migrate();
-
-
         void SetConnectionString(DbContextOptionsBuilder options)
         {
             options.UseNpgsql(connectionString);
         }
     }
 
-    private static void InitTables(IServiceCollection services)
+private static void InitTables(IServiceCollection services)
+{
+    var serviceProvider = services.BuildServiceProvider();
+    var identityContext = serviceProvider.GetService<UserIdentityDbContext>();
+    var practiFlyContext = serviceProvider.GetService<IPractiflyContext>() as DbContext;
+    //identityContext!.Database.Migrate();
+
+    //GenerateRules(identityContext);
+    
+    //practiFlyContext!.Database.Migrate();
+
+    practiFlyContext.GenerateTestDataIfEmpty();
+}
+
+    private static void GenerateRules(UserIdentityDbContext identityContext)
     {
-        // TODO: Make init tables with migration and fakers
+        if (!identityContext.Roles.Any())
+        {
+            identityContext.Roles.AddRange(new[]
+            {
+                GenerateRole("user"),
+                GenerateRole("admin"),
+                GenerateRole("teacher"),
+                GenerateRole("manager"),
+            });
+
+            identityContext.SaveChanges();
+        }
+
+        Role GenerateRole(string name) => new()
+        {
+            Name = name,
+            NormalizedName = name.ToUpper(),
+        };
     }
 
     #endregion
