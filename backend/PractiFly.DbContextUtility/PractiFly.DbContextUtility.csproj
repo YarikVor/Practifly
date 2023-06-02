@@ -7,19 +7,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0-preview.1.23111.4"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.0-preview.1.23111.4"/>
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0-preview.1"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0-preview.1.23111.4" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.0-preview.1.23111.4" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0-preview.1" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\PractiFly.DbEntities\PractiFly.DbEntities.csproj"/>
-        <ProjectReference Include="..\Practifly.FakerGenerator\Practifly.FakerGenerator.csproj"/>
-        <ProjectReference Include="..\PractiFly.FakerManager\PractiFly.FakerManager.csproj"/>
+        <ProjectReference Include="..\PractiFly.DbEntities\PractiFly.DbEntities.csproj" />
+        <ProjectReference Include="..\Practifly.FakerGenerator\Practifly.FakerGenerator.csproj" />
+        <ProjectReference Include="..\PractiFly.FakerManager\PractiFly.FakerManager.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Migrations"/>
+      <Folder Include="Migrations" />
     </ItemGroup>
 
 </Project>
