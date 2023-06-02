@@ -14,7 +14,7 @@ public abstract class DesignTimeDbContentFactory<TDbContext> : IDesignTimeDbCont
         var optionsBuilder = new DbContextOptionsBuilder<TDbContext>();
 
         optionsBuilder.UseNpgsql(
-            "User ID=YarikVor;password=uPGpfLbjt9Z4;Database=testmigration;host=ep-tight-moon-762347.eu-central-1.aws.neon.tech");
+            "User ID=YarikVor;password=uPGpfLbjt9Z4;Database=testdb;host=ep-tight-moon-762347.eu-central-1.aws.neon.tech");
 
         return (TDbContext) Activator.CreateInstance(typeof(TDbContext), optionsBuilder.Options)!;
     }
