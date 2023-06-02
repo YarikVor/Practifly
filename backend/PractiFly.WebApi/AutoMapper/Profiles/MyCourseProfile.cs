@@ -77,17 +77,24 @@ public class MyCourseProfile : Profile
                 )
             )
             //TODO: CountProgress
+            //.ForMember(
+            //    dto => dto.CountProgress,
+            //    par => par.MapFrom(
+            //        user =>
+            //            _context
+            //            .UserThemes
+            //           .Where(ut => ut.ThemeId == user.Id)
+            //           //.Select(ut => ut.IsCompleted)
+            //           .Count(uc => uc.IsCompleted)
+            //    )
+            //)
             .ForMember(
                 dto => dto.CountProgress,
                 par => par.MapFrom(
-                    user =>
-                        _context
-                        .UserThemes
-                       .Where(ut => ut.ThemeId == user.Id)
-                       //.Select(ut => ut.IsCompleted)
-                       .Count(uc => uc.IsCompleted)
-                )
-            )
+                    user => _context
+                    .UserThemes
+                    .Where(ut => ut.UserId == user.UserId)
+                    .Count (uc => uc.IsCompleted)))
             //.ForMember(
             //    e => e.Grade,
             //    par => par.MapFrom(
