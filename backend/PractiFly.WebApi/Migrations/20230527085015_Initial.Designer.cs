@@ -12,8 +12,8 @@ using PractiFly.WebApi.Context;
 namespace PractiFly.WebApi.Migrations
 {
     [DbContext(typeof(UserIdentityDbContext))]
-    [Migration("20230418120425_IdentityMigration")]
-    partial class IdentityMigration
+    [Migration("20230527085015_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -183,17 +183,15 @@ namespace PractiFly.WebApi.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("FilePhoto")
-                        .IsRequired()
-                        .HasMaxLength(2048)
-                        .HasColumnType("character varying(2048)")
-                        .HasColumnName("FilePhoto");
-
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)")
                         .HasColumnName("FirstName");
+
+                    b.Property<bool>("IsCustomPhoto")
+                        .HasColumnType("boolean")
+                        .HasColumnName("CustomPhoto");
 
                     b.Property<string>("LastName")
                         .IsRequired()

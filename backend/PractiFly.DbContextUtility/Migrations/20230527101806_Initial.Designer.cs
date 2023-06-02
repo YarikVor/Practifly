@@ -12,7 +12,7 @@ using PractiFly.DbContextUtility.Context.PractiflyDb;
 namespace PractiFly.DbContextUtility.Migrations
 {
     [DbContext(typeof(PractiFlyContext))]
-    [Migration("20230419141543_Initial")]
+    [Migration("20230527101806_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -297,6 +297,11 @@ namespace PractiFly.DbContextUtility.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(65536)
+                        .HasColumnType("character varying(65536)")
+                        .HasColumnName("Description");
+
                     b.Property<bool>("IsBasic")
                         .HasColumnType("boolean")
                         .HasColumnName("IsBasic");
@@ -397,8 +402,8 @@ namespace PractiFly.DbContextUtility.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
                         .HasColumnName("Name");
 
                     b.Property<string>("Note")
@@ -490,8 +495,8 @@ namespace PractiFly.DbContextUtility.Migrations
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasMaxLength(2)
-                        .HasColumnType("character varying(2)")
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
                         .HasColumnName("Code");
 
                     b.Property<string>("Name")
@@ -532,8 +537,8 @@ namespace PractiFly.DbContextUtility.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
                         .HasColumnName("Name");
 
                     b.Property<string>("Note")
@@ -698,8 +703,8 @@ namespace PractiFly.DbContextUtility.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
                         .HasColumnName("Name");
 
                     b.Property<string>("Note")
@@ -757,6 +762,31 @@ namespace PractiFly.DbContextUtility.Migrations
                     b.ToTable("GroupCourse");
                 });
 
+            modelBuilder.Entity("PractiFly.DbEntities.Users.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("NormalizedName")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AspNetRoles", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
             modelBuilder.Entity("PractiFly.DbEntities.Users.User", b =>
                 {
                     b.Property<int>("Id")
@@ -781,17 +811,15 @@ namespace PractiFly.DbContextUtility.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("FilePhoto")
-                        .IsRequired()
-                        .HasMaxLength(2048)
-                        .HasColumnType("character varying(2048)")
-                        .HasColumnName("FilePhoto");
-
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)")
                         .HasColumnName("FirstName");
+
+                    b.Property<bool>("IsCustomPhoto")
+                        .HasColumnType("boolean")
+                        .HasColumnName("CustomPhoto");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -840,7 +868,10 @@ namespace PractiFly.DbContextUtility.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AspNetUsers");
+                    b.ToTable("AspNetUsers", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
             modelBuilder.Entity("PractiFly.DbEntities.Users.UserCourse", b =>
@@ -856,7 +887,7 @@ namespace PractiFly.DbContextUtility.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("CourseId");
 
-                    b.Property<int>("Grade")
+                    b.Property<int?>("Grade")
                         .HasColumnType("integer")
                         .HasColumnName("Grade");
 
@@ -869,7 +900,7 @@ namespace PractiFly.DbContextUtility.Migrations
                         .HasColumnName("LastThemeId");
 
                     b.Property<DateTime>("LastTime")
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("LastTime");
 
                     b.Property<int>("LevelId")
@@ -979,7 +1010,7 @@ namespace PractiFly.DbContextUtility.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Grade")
+                    b.Property<int?>("Grade")
                         .HasColumnType("integer")
                         .HasColumnName("Grade");
 
@@ -998,8 +1029,8 @@ namespace PractiFly.DbContextUtility.Migrations
 
                     b.Property<string>("ResultUrl")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)")
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)")
                         .HasColumnName("ResultUrl");
 
                     b.Property<int>("UserId")
@@ -1013,6 +1044,26 @@ namespace PractiFly.DbContextUtility.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserMaterial");
+                });
+
+            modelBuilder.Entity("PractiFly.DbEntities.Users.UserRole", b =>
+                {
+                    b.Property<int>("RoleId")
+                        .HasColumnType("integer")
+                        .HasColumnOrder(1);
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnOrder(0);
+
+                    b.HasKey("RoleId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserRoles", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
             modelBuilder.Entity("PractiFly.DbEntities.Users.UserTheme", b =>
@@ -1436,6 +1487,25 @@ namespace PractiFly.DbContextUtility.Migrations
                         .IsRequired();
 
                     b.Navigation("Material");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PractiFly.DbEntities.Users.UserRole", b =>
+                {
+                    b.HasOne("PractiFly.DbEntities.Users.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PractiFly.DbEntities.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
 
                     b.Navigation("User");
                 });
