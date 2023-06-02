@@ -6,7 +6,7 @@ namespace Practifly.FakerGenerator.Faker.Materials;
 
 public sealed class LevelFaker : Faker<Level>, IFakerGenerate<Level>
 {
-    public LevelFaker(string lang = "uk") : base(lang)
+    public LevelFaker() : base("uk")
     {
         RuleFor(l => l.Name, f => f.Name.FirstName());
         RuleFor(l => l.Number, f => f.Random.Number(1, 5));

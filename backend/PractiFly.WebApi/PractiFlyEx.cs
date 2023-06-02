@@ -10,16 +10,16 @@ namespace PractiFly.WebApi;
 
 public static class PractiFlyEx
 {
-    [Conditional("GENERATE_TEST_DATA")]
+    //[Conditional("GENERATE_TEST_DATA")]
     public static void GenerateTestDataIfEmpty(this DbContext context)
     {
-        context.Database.EnsureCreated();
+        //context.Database.EnsureCreated();
 
         Randomizer.Seed = new Random(0);
 
         var fakerManager = new PractiFlyFakerManager();
 
-        //AddData<User>();
+        AddData<User>();
 
         AddData<Language>();
         AddData<Group>();

@@ -13,7 +13,7 @@ public class PractiFlyMapperConfigurationExpression : MapperConfigurationExpress
             new CourseDetailsProfile(_context),
             new CourseThemesProfile(_context),
             new CourseMaterialsProfile(_context),
-            new HeadingProfile(_context),
+            new HeadingProfile(),
             new MyCourseProfile(_context),
             new UserProfile(),
             new MaterialBlockProfile(_context),

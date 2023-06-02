@@ -1,17 +1,30 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
+using PractiFly.WebApi.Context;
 
 namespace PractiFly.WebApi;
 
-public class PractiFlyContextFactory : IDesignTimeDbContextFactory<PractiFlyContext>
+public abstract class DesignTimeDbContentFactory<TDbContext> : IDesignTimeDbContextFactory<TDbContext>
+    where TDbContext : DbContext
 {
-    public PractiFlyContext CreateDbContext(string[] args)
+    public TDbContext CreateDbContext(string[] args)
     {
-        var optionsBuilder = new DbContextOptionsBuilder<PractiFlyContext>();
-        optionsBuilder.UseNpgsql(
-            "User ID=YarikVor;password=uPGpfLbjt9Z4;Database=testdb;host=ep-tight-moon-762347.eu-central-1.aws.neon.tech");
+        var optionsBuilder = new DbContextOptionsBuilder<TDbContext>();
 
-        return new PractiFlyContext(optionsBuilder.Options);
+        optionsBuilder.UseNpgsql(
+            "User ID=YarikVor;password=uPGpfLbjt9Z4;Database=testmigration;host=ep-tight-moon-762347.eu-central-1.aws.neon.tech");
+
+        return (TDbContext) Activator.CreateInstance(typeof(TDbContext), optionsBuilder.Options)!;
     }
+}
+
+public class PractiFlyContextFactory : DesignTimeDbContentFactory<PractiFlyContext>
+{
+}
+
+public class UserIdentityContextFactory : DesignTimeDbContentFactory<UserIdentityDbContext>
+{
+    
 }
