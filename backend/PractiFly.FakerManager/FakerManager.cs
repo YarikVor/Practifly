@@ -20,8 +20,14 @@ public class FakerManager : IFakerManager
 
     public void AddFaker<T>(IFakerGenerate<T> faker) where T : class
     {
-        if (faker == null) throw new ArgumentNullException(nameof(faker));
+        AddFaker(faker, typeof(T));
+    }
 
-        _fakers.Add(typeof(T), faker);
+    public void AddFaker(IFakerGenerate faker, Type type)
+    {
+        ArgumentNullException.ThrowIfNull(faker);
+        if (faker == null) throw new ArgumentNullException(nameof(faker));
+        
+        _fakers.Add(type, faker);
     }
 }

@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace PractiFly.WebApi.Migrations
 {
     /// <inheritdoc />
-    public partial class IdentityMigration : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -35,7 +35,7 @@ namespace PractiFly.WebApi.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     FirstName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     LastName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    FilePhoto = table.Column<string>(type: "character varying(2048)", maxLength: 2048, nullable: false),
+                    CustomPhoto = table.Column<bool>(type: "boolean", nullable: false),
                     Birthday = table.Column<DateOnly>(type: "date", nullable: false),
                     RegistrationDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Note = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),

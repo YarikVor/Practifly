@@ -180,17 +180,15 @@ namespace PractiFly.WebApi.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("FilePhoto")
-                        .IsRequired()
-                        .HasMaxLength(2048)
-                        .HasColumnType("character varying(2048)")
-                        .HasColumnName("FilePhoto");
-
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)")
                         .HasColumnName("FirstName");
+
+                    b.Property<bool>("IsCustomPhoto")
+                        .HasColumnType("boolean")
+                        .HasColumnName("CustomPhoto");
 
                     b.Property<string>("LastName")
                         .IsRequired()

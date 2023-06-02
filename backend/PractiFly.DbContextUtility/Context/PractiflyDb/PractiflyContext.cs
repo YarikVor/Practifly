@@ -39,4 +39,16 @@ public class PractiFlyContext : DbContext, IPractiflyContext
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<UserRole> UserRoles { get; set; } = null!;
     public DbSet<Role> Roles { get; set; } = null!;
+    
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    IgnoreMigrationFor<User>();
+    IgnoreMigrationFor<UserRole>();
+    IgnoreMigrationFor<Role>();
+
+    void IgnoreMigrationFor<TEntity>() where TEntity : class
+    {
+        modelBuilder.Entity<TEntity>().ToTable(t => t.ExcludeFromMigrations());
+    }
+}
 }

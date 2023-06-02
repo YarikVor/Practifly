@@ -13,38 +13,6 @@ namespace PractiFly.DbContextUtility.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    FirstName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    LastName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    FilePhoto = table.Column<string>(type: "character varying(2048)", maxLength: 2048, nullable: false),
-                    Birthday = table.Column<DateOnly>(type: "date", nullable: false),
-                    RegistrationDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    Note = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    UserName = table.Column<string>(type: "text", nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "text", nullable: true),
-                    Email = table.Column<string>(type: "text", nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "text", nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    PasswordHash = table.Column<string>(type: "text", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "text", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "CourseDependencyType",
                 columns: table => new
                 {
@@ -65,7 +33,7 @@ namespace PractiFly.DbContextUtility.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     FoundationDate = table.Column<DateOnly>(type: "date", nullable: false),
                     TerminationDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Note = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true)
@@ -82,7 +50,7 @@ namespace PractiFly.DbContextUtility.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Code = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
-                    Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     UDC = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
                     Note = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Description = table.Column<string>(type: "character varying(65536)", maxLength: 65536, nullable: true)
@@ -98,7 +66,7 @@ namespace PractiFly.DbContextUtility.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Code = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: false),
+                    Code = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
                     Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     OriginalName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     Note = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true)
@@ -114,7 +82,7 @@ namespace PractiFly.DbContextUtility.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     Number = table.Column<int>(type: "integer", nullable: false),
                     Note = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Description = table.Column<string>(type: "character varying(65536)", maxLength: 65536, nullable: true)
@@ -344,8 +312,8 @@ namespace PractiFly.DbContextUtility.Migrations
                     UserId = table.Column<int>(type: "integer", nullable: false),
                     MaterialId = table.Column<int>(type: "integer", nullable: false),
                     IsCompleted = table.Column<bool>(type: "boolean", nullable: false),
-                    ResultUrl = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    Grade = table.Column<int>(type: "integer", nullable: false),
+                    ResultUrl = table.Column<string>(type: "character varying(2048)", maxLength: 2048, nullable: false),
+                    Grade = table.Column<int>(type: "integer", nullable: true),
                     Note = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true)
                 },
                 constraints: table =>
@@ -613,7 +581,8 @@ namespace PractiFly.DbContextUtility.Migrations
                     Number = table.Column<int>(type: "integer", nullable: false),
                     IsBasic = table.Column<bool>(type: "boolean", nullable: false),
                     LevelId = table.Column<int>(type: "integer", nullable: false),
-                    Note = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true)
+                    Note = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Description = table.Column<string>(type: "character varying(65536)", maxLength: 65536, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -648,9 +617,9 @@ namespace PractiFly.DbContextUtility.Migrations
                     CourseId = table.Column<int>(type: "integer", nullable: false),
                     LevelId = table.Column<int>(type: "integer", nullable: false),
                     IsCompleted = table.Column<bool>(type: "boolean", nullable: false),
-                    LastTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    LastTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastThemeId = table.Column<int>(type: "integer", nullable: false),
-                    Grade = table.Column<int>(type: "integer", nullable: false),
+                    Grade = table.Column<int>(type: "integer", nullable: true),
                     Note = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true)
                 },
                 constraints: table =>
@@ -1013,9 +982,6 @@ namespace PractiFly.DbContextUtility.Migrations
 
             migrationBuilder.DropTable(
                 name: "Level");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Language");

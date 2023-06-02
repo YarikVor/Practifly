@@ -7,7 +7,7 @@ namespace PractiFly.WebApi.AutoMapper.Profiles;
 
 public class HeadingProfile : Profile
 {
-    public HeadingProfile(IPractiflyContext _context)
+    public HeadingProfile()
     {
         CreateMap<HeadingCreateDto, Heading>();
         CreateMap<Heading, HeadingInfoDto>();
