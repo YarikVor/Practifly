@@ -84,7 +84,8 @@ public class CourseDetailsProfile : Profile
                     Id = m.Material.Id,
                     Name = m.Material.Name,
                     IsCompleted = m.UserMaterial != null && m.UserMaterial.IsCompleted,
-                    Grade = m.UserMaterial == null ? 0 : m.UserMaterial.Grade
+                    Grade = m.UserMaterial == null ? 0 : m.UserMaterial.Grade,
+                    Note = m.Material.Note
                 })
             ))
             ;
