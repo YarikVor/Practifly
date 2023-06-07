@@ -4,12 +4,11 @@ import {
   List,
   ListItemButton,
   ListItemText,
-  ListSubheader, Paper,
+  ListSubheader, Paper, TextField,
   Typography,
 } from "@mui/material";
 
 import React, {FC, useState} from "react";
-
 
 import {ExpandLess, ExpandMore} from "@mui/icons-material";
 
@@ -18,35 +17,37 @@ import {CourseDetails} from "../../types/course.interface";
 import {useAppDispatch} from "../../hooks/hooks";
 import {getCurrentMaterials} from "../../redux/slices/course/course.slice";
 
+import {CustomCheckedIcon, CustomUncheckedIcon} from "../../asd";
+
 import {useStyles} from "./styles";
 
-interface ThemeMenuProps {
+interface ThemeMenuProps { // Описуємо інтерфейсов пропсів, що приходять в компоненту
   courseDetails: CourseDetails | null;
   isLoading: boolean;
 }
 
-interface OpenState {
+interface OpenState {//Описуємо інтерфейс динамічного стану, для поджальшого використання
   [themeName: string]: boolean;
 }
 
-export const ThemeMenu:FC<ThemeMenuProps> = ({ 
+export const ThemeMenu:FC<ThemeMenuProps> = ({ //Дестрикторизуємо пропси, що приходять в компоненту
   courseDetails,
   isLoading,
 }) => {
   const {classes} = useStyles();
   const dispatch = useAppDispatch();
 
-  const [open, setOpen] = useState<OpenState>({});
-  const handleClick = (themeId: number) => {
+  const [open, setOpen] = useState<OpenState>({});//Ініціалізуємо стан для нашого меню, в залежності від якого будемо відкривати чи закривати меню тем.
+  const handleClick = (themeId: number) => {//функція для того, щоб динамічно вказати стану його ключі та значення, які відповідають за відкрите те чи інше меню
     setOpen((prevState) => ({
-      ...prevState,
-      [themeId]: !prevState[themeId],
+      ...prevState,//Розгортаємо попередній стан
+      [themeId]: !prevState[themeId],// Та добавляємо до нього за допомогою оператора spread ще одне значення, якщо добавляється якась тема.
     }));
   };
 
   return (
     <Box className={classes.root}>
-      {isLoading ? (
+      {isLoading ? (//Якщо запит на сервер досі обробляється, до відмальовуємо лоудер, інакше показуємо нашу розмітку
         <CircularProgress />
       ) : (
         <Paper className={classes.paperRoot} sx={{
@@ -89,35 +90,53 @@ export const ThemeMenu:FC<ThemeMenuProps> = ({
             aria-labelledby="nested-list-subheader"
             subheader={
               <ListSubheader style={{padding: "2px 2px 0 2px"}} component="div" id="nested-list-subheader">
-                <Typography style={{backgroundColor: "#F1F0FA", textAlign: "center", borderRadius: "10px 10px 0 0"}} variant="h5">Меню тем</Typography>
+                <Typography style={{backgroundColor: "#F1F0FA", height: 60, display: "flex",alignItems:"center", justifyContent:"center", borderRadius: "10px 10px 0 0"}} variant="h5">Меню тем</Typography>
               </ListSubheader>
             }
           >
-            {courseDetails?.themes.map((theme) => (
+            {courseDetails?.themes.map((theme) => (//Якщо дані з серверу прийшли, то ми ітеруємо масив тем, та відмальовуємо їх в меню
               <React.Fragment key={theme.name + Math.random()}>
-                <ListItemButton style={{margin: 2, backgroundColor: "#F1F0FA"}} onClick={() => handleClick(theme.id)}>
+                <ListItemButton style={{margin: 2, backgroundColor: "#F1F0FA"}} onClick={() => handleClick(theme.id)}>{/* При натисканні на одну з тем передаємо до нашого динамічного стану нове значення з цією темою для подальшого відслідковування чи вона відкрита */}
                   <Checkbox
                     checked={theme.isCompleted}
-                    className={classes.disabledCheckbox}
+                    icon={<CustomUncheckedIcon />}
+                    checkedIcon={<CustomCheckedIcon/>}
                   />
                   <ListItemText primary={theme.name} />
-                  {theme.materials.length !== 0 && (open[theme.id] ? <ExpandLess /> : <ExpandMore />)}
+                  {theme.materials.length !== 0 && (open[theme.id] ? <ExpandLess /> : <ExpandMore />)}{/* Якщо меню теми закрите, то відмальовуємо картинку-стрілку, яка показує чи відкрите або закрите меню теми*/}
                 </ListItemButton>
-                {theme.materials.length !== 0 && (
+                {theme.materials.length !== 0 && ( //Якщо у теми присутні матеріали, то ми в подальшому будемо їх відмальовувати
                   <Collapse in={open[theme.id]} timeout="auto" unmountOnExit>
-                    {theme.materials.map((material) => (
+                    {theme.materials.map((material) => ( //Ітеруємо всі матеріали, які є в темі та відмальовуємо їх.
                       <List
                         component="div"
                         disablePadding
                         key={Math.random()}
                       >
-                        <ListItemButton onClick={() => dispatch(getCurrentMaterials(material))} style={{margin: 2, paddingLeft: 40, backgroundColor: "#F1F0FA"}}>
+                        <ListItemButton onClick={() => dispatch(getCurrentMaterials(material))} style={{gap: 10, margin:"0 2px", paddingLeft: 40, backgroundColor: "#F1F0FA"}}>{/* При натисканні на один з матеріалів теми - записуємо її дані в Redux сховище після чого записуємо ці дані в наші інпути */}
                           <Checkbox
-                            disabled
                             checked={material.isCompleted}
-                            className={classes.disabledCheckbox}
+                            icon={<CustomUncheckedIcon />}
+                            checkedIcon={<CustomCheckedIcon/>}
                           />
                           <ListItemText primary={material.name} />
+                          <TextField
+                            defaultValue={material.grade}
+                            disabled
+                            sx={{
+                              "& .MuiInputBase-input.Mui-disabled": {
+                                WebkitTextFillColor: `${material.grade >= 50 ? "green" : "red"}`,
+                              },
+                            }}
+                            inputProps={{
+                              style: {
+                                width: 45,
+                                height: 15,
+                                color: "green",
+                                textAlign: "center",
+                              },
+                            }}
+                            className={classes.textField} />
                         </ListItemButton>
                       </List>
                     ))}

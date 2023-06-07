@@ -25,6 +25,12 @@ export interface CourseDetails {
     themes: Theme[]
 }
 
+export interface MaterialStatus {
+    id: number,
+    resultUrl: string
+    isCompleted: boolean
+}
+
 export interface Theme {
     id: number
     name: string

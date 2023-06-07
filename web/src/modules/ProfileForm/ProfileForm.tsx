@@ -138,11 +138,13 @@ export const ProfileForm: FC = () => {
                   disabled
                   register={register}/>
                 <MyInput
+                  disabled
                   outsideLabel="Ім'я"
                   width={310}
                   name="firstName"
                   register={register}/>
                 <MyInput
+                  disabled
                   outsideLabel="Прізвище"
                   width={310}
                   name="lastName"
@@ -158,6 +160,7 @@ export const ProfileForm: FC = () => {
                   name="phoneNumber"
                   register={register}/>
                 <MyInput
+                  disabled
                   outsideLabel="Дата народження"
                   width={310}
                   register={register}

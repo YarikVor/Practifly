@@ -1,7 +1,7 @@
 import {createAction, createAsyncThunk, createSlice, SliceCaseReducers} from "@reduxjs/toolkit";
 
 import {statusTypes} from "../../../types/enums";
-import {Course, CourseDetails, CourseInitialState, Material} from "../../../types/course.interface";
+import {Course, CourseDetails, CourseInitialState, Material, MaterialStatus} from "../../../types/course.interface";
 import axios from "../../../configure/axios";
 
 export const getMyCourses = createAsyncThunk<Course[], void, {rejectValue: string}>(
@@ -24,6 +24,21 @@ export const getCourseDetailsById = createAsyncThunk<CourseDetails, number, {rej
     try {
       const {data} = await axios.get<CourseDetails>(
         `course/themes/full-info?courseId=${id}`,
+      );
+      return data;
+    } catch (e) {
+      return thunkAPI.rejectWithValue("Something went wrong");
+    }
+  }
+);
+
+export const changeMaterialStatus = createAsyncThunk<void, MaterialStatus, {rejectValue: string}>(
+  "course/fullInfoById",
+  async (materialStatus, thunkAPI) => {
+    try {
+      const {data} = await axios.post(
+        "user/material/status",
+        materialStatus
       );
       return data;
     } catch (e) {
@@ -62,9 +77,7 @@ const courseSlice = createSlice<
 >({
   name: "course",
   initialState,
-  reducers: {
-
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getCurrentMaterials, (state, action) => {
       state.currentMaterials.status = statusTypes.SUCCESS;
