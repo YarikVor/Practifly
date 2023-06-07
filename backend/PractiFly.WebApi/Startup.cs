@@ -304,13 +304,13 @@ private static void InitTables(IServiceCollection services)
     var serviceProvider = services.BuildServiceProvider();
     var identityContext = serviceProvider.GetService<UserIdentityDbContext>();
     var practiFlyContext = serviceProvider.GetService<IPractiflyContext>() as DbContext;
-    //identityContext!.Database.Migrate();
+        identityContext!.Database.Migrate();
 
-    //GenerateRules(identityContext);
-    
-    //practiFlyContext!.Database.Migrate();
+        GenerateRules(identityContext);
 
-    practiFlyContext.GenerateTestDataIfEmpty();
+        practiFlyContext!.Database.Migrate();
+
+        //practiFlyContext.GenerateTestDataIfEmpty();
 }
 
     private static void GenerateRules(UserIdentityDbContext identityContext)
