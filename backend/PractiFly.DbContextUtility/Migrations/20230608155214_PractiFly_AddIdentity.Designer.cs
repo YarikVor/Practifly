@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
@@ -11,9 +12,11 @@ using PractiFly.DbContextUtility.Context.PractiflyDb;
 namespace PractiFly.DbContextUtility.Migrations
 {
     [DbContext(typeof(PractiFlyContext))]
-    partial class PractiFlyContextModelSnapshot : ModelSnapshot
+    [Migration("20230608155214_PractiFly_AddIdentity")]
+    partial class PractiFly_AddIdentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
