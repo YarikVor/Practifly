@@ -10,6 +10,7 @@ public class HeadingCompetency
 {
     [Key]
     [Column("Id")]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     [Column("CompetencyId")]

@@ -11,6 +11,7 @@ public class UserMaterial
 {
     [Key]
     [Column("Id")]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     [Column("UserId")]

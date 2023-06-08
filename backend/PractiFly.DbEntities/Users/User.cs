@@ -1,12 +1,19 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace PractiFly.DbEntities.Users;
 
 [Table("AspNetUsers")]
+[PrimaryKey(nameof(User.Id))]
 public class User : IdentityUser<int>
 {
+    [PersonalData]
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public override int Id { get; set; }
+    
     [Column("FirstName")]
     [MaxLength(EntitiesConstantLengths.Name)]
     [Required]
