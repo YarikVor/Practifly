@@ -8,7 +8,7 @@ namespace PractiFly.WebApi.AutoMapper.Profiles;
 
 public class CourseDataProfile : Profile
 {
-    public CourseDataProfile(IPractiflyContext _context)
+    public CourseDataProfile(IPractiflyContext context)
     {
         CreateMap<Course, CourseInfoDto>();
 
@@ -28,7 +28,7 @@ public class CourseDataProfile : Profile
             .ForMember(
                 dest => dest.Users,
                 opt => opt.MapFrom(
-                    e => _context
+                    e => context
                         .UserCourses
                         .Where(uc => uc.CourseId == e.Id)
                         .Select(e => e.User)
@@ -39,7 +39,7 @@ public class CourseDataProfile : Profile
             .ForMember(c => c.Language, par => par.Ignore())
             .ForMember(c => c.Owner, par => par.Ignore())
             .ForMember(c => c.LanguageId, par => par.MapFrom(
-                dto => _context
+                dto => context
                     .Languages
                     .Where(l => l.Code == dto.Language)
                     .Select(l => l.Id)

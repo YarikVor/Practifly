@@ -7,7 +7,7 @@ namespace PractiFly.WebApi.AutoMapper.Profiles;
 
 public class AdminProfile : Profile
 {
-    public AdminProfile(IPractiflyContext _context)
+    public AdminProfile(IPractiflyContext context)
     {
         CreateMap<User, UserProfileForAdminViewDto>()
             .ForMember(dto => dto.FilePhoto, par => par.MapFrom(
@@ -17,7 +17,7 @@ public class AdminProfile : Profile
         CreateProjection<User, UserProfileForAdminViewDto>()
             .ForMember(
                 up => up.Role, par => par.MapFrom(
-                    e => _context
+                    e => context
                         .UserRoles
                         .Where(ur => ur.UserId == e.Id)
                         .Select(ur => ur.Role.Name)

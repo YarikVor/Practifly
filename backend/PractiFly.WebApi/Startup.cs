@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PractiFly.DateJsonConverter;
+using PractiFly.DateJsonConverter.Schemas;
 using PractiFly.DbContextUtility.Context;
 using PractiFly.DbContextUtility.Context.Courses;
 using PractiFly.DbContextUtility.Context.Materials;
@@ -19,7 +20,6 @@ using Practifly.FakerGenerator;
 using PractiFly.FakerManager;
 using PractiFly.WebApi.AutoMappers;
 using PractiFly.WebApi.Context;
-using PractiFly.WebApi.Schema;
 using PractiFly.WebApi.Services.AuthenticationOptions;
 using PractiFly.WebApi.Services.TokenGenerator;
 using ErrorContext = PractiFly.DbContextUtility.Context.ErrorContext;
@@ -226,7 +226,7 @@ public class Startup
                     Description =
                         "JWT Authorization header using the Bearer scheme. " +
                         "\r\n\r\n Enter 'Bearer' [space] and then your token in the text input below." +
-                        "\r\n\r\nExample: \"Bearer 12345abcdef\"",
+                        "\r\n\r\nExample: \"Bearer [token]\"",
                     Name = "Authorization",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey,
@@ -275,7 +275,7 @@ public class Startup
         AddPractiFlyDb(services, connectionString);
 
         var errorConnectionString = _configuration.GetConnectionString("ErrorConnection");
-        AddErrorDb(services, errorConnectionString);
+        //AddErrorDb(services, errorConnectionString);
     }
 
     private static void AddErrorDb(IServiceCollection services, string? errorConnectionString)

@@ -10,7 +10,6 @@ using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Context;
 using PractiFly.WebApi.Dto.Admin.UserView;
 using PractiFly.WebApi.Dto.CourseData;
-using PractiFly.WebApi.Dto.CourseDetails;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace PractiFly.WebApi.Controllers;
