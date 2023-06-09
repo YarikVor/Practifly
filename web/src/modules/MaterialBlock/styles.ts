@@ -1,4 +1,3 @@
-// styles.ts
 import { makeStyles } from "@mui/styles";
 
 export const useStyles = makeStyles(() => ({
@@ -38,10 +37,39 @@ export const useStyles = makeStyles(() => ({
         marginBottom: "5px",
         cursor: "pointer",
         borderBottom: "1px solid #FFFFFF",
+        display: "flex",
+        alignItems: "center",
     },
     selectedMaterial: {
         backgroundColor: "#9062F2",
         color: "#FFFFFF",
     },
-}));
+    priorityBlock: {
+        backgroundColor: "#CCCCCC",
+        marginRight: "30px",
+        paddingLeft: "10px",
+        paddingRight: "10px",
+        borderRadius: "5px",
+    },
+    materialInfo: {
+        display: "flex",
+        alignItems: "center",
+        flex: 1,
+    },
+    materialCheckboxRow: {
 
+        paddingLeft: "78px",
+    },
+    materialNameLabel: {
+        flex: 1,
+        fontWeight: "bold",
+    },
+    materialLabel: {
+
+        marginLeft: "auto",
+        marginRight: "20px",
+        fontWeight: "bold",
+        paddingLeft: "40px",
+
+    },
+}));
