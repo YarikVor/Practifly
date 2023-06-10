@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PractiFly.MauiApplication.View.Login">
+             x:Class="PractiFly.MauiApplication.View.Login"
+             Title=" ">
     <StackLayout VerticalOptions="Center">
         <Label Text="Вхід" HorizontalOptions="Center" TextColor="#6C73BB" FontAttributes="Bold" FontSize="Medium"/>
         <Label Text="до особистого кабінету" HorizontalOptions="Center" TextColor="#6C73BB" FontSize="Subtitle"/>
@@ -28,7 +29,7 @@
                 </StackLayout>
             </StackLayout>
         </Frame>
-        <Label Text="Новий користувач?" TextColor="#6C73BB" HorizontalOptions="Center"/>
-        <Label x:Name="registration" Text="Створити обліковий запис" TextColor="#783FD6" HorizontalOptions="Center"/>
+        <!--<Label Text="Новий користувач?" TextColor="#6C73BB" HorizontalOptions="Center"/>
+        <Label x:Name="registration" Text="Створити обліковий запис" TextColor="#783FD6" HorizontalOptions="Center"/>-->
     </StackLayout>
 </ContentPage>

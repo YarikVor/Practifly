@@ -151,6 +151,12 @@ public class PractiFlyClient
     {
         return await CreateUpdateAsync(LoginUrl, loginRequestDto);
     }
+    public async Task<LoginResponseDto?> GetLoginUsersDataAsync(LoginRequestDto loginRequestDto)
+    {
+        var response = await _httpClient.PostAsJsonAsync(LoginUrl, loginRequestDto);
+        var result = await response.Content.ReadFromJsonAsync<LoginResponseDto>();
+        return result;
+    }
     public async Task<string> GetRefreshTokenAsync()
     {
         var result = await _httpClient.GetStringAsync(RefreshTokenUrl) 

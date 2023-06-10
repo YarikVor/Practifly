@@ -28,7 +28,19 @@ public partial class Login : ContentPage
             var userInfo = await client.GetLoginResponseAsync(loginRequestDto);
             if (userInfo == true)
             {
-                await Navigation.PushAsync(new Admin());
+
+                var userDataInfo = await client.GetLoginUsersDataAsync(loginRequestDto);
+                var idUser = userDataInfo.User.Id;
+                var user = await client.GetUserByIdAsAdminAsync(idUser);
+                
+                if (user.Role == "admin")
+                {
+                    App.Current.MainPage = new AppShell();
+                }
+                else
+                {
+                    await DisplayAlert("Помилка", "Вхід дозволено тільки адміністраторам", "ОК)");
+                }
             }
             else
             {

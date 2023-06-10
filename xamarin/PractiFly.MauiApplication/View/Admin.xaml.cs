@@ -19,7 +19,7 @@ public partial class Admin : ContentPage
     private readonly HttpClient _httpClient;
     private bool isInitialized = false;
     private int? IDUser;
-    private string foto = "https://s3-alpha-sig.figma.com/img/54b1/857d/556a2fbf2e264a5f382c2bd624afade7?Expires=1685318400&Signature=LnOMmo2yFVosZS6WNqzGOtEEdNU2oqGoThKoIEBe8mOdoKdIM3YPpHtwKtSX~-9T6dJwDWqOXK-TVwatPuaNjLI5lmWceHWXLyXkkTJl-eLcS6XXqNGkytEyzVCboEmfddYI-xgjVXQmL2p51-rQ8zGkHK4XArEl7hS3-Otb5VsApJwU1yR0-t~BeZx4VKmVbxS~Ln4q17Rhl-dnyVSJDzGaP-SRrkoHKAQoIPNJ4wwxmncxuZIkrmiiCutwRgtBtDsONkSIICOgPTXGtcLvFVMfGcNdUddSSPh2v5VTIo8FiNX5URFXcnq2xVUqifck7CcH1Vql1jEc~76WTB7NRg__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4";
+    private string foto = "https://s3-alpha-sig.figma.com/img/54b1/857d/556a2fbf2e264a5f382c2bd624afade7?Expires=1687132800&Signature=aWu23dhcWYshIHqujpTagx6Sp6xoH171g~gPIQznlA2K0vgmDntGAuAesI6X2m65w9Xi3~AAVBf8MycZI4zkSMc0weqhMGg0Cf7yTXCcacdylV6UuYXYkNNDG2KCQ9AqnbFDj~Q14~~rGbskfJye9wB3x95zAHjVY5rUknu9erf3OMRwJdzThXa8xz7NOcOPTKV2nAf6OUPCsBj-cP2zP~e~XAmwIaa4C85dcj~5cYHAxwtKzjChmd7ONkto2kV7y6ypit8hO6EVej7ufbU-55y~tjTrP61SHnKmjB-6gHS06g7dAmFsU7EWk~FbSnR6NXADV2DN0T2TwII7yJix~A__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4";
     public Admin()
 	{
         InitializeComponent();
@@ -35,30 +35,26 @@ public partial class Admin : ContentPage
         client = new("");
         DateFrom.Date = new DateTime(2000, 1, 1);
         DateTo.Date = DateTime.Now;
+
+        GetUsers();
     }
 
-   
-    protected async override void OnAppearing()
+    private async void GetUsers()
     {
-        
-        base.OnAppearing();
-
-        if (!isInitialized)
+        try
         {
-            try
-            {
-                UserFilterInfoDto user = new UserFilterInfoDto();
-                var filter = await client.GetFilterUserAsync(user);
-                UsersCollectionView.ItemsSource = filter;
-                //date.Text = DateFrom.Date.ToString();
-                isInitialized = true;
-            }
-            catch(Exception ex) 
-            {
-                await DisplayAlert(null, ex.Message, "Œ )");
-            }
+            UserFilterInfoDto user = new UserFilterInfoDto();
+            var filter = await client.GetFilterUserAsync(user);
+            UsersCollectionView.ItemsSource = filter;
+            isInitialized = true;
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert(null, ex.Message, "Œ )");
         }
     }
+   
+   
 
     private async void Search_Clicked(object sender, EventArgs e)
     {
@@ -86,7 +82,7 @@ public partial class Admin : ContentPage
         var idUser = selectedItem.Id;
         var user = await client.GetUserByIdAsAdminAsync(idUser);
         IDUser = user.Id;
-        id.Text = user.Id.ToString();
+        //id.Text = user.Id.ToString();
         itemlastName.Text = user.LastName;
         itemfirstName.Text = user.FirstName;
         itemEmail.Text = user.Email;
@@ -222,7 +218,7 @@ public partial class Admin : ContentPage
                     int ID = (int)IDUser;
                     var user = await client.DeleteUserByIdAsAdminAsync(ID);
                     Search_Clicked(sender, e);
-                    id.Text = null;
+                    //id.Text = null;
                     IDUser = null;
                     itemlastName.Text = null;
                     itemfirstName.Text = null;
@@ -286,28 +282,4 @@ public partial class Admin : ContentPage
     //    }
     //}
 
-    private async void AdminPanel(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new Admin());
-    }
-    private async void CategoryPanel(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new Category());
-    }
-    private async void CoursePanel(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new Course());
-    }
-    private async void CourseThemePanel(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new CourseTheme());
-    }
-    private async void MaterialBlocksPanel(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new MaterialBlocks());
-    }
-    private async void RubricsCoursePanel(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new RubricsCourse());
-    }
 }

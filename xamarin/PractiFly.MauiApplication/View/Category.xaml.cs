@@ -228,28 +228,5 @@ public partial class Category : ContentPage
         }
         
     }
-    private async void AdminPanel(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new Admin());
-    }
-    private async void CategoryPanel(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new Category());
-    }
-    private async void CoursePanel(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new Course());
-    }
-    private async void CourseThemePanel(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new CourseTheme());
-    }
-    private async void MaterialBlocksPanel(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new MaterialBlocks());
-    }
-    private async void RubricsCoursePanel(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new RubricsCourse());
-    }
+   
 }

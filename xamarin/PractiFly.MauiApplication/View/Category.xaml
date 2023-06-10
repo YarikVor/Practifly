@@ -1,23 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PractiFly.MauiApplication.View.Category">
+             x:Class="PractiFly.MauiApplication.View.Category"
+             Title=" ">
     <ScrollView>
     <StackLayout >
-        
-        <StackLayout HorizontalOptions="Center"  Margin="0,20">
-            <Label Text="Рубрики" FontSize="Title" FontAttributes="Bold"/>
-        </StackLayout>
-        <Frame BackgroundColor="#9062F2" Padding="0" CornerRadius="0">
-            <StackLayout BackgroundColor="#9062F2" Orientation="Horizontal" HorizontalOptions="Center" Spacing="1">
-                <Button TextColor="White" Text="Користувачі" WidthRequest="150" Clicked="AdminPanel"/>
-                <Button TextColor="White" Text="Рубрики" WidthRequest="150" Clicked="CategoryPanel" />
-                <Button TextColor="White" Text="Рубрики курсів" WidthRequest="150" Clicked="RubricsCoursePanel"/>
-                <Button TextColor="White" Text="Матеріали" WidthRequest="150" Clicked="MaterialBlocksPanel"/>
-                <Button TextColor="White" Text="Дані курсів" WidthRequest="150" Clicked="CoursePanel"/>
-                <Button TextColor="White" Text="Теми курсів" WidthRequest="150" Clicked="CourseThemePanel"/>
-            </StackLayout>
-        </Frame>
+            <Frame BackgroundColor="#9062F2" Padding="0" CornerRadius="0">
+                <StackLayout HorizontalOptions="Center"  Margin="0,20">
+                    <Label Text="Рубрики" FontSize="Title" FontAttributes="Bold"/>
+                </StackLayout>
+            </Frame>
             <Grid  ColumnSpacing="20" Margin="20" HorizontalOptions="Center" HeightRequest="490">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -63,7 +55,7 @@
             <Frame  HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0"  Grid.Column="1" Grid.Row="0">
                 <ScrollView>
                     <StackLayout Spacing="10" WidthRequest="500"  Margin="0,0,20,0" >
-                        <Label Text="Home/Liberi/sdsfsfsfsds" FontSize="Medium"/>
+                        <!--<Label Text="Home/Liberi/sdsfsfsfsds" FontSize="Medium"/>-->
                         <StackLayout HorizontalOptions="Start" Spacing="10">
                             <Label Text="Назва" VerticalOptions="Center" HorizontalOptions="Fill"/>
                             <Entry x:Name="name" BackgroundColor="White"  WidthRequest="480" HorizontalOptions="CenterAndExpand"/>

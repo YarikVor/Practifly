@@ -1,30 +1,23 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PractiFly.MauiApplication.View.Course">
+             x:Class="PractiFly.MauiApplication.View.Course"
+             Title=" ">
     <ScrollView>
     <StackLayout>
-        <StackLayout HorizontalOptions="Center"  Margin="0,20">
-            <Label Text="Дані курсів" FontSize="Title" FontAttributes="Bold"/>
-        </StackLayout>
-        <Frame BackgroundColor="#9062F2" Padding="0" CornerRadius="0">
-            <StackLayout BackgroundColor="#9062F2" Orientation="Horizontal" HorizontalOptions="Center" Spacing="1">
-                <Button TextColor="White" Text="Користувачі" WidthRequest="150" Clicked="AdminPanel"/>
-                <Button TextColor="White" Text="Рубрики" WidthRequest="150" Clicked="CategoryPanel" />
-                <Button TextColor="White" Text="Рубрики курсів" WidthRequest="150" Clicked="RubricsCoursePanel"/>
-                <Button TextColor="White" Text="Матеріали" WidthRequest="150" Clicked="MaterialBlocksPanel"/>
-                <Button TextColor="White" Text="Дані курсів" WidthRequest="150" Clicked="CoursePanel"/>
-                <Button TextColor="White" Text="Теми курсів" WidthRequest="150" Clicked="CourseThemePanel"/>
-            </StackLayout>
-        </Frame>
-        <Grid  ColumnSpacing="20" Margin="20" HorizontalOptions="Center">
+            <Frame BackgroundColor="#9062F2" Padding="0" CornerRadius="0">
+                <StackLayout HorizontalOptions="Center"  Margin="0,20">
+                    <Label Text="Дані курсів" FontSize="Title" FontAttributes="Bold"/>
+                </StackLayout>
+            </Frame>
+            <Grid  ColumnSpacing="20" Margin="20" HorizontalOptions="Center">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="280" />
+                <ColumnDefinition Width="680" />
+                <ColumnDefinition Width="280" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <!--<StackLayout Spacing="20"  Orientation="Horizontal" Margin="10" HorizontalOptions="Center">-->
@@ -49,7 +42,7 @@
             <Frame  HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0"  Grid.Column="1" Grid.Row="0">
                 <ScrollView>
                     <StackLayout Spacing="10" WidthRequest="600"  Margin="0,0,20,0">
-                            <Label x:Name="id"/>
+                            <!--<Label x:Name="id"/>-->
                             <Frame  BackgroundColor="White" >
                             <StackLayout Spacing="30">
                                 <StackLayout>

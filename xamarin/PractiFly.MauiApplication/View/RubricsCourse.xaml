@@ -1,22 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PractiFly.MauiApplication.View.RubricsCourse">
-    <StackLayout>
-        <StackLayout HorizontalOptions="Center"  Margin="0,20">
-            <Label Text="Рубрики курсів" FontSize="Title" FontAttributes="Bold"/>
-        </StackLayout>
-        <Frame BackgroundColor="#9062F2" Padding="0" CornerRadius="0">
-            <StackLayout BackgroundColor="#9062F2" Orientation="Horizontal" HorizontalOptions="Center" Spacing="1">
-                <Button TextColor="White" Text="Користувачі" WidthRequest="150" Clicked="AdminPanel"/>
-                <Button TextColor="White" Text="Рубрики" WidthRequest="150" Clicked="CategoryPanel" />
-                <Button TextColor="White" Text="Рубрики курсів" WidthRequest="150" Clicked="RubricsCoursePanel"/>
-                <Button TextColor="White" Text="Матеріали" WidthRequest="150" Clicked="MaterialBlocksPanel"/>
-                <Button TextColor="White" Text="Дані курсів" WidthRequest="150" Clicked="CoursePanel"/>
-                <Button TextColor="White" Text="Теми курсів" WidthRequest="150" Clicked="CourseThemePanel"/>
-            </StackLayout>
-        </Frame>
-        <!--<StackLayout Orientation="Horizontal" Spacing="10" HorizontalOptions="Center" Margin="0,20" >
+             x:Class="PractiFly.MauiApplication.View.RubricsCourse"
+             Title=" ">
+    <ScrollView>
+        <StackLayout>
+            <Frame BackgroundColor="#9062F2" Padding="0" CornerRadius="0">
+                <StackLayout HorizontalOptions="Center"  Margin="0,20">
+                    <Label Text="Рубрики курсів" FontSize="Title" FontAttributes="Bold"/>
+                </StackLayout>
+            </Frame>
+            <!--<StackLayout Orientation="Horizontal" Spacing="10" HorizontalOptions="Center" Margin="0,20" >
             <Label Text="Курс" FontSize="Title" VerticalOptions="Center"/>
             <Entry x:Name="course"  WidthRequest="550"/>
             <Label Text="Всьго рубрик" FontSize="Title" VerticalOptions="Center"/>
@@ -25,98 +19,99 @@
             </Frame>
         </StackLayout>-->
 
-        <Grid  ColumnSpacing="20" Margin="20" HorizontalOptions="Center" HeightRequest="420">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Button Text="🗑 Вилучити рубрику з курсу" Clicked="DeleteHeadingInCourse_Clicked" Grid.Column="1" Grid.Row="0" HeightRequest="50" WidthRequest="250"/>
-            <Button Text="➕ Додати рубрику до курсу" Clicked="AddHeadingInCourse_Clicked" Grid.Column="2" Grid.Row="0" HeightRequest="50" WidthRequest="250"/>
-            <!--<StackLayout Spacing="20"  Orientation="Horizontal" Margin="10" HorizontalOptions="Center">-->
-            <Frame  HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0" Grid.Column="0" Grid.Row="1">
-                <StackLayout>
-                    <Label Text="Меню курсів" Margin="0,10" FontAttributes="Bold" HorizontalOptions="Center"/>
-                    <ScrollView  WidthRequest="180" HeightRequest="350">
-                        <StackLayout >
-                            <ScrollView HeightRequest="500" WidthRequest="180">
-                                <CollectionView x:Name="CourseCollectionView"
+            <Grid  ColumnSpacing="20" Margin="20" RowSpacing="10" HorizontalOptions="Center" HeightRequest="420">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="470" />
+                </Grid.RowDefinitions>
+                <Button Text="🗑 Вилучити рубрику з курсу" Clicked="DeleteHeadingInCourse_Clicked" Grid.Column="1" Grid.Row="0" HeightRequest="50" WidthRequest="250"/>
+                <Button Text="➕ Додати рубрику до курсу" Clicked="AddHeadingInCourse_Clicked" Grid.Column="2" Grid.Row="0" HeightRequest="50" WidthRequest="250"/>
+                <!--<StackLayout Spacing="20"  Orientation="Horizontal" Margin="10" HorizontalOptions="Center">-->
+                <Frame    BackgroundColor="#ebf2ed" BorderColor="#aeb5b0" Grid.Column="0" Grid.Row="1">
+                    <StackLayout>
+                        <Label Text="Меню курсів" Margin="0,10" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <ScrollView  WidthRequest="180" HeightRequest="410">
+                            <StackLayout >
+                                <ScrollView HeightRequest="500" WidthRequest="180">
+                                    <CollectionView x:Name="CourseCollectionView"
                                         SelectionMode="Single"
                                         SelectionChanged="CourseCollectionView_SelectionChanged">
-                                    <CollectionView.ItemTemplate >
-                                        <DataTemplate>
-                                            <Label Text="{Binding Name}"/>
-                                        </DataTemplate>
-                                    </CollectionView.ItemTemplate>
-                                </CollectionView>
-                            </ScrollView>
-                        </StackLayout>
-                    </ScrollView>
-                </StackLayout>
-            </Frame >
-            <Frame  HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0" Grid.Column="1" Grid.Row="1">
-                <StackLayout>
-                <Label Text="Рубрики вибраного курсу" Margin="0,10" FontAttributes="Bold" HorizontalOptions="Center"/>
-                <ScrollView  WidthRequest="400">
-                    <StackLayout Spacing="30" HeightRequest="370">
-                        <CollectionView x:Name="HeadingCourseCollectionView"
+                                        <CollectionView.ItemTemplate >
+                                            <DataTemplate>
+                                                <Label Text="{Binding Name}"/>
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
+                                </ScrollView>
+                            </StackLayout>
+                        </ScrollView>
+                    </StackLayout>
+                </Frame >
+                <Frame  HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0" Grid.Column="1" Grid.Row="1">
+                    <StackLayout>
+                        <Label Text="Рубрики вибраного курсу" Margin="0,10" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <ScrollView  WidthRequest="400">
+                            <StackLayout Spacing="30" HeightRequest="410">
+                                <CollectionView x:Name="HeadingCourseCollectionView"
                                         SelectionMode="Single"
                                         SelectionChanged="RubricCourse_SelectionChanged">
-                            <CollectionView.ItemTemplate >
-                                <DataTemplate>
-                                    <StackLayout Orientation="Horizontal"  Margin="0,15">
-                                        <Label Text="{Binding Name}" 
+                                    <CollectionView.ItemTemplate >
+                                        <DataTemplate>
+                                            <StackLayout Orientation="Horizontal"  Margin="0,15">
+                                                <Label Text="{Binding Name}" 
                                                HorizontalOptions="Start" 
                                                VerticalOptions="Center"/>
-                                        <Button Text="→" 
+                                                <Button Text="→" 
                                                     HeightRequest="45"
                                                     Padding="10"
                                                     HorizontalOptions="EndAndExpand"
                                                     Clicked="NextLevelHeadingCourse"
                                                     FontSize="20"
                                                 />
-                                    </StackLayout>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                    </StackLayout>
+                                            </StackLayout>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </StackLayout>
 
-                </ScrollView>
-                </StackLayout>
-            </Frame>
-            <Frame  HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0" Grid.Column="2" Grid.Row="1">
-                <StackLayout>
-                    <Label Text="Всі рубрики" Margin="0,10" FontAttributes="Bold" HorizontalOptions="Center"/>
-                    <ScrollView  WidthRequest="400">
-                        <StackLayout Spacing="30" HeightRequest="370">
-                            <CollectionView x:Name="HeadingCollectionView"
+                        </ScrollView>
+                    </StackLayout>
+                </Frame>
+                <Frame  HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0" Grid.Column="2" Grid.Row="1">
+                    <StackLayout>
+                        <Label Text="Всі рубрики" Margin="0,10" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <ScrollView  WidthRequest="400">
+                            <StackLayout Spacing="30" HeightRequest="410">
+                                <CollectionView x:Name="HeadingCollectionView"
                                             SelectionMode="Single"
                                             SelectionChanged="RubricCollectionView_SelectionChanged">
-                                <CollectionView.ItemTemplate >
-                                    <DataTemplate>
-                                        <StackLayout Orientation="Horizontal"  Margin="0,15">
-                                            <Label Text="{Binding Name}" 
+                                    <CollectionView.ItemTemplate >
+                                        <DataTemplate>
+                                            <StackLayout Orientation="Horizontal"  Margin="0,15">
+                                                <Label Text="{Binding Name}" 
                                                HorizontalOptions="Start" 
                                                VerticalOptions="Center"/>
-                                            <Button Text="→" 
+                                                <Button Text="→" 
                                                     HeightRequest="45"
                                                     Padding="10"
                                                     HorizontalOptions="EndAndExpand"
                                                     Clicked="NextLevelUdc"
                                                     FontSize="20"
                                                 />
-                                        </StackLayout>
-                                    </DataTemplate>
-                                </CollectionView.ItemTemplate>
-                            </CollectionView>
-                        </StackLayout>
-                    </ScrollView>
-                </StackLayout>
-            </Frame>
-        </Grid>
-    </StackLayout>
+                                            </StackLayout>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </StackLayout>
+                        </ScrollView>
+                    </StackLayout>
+                </Frame>
+            </Grid>
+        </StackLayout>
+    </ScrollView>
 </ContentPage>

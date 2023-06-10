@@ -10,43 +10,39 @@ namespace PractiFly.MauiApplication.View;
 public partial class Course : ContentPage
 {
     private PractiFlyClient client;
-    private string foto = "https://s3-alpha-sig.figma.com/img/54b1/857d/556a2fbf2e264a5f" +
-        "382c2bd624afade7?Expires=1685318400&Signature=LnOMmo2yFVosZS6WNqzGOtEEdNU2oqGoThKoIE" +
-        "Be8mOdoKdIM3YPpHtwKtSX~-9T6dJwDWqOXK-TVwatPuaNjLI5lmWceHWXLyXkkTJl-eLcS6XXqNGkytEyzVCboE" +
-        "mfddYI-xgjVXQmL2p51-rQ8zGkHK4XArEl7hS3-Otb5VsApJwU1yR0-t~BeZx4VKmVbxS~Ln4q17Rhl-dnyVSJDzGaP" +
-        "-SRrkoHKAQoIPNJ4wwxmncxuZIkrmiiCutwRgtBtDsONkSIICOgPTXGtcLvFVMfGcNdUddSSPh2v5VTIo8FiNX5URFXcnq2x" +
-        "VUqifck7CcH1Vql1jEc~76WTB7NRg__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4";
-
+    private string foto = "https://s3-alpha-sig.figma.com/img/54b1/857d/556a2fbf2e264a5f382c2bd624afade7?Expires=1687132800&Signature=aWu23dhcWYshIHqujpTagx6Sp6xoH171g~gPIQznlA2K0vgmDntGAuAesI6X2m65w9Xi3~AAVBf8MycZI4zkSMc0weqhMGg0Cf7yTXCcacdylV6UuYXYkNNDG2KCQ9AqnbFDj~Q14~~rGbskfJye9wB3x95zAHjVY5rUknu9erf3OMRwJdzThXa8xz7NOcOPTKV2nAf6OUPCsBj-cP2zP~e~XAmwIaa4C85dcj~5cYHAxwtKzjChmd7ONkto2kV7y6ypit8hO6EVej7ufbU-55y~tjTrP61SHnKmjB-6gHS06g7dAmFsU7EWk~FbSnR6NXADV2DN0T2TwII7yJix~A__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4";
     private int? IDCourse;
     public Course()
 	{
 
 		InitializeComponent();
         client = new("");
+        GetCourse();
+
     }
     private bool isInitialized = false;
-    protected async override void OnAppearing()
+    private async void GetCourse()
     {
-
-        base.OnAppearing();
-
-        if (!isInitialized)
+        try
         {
-
-            UserFilterInfoDto user = new UserFilterInfoDto();
             var course = await client.GetAllCourseAsync(null);
             CourseCollectionView.ItemsSource = course;
-            isInitialized = true;
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert(null, ex.Message, "Œ )");
         }
     }
+
     
     private async void UsersCollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         var selectedItem = e.CurrentSelection[0] as CourseItemInfoDto;
         var idCourse = selectedItem.Id;
         var course = await client.GetCourseById(idCourse);
+
         IDCourse = course.Course.Id;
-        id.Text = course.Course.Id.ToString();
+        //id.Text = course.Course.Id.ToString();
         name.Text = course.Course.Name;
         note.Text = course.Course.Note;
         description.Text = course.Course.Description;
@@ -56,7 +52,6 @@ public partial class Course : ContentPage
         var owner = await client.GetOwnerCourseAsync(course.Course.Id);
 
         ownerImage.Source = ImageSource.FromUri(
-        //new Uri($"{user.FilePhoto}"));
         new Uri(foto));
         ownerName.Text = owner.FullName;
     }
@@ -188,7 +183,7 @@ public partial class Course : ContentPage
                     var user = await client.DeleteCourseAsync(ID);
 
                     IDCourse = null;
-                    id.Text = null;
+                    //id.Text = null;
                     name.Text = null;
                     note.Text = null;
                     description.Text = null;
@@ -211,28 +206,4 @@ public partial class Course : ContentPage
         }
     }
 
-    private async void AdminPanel(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new Admin());
-    }
-    private async void CategoryPanel(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new Category());
-    }
-    private async void CoursePanel(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new Course());
-    }
-    private async void CourseThemePanel(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new CourseTheme());
-    }
-    private async void MaterialBlocksPanel(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new MaterialBlocks());
-    }
-    private async void RubricsCoursePanel(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new RubricsCourse());
-    }
 }

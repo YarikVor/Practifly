@@ -1,8 +1,10 @@
+
 using PractiFly.Api.Api.Heading;
 using PractiFly.Api.Api.MaterialBlocks;
 using PractiFly.Api.Client;
 using PractiFly.Api.HeadingCourse;
 using PractiFly.Api.MaterialBlocks;
+using System.Text.RegularExpressions;
 
 namespace PractiFly.MauiApplication.View;
 
@@ -27,41 +29,6 @@ public partial class MaterialBlocks : ContentPage
         MaterialsCollectionView.ItemsSource = materials;
     }
     
-    private async void EditMaterial(object sender, EventArgs e)
-    {
-        if (IDMaterial != null)
-        {
-            bool result = await DisplayAlert("Підтвердження дії", "Бажаєте змінити дані матеріалу?", "Так", "Ні");
-            if (result)
-            {
-                try
-                {
-                    EditMaterialBlockDto editMaterial = new EditMaterialBlockDto()
-                    {
-                        Name = name.Text,
-                        Priority = Int32.Parse(priority.Text),
-                        Note = note.Text,
-                        Url = url.Text,
-                        IsPractical = isPractical.IsChecked,
-                        Id = (int)IDMaterial,
-                    };
-
-                    var edit = await client.EditMaterialAsync(editMaterial);
-                    AllMaterial();
-                }
-                catch(Exception ex)
-                {
-                    await DisplayAlert(null, ex.Message, "ОК)");
-                }
-                
-            }
-        }
-        else
-        {
-            await DisplayAlert(null, "Для редагування виберіть матеріал зі списку", "ОК)");
-        }
-
-    }
     private async void DeleteHeading(object sender, EventArgs e)
     {
 
@@ -95,6 +62,32 @@ public partial class MaterialBlocks : ContentPage
     }
     private async void CreateMaterial(object sender, EventArgs e)
     {
+        string codePattern = @"^\d+$";
+        string UrlPattern = @"(https?|ftp):\/\/[^\s/$.?#].[^\s]*";
+
+        if (name.Text == "")
+        {
+            await DisplayAlert(null, "Введіть назву матеріалу", "ОК)");
+            return;
+        }
+
+        Regex regex = new Regex(codePattern);
+        if (!regex.IsMatch(priority.Text))
+        {
+            await DisplayAlert(null, "Приорітетність має дорівнювати числовому значеню", "ОК)");
+            return;
+        }
+        regex = new Regex(UrlPattern);
+        if (!regex.IsMatch(url.Text))
+        {
+            await DisplayAlert(null, "Невірно введенне посилання", "ОК)");
+            return;
+        }
+        if (note.Text == "")
+        {
+            await DisplayAlert(null, "Введіть примітку", "ОК)");
+            return;
+        }
         bool result = await DisplayAlert("Підтвердження дії", "Бажаєте створити новий матеріал?", "Так", "Ні");
         if (result)
         {
@@ -126,32 +119,42 @@ public partial class MaterialBlocks : ContentPage
         IDMaterial = idmaterial;
     }
 
-    private async void AdminPanel(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new Admin());
-    }
-    private async void CategoryPanel(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new Category());
-    }
-    private async void CoursePanel(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new Course());
-    }
-    private async void CourseThemePanel(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new CourseTheme());
-    }
-    private async void MaterialBlocksPanel(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new MaterialBlocks());
-    }
-    private async void RubricsCoursePanel(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new RubricsCourse());
-    }
-    
     #region
+    private async void EditMaterial(object sender, EventArgs e)
+    {
+        if (IDMaterial != null)
+        {
+            bool result = await DisplayAlert("Підтвердження дії", "Бажаєте змінити дані матеріалу?", "Так", "Ні");
+            if (result)
+            {
+                try
+                {
+                    EditMaterialBlockDto editMaterial = new EditMaterialBlockDto()
+                    {
+                        Name = name.Text,
+                        Priority = Int32.Parse(priority.Text),
+                        Note = note.Text,
+                        Url = url.Text,
+                        IsPractical = isPractical.IsChecked,
+                        Id = (int)IDMaterial,
+                    };
+
+                    var edit = await client.EditMaterialAsync(editMaterial);
+                    AllMaterial();
+                }
+                catch (Exception ex)
+                {
+                    await DisplayAlert(null, ex.Message, "ОК)");
+                }
+
+            }
+        }
+        else
+        {
+            await DisplayAlert(null, "Для редагування виберіть матеріал зі списку", "ОК)");
+        }
+
+    }
     //private async void HeadingCollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
     //{
     //    var selectedItem = e.CurrentSelection[0] as GetHeadingBeginInfoDto;
@@ -185,6 +188,7 @@ public partial class MaterialBlocks : ContentPage
     //       NextCategory(id);
     //       AllMaterial();
     //   }
+
     #endregion
 
 

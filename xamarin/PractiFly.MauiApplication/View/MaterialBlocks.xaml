@@ -1,32 +1,23 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PractiFly.MauiApplication.View.MaterialBlocks">
+             x:Class="PractiFly.MauiApplication.View.MaterialBlocks"
+             Title=" ">
     <ScrollView>
     <StackLayout>
-        <StackLayout HorizontalOptions="Center"  Margin="0,20">
-            <Label Text="Матеріали" FontSize="Title" FontAttributes="Bold"/>
-        </StackLayout>
-        <Frame BackgroundColor="#9062F2" Padding="0" CornerRadius="0">
-            <StackLayout BackgroundColor="#9062F2" Orientation="Horizontal" HorizontalOptions="Center" Spacing="1">
-                <Button TextColor="White" Text="Користувачі" WidthRequest="150" Clicked="AdminPanel"/>
-                <Button TextColor="White" Text="Рубрики" WidthRequest="150" Clicked="CategoryPanel" />
-                <Button TextColor="White" Text="Рубрики курсів" WidthRequest="150" Clicked="RubricsCoursePanel"/>
-                <Button TextColor="White" Text="Матеріали" WidthRequest="150" Clicked="MaterialBlocksPanel"/>
-                <Button TextColor="White" Text="Дані курсів" WidthRequest="150" Clicked="CoursePanel"/>
-                <Button TextColor="White" Text="Теми курсів" WidthRequest="150" Clicked="CourseThemePanel"/>
-            </StackLayout>
-        </Frame>
-
-        <Grid  ColumnSpacing="20" Margin="20" HorizontalOptions="Center" HeightRequest="500">
+            <Frame BackgroundColor="#9062F2" Padding="0" CornerRadius="0">
+                <StackLayout HorizontalOptions="Center"  Margin="0,20">
+                    <Label Text="Матеріали" FontSize="Title" FontAttributes="Bold"/>
+                </StackLayout>
+            </Frame>
+            <Grid  ColumnSpacing="20" Margin="20" HorizontalOptions="Center" HeightRequest="500">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="320" />
+                <ColumnDefinition Width="*" />
+
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
+                    <RowDefinition Height="470" />
             </Grid.RowDefinitions>
             <!--<StackLayout Spacing="20"  Orientation="Horizontal" Margin="10" HorizontalOptions="Center">-->
             <!--<StackLayout Grid.Column="0" Grid.Row="0">
@@ -110,7 +101,7 @@
                             <CheckBox x:Name="isPractical"/>
                         </StackLayout>
                         <StackLayout Orientation="Horizontal"  HorizontalOptions="Center">
-                            <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="✔️" Clicked="EditMaterial"/>
+                            <!--<Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="✔️" Clicked="EditMaterial"/>-->
                             <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="➕" Clicked="CreateMaterial"/>
                             <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="🗑" Clicked="DeleteHeading"/>
                         </StackLayout>
