@@ -37,7 +37,7 @@ public class MyCourseController : Controller
     [HttpGet]
     [Route("user/courses")]
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = UserRoles.User, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    
     public async Task<IActionResult> UserCourse(int userId)
     {
         var result = await _context
@@ -52,7 +52,8 @@ public class MyCourseController : Controller
 
     [HttpGet]
     [Route("user/my/courses")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(Roles = UserRoles.User, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> GetUserCourseByToken()
     {
         var id = User.GetUserIdInt();
