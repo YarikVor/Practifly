@@ -12,6 +12,10 @@ import {Footer} from "../../UIComponents/Footer/Footer";
 
 import {useAppSelector} from "../../hooks/hooks";
 
+import {AccountMenu} from "../Header/Header";
+
+import { statusTypes } from "../../types/enums";
+
 import {useStyles} from "./styles";
 
 
@@ -22,7 +26,7 @@ const Container = () => {
   const isError = useAppSelector(store => store.user.status);
   const message = useAppSelector(store => store.user.errorMessage);
   useEffect(() => {
-    if(isError === "error") {
+    if(isError === statusTypes.ERROR) { 
       toast.error(message, {position: "top-center"});
     }
   },[isError]);
@@ -30,6 +34,7 @@ const Container = () => {
   return (
     <>
       <ToastContainer position="top-center"/>
+      <AccountMenu />
       <MUIContainer className={styles.root} maxWidth={false}>
         <Outlet/>
       </MUIContainer>
