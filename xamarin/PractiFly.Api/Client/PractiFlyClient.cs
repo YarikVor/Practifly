@@ -32,6 +32,14 @@ public class PractiFlyClient
 {
     private readonly HttpClient _httpClient;
 
+    public PractiFlyClient(string token)
+    {
+        //TODO: Checking validation token 
+        _httpClient = new HttpClient();
+        _httpClient.BaseAddress = new Uri(BasicUrl);
+        _httpClient.DefaultRequestHeaders.Add(Authorization, string.Format(JwtDefaultFormat, token));
+    }
+
     #region Constants
     private const string BasicUrl = "https://localhost:5001/api/";
     private const string JwtDefaultFormat = "Bearer {0}";
@@ -105,32 +113,8 @@ public class PractiFlyClient
     #endregion
 
 
-
-    public PractiFlyClient(string token)
-    {
-        //TODO: Checking validation token 
-        _httpClient = new HttpClient();
-        _httpClient.BaseAddress = new Uri(BasicUrl);
-        _httpClient.DefaultRequestHeaders.Add(Authorization, string.Format(JwtDefaultFormat,token));
-    }
-    //TODO: Maybe add registration
-
-
     #region BasicMethods
-    private async Task<TOutput> CreateAsync<TInput, TOutput>(string url, TInput dto)
-    {
-        var response = await _httpClient.PostAsJsonAsync(url, dto);
-        var result = await response.Content.ReadFromJsonAsync<TOutput>()
-            ?? throw new NullReferenceException("result");
-        return result;
-    }
-    private async Task<bool> DeleteAsync(string url, int id)
-    {
-        string uri = string.Format(url, id);
-        var response = await _httpClient.DeleteAsync(uri);
-
-        return response.IsSuccessStatusCode;
-    }
+   
     private async Task<bool> CreateUpdateAsync<TInput>(string url, TInput dto)
     {
         var response = await _httpClient.PostAsJsonAsync(url, dto);
@@ -143,6 +127,22 @@ public class PractiFlyClient
         var result = await _httpClient.GetFromJsonAsync<TOutput?>(uri);
         return result;
     }
+    private async Task<bool> DeleteAsync(string url, int id)
+    {
+        string uri = string.Format(url, id);
+        var response = await _httpClient.DeleteAsync(uri);
+
+        return response.IsSuccessStatusCode;
+    }
+    #region 
+    private async Task<TOutput> CreateAsync<TInput, TOutput>(string url, TInput dto)
+    {
+        var response = await _httpClient.PostAsJsonAsync(url, dto);
+        var result = await response.Content.ReadFromJsonAsync<TOutput>()
+            ?? throw new NullReferenceException("result");
+        return result;
+    }
+    #endregion
     #endregion
 
     #region Login
