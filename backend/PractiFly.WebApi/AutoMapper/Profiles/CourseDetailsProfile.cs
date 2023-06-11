@@ -33,7 +33,10 @@ public class CourseDetailsProfile : Profile
         CreateProjection<ThemeMaterial, MaterialDetailsViewDto>()
             .ForMember(dto => dto.Url, par => par.MapFrom(m => m.Material.Url))
             .ForMember(dto => dto.Name, par => par.MapFrom(m => m.Material.Name))
-            .ForMember(dto => dto.Id, par => par.MapFrom(m => m.Material.Id));
+            .ForMember(dto => dto.Id, par => par.MapFrom(m => m.Material.Id))
+            .ForMember(dto => dto.Note, par => par.MapFrom(m => m.Material.Note));
+                
+
 
         CreateMap<UserMaterialSendDto, UserMaterial>()
             .ForMember(um => um.MaterialId, par => par.MapFrom(dto => dto.Id))
@@ -84,7 +87,8 @@ public class CourseDetailsProfile : Profile
                     Id = m.Material.Id,
                     Name = m.Material.Name,
                     IsCompleted = m.UserMaterial != null && m.UserMaterial.IsCompleted,
-                    Grade = m.UserMaterial == null ? 0 : m.UserMaterial.Grade
+                    Grade = m.UserMaterial == null ? 0 : m.UserMaterial.Grade,
+                    Note = m.Material.Note
                 })
             ))
             ;
