@@ -17,7 +17,7 @@ public partial class MaterialBlocks : ContentPage
     public MaterialBlocks()
     {
         InitializeComponent();
-        client = new("");
+        client = new();
         //NextCategory(null);
         AllMaterial();
     }

@@ -19,14 +19,14 @@ public partial class RubricsCourse : ContentPage
     public RubricsCourse()
 	{
 		InitializeComponent();
-        client = new("");
+        client = new();
         GetCourse();
         NextCategory(null);
     }
     public RubricsCourse(int id)
     {
         InitializeComponent();
-        client = new("");
+        client = new();
         GetCourse();
         IDStartHead = id;
         NextCategory(id);
@@ -34,7 +34,7 @@ public partial class RubricsCourse : ContentPage
     public RubricsCourse(int id,string code)
     {
         InitializeComponent();
-        client = new("");
+        client = new();
         GetCourse();
         NextCategoryHeading(id, code);
         NextCategory(null);

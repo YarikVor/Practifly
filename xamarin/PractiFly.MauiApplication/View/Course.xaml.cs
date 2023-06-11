@@ -16,7 +16,7 @@ public partial class Course : ContentPage
 	{
 
 		InitializeComponent();
-        client = new("");
+        client = new();
         GetCourse();
 
     }

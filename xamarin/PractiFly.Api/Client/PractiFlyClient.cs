@@ -31,8 +31,8 @@ namespace PractiFly.Api.Client;
 public class PractiFlyClient 
 {
     private readonly HttpClient _httpClient;
-
-    public PractiFlyClient(string token)
+    public static string token = "";
+    public PractiFlyClient()
     {
         //TODO: Checking validation token 
         _httpClient = new HttpClient();

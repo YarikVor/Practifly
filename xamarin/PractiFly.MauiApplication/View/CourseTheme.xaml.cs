@@ -17,7 +17,7 @@ public partial class CourseTheme : ContentPage
     public CourseTheme()
 	{
 		InitializeComponent();
-        client = new("");
+        client = new();
     }
 
     protected async override void OnAppearing()

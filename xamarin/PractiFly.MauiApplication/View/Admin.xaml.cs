@@ -24,7 +24,6 @@ public partial class Admin : ContentPage
 	{
         InitializeComponent();
 
-
         role.Items.Add(" ");
         role.Items.Add("teacher");
         role.Items.Add("admin");
@@ -32,7 +31,7 @@ public partial class Admin : ContentPage
         role.Items.Add("manager");
         role.SelectedIndex = 0;
 
-        client = new("");
+        client = new();
         DateFrom.Date = new DateTime(2000, 1, 1);
         DateTo.Date = DateTime.Now;
 

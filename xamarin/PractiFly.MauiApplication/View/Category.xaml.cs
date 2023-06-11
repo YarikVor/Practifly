@@ -18,14 +18,14 @@ public partial class Category : ContentPage
     public Category()
 	{
 		InitializeComponent();
-        client = new("");
+        client = new();
         NextCategory(null);
     }
     public Category(int id)
     {
 
         InitializeComponent();
-        client = new("");
+        client = new();
         IDStartHead = id;
         NextCategory(id);
     }

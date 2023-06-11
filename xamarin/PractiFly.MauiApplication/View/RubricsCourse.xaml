@@ -64,7 +64,7 @@
                                         <DataTemplate>
                                             <StackLayout Orientation="Horizontal"  Margin="0,15">
                                                 <Label Text="{Binding Name}" 
-                                               HorizontalOptions="Start" 
+                                               HorizontalOptions="StartAndExpand"  
                                                VerticalOptions="Center"/>
                                                 <Button Text="→" 
                                                     HeightRequest="45"
@@ -94,7 +94,7 @@
                                         <DataTemplate>
                                             <StackLayout Orientation="Horizontal"  Margin="0,15">
                                                 <Label Text="{Binding Name}" 
-                                               HorizontalOptions="Start" 
+                                               HorizontalOptions="StartAndExpand" 
                                                VerticalOptions="Center"/>
                                                 <Button Text="→" 
                                                     HeightRequest="45"

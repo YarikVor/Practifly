@@ -51,7 +51,7 @@
                                 </StackLayout>
                                 <StackLayout>
                                     <Label Text="Опис"/>
-                                    <Editor x:Name="note" BackgroundColor="#ebf2ed" HeightRequest="200"/>
+                                        <Editor x:Name="description" BackgroundColor="#ebf2ed" HeightRequest="200"/>
                                 </StackLayout>
 
                             </StackLayout>
@@ -60,7 +60,7 @@
                             <StackLayout Spacing="30">
                                 <StackLayout>
                                     <Label Text="Примітка"/>
-                                        <Editor x:Name="description" HeightRequest="60" BackgroundColor="#ebf2ed"/>
+                                        <Editor x:Name="note" HeightRequest="60" BackgroundColor="#ebf2ed"/>
                                 </StackLayout>
                             </StackLayout>
                         </Frame >

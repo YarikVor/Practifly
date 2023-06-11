@@ -24,7 +24,7 @@
                 <Frame   HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0" Grid.Column="0" Grid.Row="0" >
                     <StackLayout >
                     <Label Text="Ієрархія рубрик" Margin="0,10" FontAttributes="Bold" HorizontalOptions="Center"/>
-                    <ScrollView  WidthRequest="180"  HeightRequest="360" >
+                    <ScrollView  WidthRequest="240"  HeightRequest="360" >
                             <StackLayout Margin ="0,0,20,0">
                                 <CollectionView x:Name="HeadingCollectionView"
                                             SelectionMode="Single"
@@ -33,7 +33,7 @@
                                         <DataTemplate>
                                             <StackLayout Orientation="Horizontal"  Margin="0,15">
                                                 <Label Text="{Binding Name}" 
-                                               HorizontalOptions="Start" 
+                                               HorizontalOptions="StartAndExpand" 
                                                VerticalOptions="Center"/>
                                                 <Button Text="→" 
                                                     HeightRequest="45"
