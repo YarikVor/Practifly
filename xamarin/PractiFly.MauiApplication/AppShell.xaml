@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell BackgroundColor="White"
+       Title=""
+    x:Class="PractiFly.MauiApplication.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:PractiFly.MauiApplication"
+    Shell.FlyoutBehavior="Disabled"
+    xmlns:pages="clr-namespace:PractiFly.MauiApplication.View">
+
+        <Tab Title="Користувачі" Icon="xamarin.png">
+            <ShellContent  ContentTemplate="{DataTemplate pages:Admin}" />
+        </Tab>
+        <Tab Title="Рубрики" Icon="xamarin.png">
+            <ShellContent ContentTemplate="{DataTemplate pages:Category}" />
+        </Tab>
+        <Tab Title="Рубрики курсів" Icon="xamarin.png">
+            <ShellContent ContentTemplate="{DataTemplate pages:RubricsCourse}" />
+        </Tab>
+        <Tab Title="Дані курсів" Icon="xamarin.png">
+            <ShellContent ContentTemplate="{DataTemplate pages:Course}" />
+        </Tab>
+        <Tab Title="Теми курсів" Icon="xamarin.png">
+            <ShellContent ContentTemplate="{DataTemplate pages:CourseTheme}" />
+        </Tab>
+        <Tab Title="Матеріали" Icon="xamarin.png">
+            <ShellContent ContentTemplate="{DataTemplate pages:MaterialBlocks}" />
+        </Tab>
+    
+
+</Shell>

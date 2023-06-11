@@ -1,0 +1,60 @@
+using PractiFly.Api.Admin;
+using PractiFly.Api.Api.Admin;
+using PractiFly.Api.Api.CourseData;
+using PractiFly.Api.Api.CourseDetails;
+using PractiFly.Api.Api.CourseMaterials;
+using PractiFly.Api.Api.CourseThemes;
+using PractiFly.Api.Api.Heading;
+using PractiFly.Api.Api.HeadingCourse;
+using PractiFly.Api.Api.Login;
+using PractiFly.Api.Api.MaterialBlocks;
+using PractiFly.Api.CourseData;
+using PractiFly.Api.CourseDetails;
+using PractiFly.Api.CourseMaterials;
+using PractiFly.Api.CourseThemes;
+using PractiFly.Api.Heading;
+using PractiFly.Api.HeadingCourse;
+using PractiFly.Api.Login;
+using PractiFly.Api.MaterialBlocks;
+
+namespace PractiFly.Api.Client;
+
+public interface IPractiFlyClient
+{
+    Task<LoginResponseDto> GetLoginResponseAsync(LoginRequestDto loginRequestDto);
+    Task<string> GetRefreshTokenAsync();
+    void UpdateToken(string token);
+    void DeleteToken();
+    Task<bool> DeleteSelfAsync();
+    Task<AdminUserInfoDto?> GetUserByIdAsAdminAsync(int id);
+    Task<bool> DeleteUserByIdAsAdminAsync(int id);
+    Task<AdminUserInfoDto> CreateUserByAdminAsync(UserCreateInfoDto userInfoDto);
+    Task<bool> UpdateUserByAdminAsync(UserUpdateInfoDto userInfoDto);
+    Task<UserItemInfoDto[]> GetFilterUserAsync(UserFilterInfoDto userFilterInfoDto);
+    Task<CourseItemInfoDto[]> GetAllCourseAsync(int? ownerId);
+    Task<CourseFullInfoDto> GetCourseById(int courseId);
+    Task<bool> CreateCourseAsync(CreateCourseDto createCourseDto);
+    Task<bool> DeleteCourseAsync(int id);
+    Task<bool> UpdateCourseAsync(UpdateCourseDto updateCourse);
+    Task<DetailsMaterialInfoDto?> GetDetailsMaterialAsync(DetailsMaterialDto detailsMaterialInfoDto);
+    Task<MaterialIncludingCourseInfoDto[]?> GetDetailsMaterialAsync(MaterialIncludingCourseDto materialIncludingCourseDto);
+    Task<ListsHeadingsCoursesInfoDto[]> GetListHeadingCourseByIdAsync(int Id);
+    Task<ListMaterialsInfoDto[]> GetListMaterialsByIdAsync(int Id);
+    Task<bool> CreateMaterialAsync(CreateMaterialBlockDto createMaterialsDto);
+    Task<bool> EditMaterialAsync(EditMaterialBlockDto createMaterialsDto);
+    Task<GetHeadingInfoDto>  GetHeadingByHeadIdAsync(int headingId);
+    Task<bool> CreateHeadingAsync(CreateHeadingDto createHeadingDto);
+    Task<bool> DeleteHeadingAsync(int id);
+    Task<bool> EditHeadingAsync(EditHeadingDto editHeadingDto);
+    Task<GetHeadingBeginInfoDto[]> GetHeadingByBeginHeadCodeAsync(int? headingId);
+    Task<bool> ChangeHeadingInCourseAsync(ChangeHeadingInCourseDto changeHeadingInCourseDto);
+    Task<ListThemesInfoDto[]> GetListThemesCourseByIdAsync(int id);
+    Task<ListMaterialsCourseInfoDto[]> GetListMaterialsCourseByIdAsync(int id);
+    Task<ThemeInformationDto> GetInformationThemeByIdAsync(int themeId);
+    Task<bool> CreateThemesOfCourseAsync(CreateThemesOfCourseDto createThemesOfCourseDto);
+    Task<bool> DeleteThemesAsync(int id);
+    Task<bool> UpdateThemesAsync(UpdateThemesDto updateThemesDto);
+    Task<bool> AddMaterialToThemeAsync(AddMaterialToThemeDto addMaterialToTheme);
+    Task<bool> DeleteThemeMaterialAsync(int id);
+    Task<bool> UpdateThemeMaterialAsync(UpdateThemeMaterialDto updateThemeMaterial);
+}
