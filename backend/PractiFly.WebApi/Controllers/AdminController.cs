@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.AutoMapper.Ex;
+using PractiFly.WebApi.Context;
 using PractiFly.WebApi.Dto.Admin.UserView;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
@@ -13,7 +15,7 @@ namespace PractiFly.WebApi.Controllers;
 
 [Route("api/admin/user")]
 [ApiController]
-//[Authorize(Roles = UserRoles.Admin, AuthenticationSchemes = "Bearer")]
+[Authorize(Roles = UserRoles.Admin, AuthenticationSchemes = "Bearer")]
 public class AdminController : Controller
 {
     private readonly IAmazonS3ClientManager _amazonClient;

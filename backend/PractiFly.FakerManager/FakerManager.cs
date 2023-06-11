@@ -27,7 +27,7 @@ public class FakerManager : IFakerManager
     {
         ArgumentNullException.ThrowIfNull(faker);
         if (faker == null) throw new ArgumentNullException(nameof(faker));
-        
+
         _fakers.Add(type, faker);
     }
 }

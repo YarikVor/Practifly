@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
@@ -16,7 +15,7 @@ public abstract class DesignTimeDbContentFactory<TDbContext> : IDesignTimeDbCont
         optionsBuilder.UseNpgsql(
             "User ID=YarikVor;password=uPGpfLbjt9Z4;Database=testdb;host=ep-tight-moon-762347.eu-central-1.aws.neon.tech");
 
-        return (TDbContext) Activator.CreateInstance(typeof(TDbContext), optionsBuilder.Options)!;
+        return (TDbContext)Activator.CreateInstance(typeof(TDbContext), optionsBuilder.Options)!;
     }
 }
 
@@ -26,5 +25,4 @@ public class PractiFlyContextFactory : DesignTimeDbContentFactory<PractiFlyConte
 
 public class UserIdentityContextFactory : DesignTimeDbContentFactory<UserIdentityDbContext>
 {
-    
 }

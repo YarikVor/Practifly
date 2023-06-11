@@ -1,5 +1,4 @@
 using AutoMapper;
-using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities.Materials;
 using PractiFly.WebApi.Dto.MaterialBlocks;
 
@@ -7,7 +6,7 @@ namespace PractiFly.WebApi.AutoMapper.Profiles;
 
 public class MaterialBlockProfile : Profile
 {
-    public MaterialBlockProfile(IPractiflyContext _context)
+    public MaterialBlockProfile()
     {
         CreateMap<CreateMaterialDto, Material>();
         CreateMap<EditMaterialDto, Material>();

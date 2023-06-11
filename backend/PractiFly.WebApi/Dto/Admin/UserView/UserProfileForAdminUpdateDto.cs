@@ -7,28 +7,18 @@ public class UserProfileForAdminUpdateDto
 {
     public int Id { get; set; }
 
-    [Required]
-    [MaxLength(128)]
-    public string FirstName { get; set; } = null!;
+    [Required] [MaxLength(128)] public string FirstName { get; set; } = null!;
 
-    [Required]
-    [MaxLength(128)]
-    public string LastName { get; set; } = null!;
+    [Required] [MaxLength(128)] public string LastName { get; set; } = null!;
 
     [Required]
     [EmailAddress]
     [MaxLength(128)]
     public string Email { get; set; } = null!;
 
-    [Phone]
-    [MaxLength(32)]
-    public string? Phone { get; set; }
+    [Phone] [MaxLength(32)] public string? Phone { get; set; }
 
-    [Required]
-    [TodayDateConstraint]
-    public DateOnly Birthday { get; set; }
+    [Required] [TodayDateConstraint] public DateOnly Birthday { get; set; }
 
-    [RoleString]
-    [Required]
-    public string Role { get; set; } = null!;
+    [RoleString] [Required] public string Role { get; set; } = null!;
 }

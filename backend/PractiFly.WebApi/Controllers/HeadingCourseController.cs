@@ -34,6 +34,7 @@ public class HeadingCourseController : Controller
     ///     The beginning of a section of code that returns sub-sections (ex: 12 -> 12.__, where '_' - 0-9).
     ///     Supports four rubric levels (ex: "", "12", "12.12", "12.12.12")
     /// </param>
+    /// <param name="headingId">Id of a heading</param>
     /// <returns></returns>
     /// <response code="200">Return subheading info (maybe empty result)</response>
     [HttpGet]

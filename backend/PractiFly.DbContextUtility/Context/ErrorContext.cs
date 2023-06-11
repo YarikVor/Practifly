@@ -4,11 +4,6 @@ namespace PractiFly.DbContextUtility.Context;
 
 public class ErrorContext : DbContext
 {
-    public ErrorContext(DbContextOptions<ErrorContext> options) : base(options)
-    {
-        Database.EnsureCreated();
-    }
-
     public DbSet<ErrorEntity> ErrorEntities { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

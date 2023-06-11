@@ -109,7 +109,7 @@ public class MaterialBlocksController : Controller
 
         return Ok();
     }
-    
+
     /// <summary>
     ///     Gets all materials.
     /// </summary>

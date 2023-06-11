@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PractiFly.DateJsonConverter;
+using PractiFly.DateJsonConverter.Schemas;
 using PractiFly.DbContextUtility.Context;
 using PractiFly.DbContextUtility.Context.Courses;
 using PractiFly.DbContextUtility.Context.Materials;
@@ -19,7 +20,6 @@ using Practifly.FakerGenerator;
 using PractiFly.FakerManager;
 using PractiFly.WebApi.AutoMappers;
 using PractiFly.WebApi.Context;
-using PractiFly.WebApi.Schema;
 using PractiFly.WebApi.Services.AuthenticationOptions;
 using PractiFly.WebApi.Services.TokenGenerator;
 using ErrorContext = PractiFly.DbContextUtility.Context.ErrorContext;
@@ -100,7 +100,7 @@ public class Startup
         //AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", false);
         //AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
         //if (env.IsDevelopment())
-            UseSwagger(app);
+        UseSwagger(app);
 
         //UseExceptionHandler(app, services);
         app.UseRouting();
@@ -226,7 +226,7 @@ public class Startup
                     Description =
                         "JWT Authorization header using the Bearer scheme. " +
                         "\r\n\r\n Enter 'Bearer' [space] and then your token in the text input below." +
-                        "\r\n\r\nExample: \"Bearer 12345abcdef\"",
+                        "\r\n\r\nExample: \"Bearer [token]\"",
                     Name = "Authorization",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey,
@@ -275,7 +275,7 @@ public class Startup
         AddPractiFlyDb(services, connectionString);
 
         var errorConnectionString = _configuration.GetConnectionString("ErrorConnection");
-        AddErrorDb(services, errorConnectionString);
+        //AddErrorDb(services, errorConnectionString);
     }
 
     private static void AddErrorDb(IServiceCollection services, string? errorConnectionString)
@@ -299,11 +299,11 @@ public class Startup
         }
     }
 
-private static void InitTables(IServiceCollection services)
-{
-    var serviceProvider = services.BuildServiceProvider();
-    var identityContext = serviceProvider.GetService<UserIdentityDbContext>();
-    var practiFlyContext = serviceProvider.GetService<IPractiflyContext>() as DbContext;
+    private static void InitTables(IServiceCollection services)
+    {
+        var serviceProvider = services.BuildServiceProvider();
+        var identityContext = serviceProvider.GetService<UserIdentityDbContext>();
+        var practiFlyContext = serviceProvider.GetService<IPractiflyContext>() as DbContext;
         identityContext!.Database.Migrate();
 
         GenerateRules(identityContext);
@@ -311,28 +311,26 @@ private static void InitTables(IServiceCollection services)
         practiFlyContext!.Database.Migrate();
 
         //practiFlyContext.GenerateTestDataIfEmpty();
-}
+    }
 
     private static void GenerateRules(UserIdentityDbContext identityContext)
     {
         if (!identityContext.Roles.Any())
         {
-            identityContext.Roles.AddRange(new[]
-            {
-                GenerateRole("user"),
-                GenerateRole("admin"),
-                GenerateRole("teacher"),
-                GenerateRole("manager"),
-            });
+            identityContext.Roles.AddRange(GenerateRole("user"), GenerateRole("admin"), GenerateRole("teacher"),
+                GenerateRole("manager"));
 
             identityContext.SaveChanges();
         }
 
-        Role GenerateRole(string name) => new()
+        Role GenerateRole(string name)
         {
-            Name = name,
-            NormalizedName = name.ToUpper(),
-        };
+            return new Role
+            {
+                Name = name,
+                NormalizedName = name.ToUpper()
+            };
+        }
     }
 
     #endregion

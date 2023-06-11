@@ -8,7 +8,6 @@ public class MaterialsContext : DbContext, IMaterialsContext
 {
     public MaterialsContext(DbContextOptions<MaterialsContext> options) : base(options)
     {
-        Database.EnsureCreated();
     }
 
     public DbSet<Theme> Themes { get; set; } = null!;

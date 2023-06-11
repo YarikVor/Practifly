@@ -5,11 +5,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
-using PractiFly.DbEntities.Courses;
 using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.AutoMapper.Ex;
 using PractiFly.WebApi.Dto.CourseDetails;
-using PractiFly.WebApi.Dto.Heading;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace PractiFly.WebApi.Controllers;
@@ -33,6 +31,7 @@ public class CourseDetailsController : Controller
         _configurationProvider = configurationProvider;
         _mapper = mapper;
     }
+
     /// <summary>
     ///     Returns details about a material identified by the specified Id`s.
     /// </summary>
@@ -128,14 +127,14 @@ public class CourseDetailsController : Controller
 
         return Ok();
     }
+
     /// <summary>
-    ///  Returns advanced information about the course, including information. its themes and their materials
+    ///     Returns advanced information about the course, including information. its themes and their materials
     /// </summary>
     /// <param name="courseId">Id of the course about which information is received</param>
     /// <returns></returns>
     /// <response code="200">Operation is successful.</response>
     /// <response code="400">Operation was failed</response>
-
     [HttpGet]
     [Route("course/themes/full-info")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -150,7 +149,6 @@ public class CourseDetailsController : Controller
             .AsNoTracking()
             .Where(c => c.Id == courseId)
             .ProjectTo<UserCourseInfoDto>(_configurationProvider, new { userId })
-
             .FirstOrDefaultAsync();
         return result == null ? BadRequest() : Json(result);
     }
