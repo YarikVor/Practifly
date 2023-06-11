@@ -11,10 +11,10 @@ public class PractiFlyFakerManager : FakerManager
         var typeOfIFakerGenerate = typeof(IFakerGenerate);
         var fakersTypes = currentAssembly
             .ExportedTypes
-            .Where(t => t
-                .GetInterfaces()
-                .Contains(typeOfIFakerGenerate)
-            );
+              .Where(t => t
+                  .GetInterfaces()
+                  .Contains(typeOfIFakerGenerate)
+              );
 
         foreach (var fakerType in fakersTypes)
         {
@@ -24,7 +24,7 @@ public class PractiFlyFakerManager : FakerManager
 
             object Instance()
             {
-                if (fakerType.GetConstructor(Type.EmptyTypes) != null) 
+                if (fakerType.GetConstructor(Type.EmptyTypes) != null)
                     return Activator.CreateInstance(fakerType)!;
 
                 if (fakerType.GetConstructor(new[] { typeof(int) }) != null)

@@ -60,7 +60,7 @@ public class ProfileController : Controller
             .Users
             .AsNoTracking()
             .Where(e => e.Id == userId)
-            .ProjectTo<UserInfoDto>(_configurationProvider, new {baseUrl = _amazonClient.GetFileUrl()})
+            .ProjectTo<UserInfoDto>(_configurationProvider, new { baseUrl = _amazonClient.GetFileUrl() })
             .FirstOrDefaultAsync();
 
         if (result == null)

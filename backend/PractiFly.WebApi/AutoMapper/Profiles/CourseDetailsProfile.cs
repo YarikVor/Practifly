@@ -3,7 +3,6 @@ using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities.Courses;
 using PractiFly.DbEntities.Users;
 using PractiFly.WebApi.Dto.CourseDetails;
-using System.Linq.Expressions;
 
 namespace PractiFly.WebApi.AutoMapper.Profiles;
 
@@ -35,7 +34,6 @@ public class CourseDetailsProfile : Profile
             .ForMember(dto => dto.Name, par => par.MapFrom(m => m.Material.Name))
             .ForMember(dto => dto.Id, par => par.MapFrom(m => m.Material.Id))
             .ForMember(dto => dto.Note, par => par.MapFrom(m => m.Material.Note));
-                
 
 
         CreateMap<UserMaterialSendDto, UserMaterial>()
@@ -50,14 +48,14 @@ public class CourseDetailsProfile : Profile
                     .UserThemes
                     .Where(ut => ut.ThemeId == e.Id)
                     .Select(ut => ut.IsCompleted)
-                .FirstOrDefault()));
+                    .FirstOrDefault()));
         //
         var userId = 0;
         CreateProjection<Course, UserCourseInfoDto>()
-                    .ForMember(dto => dto.Themes, par => par.MapFrom(c => context
-                        .Themes
-                        .Where(t => t.CourseId == c.Id)
-                    ));
+            .ForMember(dto => dto.Themes, par => par.MapFrom(c => context
+                .Themes
+                .Where(t => t.CourseId == c.Id)
+            ));
 
         CreateProjection<Theme, FullThemeWithMaterialsDto>()
             .ForMember(dto => dto.IsCompleted, par => par.MapFrom(t => context

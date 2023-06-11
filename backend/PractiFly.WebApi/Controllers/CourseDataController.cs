@@ -262,55 +262,55 @@ public class CourseDataController : Controller
     //}
 
 
-        /*
-            var result = await _context
-            .Courses
-            .AsNoTracking()
-            .Where(c => c.Id == courseId)
-            .Select(c => new
-            {
-                c.Id,
-                c.Name,
-                Themes = _context.Themes
-                    .AsNoTracking()
-                    .Where(t => t.CourseId == courseId)
-                    .Select(t => new
-                    {
-                        Theme = t,
-                        UserTheme = _context
-                            .UserThemes
-                            .FirstOrDefault(ut => ut.UserId == userId && ut.ThemeId == t.Id)
-                    })
-                    .Select(obj => new
-                    {
-                        Id = obj.Theme.Id,
-                        Name = obj.Theme.Name,
-                        IsComplited = obj.UserTheme != null && obj.UserTheme.IsCompleted,
-                        Grade = obj.UserTheme == null ? 0 : obj.UserTheme.Grade,
-                        Materials = _context
-                            .ThemeMaterials
-                            .Where(tm => tm.ThemeId == obj.Theme.Id)
-                            .Select(tm => tm.Material)
-                            .Select(m => new
-                            {
-                                Material = m,
-                                UserMaterial = _context
-                                    .UserMaterials
-                                    .FirstOrDefault(um => um.UserId == userId && um.MaterialId == m.Id)
-                            })
-                            .Select(m => new
-                            {
-                                Id = m.Material.Id,
-                                Name = m.Material.Name,
-                                IsComplited = m.UserMaterial != null && m.UserMaterial.IsCompleted,
-                                Grade = m.UserMaterial == null ? 0 : m.UserMaterial.Grade,
-                            })
-                            .ToArray()
-                    }).ToArray()
-            })
-            .FirstOrDefaultAsync();*/
-        /**/
+    /*
+        var result = await _context
+        .Courses
+        .AsNoTracking()
+        .Where(c => c.Id == courseId)
+        .Select(c => new
+        {
+            c.Id,
+            c.Name,
+            Themes = _context.Themes
+                .AsNoTracking()
+                .Where(t => t.CourseId == courseId)
+                .Select(t => new
+                {
+                    Theme = t,
+                    UserTheme = _context
+                        .UserThemes
+                        .FirstOrDefault(ut => ut.UserId == userId && ut.ThemeId == t.Id)
+                })
+                .Select(obj => new
+                {
+                    Id = obj.Theme.Id,
+                    Name = obj.Theme.Name,
+                    IsComplited = obj.UserTheme != null && obj.UserTheme.IsCompleted,
+                    Grade = obj.UserTheme == null ? 0 : obj.UserTheme.Grade,
+                    Materials = _context
+                        .ThemeMaterials
+                        .Where(tm => tm.ThemeId == obj.Theme.Id)
+                        .Select(tm => tm.Material)
+                        .Select(m => new
+                        {
+                            Material = m,
+                            UserMaterial = _context
+                                .UserMaterials
+                                .FirstOrDefault(um => um.UserId == userId && um.MaterialId == m.Id)
+                        })
+                        .Select(m => new
+                        {
+                            Id = m.Material.Id,
+                            Name = m.Material.Name,
+                            IsComplited = m.UserMaterial != null && m.UserMaterial.IsCompleted,
+                            Grade = m.UserMaterial == null ? 0 : m.UserMaterial.Grade,
+                        })
+                        .ToArray()
+                }).ToArray()
+        })
+        .FirstOrDefaultAsync();*/
+    /**/
 
-        //return result == null ? BadRequest() : Json(result);
+    //return result == null ? BadRequest() : Json(result);
     //}
 }

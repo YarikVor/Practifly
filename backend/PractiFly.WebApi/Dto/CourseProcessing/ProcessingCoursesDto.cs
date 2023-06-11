@@ -7,8 +7,7 @@ namespace PractiFly.WebApi.Dto.StudyResults;
 
 public class ProcessingCoursesDto
 {
-    [Required]
-    public int Id { get; set; }
+    [Required] public int Id { get; set; }
 
     public string Course { get; set; } = null!;
 }

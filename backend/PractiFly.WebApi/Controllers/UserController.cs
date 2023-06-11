@@ -15,11 +15,11 @@ namespace PractiFly.WebApi.Controllers;
 [Route("api/user")]
 public class UserController : Controller
 {
+    private readonly IAmazonS3ClientManager _amazonClient;
     private readonly IMapper _mapper;
     private readonly SignInManager<User> _signInManager;
     private readonly ITokenGenerator _tokenGenerator;
     private readonly UserManager<User> _userManager;
-    private readonly IAmazonS3ClientManager _amazonClient;
 
     public UserController(
         ITokenGenerator tokenGenerator,
@@ -34,7 +34,6 @@ public class UserController : Controller
         _signInManager = signInManager;
         _mapper = mapper;
         _amazonClient = amazonClient;
-        
     }
 
     /// <summary>
@@ -65,8 +64,9 @@ public class UserController : Controller
         if (!identityResult.Succeeded)
             return BadRequest(identityResult.Errors);
 
-        var resultDto = _mapper.Map<User, UserTokenInfoDto>(identityUser, opt => opt.Items["baseUrl"] = _amazonClient.GetFileUrl());
-        
+        var resultDto =
+            _mapper.Map<User, UserTokenInfoDto>(identityUser, opt => opt.Items["baseUrl"] = _amazonClient.GetFileUrl());
+
         resultDto.Token = GenerateToken(identityUser.Id, UserRoles.User);
         return Ok(resultDto);
     }
@@ -93,7 +93,8 @@ public class UserController : Controller
         var role = (await _userManager.GetRolesAsync(user))[0];
 
         if (!result.Succeeded) return BadRequest();
-        var resultDto = _mapper.Map<User, UserTokenInfoDto>(user, opt => opt.Items["baseUrl"] = _amazonClient.GetFileUrl());
+        var resultDto =
+            _mapper.Map<User, UserTokenInfoDto>(user, opt => opt.Items["baseUrl"] = _amazonClient.GetFileUrl());
         resultDto.Token = GenerateToken(user.Id, role);
         return Ok(resultDto);
     }
@@ -168,7 +169,7 @@ public class UserController : Controller
     {
         // Отримання ідентифікатора поточного користувача з токена.
         var userId = User.GetUserId();
-        
+
         var user = await _userManager.FindByIdAsync(userId);
 
         if (user == null)

@@ -58,7 +58,6 @@ public class MyCourseProfile : Profile
                     e =>
                         (float)
                         (context
-
                             .UserThemes
                             .Where(ut => ut.UserId == e.UserId)
                             .Where(ut => ut.Theme.CourseId == e.CourseId)
@@ -72,8 +71,8 @@ public class MyCourseProfile : Profile
                 par => par.MapFrom(
                     user =>
                         context
-                        .Themes
-                        .Count(t => t.CourseId == user.CourseId)
+                            .Themes
+                            .Count(t => t.CourseId == user.CourseId)
                 )
             )
             //TODO: CountProgress
@@ -92,10 +91,10 @@ public class MyCourseProfile : Profile
                 dto => dto.CountProgress,
                 par => par.MapFrom(
                     uc => context
-                    .UserThemes
-                    .Where(ut => ut.Theme.CourseId == uc.CourseId)
-                    .Where(ut => ut.UserId == uc.UserId)
-                    .Count (ut => ut.IsCompleted)))
+                        .UserThemes
+                        .Where(ut => ut.Theme.CourseId == uc.CourseId)
+                        .Where(ut => ut.UserId == uc.UserId)
+                        .Count(ut => ut.IsCompleted)))
             //.ForMember(
             //    e => e.Grade,
             //    par => par.MapFrom(

@@ -22,6 +22,5 @@ public class UserFilteringDto
     [MaxLength(128)]
     public string? Email { get; set; }
 
-    [RoleString]
-    public string? Role { get; set; }
+    [RoleString] public string? Role { get; set; }
 }

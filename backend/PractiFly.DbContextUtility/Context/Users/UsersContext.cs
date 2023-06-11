@@ -8,10 +8,11 @@ namespace PractiFly.DbContextUtility.Context.Users;
 public class UsersContext : DbContext, IUsersContext
 {
     public UsersContext(DbContextOptions<UsersContext> options) : base(options)
-    {}
+    {
+    }
 
     public DbSet<Group> Groups { get; set; } = null!;
-    public DbSet<GroupCourse> GroupCourses { get; set; }  = null!;
+    public DbSet<GroupCourse> GroupCourses { get; set; } = null!;
     public DbSet<UserCourse> UserCourses { get; set; } = null!;
     public DbSet<UserGroup> UserGroups { get; set; } = null!;
     public DbSet<UserHeading> UserHeadings { get; set; } = null!;

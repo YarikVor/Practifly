@@ -100,7 +100,7 @@ public class Startup
         //AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", false);
         //AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
         //if (env.IsDevelopment())
-            UseSwagger(app);
+        UseSwagger(app);
 
         //UseExceptionHandler(app, services);
         app.UseRouting();
@@ -299,11 +299,11 @@ public class Startup
         }
     }
 
-private static void InitTables(IServiceCollection services)
-{
-    var serviceProvider = services.BuildServiceProvider();
-    var identityContext = serviceProvider.GetService<UserIdentityDbContext>();
-    var practiFlyContext = serviceProvider.GetService<IPractiflyContext>() as DbContext;
+    private static void InitTables(IServiceCollection services)
+    {
+        var serviceProvider = services.BuildServiceProvider();
+        var identityContext = serviceProvider.GetService<UserIdentityDbContext>();
+        var practiFlyContext = serviceProvider.GetService<IPractiflyContext>() as DbContext;
         identityContext!.Database.Migrate();
 
         GenerateRules(identityContext);
@@ -311,28 +311,26 @@ private static void InitTables(IServiceCollection services)
         practiFlyContext!.Database.Migrate();
 
         //practiFlyContext.GenerateTestDataIfEmpty();
-}
+    }
 
     private static void GenerateRules(UserIdentityDbContext identityContext)
     {
         if (!identityContext.Roles.Any())
         {
-            identityContext.Roles.AddRange(new[]
-            {
-                GenerateRole("user"),
-                GenerateRole("admin"),
-                GenerateRole("teacher"),
-                GenerateRole("manager"),
-            });
+            identityContext.Roles.AddRange(GenerateRole("user"), GenerateRole("admin"), GenerateRole("teacher"),
+                GenerateRole("manager"));
 
             identityContext.SaveChanges();
         }
 
-        Role GenerateRole(string name) => new()
+        Role GenerateRole(string name)
         {
-            Name = name,
-            NormalizedName = name.ToUpper(),
-        };
+            return new Role
+            {
+                Name = name,
+                NormalizedName = name.ToUpper()
+            };
+        }
     }
 
     #endregion

@@ -4,10 +4,7 @@ namespace PractiFly.WebApi.Dto.Level;
 
 public class LevelCreateDto
 {
-    [Required]
-    [MaxLength(256)]
-    public string LevelName { get; set; } = null!;
+    [Required] [MaxLength(256)] public string LevelName { get; set; } = null!;
 
-    [MaxLength(65536)]
-    public string? Description { get; set; }
+    [MaxLength(65536)] public string? Description { get; set; }
 }
