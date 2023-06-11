@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
+using PractiFly.WebApi.Context;
 using PractiFly.WebApi.Dto.MyCourse;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
@@ -36,6 +37,7 @@ public class MyCourseController : Controller
     [HttpGet]
     [Route("user/courses")]
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(Roles = UserRoles.User, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> UserCourse(int userId)
     {
         var result = await _context

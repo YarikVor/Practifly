@@ -47,6 +47,7 @@ public class MaterialBlocksController : Controller
     /// <returns>A JSON-encoded representation of the list of materials.</returns>
     [HttpGet]
     [Route("heading/materials")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> GetMaterialsFromHeading(int headingId)
     {
         var result = await _context
@@ -119,6 +120,7 @@ public class MaterialBlocksController : Controller
     /// <response code="404">Materials not found.</response>
     [HttpGet]
     [Route("material/all")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> GetMaterials()
     {
         var materials = await _context.Materials
