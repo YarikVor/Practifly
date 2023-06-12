@@ -2,7 +2,7 @@
 
 public class UserMaterialSendDto
 {
-    public int Id { get; set; }
+    public int MaterialId { get; set; }
 
     public string? ResultUrl { get; set; }
 
