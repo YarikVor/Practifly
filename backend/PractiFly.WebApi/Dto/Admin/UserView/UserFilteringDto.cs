@@ -6,10 +6,10 @@ namespace PractiFly.WebApi.Dto.Admin.UserView;
 public class UserFilteringDto
 {
     [MaxLength(128)]
-    public string? Name { get; set; }
+    public string? FirstName { get; set; }
 
     [MaxLength(128)]
-    public string? Surname { get; set; }
+    public string? LastName { get; set; }
 
     [Phone]
     [MaxLength(32)]
@@ -22,6 +22,5 @@ public class UserFilteringDto
     [MaxLength(128)]
     public string? Email { get; set; }
 
-    [RoleString]
-    public string? Role { get; set; }
+    [RoleString] public string? Role { get; set; }
 }

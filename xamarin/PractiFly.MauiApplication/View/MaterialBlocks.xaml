@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PractiFly.MauiApplication.View.MaterialBlocks"
+             Title=" ">
+    <ScrollView>
+    <StackLayout>
+            <Frame BackgroundColor="#9062F2" Padding="0" CornerRadius="0">
+                <StackLayout HorizontalOptions="Center"  Margin="0,20">
+                    <Label Text="Матеріали" FontSize="Title" FontAttributes="Bold"/>
+                </StackLayout>
+            </Frame>
+            <Grid  ColumnSpacing="20" Margin="20" HorizontalOptions="Center" HeightRequest="500">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="320" />
+                <ColumnDefinition Width="*" />
+
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                    <RowDefinition Height="470" />
+            </Grid.RowDefinitions>
+            <!--<StackLayout Spacing="20"  Orientation="Horizontal" Margin="10" HorizontalOptions="Center">-->
+            <!--<StackLayout Grid.Column="0" Grid.Row="0">
+                <Label Text="Ієрархія рубрик"/>
+                --><!--<Label Text="Home/Libery/asdasdasdasdasd"/>--><!--
+                <Frame  HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0" >
+                    <ScrollView  WidthRequest="180" HeightRequest="450">
+                        <StackLayout Margin ="0,0,20,0">
+                            <CollectionView x:Name="HeadingCollectionView"
+                                            SelectionMode="Single"
+                                            SelectionChanged="HeadingCollectionView_SelectionChanged">
+                                <CollectionView.ItemTemplate >
+                                    <DataTemplate>
+                                        <StackLayout Orientation="Horizontal"  Margin="0,15">
+                                            <Label Text="{Binding Name}" 
+                                               HorizontalOptions="Start" 
+                                               VerticalOptions="Center"/>
+                                            <Button Text="→" 
+                                                    HeightRequest="45"
+                                                    Padding="10"
+                                                    HorizontalOptions="EndAndExpand"
+                                                    Clicked="NextLevelUdc"
+                                                    FontSize="20"
+                                                />
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </StackLayout>
+                    </ScrollView>
+                </Frame >
+            </StackLayout>-->
+
+            <StackLayout Grid.Column="0" Grid.Row="0">
+                <Label Text="Матеріали"/>
+                <Frame  HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0" >
+                    <StackLayout>
+                        <ScrollView  WidthRequest="300" Padding="12,0" HeightRequest="450">
+                            <StackLayout >
+                                <CollectionView x:Name="MaterialsCollectionView"
+                                            SelectionMode="Single"
+                                            SelectionChanged="MaterialCollectionView_SelectionChanged">
+                                    <CollectionView.ItemTemplate >
+                                        <DataTemplate>
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label Text="{Binding Name}" />
+                                                <!--<Label Text="{Binding Name}" VerticalOptions="Center" />-->
+                                                <!--<CheckBox HorizontalOptions="EndAndExpand" Margin="15,0,0,0"/>
+                                                <CheckBox HorizontalOptions="End" Margin="15,0,0,0"/>
+                                                <Frame Padding="10" HorizontalOptions="End"  BackgroundColor="White">
+                                                    <Label     FontSize="12" Text="20"/>
+                                                </Frame>
+                                                <CheckBox HorizontalOptions="End" Margin="15,0,0,0"/>-->
+                                            </StackLayout>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                                
+                                
+                            </StackLayout>
+
+                        </ScrollView>
+                    </StackLayout>
+                </Frame >
+            </StackLayout>
+            <StackLayout Grid.Column="1" Grid.Row="0" WidthRequest="400" >
+                <Label Text="Створити новий матеріал"/>
+                <Frame BackgroundColor="#ebf2ed" BorderColor="#aeb5b0">
+                    <StackLayout Spacing="10">
+                        <Label Text="Назва"/>
+                        <Entry x:Name="name" Placeholder="Назва" BackgroundColor="White"/>
+                        <Label Text="Примітка"/>
+                        <Editor x:Name="note" HeightRequest="100" Placeholder="Опис" BackgroundColor="White"/>
+                        <Label Text="URL"/>
+                        <Entry x:Name="url" Placeholder="Посилання" BackgroundColor="White"/>
+                        <Label Text="Приорітетність" />
+                        <Entry x:Name="priority" Placeholder="Приорітетність" BackgroundColor="White"/>
+
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="Практичне" VerticalOptions="Center"/>
+                            <CheckBox x:Name="isPractical"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal"  HorizontalOptions="Center">
+                            <!--<Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="✔️" Clicked="EditMaterial"/>-->
+                            <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="➕" Clicked="CreateMaterial"/>
+                            <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="🗑" Clicked="DeleteHeading"/>
+                        </StackLayout>
+                    </StackLayout>
+                </Frame>
+                
+            </StackLayout>
+        </Grid>
+    </StackLayout>
+    </ScrollView>
+</ContentPage>

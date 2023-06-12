@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities.Users;
-using PractiFly.WebApi.AutoMapper;
+using PractiFly.WebApi.AutoMapper.Ex;
+using PractiFly.WebApi.Context;
 using PractiFly.WebApi.Dto.Admin.UserView;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
@@ -13,9 +15,10 @@ namespace PractiFly.WebApi.Controllers;
 
 [Route("api/admin/user")]
 [ApiController]
-//[Authorize(Roles = UserRoles.Admin, AuthenticationSchemes = "Bearer")]
+[Authorize(Roles = UserRoles.Admin, AuthenticationSchemes = "Bearer")]
 public class AdminController : Controller
 {
+    private readonly IAmazonS3ClientManager _amazonClient;
     private readonly IConfigurationProvider _configurationProvider;
     private readonly IPractiflyContext _context;
     private readonly IMapper _mapper;
@@ -24,12 +27,16 @@ public class AdminController : Controller
 
     public AdminController(IPractiflyContext practiflyContext,
         UserManager<User> userManager,
-        IConfigurationProvider configurationProvider
+        IConfigurationProvider configurationProvider,
+        IMapper mapper,
+        IAmazonS3ClientManager amazonClient
     )
     {
         _userManager = userManager;
         _context = practiflyContext;
         _configurationProvider = configurationProvider;
+        _mapper = mapper;
+        _amazonClient = amazonClient;
     }
 
     /// <summary>
@@ -48,7 +55,7 @@ public class AdminController : Controller
             .Users
             .AsNoTracking()
             .Where(u => u.Id == userId)
-            .ProjectTo<UserProfileForAdminViewDto>(_configurationProvider)
+            .ProjectTo<UserProfileForAdminViewDto>(_configurationProvider, new { baseUrl = _amazonClient.GetFileUrl() })
             .FirstOrDefaultAsync();
 
         return result == null ? NotFound() : Json(result);
@@ -65,9 +72,9 @@ public class AdminController : Controller
     [HttpDelete]
     [Route("")]
     //[Authorize(Roles = UserRoles.Admin)]
-    public async Task<IActionResult> DeleteUserByIdAsync(string userId)
+    public async Task<IActionResult> DeleteUserByIdAsync(int userId)
     {
-        var user = await _userManager.FindByIdAsync(userId);
+        var user = await _userManager.FindByIdAsync(userId.ToString());
 
         if (user == null)
             return NotFound();
@@ -97,7 +104,15 @@ public class AdminController : Controller
 
         var roleResult = await _userManager.AddToRoleAsync(user, userDto.Role);
 
-        return !roleResult.Succeeded ? BadRequest() : Ok();
+        if (!roleResult.Succeeded) return BadRequest();
+
+        var dto = _mapper.Map<User, UserProfileForAdminViewDto>(
+            user,
+            options => options.Items["baseUrl"] = _amazonClient.GetFileUrl()
+        );
+
+        dto.Role = userDto.Role;
+        return Json(dto);
     }
 
     /// <summary>
@@ -117,7 +132,8 @@ public class AdminController : Controller
         if (user == null) return NotFound();
 
         user.ChangeUserInAdmin(userDto);
-
+        //Add
+        //
         var result = await _userManager.UpdateAsync(user);
 
         if (!result.Succeeded)
@@ -157,11 +173,11 @@ public class AdminController : Controller
         if (roleId != 0)
             users = users.Where(u => _context.UserRoles.Any(ur => ur.UserId == u.Id && ur.RoleId == roleId));
 
-        if (!string.IsNullOrEmpty(filter.Name))
-            users = users.Where(u => u.FirstName.Contains(filter.Name));
+        if (!string.IsNullOrEmpty(filter.FirstName))
+            users = users.Where(u => u.FirstName.Contains(filter.FirstName));
 
-        if (!string.IsNullOrEmpty(filter.Surname))
-            users = users.Where(u => u.LastName.Contains(filter.Surname));
+        if (!string.IsNullOrEmpty(filter.LastName))
+            users = users.Where(u => u.LastName.Contains(filter.LastName));
 
         if (!string.IsNullOrEmpty(filter.Phone))
             users = users.Where(u => u.PhoneNumber == filter.Phone);

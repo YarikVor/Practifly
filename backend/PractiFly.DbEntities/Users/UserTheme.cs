@@ -12,6 +12,7 @@ public class UserTheme
 {
     [Key]
     [Column("Id")]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     [Column("UserId")]
@@ -37,8 +38,7 @@ public class UserTheme
     public virtual Level Level { get; set; } = null!;
 
     [Column("Grade")]
-    [Required]
-    public int Grade { get; set; }
+    public int? Grade { get; set; }
 
     [Column("Note")]
     [MaxLength(EntitiesConstantLengths.Note)]

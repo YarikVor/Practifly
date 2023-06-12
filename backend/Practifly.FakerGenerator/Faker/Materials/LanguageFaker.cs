@@ -6,11 +6,10 @@ namespace Practifly.FakerGenerator.Faker.Materials;
 
 public sealed class LanguageFaker : Faker<Language>, IFakerGenerate<Language>
 {
-    public LanguageFaker(string lang = "uk") : base(lang)
+    public LanguageFaker() : base("uk")
     {
-        RuleFor(l => l.Id, f => f.IndexFaker + 1);
         RuleFor(l => l.Code, f => f.Random.RandomLocale().Substring(0, 2));
-        RuleFor(l => l.Name, f => f.Random.RandomLocale().Substring(0, 2)); //TODO:
+        RuleFor(l => l.Name, f => f.Random.RandomLocale().Substring(0, 2));
         RuleFor(l => l.OriginalName, f => f.Random.RandomLocale());
         RuleFor(l => l.Note, f => f.Lorem.Sentence());
     }

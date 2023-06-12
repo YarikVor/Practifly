@@ -10,4 +10,8 @@
         <PackageReference Include="Bogus" Version="34.0.2"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\PractiFly.FakerManager\PractiFly.FakerManager.csproj"/>
+    </ItemGroup>
+
 </Project>

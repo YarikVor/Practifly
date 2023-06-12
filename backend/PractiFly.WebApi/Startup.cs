@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
+using Amazon.S3;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PractiFly.DateJsonConverter;
+using PractiFly.DateJsonConverter.Schemas;
 using PractiFly.DbContextUtility.Context;
 using PractiFly.DbContextUtility.Context.Courses;
 using PractiFly.DbContextUtility.Context.Materials;
@@ -18,7 +20,6 @@ using Practifly.FakerGenerator;
 using PractiFly.FakerManager;
 using PractiFly.WebApi.AutoMappers;
 using PractiFly.WebApi.Context;
-using PractiFly.WebApi.Schema;
 using PractiFly.WebApi.Services.AuthenticationOptions;
 using PractiFly.WebApi.Services.TokenGenerator;
 using ErrorContext = PractiFly.DbContextUtility.Context.ErrorContext;
@@ -44,16 +45,23 @@ public class Startup
 
     #endregion
 
-
     #region Configure Services
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddCors();
+        services.AddCors(options =>
+        {
+            options.AddPolicy("_MyPolicy",
+                policy =>
+                {
+                    policy.WithOrigins("*")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+        });
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
         services
-            .AddSingleton<IAuthOptions, AuthOptions>()
+            .AddSingleton<IAuthConfiguration, AuthConfiguration>()
             .AddSingleton<ITokenGenerator, TokenGenerator>();
 
         services.AddSingleton<IFakerManager, PractiFlyFakerManager>();
@@ -69,12 +77,17 @@ public class Startup
 
         ConfigureDatabase(services);
 
-        InitTables(services);
-
         AddIdentityUserAndRole(services);
+
+        InitTables(services);
 
         services.AddScoped<IConfigurationProvider, PractiFlyMapperConfiguration>();
         services.AddScoped<IMapper, PractiFlyMapper>();
+
+        services.AddScoped<IAmazonS3, PractiFlyAmazonS3Client>();
+        services.AddSingleton<IAuthConfiguration, AuthConfiguration>();
+        services.AddSingleton<IBucketConfiguration, BucketConfiguration>();
+        services.AddScoped<IAmazonS3ClientManager, PractiFlyAmazonS3ClientManager>();
     }
 
     #endregion
@@ -83,16 +96,16 @@ public class Startup
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        // TODO: Add support DateTime, DateOnly and TimeOnly where UTC = +00:00
-        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", false);
-        AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
-        if (env.IsDevelopment())
-            UseSwagger(app);
+        //Add support DateTime, DateOnly and TimeOnly where UTC = +00:00
+        //AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", false);
+        //AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
+        //if (env.IsDevelopment())
+        UseSwagger(app);
 
         //UseExceptionHandler(app, services);
         app.UseRouting();
 
-        app.UseCors(builder => builder.AllowAnyOrigin());
+        app.UseCors("_MyPolicy");
         app.UseHttpsRedirection();
 
         app.UseAuthentication();
@@ -108,7 +121,7 @@ public class Startup
 
     private static void AddAuthorizationAndAuthentication(IServiceCollection services)
     {
-        var authOptions = services.BuildServiceProvider().GetService<IAuthOptions>()
+        var authOptions = services.BuildServiceProvider().GetService<IAuthConfiguration>()
                           ?? throw new NullReferenceException("IAuthOptions is not found");
 
         services.AddAuthorization();
@@ -200,7 +213,7 @@ public class Startup
 
     #endregion
 
-    #region Congigure Swagger
+    #region Configure Swagger
 
     private static void AddSwaggerGenerationTokenForUser(IServiceCollection services)
     {
@@ -213,7 +226,7 @@ public class Startup
                     Description =
                         "JWT Authorization header using the Bearer scheme. " +
                         "\r\n\r\n Enter 'Bearer' [space] and then your token in the text input below." +
-                        "\r\n\r\nExample: \"Bearer 12345abcdef\"",
+                        "\r\n\r\nExample: \"Bearer [token]\"",
                     Name = "Authorization",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey,
@@ -262,7 +275,7 @@ public class Startup
         AddPractiFlyDb(services, connectionString);
 
         var errorConnectionString = _configuration.GetConnectionString("ErrorConnection");
-        AddErrorDb(services, errorConnectionString);
+        //AddErrorDb(services, errorConnectionString);
     }
 
     private static void AddErrorDb(IServiceCollection services, string? errorConnectionString)
@@ -280,13 +293,6 @@ public class Startup
             .AddDbContext<IPractiflyContext, PractiFlyContext>(SetConnectionString)
             .AddDbContext<UserIdentityDbContext>(SetConnectionString);
 
-        //services.BuildServiceProvider().GetService<UserIdentityDbContext>().Database.Migrate();
-
-        var context = services.BuildServiceProvider().GetService<IPractiflyContext>() as PractiFlyContext;
-        //context.GenerateTestDataIfEmpty();
-        //context.Database.Migrate();
-
-
         void SetConnectionString(DbContextOptionsBuilder options)
         {
             options.UseNpgsql(connectionString);
@@ -295,7 +301,36 @@ public class Startup
 
     private static void InitTables(IServiceCollection services)
     {
-        // TODO: Make init tables
+        var serviceProvider = services.BuildServiceProvider();
+        var identityContext = serviceProvider.GetService<UserIdentityDbContext>();
+        var practiFlyContext = serviceProvider.GetService<IPractiflyContext>() as DbContext;
+        identityContext!.Database.Migrate();
+
+        GenerateRules(identityContext);
+
+        practiFlyContext!.Database.Migrate();
+
+        //practiFlyContext.GenerateTestDataIfEmpty();
+    }
+
+    private static void GenerateRules(UserIdentityDbContext identityContext)
+    {
+        if (!identityContext.Roles.Any())
+        {
+            identityContext.Roles.AddRange(GenerateRole("user"), GenerateRole("admin"), GenerateRole("teacher"),
+                GenerateRole("manager"));
+
+            identityContext.SaveChanges();
+        }
+
+        Role GenerateRole(string name)
+        {
+            return new Role
+            {
+                Name = name,
+                NormalizedName = name.ToUpper()
+            };
+        }
     }
 
     #endregion

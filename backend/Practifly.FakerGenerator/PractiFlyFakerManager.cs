@@ -1,6 +1,4 @@
-using Practifly.FakerGenerator.Faker.Courses;
-using Practifly.FakerGenerator.Faker.Materials;
-using Practifly.FakerGenerator.Faker.Users;
+using System.Reflection;
 using PractiFly.FakerManager;
 
 namespace Practifly.FakerGenerator;
@@ -9,36 +7,31 @@ public class PractiFlyFakerManager : FakerManager
 {
     public PractiFlyFakerManager(int count = 5)
     {
-        // Users
-        AddFaker(new GroupCourseFaker(count));
-        AddFaker(new GroupFaker(count));
-        AddFaker(new UserCourseFaker(count));
-        AddFaker(new UserFaker());
-        AddFaker(new UserGroupFaker(count));
-        AddFaker(new UserHeadingFaker(count));
-        AddFaker(new UserMaterialFaker(count));
-        AddFaker(new UserThemeFaker(count));
+        var currentAssembly = Assembly.GetExecutingAssembly();
+        var typeOfIFakerGenerate = typeof(IFakerGenerate);
+        var fakersTypes = currentAssembly
+            .ExportedTypes
+              .Where(t => t
+                  .GetInterfaces()
+                  .Contains(typeOfIFakerGenerate)
+              );
 
-        // Materials
-        AddFaker(new CompetencyFaker(count));
-        AddFaker(new HeadingCompetencyFaker(count));
-        AddFaker(new HeadingFaker());
-        AddFaker(new HeadingMaterialFaker(count));
-        AddFaker(new LanguageFaker());
-        AddFaker(new LevelFaker());
-        AddFaker(new MaterialFaker(count));
-        AddFaker(new MaterialBlockFaker(count));
-        AddFaker(new MaterialCompetencyFaker(count));
-        AddFaker(new UnitFaker(count));
+        foreach (var fakerType in fakersTypes)
+        {
+            var faker = (IFakerGenerate)Instance();
 
-        // Courses
-        AddFaker(new CourseCompotencyFaker(count));
-        AddFaker(new CourseDependencyFaker(count));
-        AddFaker(new CourseDependencyTypeFaker());
-        AddFaker(new CourseFaker(count));
-        AddFaker(new CourseHeadingFaker(count));
-        AddFaker(new CourseMaterialFaker(count));
-        AddFaker(new ThemeFaker(count));
-        AddFaker(new ThemeMaterialFaker(count));
+            AddFaker(faker, fakerType);
+
+            object Instance()
+            {
+                if (fakerType.GetConstructor(Type.EmptyTypes) != null)
+                    return Activator.CreateInstance(fakerType)!;
+
+                if (fakerType.GetConstructor(new[] { typeof(int) }) != null)
+                    return Activator.CreateInstance(fakerType, count)!;
+
+                throw new Exception($"Constructor is not available for {fakerType.Name}");
+            }
+        }
     }
 }

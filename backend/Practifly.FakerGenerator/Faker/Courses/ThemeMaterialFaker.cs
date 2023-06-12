@@ -7,7 +7,6 @@ public sealed class ThemeMaterialFaker : FakerFkRandomizer<ThemeMaterial>, IFake
 {
     public ThemeMaterialFaker(int count) : base(count)
     {
-        RuleFor(tm => tm.Id, f => f.IndexFaker + 1);
         RuleFor(tm => tm.ThemeId, RandomId);
         RuleFor(tm => tm.MaterialId, RandomId);
         RuleFor(tm => tm.Number, f => f.Random.Int(0, 100));

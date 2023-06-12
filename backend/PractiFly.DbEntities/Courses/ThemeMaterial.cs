@@ -11,6 +11,7 @@ public class ThemeMaterial
 {
     [Key]
     [Column("Id")]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     [Column("ThemeId")]
@@ -43,7 +44,6 @@ public class ThemeMaterial
     [MaxLength(EntitiesConstantLengths.Note)]
     public string? Note { get; set; }
 
-    //TODO: Description?
     [Column("Description")]
     [MaxLength(65536)]
     public string? Description { get; set; }

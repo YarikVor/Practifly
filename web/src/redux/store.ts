@@ -1,19 +1,20 @@
-import {combineReducers, configureStore} from "@reduxjs/toolkit";
+import {configureStore} from "@reduxjs/toolkit";
 
-import {useDispatch} from "react-redux";
+import {IStore} from "../types/store.interfaces";
 
-import {authReducer} from "./slices/auth/auth";
-import {IStore} from "./interfaces/store.interfaces";
+import {userReducer} from "./slices/user/user.slice";
+import {courseReducer} from "./slices/course/course.slice";
 
 
-const rootReducer = combineReducers({authReducer});
 const store = configureStore<IStore>({
   reducer: {
-    auth: authReducer,
+    user: userReducer,
+    course: courseReducer,
   },
   devTools: true, 
 });
 
-export type RootState = ReturnType<typeof rootReducer>;
-export const useAppDispatch = () => useDispatch<typeof store.dispatch>();
+export type RootState = ReturnType<typeof store.getState>
+
+export type AppDispatch = typeof store.dispatch
 export default store ;

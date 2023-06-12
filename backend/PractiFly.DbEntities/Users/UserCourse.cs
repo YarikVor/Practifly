@@ -12,6 +12,7 @@ public class UserCourse
 {
     [Key]
     [Column("Id")]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     [Column("UserId")]
@@ -45,8 +46,7 @@ public class UserCourse
     public virtual Theme LastTheme { get; set; } = null!;
 
     [Column("Grade")]
-    //TODO: можливо не обов'язкове поле
-    public int Grade { get; set; }
+    public int? Grade { get; set; }
 
     [Column("Note")]
     [MaxLength(EntitiesConstantLengths.Note)]

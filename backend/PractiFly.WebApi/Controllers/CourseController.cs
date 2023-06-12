@@ -65,7 +65,6 @@ public class CourseController : Controller
     [Route("course/headings/included")]
     public async Task<IActionResult> GetIncludedHeadings(int courseId)
     {
-        //TODO: Check included headings to courses in HeadingCourseItemDto
         var result = await _context
             .Courses
             .AsNoTracking()
@@ -74,8 +73,6 @@ public class CourseController : Controller
             .FirstOrDefaultAsync();
 
         return Json(result);
-
-        //TODO: можлива реалізація даного методу
         //HeadingCourseItemDto result = await _context
         //.Courses
         //.AsNoTracking()
@@ -96,7 +93,7 @@ public class CourseController : Controller
         //.FirstOrDefaultAsync();
     }
 
-    //TODO: ???
+
     /// <summary>
     ///     Returns detailed information about a material identified by the specified Id.
     /// </summary>
@@ -142,7 +139,7 @@ public class CourseController : Controller
                 {
                     Id = cm.MaterialId,
                     Name = cm.Material.Name,
-                    //TODO: Go to map (CourseDetailsProfile) 
+
                     IsIncluded = _context
                         .ThemeMaterials
                         .Any(tm => tm.MaterialId == cm.MaterialId && tm.ThemeId == themeId),

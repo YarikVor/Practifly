@@ -34,20 +34,40 @@ public class HeadingCourseController : Controller
     ///     The beginning of a section of code that returns sub-sections (ex: 12 -> 12.__, where '_' - 0-9).
     ///     Supports four rubric levels (ex: "", "12", "12.12", "12.12.12")
     /// </param>
+    /// <param name="headingId">Id of a heading</param>
     /// <returns></returns>
     /// <response code="200">Return subheading info (maybe empty result)</response>
     [HttpGet]
     [Route("heading/sub")]
     public async Task<IActionResult> GetSubheading(
         [RegularExpression(EntitiesConstants.SubHeadingPattern)]
-        string beginCode
+        string? beginCode = "",
+        int? headingId = null
     )
     {
-        var patternSubRubricCode = beginCode.GetCodeLike();
+        var query = _context
+            .Headings
+            .AsNoTracking();
 
-        var result = await _context.Headings
-            .AsNoTracking()
-            .Where(e => EF.Functions.Like(e.Code, patternSubRubricCode))
+        if (headingId is null or 0)
+        {
+            var patternSubRubricCode = beginCode.GetCodeLike();
+            query = query.Where(e => EF.Functions.Like(e.Code, patternSubRubricCode));
+        }
+        else
+        {
+            query = query.Where(
+                e => EF.Functions.Like(
+                    e.Code, _context
+                        .Headings
+                        .Where(h => h.Id == headingId)
+                        .Select(h => h.Code)
+                        .FirstOrDefault() + ".__"
+                )
+            );
+        }
+
+        var result = await query
             .ProjectTo<HeadingItemDto>(_configurationProvider)
             .ToListAsync();
 
@@ -71,7 +91,7 @@ public class HeadingCourseController : Controller
     public async Task<IActionResult> CourseSubHeading(
         int courseId,
         [RegularExpression(EntitiesConstants.SubHeadingPattern)]
-        string beginCode
+        string? beginCode = ""
     )
     {
         var patternSubheadingCode = beginCode.GetCodeLike();
@@ -82,7 +102,7 @@ public class HeadingCourseController : Controller
             .Where(e => e.CourseId == courseId)
             .Select(e => e.Heading)
             .Where(e => EF.Functions.Like(e.Code, patternSubheadingCode))
-            .ProjectTo<HeadingItemInCourseDto>(_configurationProvider)
+            .ProjectTo<HeadingItemInCourseDto>(_configurationProvider, new { courseId })
             .ToListAsync();
 
         return Json(result);

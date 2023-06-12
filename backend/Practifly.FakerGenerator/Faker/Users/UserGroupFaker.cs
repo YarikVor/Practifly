@@ -7,7 +7,6 @@ public sealed class UserGroupFaker : FakerFkRandomizer<UserGroup>, IFakerGenerat
 {
     public UserGroupFaker(int count) : base(count)
     {
-        RuleFor(ug => ug.Id, f => f.IndexFaker + 1);
         RuleFor(ug => ug.UserId, RandomId);
         RuleFor(ug => ug.GroupId, RandomId);
         RuleFor(ug => ug.IsActive, f => f.Random.Bool());

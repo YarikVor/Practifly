@@ -47,6 +47,7 @@ public class MaterialBlocksController : Controller
     /// <returns>A JSON-encoded representation of the list of materials.</returns>
     [HttpGet]
     [Route("heading/materials")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> GetMaterialsFromHeading(int headingId)
     {
         var result = await _context
@@ -69,9 +70,8 @@ public class MaterialBlocksController : Controller
     /// <returns>A JSON-encoded representation of the new material block.</returns>
     [HttpPost]
     [Route("material")]
-    [Authorize(Roles = UserRoles.Teacher, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = UserRoles.Manager, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = UserRoles.Admin, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(Roles = $"{UserRoles.Admin},{UserRoles.Teacher},{UserRoles.Manager}",
+        AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> CreateMaterial(CreateMaterialDto blockDto)
     {
         var material = _mapper.Map<CreateMaterialDto, Material>(blockDto);
@@ -79,7 +79,8 @@ public class MaterialBlocksController : Controller
         await _context.SaveChangesAsync();
 
         if (material.Id == 0)
-            return Problem();
+            //return Problem(statusCode: 999);
+            return BadRequest();
 
         var materialDto = _mapper.Map<Material, MaterialDto>(material);
         return Json(materialDto);
@@ -95,9 +96,8 @@ public class MaterialBlocksController : Controller
     /// <returns>A JSON-encoded representation of the new material block.</returns>
     [HttpPost]
     [Route("material/edit")]
-    [Authorize(Roles = UserRoles.Teacher, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = UserRoles.Manager, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = UserRoles.Admin, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(Roles = $"{UserRoles.Admin},{UserRoles.Teacher},{UserRoles.Manager}",
+        AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> EditMaterial(EditMaterialDto blockDto)
     {
         if (!await _context.Materials.AnyAsync(e => e.Id == blockDto.Id))
@@ -111,56 +111,6 @@ public class MaterialBlocksController : Controller
         return Ok();
     }
 
-    /*/// <summary>
-    /// Returns a list of material blocks associated with a block identified by the specified Id. 
-    /// </summary>
-    /// <remarks>
-    /// When a block is clicked, the method displays the materials that are included in the block, as well as those that are not included in any block.
-    /// </remarks>
-    /// <param name="blockId">Id of the material block.</param>
-    /// <response code="200">Getting material blocks was successful.</response>
-    /// <response code="400">Operation was failed.</response>
-    /// <response code="404">No blocks found.</response>
-    /// <returns>A JSON-encoded representation of the list of material blocks.</returns>
-    // TODO: ПЕРЕДИВИТИСЯ (певно цей метод має видалитись, оскільки елемент сторінки з блоками матеріалів був викинутий)
-    [HttpGet]
-    [Route("[action]")]
-    public async Task<IActionResult> GetBlocksWithMaterials(int blockId)
-    {
-        //var result = await _context
-        //    .MaterialBlocks
-        //    .AsNoTracking()
-        //    //TODO:
-        //    //При натисканні на блок відображаються ті матеріали,
-        //    //що включені  в цей блок, а також ті,
-        //    //що не включені взагалі ні в один блок
-        //    .Where(e => e.Id == blockId)
-        //    .Select(e => new MaterialBlockItemDto(){
-        //        Id = e.Id,
-        //        Name = e.Parent.Name,
-        //        IsIncluded = _context.MaterialBlocks.Any(e => e.Id == blockId),
-        //        IsPractical = e.Parent.IsPractical
-        //    }
-        //).ToListAsync();
-
-        var materials = await _context.Materials
-            .AsNoTracking()
-            .Include(m => _context.MaterialBlocks)
-            .ThenInclude(mb => mb.Parent)
-            .Where(m => _context.MaterialBlocks.Any(mb => mb.Id == blockId) || !_context.MaterialBlocks.Any())
-            .Select(m => new MaterialBlockItemDto()
-            {
-                Id = m.Id,
-                Name = m.Name,
-                IsIncluded = _context.MaterialBlocks.Any(mb => mb.Id == blockId),
-                IsPractical = m.IsPractical
-            })
-            .ToListAsync();
-
-        return Json(materials);
-    }*/
-
-
     /// <summary>
     ///     Gets all materials.
     /// </summary>
@@ -170,6 +120,7 @@ public class MaterialBlocksController : Controller
     /// <response code="404">Materials not found.</response>
     [HttpGet]
     [Route("material/all")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> GetMaterials()
     {
         var materials = await _context.Materials

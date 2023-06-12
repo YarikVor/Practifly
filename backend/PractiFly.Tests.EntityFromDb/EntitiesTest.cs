@@ -26,8 +26,8 @@ public class EntitiesTest
 
     public EntitiesTest(ITestOutputHelper logger)
     {
-        //TODO: Add WebApi project
-        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        //Add WebApi project
+        //AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
         _logger = logger;
         var option = new CheckerOptionBuilder()

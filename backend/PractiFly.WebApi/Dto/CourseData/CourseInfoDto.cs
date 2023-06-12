@@ -3,6 +3,7 @@
 public class CourseInfoDto
 {
     public int Id { get; set; }
+    public int OwnerId { get; set; }
     public string Language { get; set; } = null!;
     public string Name { get; set; } = null!;
     public string? Note { get; set; }

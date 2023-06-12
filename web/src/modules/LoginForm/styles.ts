@@ -1,6 +1,15 @@
 import {makeStyles} from "@mui/styles";
 
 export const useStyles = makeStyles({
+  root: {
+    "& .MuiInputBase-root": {
+      background: "#F1F0FA",
+      borderRadius: 15,
+      "&.Mui-focused fieldset":{
+        borderColor: "red",
+      },
+    },
+  },
   loginForm: {
     maxWidth: 580,
     margin: "0 auto",

@@ -99,13 +99,12 @@ public class HeadingController : Controller
     /// <response code="404">Heading not found.</response>
     [HttpPost]
     [Route("edit")]
-    //[Authorize(UserRoles.Admin)]
+//[Authorize(UserRoles.Admin)]
     public async Task<IActionResult> Edit(HeadingEditDto dto)
     {
         if (!await _context.Headings.AnyAsync(e => e.Id == dto.Id))
             return NotFound();
-
-        if (_context.Headings.Any(e => e.Code == dto.Code && e.Id != dto.Id))
+        if (await _context.Headings.AnyAsync(e => e.Code == dto.Code && e.Id != dto.Id))
             return BadRequest(new { message = "Heading with this code already exists" });
 
         var changedHeading = _mapper.Map<HeadingEditDto, Heading>(dto);
@@ -127,17 +126,11 @@ public class HeadingController : Controller
     //[Authorize(UserRoles.Admin)]
     public async Task<IActionResult> Delete(int headingId)
     {
-        var isAvaibleHeading = await _context
+        var count = await _context
             .Headings
-            .AnyAsync(e => e.Id == headingId);
+            .Where(h => h.Id == headingId)
+            .ExecuteDeleteAsync();
 
-        if (!isAvaibleHeading)
-            return NotFound();
-
-        _context.Headings.Remove(new Heading { Id = headingId });
-
-        await _context.SaveChangesAsync();
-
-        return Ok();
+        return count == 0 ? NotFound() : Ok();
     }
 }

@@ -10,6 +10,7 @@ public class CourseDependencyType
 {
     [Key]
     [Column("Id")]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     [Column("Name")]

@@ -1,25 +1,48 @@
-import {makeStyles} from "@mui/styles";
+import {makeStyles} from "tss-react/mui";
 
-export const useStyles = makeStyles({
-  labelStyles: {
-    "& $notchedOutline": {
-      backgroundColor: "white",
-    },
-    "&.MuiFormLabel-root": {
-      "&.MuiInputLabel-root": {
-        "&.Mui-focused": {
-          color: "rgba(120, 63, 214, 0.5)",
-        },
+export const useStyles = makeStyles<{width?: string | number, isBlock: boolean}>()((
+  theme, {width, isBlock}) => ({
+  wrapper:{
+    width: isBlock ? width : "",
+
+  },
+  image: {
+    marginLeft: 10,
+  },
+  root: {
+    "& .MuiInputLabel-root": {
+      "&.Mui-focused": {
+        color: "rgba(120, 63, 214, 0.5)",
+        fontWeight: "bold",
       },
-      position: "relative",
-      display: "block",
-      margin: "0 0 -10px -10px",
-      fontSize: 18,
+    },
+    "& .MuiOutlinedInput-root": {
+      width: !isBlock ? width : "",
+      borderRadius: 15,
+      background: "#F1F0FA",
+      "&:hover fieldset": {
+        borderColor: "rgba(120, 63, 214, 0.5)",
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: "rgba(120, 63, 214, 0.5)",
+      },
+    },
+  },
+  labelStyles: {
+    display: "flex",
+    alignItems: "center",
+    color: "#808485",
+    "&.MuiFormLabel-root": {
+      fontSize: 23,
+      marginLeft: 2,
       fontWeight: 500,
     },
   },
+  error: {
+    color: "red",
+  },
   inputStyles: {
-    "&.MuiInputBase-root": {
+    "& .MuiInputBase-root": {
       "&.Mui-focused fieldset": {
         borderColor: "rgba(120, 63, 214, 0.5)",
       },
@@ -46,4 +69,4 @@ export const useStyles = makeStyles({
     },
   },
   notchedOutline: {},
-});
+}));

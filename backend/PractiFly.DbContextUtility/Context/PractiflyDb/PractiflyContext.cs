@@ -7,11 +7,6 @@ namespace PractiFly.DbContextUtility.Context.PractiflyDb;
 
 public class PractiFlyContext : DbContext, IPractiflyContext
 {
-    static PractiFlyContext()
-    {
-        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-    }
-
     public PractiFlyContext(DbContextOptions<PractiFlyContext> options) : base(options)
     {
     }
@@ -44,4 +39,16 @@ public class PractiFlyContext : DbContext, IPractiflyContext
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<UserRole> UserRoles { get; set; } = null!;
     public DbSet<Role> Roles { get; set; } = null!;
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        IgnoreMigrationFor<User>();
+        IgnoreMigrationFor<UserRole>();
+        IgnoreMigrationFor<Role>();
+
+        void IgnoreMigrationFor<TEntity>() where TEntity : class
+        {
+            modelBuilder.Entity<TEntity>().ToTable(t => t.ExcludeFromMigrations());
+        }
+    }
 }

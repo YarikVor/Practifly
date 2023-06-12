@@ -1,12 +1,12 @@
-using System.Security.Claims;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PractiFly.DbContextUtility.Context.PractiflyDb;
 using PractiFly.DbEntities.Users;
-using PractiFly.WebApi.AutoMapper;
+using PractiFly.WebApi.AutoMapper.Ex;
 using PractiFly.WebApi.Dto.Profile;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
@@ -16,6 +16,7 @@ namespace PractiFly.WebApi.Controllers;
 [Route("api/user/profile")]
 public class ProfileController : Controller
 {
+    private readonly IAmazonS3ClientManager _amazonClient;
     private readonly IConfigurationProvider _configurationProvider;
     private readonly IPractiflyContext _context;
     private readonly UserManager<User> _userManager;
@@ -23,12 +24,24 @@ public class ProfileController : Controller
     public ProfileController(
         IPractiflyContext context,
         IConfigurationProvider configurationProvider,
-        UserManager<User> userManager
+        UserManager<User> userManager,
+        IAmazonS3ClientManager amazonClient
     )
     {
         _context = context;
         _configurationProvider = configurationProvider;
         _userManager = userManager;
+        _amazonClient = amazonClient;
+    }
+
+    [HttpGet]
+    [Route("me")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<IActionResult> GetUserProfileFromToken()
+    {
+        var id = User.GetUserIdInt();
+
+        return await GetUserProfileInfo(id);
     }
 
     /// <summary>
@@ -47,7 +60,7 @@ public class ProfileController : Controller
             .Users
             .AsNoTracking()
             .Where(e => e.Id == userId)
-            .ProjectTo<UserInfoDto>(_configurationProvider)
+            .ProjectTo<UserInfoDto>(_configurationProvider, new { baseUrl = _amazonClient.GetFileUrl() })
             .FirstOrDefaultAsync();
 
         if (result == null)
@@ -67,9 +80,9 @@ public class ProfileController : Controller
     [Authorize(AuthenticationSchemes = "Bearer")]
     [Route("edit")]
     [HttpPost]
-    public async Task<IActionResult> UpdateUser(UserProfileInfoCreateDto userDto)
+    public async Task<IActionResult> UpdateUser(UserProfileInfoEditDto userDto)
     {
-        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userId = User.GetUserId();
 
         var user = await _userManager.FindByIdAsync(userId);
 
@@ -79,8 +92,6 @@ public class ProfileController : Controller
 
         var result = await _userManager.UpdateAsync(user);
 
-        if (!result.Succeeded) return BadRequest();
-
-        return Ok();
+        return !result.Succeeded ? BadRequest() : Ok();
     }
 }

@@ -7,7 +7,6 @@ public sealed class MaterialBlockFaker : FakerFkRandomizer<MaterialBlock>, IFake
 {
     public MaterialBlockFaker(int count) : base(count)
     {
-        RuleFor(mb => mb.Id, f => f.IndexFaker + 1);
         RuleFor(mb => mb.ParentId, RandomId);
         RuleFor(mb => mb.ChildId, RandomId);
         RuleFor(mb => mb.Number, f => f.Random.Number(1, 5));

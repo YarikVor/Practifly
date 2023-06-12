@@ -9,5 +9,8 @@ public class CourseMaterialItemDto
 
     public int? Grade { get; set; }
 
+    public string? Note { get; set; }
+    public string? Url { get; set; }
+
     public bool IsCompleted { get; set; }
 }

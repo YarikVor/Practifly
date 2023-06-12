@@ -1,51 +1,86 @@
-import {ChangeEvent, FormEvent, useState} from "react";
-import {Form} from "react-router-dom";
+import {useMemo} from "react";
+import {Form, useNavigate} from "react-router-dom";
 
 import {Box, Button, Typography} from "@mui/material";
 
+import {useForm} from "react-hook-form";
+
+import {yupResolver} from "@hookform/resolvers/yup";
 
 import {MyInput} from "../../UIComponents/Input/MyInput";
 
 
-import {useAppDispatch} from "../../redux/store";
+import {useAppDispatch, useAppSelector} from "../../hooks/hooks";
+import {fetchLogin} from "../../redux/slices/user/user.slice";
 
-import {fetchLogin} from "../../redux/slices/auth/auth";
+import {loginSchema} from "../../validations/login.schema";
 
+
+import {setTokenToLocalStorage} from "../../handlers/handlers";
+
+import {UserLoginData} from "../../types/user.interface";
+
+import {statusTypes} from "../../types/enums";
+
+import {Profile} from "../../Pages/Profile/Profile";
 
 import {useStyles} from "./styles";
 
 const LoginForm = () => {
   const styles = useStyles();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const isSubmitted = useAppSelector(store => store.user.status === statusTypes.LOADING);
 
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const validationSchema = useMemo(() => {
+    return loginSchema;
+  }, []);
 
-  const handleChange = async (event: ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [event.target.name]: event.target.value });
-  };
-
-  const sendFormData = async (event: FormEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-    const data = await dispatch(fetchLogin(formData));
-    if (!data.payload) {
-      alert("ПРОВІРЬТЕ ПРАВИЛЬНІСТЬ ВВЕДЕНИХ ДАННИХ");
-    } else {
-      window.localStorage.setItem("practifly", data.payload.toString());
-
+  const {
+    formState: {errors, isValid},
+    handleSubmit,
+    register,
+  } = useForm<UserLoginData>(
+    {
+      mode: "onChange",
+      resolver: yupResolver(validationSchema),
     }
+  );
+
+  const customSubmit = async (data: UserLoginData) => {
+    const {token} = await dispatch(fetchLogin(data)).unwrap(); 
+    if(token) {
+      await setTokenToLocalStorage("token", token);
+    }
+    navigate({pathname:"/profile"});
   };
+
 
   return (
-    <Form onSubmit={sendFormData} className={styles.loginForm}>
-      <MyInput name="email" onChange={handleChange} placeholder="Email"/>
-      <MyInput name="password" onChange={handleChange} placeholder="Пароль"/>
+    <Form onSubmit={handleSubmit(customSubmit)} className={styles.loginForm}>
+      <MyInput
+        label="Email"
+        error={Boolean(errors.email?.message)}
+        helperText={errors.email?.message}
+        register={register}
+        name="email"
+      />
+      <MyInput
+        label="Password"
+        error={Boolean(errors.password?.message)}
+        helperText={errors.password?.message}
+        register={register}
+        name="password"
+      />
       <Box className={styles.buttonWrapper}>
         <Typography>Забули пароль?</Typography>
-        <Button type="submit" variant="contained" className={styles.submitButton}>Ввійти</Button>
+        <Button
+          type="submit"
+          disabled={isSubmitted || !isValid}
+          variant="contained"
+          className={styles.submitButton}
+          children="Ввійти"
+        />
       </Box>
     </Form>
   );
