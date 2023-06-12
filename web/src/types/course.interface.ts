@@ -45,7 +45,6 @@ export interface Material {
     grade: number
     note: string
     isCompleted: boolean
-    url:string
 }
 
 
