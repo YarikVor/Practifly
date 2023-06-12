@@ -103,7 +103,7 @@ public class CourseDetailsController : Controller
 
         var userMaterial = await _context
             .UserMaterials
-            .Where(e => e.UserId == userId && e.MaterialId == dto.Id)
+            .Where(e => e.UserId == userId && e.MaterialId == dto.MaterialId)
             .FirstOrDefaultAsync();
 
         if (userMaterial == null)

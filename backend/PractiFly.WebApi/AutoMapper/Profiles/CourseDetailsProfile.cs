@@ -39,7 +39,7 @@ public class CourseDetailsProfile : Profile
 
 
         CreateMap<UserMaterialSendDto, UserMaterial>()
-            .ForMember(um => um.MaterialId, par => par.MapFrom(dto => dto.Id))
+            .ForMember(um => um.MaterialId, par => par.MapFrom(dto => dto.MaterialId))
             .ReverseMap();
 
         CreateProjection<UserMaterial, UserMaterialInfoDto>();
