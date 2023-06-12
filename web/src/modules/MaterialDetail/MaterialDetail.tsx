@@ -3,6 +3,8 @@ import {Box, Button, Modal, TextField, Typography} from "@mui/material";
 import React, {useEffect, useState} from "react";
 
 
+import {useNavigate} from "react-router-dom";
+
 import {useAppDispatch, useAppSelector} from "../../hooks/hooks";
 
 import booksButton from "../../assets/booksButton.png";
@@ -20,16 +22,16 @@ export const MaterialDetail = () => {
   const currentMaterials = useAppSelector((state) => state.course.currentMaterials.data);//Дістаємо попередньо записаний матеріал з сховища та звписуємо його дані в інпути
   const {classes} = useStyles();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const DEFAULT_INPUT_WIDTH = 60;//Встановлюємо стартове значення ширина інпута для оцінки
   const [url, setUrl] = useState("");
   const [statusData, setStatusData] = useState<MaterialStatus>({
-    id: 0,
+    materialId: 0,
     resultUrl: "",
     isCompleted: false,
   });
 
   const [inputWidth, setInputWidth] = useState(DEFAULT_INPUT_WIDTH);//Створюємо стан ширини інпута оцінки
-
   useEffect(() => {//За допомогою хука ЮЗЕФЕКТ дивимось за оцінкою матеріалу - якщо вона більше 99, то встановлюємо ширину інпуту яка буде доцільно виглядати і так для решти оцінок
     if (!currentMaterials?.grade) {
       setInputWidth(DEFAULT_INPUT_WIDTH);
@@ -42,20 +44,19 @@ export const MaterialDetail = () => {
     }
   }, [currentMaterials?.grade]);
   const handleSubmitData = async () =>{
-    if(currentMaterials) {
-      setStatusData({id: currentMaterials.id, resultUrl: url, isCompleted: !currentMaterials.isCompleted});
-    }
-    console.log(statusData);
-    const data = await dispatch(changeMaterialStatus(statusData));
+    await dispatch(changeMaterialStatus(statusData));
   };
-
+  useEffect(() => {
+    if(currentMaterials){
+      setStatusData({materialId: currentMaterials.id, resultUrl: url, isCompleted: !currentMaterials.isCompleted});
+    }
+  },[currentMaterials, url]);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
   return (
     <Box className={classes.root}>
-            <Typography>Назва</Typography>
+      <Typography>Назва</Typography>
       <Box className={classes.nameWrapper}>
         <TextField
           disabled
@@ -132,7 +133,7 @@ export const MaterialDetail = () => {
                 className={classes.textFieldModal}/>
             </Box>
           </Modal>
-          <Button onClick={handleSubmitData}>
+          <Button disabled={!currentMaterials} onClick={handleSubmitData}>
             <img
               style={{
                 borderRadius: 10,

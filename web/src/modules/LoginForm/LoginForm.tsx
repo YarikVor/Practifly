@@ -22,6 +22,8 @@ import {UserLoginData} from "../../types/user.interface";
 
 import {statusTypes} from "../../types/enums";
 
+import {Profile} from "../../Pages/Profile/Profile";
+
 import {useStyles} from "./styles";
 
 const LoginForm = () => {
@@ -46,11 +48,11 @@ const LoginForm = () => {
   );
 
   const customSubmit = async (data: UserLoginData) => {
-    const {token} = await dispatch(fetchLogin(data)).unwrap();
+    const {token} = await dispatch(fetchLogin(data)).unwrap(); 
     if(token) {
       await setTokenToLocalStorage("token", token);
-      navigate("/");
     }
+    navigate({pathname:"/profile"});
   };
 
 

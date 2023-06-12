@@ -26,7 +26,7 @@ export interface CourseDetails {
 }
 
 export interface MaterialStatus {
-    id: number,
+    materialId: number,
     resultUrl: string
     isCompleted: boolean
 }

@@ -12,43 +12,45 @@ import {MyCourses} from "../Pages/MyCourses/MyCourses";
 import RubricsCourse from "../Pages/RubricsCourse/RubricsCourse";
 import CourseMaterial from "../Pages/CourseMaterial/CourseMaterial";
 
-export const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Container/>,
-    children: [
-      {
-        path: "/home",
-        element: <Box>Hello Kitty!!!</Box>,
-      },
-      {
-        path: "/registration",
-        element: <Registration/>,
-      },
-      {
-        path: "/myCourses",
-        element: <MyCourses />,
-      },
-      {
-        path: "/login",
-        element: <Login/>,
-      },
-      {
-        path: "/profile",
-        element: <Profile/>,
-      },
-      {
-        path: "/courseDetails/:id",
-        element: <CourseDetails/>,
-      },
-      {
-        path: "/rubricsCourse",
-        element: <RubricsCourse/>,
-      },
-      {
-        path: "/courseMaterial",
-        element: <CourseMaterial/>,
-      },
-    ],
-  },
-]);
+export const router = (isAuth: boolean) => {
+  return createBrowserRouter([
+    {
+      path: "/",
+      element: <Container/>,
+      children: [
+        {
+          path: "/home",
+          element: <Box>Hello Kitty!!!</Box>,
+        },
+        {
+          path: "/registration",
+          element: <Registration/>,
+        },
+        {
+          path: "/myCourses",
+          element: isAuth ? <MyCourses /> : <Login/>,
+        },
+        {
+          path: "/login",
+          element: <Login/>,
+        },
+        {
+          path: "/profile",
+          element: isAuth ? <Profile /> : <Login/>,
+        },
+        {
+          path: "/courseDetails/:id",
+          element: isAuth ? <CourseDetails /> : <Login/>,
+        },
+        {
+          path: "/rubricsCourse",
+          element: <RubricsCourse/>,
+        },
+        {
+          path: "/courseMaterial",
+          element: <CourseMaterial/>,
+        },
+      ],
+    },
+  ]);
+};

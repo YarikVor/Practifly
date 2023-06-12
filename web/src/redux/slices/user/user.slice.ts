@@ -6,7 +6,7 @@ import {statusTypes, endpointTypes} from "../../../types/enums";
 import {
   AuthResponseData,
   PhotoURL,
-  ProfileData, UpdateProfile, UserInitialState,
+  ProfileData, UpdateProfile, UserData, UserInitialState,
   UserLoginData,
   UserRegisterData,
 } from "../../../types/user.interface";
@@ -58,6 +58,7 @@ export const uploadPhoto = createAsyncThunk<PhotoURL, FormData, {rejectValue: st
     }
   }
 );
+
 
 export const fetchRegistration = createAsyncThunk<AuthResponseData, UserRegisterData, {rejectValue: string}>(
   "user/fetchRegistration",

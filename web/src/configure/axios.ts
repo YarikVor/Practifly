@@ -14,7 +14,6 @@ instance.interceptors.request.use(
       return config;
     }
     config.headers.Authorization = `Bearer ${token}`;
-    config.headers["Content-Type"] = "application/json";
     return config;
   }, 
   (error) => {

@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 
 import {Outlet} from "react-router-dom";
 
-import {Container as MUIContainer} from "@mui/material";
+import {CircularProgress, Container as MUIContainer} from "@mui/material";
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -14,11 +14,9 @@ import {useAppSelector} from "../../hooks/hooks";
 
 import {AccountMenu} from "../Header/Header";
 
-import { statusTypes } from "../../types/enums";
+import {statusTypes} from "../../types/enums";
 
 import {useStyles} from "./styles";
-
-
 
 
 const Container = () => {

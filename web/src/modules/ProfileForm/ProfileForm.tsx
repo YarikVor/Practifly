@@ -40,6 +40,8 @@ import {useStyles} from "./styles";
 
 export const ProfileForm: FC = () => {
   const styles = useStyles();
+  const data = useAppSelector(store => store.user.profileData);
+  const status = useAppSelector(store => store.user.status);
   const dispatch = useAppDispatch();
   const [image, setImage] = useState("");
   const validationSchema = useMemo(() => {
@@ -101,20 +103,23 @@ export const ProfileForm: FC = () => {
 
   useLayoutEffect(() => {
     const fetchData = async () => {
-      const response = await dispatch(fetchMe()).unwrap();
-      reset({
-        username: response.username,
-        firstName: response.firstName,
-        lastName: response.lastName,
-        email: response.email,
-        phoneNumber: response.phoneNumber,
-        birthday: response.birthday,
-        registrationDate: response.registrationDate,
-        countCompleted: response.countCompleted,
-        countInProgress: response.countCompleted,
-        averageGrade: response.averageGrade,
-      });
-      setImage(response.filePhoto);
+      if (data) {
+        reset({
+          username: data.username,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          phoneNumber: data.phoneNumber,
+          birthday: data.birthday,
+          registrationDate: data.registrationDate,
+          countCompleted: data.countCompleted,
+          countInProgress: data.countCompleted,
+          averageGrade: data.averageGrade,
+        });
+        setImage(data.filePhoto);
+      } else {
+        await dispatch(fetchMe());
+      }
     };
     fetchData().catch((e) => {
       toast.error(e.message);
@@ -122,113 +127,126 @@ export const ProfileForm: FC = () => {
   }, []);
 
   return (
-    <Form onSubmit={handleSubmit(customSubmit)}>
-      <Box className={styles.rootForm}>
-        <Box>
-          <Box className={styles.infoBlock}>
-            <MyInput
-              outsideLabel="Логін"
-              width={310}
-              name="username"
-              disabled
-              register={register}/>
-            <MyInput
-              disabled
-              outsideLabel="Ім'я"
-              width={310}
-              name="firstName"
-              register={register}/>
-            <MyInput
-              disabled
-              outsideLabel="Прізвище"
-              width={310}
-              name="lastName"
-              register={register}/>
-            <MyInput
-              outsideLabel="Email"
-              width={310}
-              name="email"
-              register={register}/>
-            <MyInput
-              outsideLabel="Номер телефону"
-              width={310}
-              name="phoneNumber"
-              register={register}/>
-            <MyInput
-              disabled
-              outsideLabel="Дата народження"
-              width={310}
-              register={register}
-              name="birthday"
-              type="date"/>
-          </Box>
-          <Box style={{display: "flex", alignItems: "center", justifyContent:"space-between", marginTop: 20}}>
-            <Box style={{display: "flex", alignItems: "center"}}>
-              <Typography style={{margin: "auto 20px auto 0"}}>Курсів пройдено/в процесі</Typography>
-              <MyInput
-                name="countCompleted"
-                width={60}
-                register={register}
-                isCenter={true}
-                disabled/>
-              <MyInput
-                name="countInProgress"
-                width={60}
-                register={register}
-                isCenter={true}
-                disabled/>
+    <>
+      {status === statusTypes.LOADING ? (
+        <CircularProgress/>
+      ) : (
+        <Form onSubmit={handleSubmit(customSubmit)}>
+          <Box className={styles.rootForm}>
+            <Box>
+              <Box className={styles.infoBlock}>
+                <MyInput
+                  outsideLabel="Логін"
+                  width={310}
+                  name="username"
+                  disabled
+                  register={register}/>
+                <MyInput
+                  disabled
+                  outsideLabel="Ім'я"
+                  width={310}
+                  name="firstName"
+                  register={register}/>
+                <MyInput
+                  disabled
+                  outsideLabel="Прізвище"
+                  width={310}
+                  name="lastName"
+                  register={register}/>
+                <MyInput
+                  outsideLabel="Email"
+                  width={310}
+                  name="email"
+                  register={register}/>
+                <MyInput
+                  outsideLabel="Номер телефону"
+                  width={310}
+                  name="phoneNumber"
+                  register={register}/>
+                <MyInput
+                  disabled
+                  outsideLabel="Дата народження"
+                  width={310}
+                  register={register}
+                  name="birthday"
+                  type="date"/>
+              </Box>
+              <Box style={{display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 20}}>
+                <Box style={{display: "flex", alignItems: "center"}}>
+                  <Typography style={{margin: "auto 20px auto 0"}}>Курсів пройдено/в процесі</Typography>
+                  <MyInput
+                    name="countCompleted"
+                    width={60}
+                    register={register}
+                    isCenter={true}
+                    disabled/>
+                  <MyInput
+                    name="countInProgress"
+                    width={60}
+                    register={register}
+                    isCenter={true}
+                    disabled/>
+                </Box>
+                <Box style={{display: "flex", alignItems: "center"}}>
+                  <Typography style={{margin: "auto 20px auto 0"}}>Середня оцінка за всі курси</Typography>
+                  <MyInput
+                    disabled
+                    width={60}
+                    isCenter={true}
+                    name="averageGrade"
+                    register={register}
+                  />
+                </Box>
+                <Button type="submit">
+                  <img src={editIcon}/>
+                </Button>
+              </Box>
             </Box>
-            <Box style={{display: "flex", alignItems: "center"}}>
-              <Typography style={{margin: "auto 20px auto 0"}}>Середня оцінка за всі курси</Typography>
-              <MyInput
-                disabled
-                width={60}
-                isCenter={true}
-                name="averageGrade"
-                register={register}
-              />
+            <Box className={styles.rightBlock}>
+              <Typography variant="h6" style={{marginBottom: 10}}>Фото профіля</Typography>
+              <Box className={styles.imageWrapper}>
+                <label htmlFor="filePhoto">
+                  <Avatar
+                    sx={{borderRadius: 0, width: "100%", height: 200}}
+                    srcSet={image}
+                    imgProps={{
+                      onError: handleImageError,
+                    }}
+                  />
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  name="filePhoto"
+                  hidden
+                  id="filePhoto"
+                />
+              </Box>
+              <Box className={styles.registrationDate}>
+                <Typography variant="h6" style={{
+                  color: "#808485",
+                  fontSize: 18,
+                  paddingRight: 20,
+                  display: "flex",
+                  alignItems: "center",
+                }}>
+                    Дата реєстрації
+                  <Image width={20} height={20} style={{marginLeft: 10}} src={lockImage}/>
+                </Typography>
+                <MyInput
+                  width={150}
+                  register={register}
+                  disabled
+                  name="registrationDate"
+                  type="date"/>
+              </Box>
             </Box>
-            <Button type="submit">
-              <img src={editIcon}/>
-            </Button>
           </Box>
-        </Box>
-        <Box className={styles.rightBlock}>
-          <Typography variant="h6" style={{marginBottom: 10}}>Фото профіля</Typography>
-          <Box className={styles.imageWrapper}>
-            <label htmlFor="filePhoto">
-              <Avatar
-                sx={{ borderRadius: 0, width: "100%", height: 200 }}
-                srcSet={image}
-                imgProps={{
-                  onError: handleImageError,
-                }}
-              />
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              name="filePhoto"
-              hidden
-              id="filePhoto"
-            />
-          </Box>
-          <Box className={styles.registrationDate}>
-            <Typography variant="h6" style={{color: "#808485", fontSize: 18, paddingRight: 20, display: "flex", alignItems: "center"}}>
-                  Дата реєстрації
-              <Image width={20} height={20} style={{marginLeft: 10}} src={lockImage}/>
-            </Typography>
-            <MyInput
-              width={150}
-              register={register} 
-              disabled
-              name="registrationDate"
-              type="date"/>
-          </Box>
-        </Box>
-      </Box>
-    </Form>
+        </Form>
+      )
+      }
+    </>
   );
 };
 
