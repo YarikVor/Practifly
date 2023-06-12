@@ -19,7 +19,7 @@ public class CourseDataProfile : Profile
             .ForMember(dto => dto.FilePhoto, par => par.MapFrom(
                 e => baseUrl + (e.IsCustomPhoto ? e.Id : 0)));
 
-        CreateProjection<Course, CourseInfoDto>()
+        CreateMap<Course, CourseInfoDto>()
             .ForMember(dto => dto.Language, par => par.MapFrom(e => e.Language.Name));
 
         CreateProjection<Course, CourseFullInfoDto>()

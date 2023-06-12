@@ -150,7 +150,7 @@ public class CourseDataController : Controller
     //TODO: Create owner
     public async Task<IActionResult> CreateCourse(CreateCourseDto courseDto)
     {
-        var course = _mapper.Map<CreateCourseDto, Course>(courseDto); //???
+        var course = _mapper.Map<CreateCourseDto, Course>(courseDto);
         await _context.Courses.AddAsync(course);
         await _context.SaveChangesAsync();
         if (course.Id == 0) return BadRequest();
