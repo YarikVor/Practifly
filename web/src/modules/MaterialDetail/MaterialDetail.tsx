@@ -3,7 +3,7 @@ import {Box, Button, Modal, TextField, Typography} from "@mui/material";
 import React, {useEffect, useState} from "react";
 
 
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 import {useAppDispatch, useAppSelector} from "../../hooks/hooks";
 
@@ -86,11 +86,11 @@ export const MaterialDetail = () => {
           value={currentMaterials?.note}/>
       </Box>
       <Box className={classes.buttonsWrapper}>
-        <Button
+        <a href={currentMaterials?.url}
           className={classes.goToMaterialButton}>
           <img src={booksButton}/>
                     Перейти до матеріалів
-        </Button>
+        </a>
         <Box style={{display: "flex", alignItems: "center"}}>
           <TextField
             value={`${(!currentMaterials?.grade ? 0 : currentMaterials.grade)}/100`}
