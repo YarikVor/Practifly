@@ -12,4 +12,5 @@ export const getTokenFromLocalStorage = (key: string): string | null => {
 
 export const removeTokenFromLocalStorage = (): void => {
   window.localStorage.removeItem("token");
+
 };

@@ -1,4 +1,4 @@
-import {useMemo} from "react";
+import {useEffect, useMemo} from "react";
 import {Form, useNavigate} from "react-router-dom";
 
 import {Box, Button, Typography} from "@mui/material";
@@ -11,7 +11,7 @@ import {MyInput} from "../../UIComponents/Input/MyInput";
 
 
 import {useAppDispatch, useAppSelector} from "../../hooks/hooks";
-import {fetchLogin} from "../../redux/slices/user/user.slice";
+import {fetchLogin, fetchMe} from "../../redux/slices/user/user.slice";
 
 import {loginSchema} from "../../validations/login.schema";
 
@@ -22,7 +22,6 @@ import {UserLoginData} from "../../types/user.interface";
 
 import {statusTypes} from "../../types/enums";
 
-import {Profile} from "../../Pages/Profile/Profile";
 
 import {useStyles} from "./styles";
 
@@ -48,13 +47,15 @@ const LoginForm = () => {
   );
 
   const customSubmit = async (data: UserLoginData) => {
-    const {token} = await dispatch(fetchLogin(data)).unwrap(); 
+    const {token} = await dispatch(fetchLogin(data)).unwrap();
     if(token) {
-      await setTokenToLocalStorage("token", token);
+      setTokenToLocalStorage("token", token);
     }
-    navigate({pathname:"/profile"});
+    const response = await dispatch(fetchMe()).unwrap();
+    if(response) {
+      navigate("/");
+    }
   };
-
 
   return (
     <Form onSubmit={handleSubmit(customSubmit)} className={styles.loginForm}>

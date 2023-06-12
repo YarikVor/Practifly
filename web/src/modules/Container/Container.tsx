@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 
 import {Outlet} from "react-router-dom";
 
-import {CircularProgress, Container as MUIContainer} from "@mui/material";
+import {Container as MUIContainer} from "@mui/material";
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -12,7 +12,7 @@ import {Footer} from "../../UIComponents/Footer/Footer";
 
 import {useAppSelector} from "../../hooks/hooks";
 
-import {AccountMenu} from "../Header/Header";
+import { Header} from "../Header/Header";
 
 import {statusTypes} from "../../types/enums";
 
@@ -32,7 +32,7 @@ const Container = () => {
   return (
     <>
       <ToastContainer position="top-center"/>
-      <AccountMenu />
+      <Header />
       <MUIContainer className={styles.root} maxWidth={false}>
         <Outlet/>
       </MUIContainer>

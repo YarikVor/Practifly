@@ -19,20 +19,22 @@ export const router = (isAuth: boolean) => {
       element: <Container/>,
       children: [
         {
-          path: "/home",
-          element: <Box>Hello Kitty!!!</Box>,
-        },
-        {
           path: "/registration",
           element: <Registration/>,
         },
-        {
-          path: "/myCourses",
-          element: isAuth ? <MyCourses /> : <Login/>,
-        },
+
         {
           path: "/login",
           element: <Login/>,
+        },
+        {
+          path: "/home",
+          element: <Box>Hello Kitty!!!</Box>,
+        },
+
+        {
+          path: "/myCourses",
+          element: isAuth ? <MyCourses /> : <Login/>,
         },
         {
           path: "/profile",

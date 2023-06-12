@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice, SliceCaseReducers} from "@reduxjs/toolkit";
+import {createAction, createAsyncThunk, createSlice, SliceCaseReducers} from "@reduxjs/toolkit";
 
 import axios from "../../../configure/axios";
 
@@ -6,7 +6,7 @@ import {statusTypes, endpointTypes} from "../../../types/enums";
 import {
   AuthResponseData,
   PhotoURL,
-  ProfileData, UpdateProfile, UserData, UserInitialState,
+  ProfileData, UpdateProfile, UserInitialState,
   UserLoginData,
   UserRegisterData,
 } from "../../../types/user.interface";
@@ -88,6 +88,8 @@ export const fetchMe = createAsyncThunk<ProfileData, void, {rejectValue: string}
   }
 );
 
+export const logout = createAction("auth/logout");
+
 const initialState: UserInitialState = {
   data: null,
   profileData: null,
@@ -102,6 +104,9 @@ const userSlice = createSlice<
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(logout, () => {
+      return initialState;
+    });
     builder.addCase(fetchLogin.pending, (state) => {
       state.status = statusTypes.LOADING;
       state.data = null;

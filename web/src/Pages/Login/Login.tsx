@@ -2,14 +2,25 @@
 import {Box, Typography} from "@mui/material";
 
 
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
+
+import {useEffect} from "react";
 
 import LoginForm from "../../modules/LoginForm/LoginForm";
+
+import {useAppSelector} from "../../hooks/hooks";
 
 import {useStyles} from "./styles";
 
 const Login = () => {
   const styles = useStyles();
+  const isAuth = useAppSelector(store => store.user.profileData);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if(isAuth) {
+      navigate("/");
+    }
+  }, [isAuth]);
 
   return (
     <Box className={styles.wrapper}>
