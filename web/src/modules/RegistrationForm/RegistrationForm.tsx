@@ -51,10 +51,9 @@ const RegistrationForm = () => {
   );
 
   const customSubmit = async (data: UserRegisterData) => {
-    const birthday = moment(data.birthday).format("DD/MM/YYYY");//Перетворюємо дату до потрібного формату
-    const {token} = await dispatch(fetchRegistration({...data, birthday: birthday})).unwrap();//За допомогою оператор SPREAD добавляємо до переданих формою даних нашу відформатовану дату.Spread оператор (...) в JavaScript - це синтаксична конструкція, яка дозволяє розгортати (spread) елементи масиву або властивості об'єкта, додаючи їх в новий масив або об'єкт. Він дозволяє використовувати значення з одного масиву або об'єкта в іншому масиві або об'єкті без необхідності вказувати кожний елемент окремо.
-    //fetchRegistration Відправляє дані, які які користувач ввів для регістрації та відсилає запит на сервер після чого очікує на відповідь. Якщо дані не коректні, тобто сервер вернув не токен, то випливає помилка.
-    if(token) { //якщо токен прийшов і він валідний, то спрацьовує умова наступна умова.
+    const birthday = moment(data.birthday).format("DD/MM/YYYY");
+    const {token} = await dispatch(fetchRegistration({...data, birthday: birthday})).unwrap();
+    if(token) {
       await setTokenToLocalStorage("token", token);
       navigate("/");
     }
