@@ -8,23 +8,23 @@ namespace PractiFly.WebApi.AutoMapper.Profiles;
 
 public class CourseMaterialsProfile : Profile
 {
-    public CourseMaterialsProfile(IPractiflyContext _context)
+    public CourseMaterialsProfile(IPractiflyContext context)
     {
         CreateProjection<Heading, HeadingInfoDto>();
         CreateProjection<Material, MaterialForInclusionDto>()
             .ForMember(dto => dto.IsIncluded, par => par.MapFrom(
-                e => _context
+                e => context
                     .CourseMaterials
                     .Any(cm => cm.MaterialId == e.Id)))
             .ForMember(dto => dto.PriorityLevel, par => par.MapFrom(
-                e => _context
+                e => context
                     .CourseMaterials
                     .Where(cm => cm.MaterialId == e.Id)
                     .Select(cm => cm.PriorityLevel)));
 
         CreateProjection<Material, MaterialFromIncludedBlockViewDto>()
             .ForMember(dto => dto.PriorityLevel, par => par.MapFrom(
-                e => _context
+                e => context
                     .CourseMaterials
                     .Where(cm => cm.MaterialId == e.Id)
                     .Select(cm => cm.PriorityLevel)));
@@ -49,12 +49,12 @@ public class CourseMaterialsProfile : Profile
             .ForMember(
                 dto => dto.IsIncluded,
                 par => par.MapFrom(
-                    m => _context
+                    m => context
                         .CourseMaterials
                         .Any(cm => cm.CourseId == courseId && cm.MaterialId == m.Id)))
             .ForMember(dto => dto.PriorityLevel,
                 par => par.MapFrom(
-                    m => _context
+                    m => context
                         .CourseMaterials
                         .Where(cm => cm.CourseId == courseId && cm.MaterialId == m.Id)
                         .Select(cm => cm.PriorityLevel)

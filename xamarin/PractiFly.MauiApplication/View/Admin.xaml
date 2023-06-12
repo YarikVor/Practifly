@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PractiFly.MauiApplication.View.Admin"
+             Title=" ">
+             
+    <ScrollView >
+        <StackLayout>
+            
+        <Frame BackgroundColor="#9062F2" Padding="0" CornerRadius="0">
+                <StackLayout HorizontalOptions="Center"   Margin="0,20">
+                    <Label Text="Користувачі" FontSize="Title" FontAttributes="Bold"/>
+                </StackLayout>
+                <!--<StackLayout BackgroundColor="#9062F2" Orientation="Horizontal" HorizontalOptions="Center" Spacing="1">
+                <Button TextColor="White" Text="Користувачі" WidthRequest="150" Clicked="AdminPanel"/>
+                <Button TextColor="White" Text="Рубрики" WidthRequest="150" Clicked="CategoryPanel" />
+                <Button TextColor="White" Text="Рубрики курсів" WidthRequest="150" Clicked="RubricsCoursePanel"/>
+                <Button TextColor="White" Text="Матеріали" WidthRequest="150" Clicked="MaterialBlocksPanel"/>
+                <Button TextColor="White" Text="Дані курсів" WidthRequest="150" Clicked="CoursePanel"/>
+                <Button TextColor="White" Text="Теми курсів" WidthRequest="150" Clicked="CourseThemePanel"/>
+            </StackLayout>-->
+        </Frame>
+            <Grid  ColumnSpacing="30" Margin="20" HorizontalOptions="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="230" />
+                <ColumnDefinition Width="230" />
+                <ColumnDefinition Width="650" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"  />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <!--<StackLayout Spacing="20"  Orientation="Horizontal" Margin="10" HorizontalOptions="Center">-->
+            <Frame  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0" Grid.Column="0" Grid.Row="0">
+                <ScrollView>
+                    <StackLayout Spacing="10" WidthRequest="180" Margin="0,0,20,0">
+                        <Label Text="Відбір користувачів" TextColor="#9062F2" FontAttributes="Bold"/>
+                        <StackLayout>
+                            <Label Text="Ім'я"/>
+                            <Entry x:Name="firstName" BackgroundColor="White" />
+                        </StackLayout>
+                        <StackLayout>
+                            <Label Text="Прізвище"/>
+                            <Entry x:Name="lastName" BackgroundColor="White"/>
+                        </StackLayout>
+                        <StackLayout>
+                            <Label Text="Телефон"/>
+                            <Entry x:Name="phone" BackgroundColor="White" />
+                        </StackLayout>
+                        <StackLayout Spacing="10">
+                            <Label Text="Дата реєстрації"/>
+                            <StackLayout Orientation="Horizontal" Spacing="20">
+                                <Label Text="Від"/>
+                                <DatePicker x:Name="DateFrom"  Format="d" />
+                                </StackLayout>
+                            <StackLayout Orientation="Horizontal" Spacing="20">
+                                <Label Text=" до"/>
+                                <DatePicker x:Name="DateTo"  Format="d" />
+                                <!--<Entry x:Name="registrationDateTo" BackgroundColor="White" />
+                                <Button CornerRadius="8" Text="📆" />-->
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout>
+                            <Label Text="Email"/>
+                            <Entry x:Name="email" BackgroundColor="White"/>
+                        </StackLayout>
+                        <StackLayout>
+                            <Label Text="Ролі"/>
+                            <Picker x:Name="role" BackgroundColor="White" HorizontalOptions="Fill"  />
+                        </StackLayout>
+                    </StackLayout>
+                </ScrollView>
+            </Frame >
+            <StackLayout Grid.Column="0" Grid.Row="1">
+                <Button x:Name="Search" 
+                        HorizontalOptions="End" 
+                        Padding="10" 
+                        FontSize="Medium" 
+                        CornerRadius="8" 
+                        Text="🔍"
+                        Clicked="Search_Clicked"/>
+            </StackLayout>
+            <Frame HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0" Grid.Column="1" Grid.Row="0">
+                    <ScrollView  WidthRequest="180" HeightRequest="480" Orientation="Vertical" >
+                        <CollectionView x:Name="UsersCollectionView"
+                                        SelectionMode="Single"
+                                        SelectionChanged="UsersCollectionView_SelectionChanged">
+                            <CollectionView.ItemTemplate >
+                                <DataTemplate>
+                                    <Label Text="{Binding Fullname}"/>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </ScrollView>
+            </Frame>
+
+                <Frame   HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0"  Grid.Column="2" Grid.Row="0">
+                <ScrollView>
+                        <StackLayout HeightRequest="500" Spacing="10" WidthRequest="600"  Margin="0,0,20,0">
+                            <!--<Label x:Name="id"/>-->
+                        <Grid  ColumnSpacing="50" RowSpacing="20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <StackLayout Grid.Column="0" Grid.Row="0"   >
+                                <Label Text="Ім'я"/>
+                                <Entry x:Name="itemfirstName" BackgroundColor="White"/>
+                            </StackLayout>
+                            <StackLayout Grid.Column="1" Grid.Row="0"   >
+                                <Label Text="Прізвище"/>
+                                <Entry x:Name="itemlastName" BackgroundColor="White"/>
+                            </StackLayout>
+                            <StackLayout Grid.Column="0" Grid.Row="1" >
+                                <Label Text="Email"/>
+                                <StackLayout  Orientation="Horizontal">
+                                    <Entry x:Name="itemEmail" 
+                                    HorizontalOptions="FillAndExpand" 
+                                    BackgroundColor="White" />
+                                </StackLayout>
+                            </StackLayout>
+                            <StackLayout Grid.Column="1" Grid.Row="1" >
+                                <Label Text="Телефон"/>
+                                <StackLayout  Orientation="Horizontal">
+                                    <Entry x:Name="itemPhoneNumber" 
+                                    HorizontalOptions="FillAndExpand" 
+                                    BackgroundColor="White" />
+                                </StackLayout>
+                            </StackLayout>
+                            <StackLayout Grid.Column="0" Grid.Row="2" >
+                                <Label Text="Дата реєстрації"/>
+                                <StackLayout  Orientation="Horizontal" >
+                                    <Label Padding="6" 
+                                    x:Name="itemDate" 
+                                    HorizontalOptions="FillAndExpand" 
+                                    BackgroundColor="White" />
+                                </StackLayout>
+                            </StackLayout>
+                            <StackLayout Grid.Column="1" Grid.Row="2" >
+                                <Label Text="Дата народження"/>
+                                <StackLayout  Orientation="Horizontal" >
+                                    <Entry  x:Name="itemDateBirthday" 
+                            HorizontalOptions="FillAndExpand" 
+                            BackgroundColor="White" />
+                                </StackLayout>
+                            </StackLayout>
+                        </Grid>
+                            <Grid  ColumnSpacing="50" RowSpacing="20" Margin="0,20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <StackLayout Grid.Column="0" Grid.Row="0" >
+                                <Label Text="Фото профіля"/>
+                                <Image HorizontalOptions="FillAndExpand" HeightRequest="200" x:Name="fotoProfile"/>
+                            </StackLayout>
+                            <StackLayout Margin="0,40" Grid.Column="1" Grid.Row="0" VerticalOptions="Start"  >
+                                <Grid ColumnSpacing="20" RowSpacing="20">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    
+                                    <Label FontSize="12"  Grid.Column="0" Grid.Row="0"  VerticalOptions="Center" Text="Головний адміністратор"/>
+                                    <RadioButton x:Name="radioButtonAdmin" Grid.Column="1" Grid.Row="0" />
+
+                                    <Label  FontSize="12" Grid.Column="0" Grid.Row="1"  VerticalOptions="Center" Text="Менеджер контенту"/>
+                                    <RadioButton x:Name="radioButtonManager" Grid.Column="1" Grid.Row="1" />
+
+
+                                    <Label FontSize="12"  Grid.Column="0" Grid.Row="2" VerticalOptions="Center" Text="Викладач"/>
+                                    <RadioButton x:Name="radioButtonTeacher"  Grid.Column="1" Grid.Row="2"/>
+
+
+                                    <Label FontSize="12" Grid.Column="0" Grid.Row="3" VerticalOptions="Center" Text="Користувач"/>
+                                    <RadioButton x:Name="radioButtonUser"  Grid.Column="1" Grid.Row="3"/>
+                                </Grid>
+                            </StackLayout>
+                        </Grid>
+                    </StackLayout>
+                </ScrollView>
+            </Frame>
+                <!--<StackLayout Orientation="Horizontal" Grid.Column="2" Grid.Row="1" HorizontalOptions="StartAndExpand">
+                    <Button  Padding="15,0" FontSize="Medium" CornerRadius="8" Text="#"/>
+                    <Button  Padding="15,0" FontSize="Medium" CornerRadius="8" Text="#"/>
+                    <Button  Padding="15,0" FontSize="Medium" CornerRadius="8" Text="#"/>
+                </StackLayout>-->
+                <StackLayout Orientation="Horizontal" Grid.Column="2" Grid.Row="1" HorizontalOptions="End">
+                    <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="🔁" Clicked="ReversDataUser_Clicked"/>
+                <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="✔️" Clicked="Edit_Clicked"/>
+                <!--<Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="➕" Clicked="CreateUser_Clicked"/>-->
+                <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="🗑" Clicked="Delete_Clicked"/>
+                </StackLayout>
+        </Grid>
+        <!--</StackLayout>-->
+    </StackLayout>
+    </ScrollView>
+</ContentPage>

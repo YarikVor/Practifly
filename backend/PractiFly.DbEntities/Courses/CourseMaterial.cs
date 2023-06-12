@@ -11,6 +11,7 @@ public class CourseMaterial
 {
     [Key]
     [Column("Id")]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     [Column("CourseId")]

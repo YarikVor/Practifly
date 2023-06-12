@@ -10,7 +10,7 @@ namespace PractiFly.WebApi;
 
 public static class PractiFlyEx
 {
-    //[Conditional("GENERATE_TEST_DATA")]
+    [Conditional("GENERATE_TEST_DATA_")]
     public static void GenerateTestDataIfEmpty(this DbContext context)
     {
         //context.Database.EnsureCreated();

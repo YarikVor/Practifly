@@ -8,7 +8,7 @@ namespace PractiFly.WebApi.AutoMapper.Profiles;
 
 public class CourseThemesProfile : Profile
 {
-    public CourseThemesProfile(IPractiflyContext _context)
+    public CourseThemesProfile(IPractiflyContext context)
     {
         CreateProjection<Theme, ThemeInfoDto>();
         CreateProjection<Theme, ThemeItemDto>();
@@ -22,7 +22,7 @@ public class CourseThemesProfile : Profile
 
         CreateProjection<Course, CourseItemWithThemeDto>()
             .ForMember(e => e.Themes, par => par.MapFrom(
-                    e => _context
+                    e => context
                         .Themes
                         .Where(t => t.CourseId == e.Id)
                 )
@@ -40,7 +40,7 @@ public class CourseThemesProfile : Profile
             .ForMember(
                 dto => dto.IsIncluded,
                 par => par.MapFrom(
-                    cm => _context
+                    cm => context
                         .ThemeMaterials
                         .Any(tm => tm.MaterialId == cm.MaterialId)
                 )

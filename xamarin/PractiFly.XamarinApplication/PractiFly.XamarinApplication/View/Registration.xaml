@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PractiFly.XamarinApplication.View.Registration">
+    <ContentPage.Content>
+        <StackLayout HorizontalOptions="Center" VerticalOptions="Center" >
+            <Label Text="Реєстрація користувача" HorizontalOptions="Center" TextColor="#6C73BB" FontAttributes="Bold" FontSize="Medium"/>
+            <Frame BackgroundColor="#515FD9" HorizontalOptions="Center" CornerRadius="20"  >
+                <Frame.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,2">
+                        <GradientStop Color="#515FD9" Offset="0.1" />
+                        <GradientStop Color="White" Offset="0.9" />
+                    </LinearGradientBrush>
+                </Frame.Background>
+                <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Margin="0,10" Spacing="15">
+                    <Grid HorizontalOptions="Center" ColumnSpacing="50" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                        <StackLayout Grid.Column="0" Grid.Row="0" WidthRequest="220" Spacing="15" >
+                            <StackLayout>
+                                <Label Text="Ім'я"/>
+                                <Entry/>
+                            </StackLayout>
+                            <StackLayout>
+                                <Label Text="Email"/>
+                                <Entry/>
+                            </StackLayout>
+                            <StackLayout>
+                                <Label Text="Дата народження"/>
+                                <StackLayout Orientation="Horizontal">
+                                    <Entry WidthRequest="55"/>
+                                    <Entry WidthRequest="100"/>
+                                    <Entry WidthRequest="55"/>
+                                </StackLayout>
+                            </StackLayout>
+                           
+                        </StackLayout>
+
+                        <StackLayout Grid.Column="1" Grid.Row="0" WidthRequest="220" Spacing="15" >
+                            <StackLayout>
+                                <Label Text="Прізвище"/>
+                                <Entry/>
+                            </StackLayout>
+                            <StackLayout>
+                                <Label Text="Телефон"/>
+                                <Entry/>
+                            </StackLayout>
+                        </StackLayout>
+                    </Grid>
+                    <Grid  ColumnSpacing="50">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackLayout Grid.Column="0" Grid.Row="0"   >
+                            <Label Text="Пароль"/>
+                            <StackLayout Orientation="Horizontal" >
+                                <Entry WidthRequest="220"/>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Column="1" Grid.Row="0"   >
+                            <Label Text="Підтвердження пароля"/>
+                            <StackLayout Orientation="Horizontal" >
+                                <Entry WidthRequest="220"/>
+                            </StackLayout>
+                        </StackLayout>
+                    </Grid>
+                    <Button  Margin="0,20,0,0" HeightRequest="50"  Text="Зареєструватися"  CornerRadius="10"/>
+                </StackLayout>
+            </Frame>
+            <Label Text="Уже маєте обліковий запис?" TextColor="#6C73BB" HorizontalOptions="Center"/>
+            <Label x:Name="login" Text="Увійти" TextColor="#783FD6" HorizontalOptions="Center"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

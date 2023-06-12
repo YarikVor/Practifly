@@ -40,6 +40,12 @@ const MaterialMenu: React.FC<MaterialMenuProps> = ({ materials }) => {
                 <Typography className={classes.headerText}>Меню матеріалів</Typography>
             </Box>
             <List>
+                <ListItem className={classes.materialLabel}>
+                    <Typography className={classes.materialNameLabel}>Назва</Typography>
+                    <Typography className={classes.materialLabel}>Enabled</Typography>
+                    <Typography className={classes.materialLabel}>Practical</Typography>
+                    <Typography className={classes.materialLabel}>Пріорітетність</Typography>
+                </ListItem>
                 {materials.map((material) => (
                     <ListItem
                         key={material.id}
@@ -48,22 +54,32 @@ const MaterialMenu: React.FC<MaterialMenuProps> = ({ materials }) => {
                         }`}
                         onClick={() => handleMaterialClick(material)}
                     >
-                        <Checkbox
-                            checked={material.enabled}
-                            onChange={() => handleEnabledChange(material)}
-                            disabled={material.isReserved}
-                        />
-                        <Checkbox
-                            checked={material.isPractical}
-                            onChange={() => handlePracticalChange(material)}
-                            disabled={material.isReserved}
-                        />
-                        <span>{material.name}</span>
-                        <input type="number" value={material.priority} disabled={material.isReserved} />
+                        <Box className={classes.materialInfo}>
+                            <Typography>{material.name}</Typography>
+                            <div className={classes.materialCheckboxRow}>
+                                <Checkbox
+                                    checked={material.enabled}
+                                    onChange={() => handleEnabledChange(material)}
+                                    disabled={material.isReserved}
+                                />
+                            </div>
+                            <div className={classes.materialCheckboxRow}>
+                                <Checkbox
+                                    checked={material.isPractical}
+                                    onChange={() => handlePracticalChange(material)}
+                                    disabled={material.isReserved}
+                                />
+                            </div>
+                        </Box>
+                        <div className={classes.priorityBlock}>
+                            <span>{material.priority}</span>
+                        </div>
                     </ListItem>
                 ))}
             </List>
         </Box>
+
+
     );
 };
 

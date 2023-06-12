@@ -17,6 +17,5 @@ public class ThemeMaterialEditDto
     [MaxLength(EntitiesConstantLengths.Note)]
     public string? Note { get; set; }
 
-    [MaxLength(65536)]
-    public string? Description { get; set; }
+    [MaxLength(65536)] public string? Description { get; set; }
 }

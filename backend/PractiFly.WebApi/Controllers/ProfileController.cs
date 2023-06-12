@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -61,7 +60,7 @@ public class ProfileController : Controller
             .Users
             .AsNoTracking()
             .Where(e => e.Id == userId)
-            .ProjectTo<UserInfoDto>(_configurationProvider, new {baseUrl = _amazonClient.GetFileUrl()})
+            .ProjectTo<UserInfoDto>(_configurationProvider, new { baseUrl = _amazonClient.GetFileUrl() })
             .FirstOrDefaultAsync();
 
         if (result == null)

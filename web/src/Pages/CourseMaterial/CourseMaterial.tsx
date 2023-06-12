@@ -40,15 +40,15 @@ const RubricsCourse: React.FC = () => {
     { id: 8, name: "Rubric 8", subRubrics: [] },
   ];
   const materials =[
-    { id: 1, name: "Material 1" },
-    { id: 2, name: "Material 2" },
-    { id: 3, name: "Material 3" },
-    { id: 4, name: "Material 4" },
-    { id: 5, name: "Material 5" },
-    { id: 6, name: "Material 6" },
-    { id: 7, name: "Material 7" },
-    { id: 8, name: "Material 8" },
-    { id: 9, name: "Material 9" },
+    { id: 1, name: "Material 1",isPractical: true, priority:"3"  },
+    { id: 2, name: "Material 2",isPractical: true, priority:"23" },
+    { id: 3, name: "Material 3",isPractical: false, priority:"3" },
+    { id: 4, name: "Material 4",isPractical: true, priority:"31" },
+    { id: 5, name: "Material 5",isPractical: false, priority:"33" },
+    { id: 6, name: "Material 6",isPractical: true, priority:"45" },
+    { id: 7, name: "Material 7",isPractical: false, priority:"96" },
+    { id: 8, name: "Material 8",isPractical: true ,priority:"3" },
+    { id: 9, name: "Material 9",isPractical: false, priority:"45"},
   ]
 
 

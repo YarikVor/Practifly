@@ -1,6 +1,6 @@
 using Microsoft.OpenApi.Models;
 
-namespace PractiFly.WebApi.Schema;
+namespace PractiFly.DateJsonConverter.Schemas;
 
 public sealed class TimeOnlyApiSchema : OpenApiSchema
 {

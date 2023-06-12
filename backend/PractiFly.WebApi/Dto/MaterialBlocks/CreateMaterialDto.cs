@@ -10,7 +10,7 @@ public class CreateMaterialDto
     public string Name { get; set; } = null!;
 
     // TODO:
-    public int Priority { get; set; }
+    //public int Priority { get; set; }
 
     [MaxLength(EntitiesConstantLengths.Note)]
     public string? Note { get; set; }

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PractiFly.XamarinApplication.View.Login">
+    <ContentPage.Content>
+        <StackLayout VerticalOptions="Center">
+            <Label Text="Вхід" HorizontalOptions="Center" TextColor="#6C73BB" FontAttributes="Bold" FontSize="Medium"/>
+            <Label Text="до особистого кабінету" HorizontalOptions="Center" TextColor="#6C73BB" FontSize="Subtitle"/>
+            <Frame BackgroundColor="#515FD9" HorizontalOptions="Center" CornerRadius="20">
+                <Frame.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,2">
+                        <GradientStop Color="#515FD9" Offset="0.1" />
+                        <GradientStop Color="White" Offset="0.9" />
+                    </LinearGradientBrush>
+                </Frame.Background>
+                <StackLayout   WidthRequest="300" Margin="0,10">
+                    <Entry Placeholder="Email" />
+                    <Entry Placeholder="Пароль"/>
+                    <StackLayout Orientation="Horizontal" Margin="0,10,0,0">
+                        <Label Text="Забули пароль?" Margin="0,5,0,0" />
+                        <Button Text="Ввійти"  BackgroundColor="#e0efff" WidthRequest="100" HorizontalOptions="EndAndExpand" CornerRadius="5"/>
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+            <Label Text="Новий користувач?" TextColor="#6C73BB" HorizontalOptions="Center"/>
+            <Label x:Name="registration" Text="Створити обліковий запис" TextColor="#783FD6" HorizontalOptions="Center"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1025,7 +1025,6 @@ namespace PractiFly.DbContextUtility.Migrations
                         .HasColumnName("Note");
 
                     b.Property<string>("ResultUrl")
-                        .IsRequired()
                         .HasMaxLength(2048)
                         .HasColumnType("character varying(2048)")
                         .HasColumnName("ResultUrl");
@@ -1072,7 +1071,7 @@ namespace PractiFly.DbContextUtility.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Grade")
+                    b.Property<int?>("Grade")
                         .HasColumnType("integer")
                         .HasColumnName("Grade");
 

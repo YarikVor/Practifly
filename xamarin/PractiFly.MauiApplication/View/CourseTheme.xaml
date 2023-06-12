@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PractiFly.MauiApplication.View.CourseTheme"
+             Title=" ">
+    <StackLayout>
+        <Frame BackgroundColor="#9062F2" Padding="0" CornerRadius="0">
+            <StackLayout HorizontalOptions="Center"  Margin="0,20">
+                <Label Text="Теми курсів" FontSize="Title" FontAttributes="Bold"/>
+            </StackLayout>
+        </Frame>
+        <Grid  ColumnSpacing="20" Margin="20" HorizontalOptions="Center" HeightRequest="490">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="550" />
+                <ColumnDefinition Width="240" />
+                <ColumnDefinition Width="220" />
+                <ColumnDefinition Width="250" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="520" />
+            </Grid.RowDefinitions>
+            <!--<StackLayout Spacing="20"  Orientation="Horizontal" Margin="10" HorizontalOptions="Center">-->
+
+            <Frame   WidthRequest="550" BackgroundColor="#ebf2ed" BorderColor="#aeb5b0"  Grid.Column="0" Grid.Row="0">
+                <ScrollView HeightRequest="470">
+                    <StackLayout Spacing="10"  Padding="0,0,20,0" >
+                        <Label Text="Тема курсу" />
+                        <Frame  BackgroundColor="White" >
+                            <StackLayout >
+                                <StackLayout>
+                                    <Label  Text="Назва"/>
+                                    <Entry x:Name="name" BackgroundColor="#ebf2ed"/>
+                                </StackLayout>
+                                <StackLayout>
+                                    <Label Text="Опис"/>
+                                    <Editor x:Name="description" BackgroundColor="#ebf2ed" HeightRequest="120"/>
+                                </StackLayout>
+                                <StackLayout>
+                                    <Label Text="Примітка"/>
+                                    <Editor x:Name="note" BackgroundColor="#ebf2ed" HeightRequest="70"/>
+                                </StackLayout>
+                                <StackLayout Margin="0,10,0,0" Spacing="20" Orientation ="Horizontal">
+                                    <Label Text="Пріорітетність"/>
+                                    <Entry HorizontalOptions="Start" x:Name="levelId" BackgroundColor="#ebf2ed" HeightRequest="20" WidthRequest="5"/>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal" Margin="0,20,0,0" Grid.Column="1" Grid.Row="1" HorizontalOptions="End">
+                                    <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="🔁" Clicked="ReversTheme_Clicked" />
+                                    <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="✔️" Clicked="EditTheme_Clicked" />
+                                    <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="➕" Clicked="CreateTheme_Clicked" />
+                                    <Button  Padding="10" FontSize="Medium" CornerRadius="8" Text="🗑" Clicked="Delete_Clicked" />
+                                </StackLayout>
+                            </StackLayout>
+                        </Frame>
+                    </StackLayout>
+                </ScrollView>
+            </Frame>
+
+            <Frame  HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0" Grid.Column="1" Grid.Row="0">
+                <StackLayout>
+                    <Label Text="Курси" Margin="0,10" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    <ScrollView HeightRequest="470"  WidthRequest="180" Padding="12,0">
+                        <StackLayout >
+                            <CollectionView x:Name="CourseCollectionView"
+                                        SelectionMode="Single"
+                                            SelectionChanged="CourseCollectionView_SelectionChanged">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackLayout Orientation="Horizontal" >
+                                            <Label Text="{Binding Name}" VerticalOptions="Center"  />
+                                            <!--<Button HorizontalOptions = "EndAndExpand" HeightRequest="30" BackgroundColor="White"  FontSize="5" CornerRadius="8" Text="➕"/>-->
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </StackLayout>
+                    </ScrollView>
+                </StackLayout>
+            </Frame >
+            <Frame  HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0" Grid.Column="2" Grid.Row="0">
+                <StackLayout>
+                    <Label Text="Теми курсів" Margin="0,10" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    <ScrollView HeightRequest="470"  WidthRequest="180" Padding="12,0">
+
+                        <StackLayout >
+                            <CollectionView x:Name="ThemesCourseCollectionView"
+                                        SelectionMode="Single"
+                                            SelectionChanged="ThemeCollectionView_SelectionChanged">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackLayout Orientation="Horizontal" >
+                                            <Label Text="{Binding Name}" VerticalOptions="Center" />
+                                            
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+
+                        </StackLayout>
+
+                    </ScrollView>
+                </StackLayout>
+            </Frame >
+            <Frame  HasShadow="True"  BackgroundColor="#ebf2ed" BorderColor="#aeb5b0" Grid.Column="3" Grid.Row="0">
+                <StackLayout>
+                    <Label Text="Меню матеріалів" Margin="0,10" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    <ScrollView  WidthRequest="230" HeightRequest="470" Padding="12,0">
+                        <StackLayout Spacing="30" >
+                            <CollectionView x:Name="MaterialsCourseCollectionView"
+                                            SelectionMode="Single">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="{Binding Name}" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
+                                            <Frame Padding="10" HorizontalOptions="EndAndExpand"  BackgroundColor="White">
+                                                <Label  Text="{Binding PriorityLevel}" HorizontalOptions="Center"  FontSize="12"/>
+                                            </Frame>
+                                            <CheckBox IsChecked="{Binding IsIncluded}" HorizontalOptions="EndAndExpand" Margin="15,0,0,0"/>
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                            
+                            
+
+                        </StackLayout>
+
+                    </ScrollView>
+                </StackLayout>
+            </Frame >
+        </Grid>
+    </StackLayout>
+</ContentPage>
